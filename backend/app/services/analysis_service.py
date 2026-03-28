@@ -158,7 +158,8 @@ class AnalysisService:
             analysis=analysis,
             extracted_skills_list=context.extracted_skills,
             keyword_matches=context.keyword_matches,
-            db=db
+            db=db,
+            target_domain=cv.target_domain,
         )
 
         # FINAL COMMIT to save the generated recommendations

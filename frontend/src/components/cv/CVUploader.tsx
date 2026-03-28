@@ -1,8 +1,25 @@
-import { useState, useRef, DragEvent, ChangeEvent } from 'react';
-import { UploadCloud, FileText, X, CheckCircle2, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import type { DragEvent, ChangeEvent } from 'react';
+import { UploadCloud, FileText, X, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/Button';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+
+const DOMAINS = [
+  { value: 'Software Engineering', label: '💻 Software Engineering' },
+  { value: 'Data & Analytics', label: '📊 Data & Analytics' },
+  { value: 'Industrial Engineering', label: '🏭 Industrial Engineering' },
+  { value: 'Mechanical Engineering', label: '⚙️ Mechanical Engineering' },
+  { value: 'Electrical Engineering', label: '⚡ Electrical Engineering' },
+  { value: 'Civil Engineering', label: '🏗️ Civil Engineering' },
+  { value: 'Business & Management', label: '📈 Business & Management' },
+  { value: 'Marketing & Communications', label: '📣 Marketing & Communications' },
+  { value: 'Finance & Accounting', label: '💰 Finance & Accounting' },
+  { value: 'Healthcare & Biomedical', label: '🏥 Healthcare & Biomedical' },
+  { value: 'Environmental & Energy', label: '🌱 Environmental & Energy' },
+  { value: 'Cybersecurity', label: '🔒 Cybersecurity' },
+  { value: 'UX / UI Design', label: '🎨 UX / UI Design' },
+];
 
 interface CVUploaderProps {
   onUploadSuccess: (cvId: number) => void;
@@ -12,6 +29,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedDomain, setSelectedDomain] = useState(DOMAINS[0].value);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -64,6 +82,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
     setIsUploading(true);
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('target_domain', selectedDomain);
     
     try {
       const response = await api.post('/cvs/upload', formData, {
@@ -82,6 +101,36 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
 
   return (
     <div className="w-full">
+      {/* Domain Selection */}
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-[var(--color-muted)] mb-2 tracking-wide uppercase">
+          Target Domain
+        </label>
+        <div className="relative">
+          <select
+            id="domain-select"
+            value={selectedDomain}
+            onChange={(e) => setSelectedDomain(e.target.value)}
+            className="
+              w-full appearance-none px-4 py-3 rounded-xl
+              bg-zinc-900 border border-[var(--color-card-border)]
+              text-white font-medium
+              cursor-pointer
+              transition-all duration-200
+              hover:border-[var(--color-primary)]/50
+              focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 focus:border-[var(--color-primary)]
+            "
+          >
+            {DOMAINS.map((domain) => (
+              <option key={domain.value} value={domain.value}>
+                {domain.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-muted)] pointer-events-none" />
+        </div>
+      </div>
+
       {!file ? (
         <div
           onDragOver={handleDragOver}
@@ -119,7 +168,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
         </div>
       ) : (
         <div className="border border-[var(--color-card-border)] rounded-2xl p-6 bg-[rgba(24,24,27,0.5)] flex flex-col items-center animate-in slide-up">
-          <div className="flex items-center gap-4 w-full p-4 bg-zinc-900 rounded-xl border border-[var(--color-card-border)] mb-6">
+          <div className="flex items-center gap-4 w-full p-4 bg-zinc-900 rounded-xl border border-[var(--color-card-border)] mb-4">
             <div className="p-3 bg-[var(--color-primary)]/10 text-[var(--color-primary)] rounded-lg">
               <FileText className="w-6 h-6" />
             </div>
@@ -138,6 +187,13 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
                 <X className="w-5 h-5" />
               </button>
             )}
+          </div>
+
+          {/* Show selected domain badge */}
+          <div className="w-full mb-4 px-1">
+            <span className="text-xs font-medium text-[var(--color-muted)]">
+              Domain: <span className="text-[var(--color-primary)]">{selectedDomain}</span>
+            </span>
           </div>
           
           <Button 

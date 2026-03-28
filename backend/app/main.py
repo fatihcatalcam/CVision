@@ -41,31 +41,52 @@ logger = logging.getLogger("cvision")
 
 
 def seed_skills(db: Session) -> None:
-    """Populate the skills table if empty."""
-    existing_count = db.query(Skill).count()
-    if existing_count > 0:
-        logger.info(f"Skills table already has {existing_count} entries, skipping seed.")
-        return
+    """Populate the skills table, adding any new skills that don't exist yet."""
+    existing_names = {s.name for s in db.query(Skill).all()}
+    added = 0
 
     for skill_data in SKILLS_DATA:
-        skill = Skill(name=skill_data["name"], category=skill_data["category"])
-        db.add(skill)
+        if skill_data["name"] not in existing_names:
+            skill = Skill(name=skill_data["name"], category=skill_data["category"])
+            db.add(skill)
+            added += 1
 
-    db.commit()
-    logger.info(f"Seeded {len(SKILLS_DATA)} skills into the database.")
+    if added > 0:
+        db.commit()
+        logger.info(f"Added {added} new skills (total in seed: {len(SKILLS_DATA)}).")
+    else:
+        logger.info(f"Skills table already up to date ({len(existing_names)} entries).")
 
 
 def seed_role_profiles(db: Session) -> None:
-    """Populate the role_profiles table if empty."""
-    existing_count = db.query(RoleProfile).count()
-    if existing_count > 0:
-        logger.info(f"Role profiles table already has {existing_count} entries, skipping seed.")
+    """Populate the role_profiles table. Re-seeds if domain info is missing."""
+    existing = db.query(RoleProfile).all()
+
+    # Check if any existing profile is missing domain (i.e. old data)
+    needs_reseed = any(not getattr(p, "domain", None) or p.domain == "Software Engineering"
+                       for p in existing) and len(existing) < len(ROLE_PROFILES_DATA)
+
+    if existing and not needs_reseed:
+        logger.info(f"Role profiles table already has {len(existing)} entries, skipping seed.")
         return
+
+    if existing and needs_reseed:
+        logger.info("Re-seeding role profiles with domain data...")
+        # Delete dependent career_recommendations first to avoid FK constraint
+        from app.models.career_recommendation import CareerRecommendation
+        profile_ids = [p.id for p in existing]
+        db.query(CareerRecommendation).filter(
+            CareerRecommendation.role_profile_id.in_(profile_ids)
+        ).delete(synchronize_session="fetch")
+        for p in existing:
+            db.delete(p)
+        db.flush()
 
     for profile_data in ROLE_PROFILES_DATA:
         profile = RoleProfile(
             title=profile_data["title"],
             description=profile_data["description"],
+            domain=profile_data.get("domain", "Software Engineering"),
             expected_keywords=profile_data["expected_keywords"],
             expected_skills=profile_data["expected_skills"],
         )

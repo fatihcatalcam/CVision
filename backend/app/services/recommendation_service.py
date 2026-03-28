@@ -23,20 +23,32 @@ class RecommendationService:
         extracted_skills_list: list[dict],
         keyword_matches: dict[str, list[str]],
         db: Session,
+        target_domain: str | None = None,
     ) -> list[CareerRecommendation]:
         """
         Generate recommendations for a freshly completed analysis and save them.
 
         Args:
             analysis: The AnalysisResult record (must have extracted_skills populated).
+            extracted_skills_list: List of skill dicts from the analysis engine.
             keyword_matches: The keyword matches dict from AnalysisContext.
             db: Database session.
+            target_domain: If provided, only match against roles in this domain.
 
         Returns:
             List of generated CareerRecommendation instances.
         """
-        # Load role profiles
-        profiles = db.query(RoleProfile).all()
+        # Load role profiles filtered by domain
+        query = db.query(RoleProfile)
+        if target_domain:
+            query = query.filter(RoleProfile.domain == target_domain)
+        profiles = query.all()
+        
+        # Fallback to all if no profiles found for domain
+        if not profiles and target_domain:
+            logger.warning(f"No profiles for domain '{target_domain}', using all profiles")
+            profiles = db.query(RoleProfile).all()
+            
         profiles_data = [
             {
                 "id": p.id,
