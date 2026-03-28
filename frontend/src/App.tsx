@@ -6,6 +6,7 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { AnalysisPage } from './pages/analysis/AnalysisPage';
 import { AdminPage } from './pages/admin/AdminPage';
+import { HomePage } from './pages/home/HomePage';
 
 function App() {
   return (
@@ -30,8 +31,8 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
           </Route>
           
-          {/* Redirects */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Landing / Redirects */}
+          <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
