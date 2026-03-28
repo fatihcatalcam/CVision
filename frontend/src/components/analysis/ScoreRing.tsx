@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 interface ScoreRingProps {
   score: number;
@@ -13,11 +13,12 @@ export function ScoreRing({
   size = 120, 
   colorClass = 'text-[var(--color-primary)]' 
 }: ScoreRingProps) {
+  const safeScore = isNaN(score) ? 0 : score;
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   // Calculate stroke dashoffset for the score (0-100)
-  const offset = circumference - (score / 100) * circumference;
+  const offset = circumference - (safeScore / 100) * circumference;
 
   // Determine color based on threshold if no specific color provided
   let defaultColor = 'text-[var(--color-primary)]';

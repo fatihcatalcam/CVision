@@ -20,6 +20,7 @@ class RecommendationService:
     @staticmethod
     def generate_recommendations(
         analysis: AnalysisResult,
+        extracted_skills_list: list[dict],
         keyword_matches: dict[str, list[str]],
         db: Session,
     ) -> list[CareerRecommendation]:
@@ -46,8 +47,8 @@ class RecommendationService:
             for p in profiles
         ]
 
-        # Extract names of skills from the analysis relationships
-        extracted_skills = [es.skill.name for es in analysis.extracted_skills]
+        # Extract names of skills directly from the pre-computed engine context list
+        extracted_skills = [es["skill_name"] for es in extracted_skills_list]
 
         # Run recommender engine
         recommender = CareerRecommender(

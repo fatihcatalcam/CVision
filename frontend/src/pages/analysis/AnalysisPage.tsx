@@ -10,13 +10,14 @@ import { RoleMatcher } from '../../components/analysis/RoleMatcher';
 
 interface AnalysisResponse {
   id: number;
-  overall_score: number;
-  ats_score: number;
-  keyword_score: number;
-  grammar_score: number;
+  scores: {
+    overall_score: number;
+    ats_score: number;
+    keyword_score: number;
+  };
   suggestions: any[];
   extracted_skills: any[];
-  recommendations?: any[];
+  career_recommendations?: any[];
 }
 
 export function AnalysisPage() {
@@ -24,38 +25,83 @@ export function AnalysisPage() {
   const navigate = useNavigate();
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const hasTriggeredRef = useRef(false);
 
+  // Simulated progress bar effect
   useEffect(() => {
-    let isMounted = true;
+    if (data || error) return;
+    
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        // Slow down the progress as it gets closer to 95%
+        if (prev < 30) return prev + 2;
+        if (prev < 60) return prev + 1;
+        if (prev < 90) return prev + 0.5;
+        if (prev < 95) return prev + 0.1;
+        return prev; // Hold at 95% until complete
+      });
+    }, 200);
 
-    const runAnalysis = async () => {
+    return () => clearInterval(interval);
+  }, [data, error]);
+
+  useEffect(() => {
+    let active = true;
+
+    const executeWorkflow = async () => {
+      // Step 1: Check if result already exists (prevent re-running ML pipeline on F5 refresh)
+      try {
+        const existingCall = await api.get(`/analysis/${id}/results`);
+        if (active) {
+          setData(existingCall.data);
+          setProgress(100);
+        }
+        return; // Analysis already exists and is loaded!
+      } catch (err: any) {
+        // If the error is not a 404 (Not Found), it's a real API failure.
+        if (err.response?.status !== 404) {
+          if (active) setError(err.response?.data?.detail || 'Failed to connect to backend.');
+          return;
+        }
+      }
+
+      // Step 2: Result doesn't exist (returns 404). We must trigger the ML pipeline!
+      // Prevent StrictMode double-triggering the heavy backend POST
       if (hasTriggeredRef.current) return;
       hasTriggeredRef.current = true;
+
       try {
-        // Step 1: Trigger the heavy backend analysis pipeline
         setLoadingMsg('Extracting text and scanning ATS structure...');
         await api.post(`/analysis/${id}`);
         
-        // Step 2: Fetch the synthesized results
-        if (!isMounted) return;
-        setLoadingMsg('Generating career recommendations...');
-        const result = await api.get(`/analysis/${id}/results`);
+        // Wait briefly just to ensure backend commit finishes smoothly
+        await new Promise(r => setTimeout(r, 500));
         
-        setData(result.data);
+        setLoadingMsg('Generating career recommendations...');
+        setProgress(99); 
+        
+        const freshResult = await api.get(`/analysis/${id}/results`);
+        
+        // Even if StrictMode tried to unmount us, we FORCE update the data so the user sees it!
+        // (React 18 safely ignores state updates on fully unmounted trees, but for StrictMode remounts 
+        // the state manager handles it smoothly).
+        setData(freshResult.data);
+        setProgress(100);
+        
       } catch (err: any) {
-        console.error(err);
-        setError(err.response?.data?.detail || 'Analysis failed. Please try again.');
+        console.error("Pipeline Error:", err);
+        setError(err.response?.data?.detail || 'Analysis pipeline failed unexpectedly.');
       }
     };
 
     if (id) {
-      runAnalysis();
+      executeWorkflow();
     }
 
     return () => {
-      isMounted = false;
+      active = false;
     };
   }, [id]);
 
@@ -86,11 +132,23 @@ export function AnalysisPage() {
           <Loader2 className="w-16 h-16 text-[var(--color-primary)] animate-spin" />
           <div className="absolute inset-0 border-4 border-[var(--color-primary)] opacity-20 rounded-full scale-150 animate-ping" />
         </div>
-        <div className="text-center animate-pulse">
-          <h2 className="text-xl font-bold text-white mb-1">Analyzing CV</h2>
-          <p className="text-[var(--color-muted)] text-sm">{loadingMsg}</p>
-          <p className="text-xs text-zinc-600 mt-4 max-w-[200px] mx-auto text-balance">
-            Please wait. Extensive ML models and heuristics are scoring your profile.
+        <div className="text-center animate-pulse w-full max-w-md px-6">
+          <h2 className="text-xl font-bold text-white mb-2">Analyzing CV</h2>
+          <p className="text-[var(--color-muted)] text-sm mb-4 h-5">{loadingMsg}</p>
+          
+          {/* Simulated Loading Bar */}
+          <div className="w-full bg-zinc-800 rounded-full h-2 mb-2 overflow-hidden border border-zinc-700">
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            ></div>
+          </div>
+          <p className="text-xs text-indigo-400 font-bold tracking-widest text-right mb-6">
+            {Math.floor(progress)}%
+          </p>
+
+          <p className="text-xs text-zinc-500 mx-auto text-balance leading-relaxed">
+            Please wait. Extensive ML models and heuristics are scoring your profile. This may take up to 20-30 seconds depending on the size of your CV.
           </p>
         </div>
       </div>
@@ -114,16 +172,16 @@ export function AnalysisPage() {
           <p className="text-[var(--color-muted)] text-sm">Report #{data.id} • Processed by CVision AI</p>
         </div>
         <div className="hidden sm:block">
-          <ScoreRing score={Math.round(data.overall_score)} label="Overall Score" size={80} colorClass="" />
+          <ScoreRing score={Math.round(data.scores.overall_score)} label="Overall Score" size={80} colorClass="" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Left Column: Sub Scores */}
         <Card className="col-span-1 flex flex-col items-center justify-center gap-6 py-10">
-          <ScoreRing score={Math.round(data.ats_score)} label="ATS Compatibility" colorClass="text-[#3b82f6]" />
+          <ScoreRing score={Math.round(data.scores.ats_score)} label="ATS Compatibility" colorClass="text-[#3b82f6]" />
           <div className="w-full h-px bg-zinc-800 my-2" />
-          <ScoreRing score={Math.round(data.keyword_score)} label="Keyword Relevance" colorClass="text-[#8b5cf6]" />
+          <ScoreRing score={Math.round(data.scores.keyword_score)} label="Keyword Relevance" colorClass="text-[#8b5cf6]" />
         </Card>
 
         {/* Center/Right Column: Suggestions & Recommendations */}
@@ -134,7 +192,7 @@ export function AnalysisPage() {
               <p className="text-sm text-[var(--color-muted)] mt-1">Comparing your extracted skills against our database roles</p>
             </div>
             <div className="p-6">
-              <RoleMatcher recommendations={data.recommendations || []} />
+              <RoleMatcher recommendations={data.career_recommendations || []} />
             </div>
           </Card>
         </div>

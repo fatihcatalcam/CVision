@@ -16,36 +16,47 @@ SECTION_PATTERNS: dict[str, list[str]] = {
     "education": [
         r"\beducation\b", r"\bacademic\b", r"\buniversity\b", r"\bcollege\b",
         r"\bdegree\b", r"\bbachelor\b", r"\bmaster\b", r"\bphd\b", r"\bdiploma\b",
-        r"\bgpa\b", r"\bschool\b", r"\bgraduat",
+        r"\bgpa\b", r"\bschool\b", r"\bgraduat", r"\beğitim\b", r"\blise\b",
+        r"\büniversite\b", r"\bokul\b", r"\bmezuniyet\b", r"\bakademi\b",
+        r"\blisans\b", r"\byüksek\s*lisans\b",
     ],
     "experience": [
         r"\bexperience\b", r"\bwork\s*experience\b", r"\bemployment\b",
         r"\bprofessional\s*experience\b", r"\bwork\s*history\b", r"\bjob\b",
-        r"\binternship\b", r"\bposition\b", r"\bcompany\b",
+        r"\binternship\b", r"\bposition\b", r"\bcompany\b", r"\bdeneyim\b",
+        r"\btecrübe\b", r"\biş\s*geçmişi\b", r"\bstaj\b", r"\bpozisyon\b",
+        r"\bşirket\b", r"\bçalışma\s*geçmişi\b",
     ],
     "skills": [
         r"\bskills?\b", r"\btechnical\s*skills?\b", r"\bcore\s*competenc",
         r"\bproficienc", r"\btechnolog", r"\btools?\b", r"\bexpertise\b",
+        r"\byetenekler\b", r"\bbeceriler\b", r"\buzmanlıklar\b",
+        r"\bteknik\s*beceriler\b", r"\baraçlar\b",
     ],
     "projects": [
         r"\bprojects?\b", r"\bportfolio\b", r"\bpersonal\s*projects?\b",
-        r"\bacademic\s*projects?\b", r"\bside\s*projects?\b",
+        r"\bacademic\s*projects?\b", r"\bside\s*projects?\b", r"\bprojeler\b",
+        r"\bkişisel\s*projeler\b",
     ],
     "certifications": [
         r"\bcertificat", r"\blicens", r"\baccreditat",
-        r"\bcredential\b", r"\bprofessional\s*development\b",
+        r"\bcredential\b", r"\bprofessional\s*development\b", r"\bsertifikalar\b",
+        r"\bbelgeler\b", r"\blisanslar\b", r"\bbaşarılar\b",
     ],
     "summary": [
         r"\bsummary\b", r"\bobjective\b", r"\bprofile\b", r"\babout\s*me\b",
         r"\bprofessional\s*summary\b", r"\bcareer\s*objective\b",
-        r"\bpersonal\s*statement\b",
+        r"\bpersonal\s*statement\b", r"\bözet\b", r"\bhakkımda\b",
+        r"\bkariyer\s*hedefi\b", r"\bprofil\b",
     ],
     "languages": [
         r"\blanguages?\b", r"\bforeign\s*languages?\b",
-        r"\blanguage\s*skills?\b", r"\bfluent\b",
+        r"\blanguage\s*skills?\b", r"\bfluent\b", r"\bdiller\b",
+        r"\byabancı\s*dil\b",
     ],
     "references": [
         r"\breferences?\b", r"\brecommendation", r"\breferees?\b",
+        r"\breferanslar\b",
     ],
 }
 

@@ -34,14 +34,26 @@ class AnalysisService:
         ]
 
     @staticmethod
-    def _load_role_profiles(db: Session) -> list[dict]:
-        """Load all role profiles from the database for keyword scoring."""
-        profiles = db.query(RoleProfile).all()
+    def _load_role_profiles(db: Session, target_domain: str | None = None) -> list[dict]:
+        """Load role profiles from the database for keyword scoring, optionally filtering by domain."""
+        query = db.query(RoleProfile)
+        
+        if target_domain:
+            query = query.filter(RoleProfile.domain == target_domain)
+            
+        profiles = query.all()
+        
+        # If no profiles match the target domain, fallback to all profiles to prevent engine crash
+        if not profiles and target_domain:
+            logger.warning(f"No role profiles found for domain '{target_domain}', falling back to all profiles")
+            profiles = db.query(RoleProfile).all()
+            
         return [
             {
                 "id": p.id,
                 "title": p.title,
                 "description": p.description,
+                "domain": p.domain,
                 "expected_keywords": p.expected_keywords or [],
                 "expected_skills": p.expected_skills or [],
             }
@@ -89,10 +101,12 @@ class AnalysisService:
 
         # Load reference data
         skills_list = AnalysisService._load_skills(db)
-        role_profiles = AnalysisService._load_role_profiles(db)
+        
+        # Filter role profiles by the user's selected domain
+        role_profiles = AnalysisService._load_role_profiles(db, cv.target_domain)
 
         logger.info(
-            f"Running analysis for CV {cv.id} "
+            f"Running analysis for CV {cv.id} (Domain: {cv.target_domain}) "
             f"({len(skills_list)} skills, {len(role_profiles)} role profiles)"
         )
 
@@ -135,16 +149,20 @@ class AnalysisService:
             )
             db.add(extracted_skill)
             
-        # Optional: Generate and persist career recommendations
-        # This ties Phase 6 into Phase 5 naturally.
+        # Commit the analysis and its relationships so the ORM populates .extracted_skills
+        db.commit()
+        db.refresh(analysis)
+
+        # Generate and persist career recommendations
         RecommendationService.generate_recommendations(
             analysis=analysis,
+            extracted_skills_list=context.extracted_skills,
             keyword_matches=context.keyword_matches,
             db=db
         )
 
+        # FINAL COMMIT to save the generated recommendations
         db.commit()
-        db.refresh(analysis)
 
         logger.info(
             f"Analysis {analysis.id} saved for CV {cv.id}: "

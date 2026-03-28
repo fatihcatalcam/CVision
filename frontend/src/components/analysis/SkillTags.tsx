@@ -1,9 +1,8 @@
-import React from 'react';
+
 
 interface ExtractedSkill {
-  id: number;
-  name: string;
-  category: string;
+  skill_name: string;
+  skill_category: string;
   confidence_score: number;
 }
 
@@ -21,7 +20,7 @@ export function SkillTags({ skills }: SkillTagsProps) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {sorted.map((skill) => {
+      {sorted.map((skill, index) => {
         let colorClasses = 'bg-zinc-800 text-zinc-300 border-zinc-700'; // Low confidence
         if (skill.confidence_score >= 0.8) {
           colorClasses = 'bg-blue-500/10 text-blue-400 border-blue-500/20'; // High confidence
@@ -31,11 +30,11 @@ export function SkillTags({ skills }: SkillTagsProps) {
 
         return (
           <span 
-            key={skill.id}
+            key={`${skill.skill_name}-${index}`}
             className={`px-3 py-1.5 rounded-full text-xs font-medium border ${colorClasses} animate-in fade-in transition-all hover:scale-105 cursor-default flex items-center gap-1.5`}
             title={`Confidence: ${(skill.confidence_score * 100).toFixed(0)}%`}
           >
-            {skill.name}
+            {skill.skill_name}
             {skill.confidence_score >= 0.9 && <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />}
           </span>
         );

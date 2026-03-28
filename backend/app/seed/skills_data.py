@@ -147,4 +147,22 @@ SKILLS_DATA: list[dict[str, str]] = [
     {"name": "OOP", "category": "architecture"},
     {"name": "Clean Architecture", "category": "architecture"},
     {"name": "Event-Driven Architecture", "category": "architecture"},
+
+    # ---- Industrial Engineering / Supply Chain ----
+    {"name": "ERP Systems", "category": "engineering"},
+    {"name": "SAP", "category": "engineering"},
+    {"name": "Excel", "category": "tool"},
+    {"name": "Lean Manufacturing", "category": "engineering"},
+    {"name": "Production Planning", "category": "engineering"},
+    {"name": "Supply Chain Management", "category": "engineering"},
+    {"name": "AutoCAD", "category": "tool"},
+    {"name": "Lean Six Sigma", "category": "engineering"},
+    {"name": "Process Optimization", "category": "engineering"},
+    {"name": "Kaizen", "category": "engineering"},
+    {"name": "Minitab", "category": "tool"},
+    {"name": "Time Study", "category": "engineering"},
+    {"name": "Value Stream Mapping", "category": "engineering"},
+    {"name": "Inventory Optimization", "category": "engineering"},
+    {"name": "Logistics", "category": "engineering"},
+    {"name": "Purchasing", "category": "engineering"},
 ]

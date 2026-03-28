@@ -15,6 +15,7 @@ class CVResponse(BaseModel):
     status: str
     uploaded_at: datetime
     has_analysis: bool = False
+    target_domain: str | None = None
 
     model_config = {"from_attributes": True}
 
@@ -27,6 +28,7 @@ class CVDetailResponse(BaseModel):
     file_size: int
     status: str
     uploaded_at: datetime
+    target_domain: str | None = None
     extracted_text_preview: str | None = None  # First 500 chars
 
     model_config = {"from_attributes": True}

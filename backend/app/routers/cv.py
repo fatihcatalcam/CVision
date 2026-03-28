@@ -13,7 +13,7 @@ Implements FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
@@ -34,6 +34,7 @@ router = APIRouter(prefix="/cvs", tags=["CV Management"])
 )
 async def upload_cv(
     file: UploadFile = File(..., description="CV file (PDF or TXT, max 5MB)"),
+    target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -48,7 +49,7 @@ async def upload_cv(
     **Status lifecycle**: pending → processing → completed / failed
     """
     try:
-        cv = await CVService.upload_cv(file, current_user, db)
+        cv = await CVService.upload_cv(file, target_domain, current_user, db)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -63,6 +64,7 @@ async def upload_cv(
         status=cv.status,
         uploaded_at=cv.uploaded_at,
         has_analysis=cv.analysis_result is not None,
+        target_domain=cv.target_domain,
     )
 
 
@@ -94,6 +96,7 @@ def list_cvs(
                 status=cv.status,
                 uploaded_at=cv.uploaded_at,
                 has_analysis=cv.analysis_result is not None,
+                target_domain=cv.target_domain,
             )
             for cv in cvs
         ],
@@ -131,6 +134,7 @@ def get_cv(
         file_size=cv.file_size,
         status=cv.status,
         uploaded_at=cv.uploaded_at,
+        target_domain=cv.target_domain,
         extracted_text_preview=(
             cv.extracted_text[:500] if cv.extracted_text else None
         ),

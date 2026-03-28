@@ -96,6 +96,7 @@ class CVService:
     @staticmethod
     async def upload_cv(
         file: UploadFile,
+        target_domain: str,
         user: User,
         db: Session,
     ) -> CV:
@@ -104,6 +105,7 @@ class CVService:
 
         Args:
             file: The uploaded file from the request.
+            target_domain: The target profession domain for the CV analysis.
             user: The authenticated user performing the upload.
             db: Database session.
 
@@ -130,6 +132,7 @@ class CVService:
             file_type=extension,
             file_size=file_size,
             status="processing",
+            target_domain=target_domain,
         )
         db.add(cv)
         db.commit()

@@ -22,6 +22,7 @@ class CV(Base):
     file_type: Mapped[str] = mapped_column(String(10), nullable=False)  # "pdf" or "txt"
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)  # bytes
     extracted_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    target_domain: Mapped[str | None] = mapped_column(String(100), nullable=True)
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="pending"
     )  # pending, processing, completed, failed

@@ -46,30 +46,34 @@ class KeywordScorer(BaseAnalyzer):
             context.keyword_score = 0.0
             return
 
-        # Count keyword matches
-        matched_keywords: list[str] = []
-        for keyword in all_keywords:
-            escaped = re.escape(keyword)
-            if re.search(rf"\b{escaped}\b", text_lower):
-                matched_keywords.append(keyword)
+        # Count keyword matches per profile
+        best_ratio = 0.0
+        matched_total_unique = set()
 
-        # Score: percentage of all keywords found in CV
-        match_ratio = len(matched_keywords) / len(all_keywords)
-        context.keyword_score = round(min(match_ratio * 100 * 2, 100.0), 1)
-
-        # Store per-profile keyword matches for recommendations
         for profile in self._role_profiles:
             profile_keywords = profile.get("expected_keywords", [])
-            if not isinstance(profile_keywords, list):
+            if not isinstance(profile_keywords, list) or not profile_keywords:
                 continue
+            
             profile_matches = []
             for kw in profile_keywords:
                 escaped = re.escape(kw.lower())
                 if re.search(rf"\b{escaped}\b", text_lower):
                     profile_matches.append(kw)
+                    matched_total_unique.add(kw)
+            
             context.keyword_matches[profile["title"]] = profile_matches
+
+            # Cap the denominator to 10 keywords maximum for a realistic score
+            required_keywords_count = min(len(profile_keywords), 10)
+            ratio = len(profile_matches) / required_keywords_count
+            if ratio > best_ratio:
+                best_ratio = ratio
+
+        # Score: use the best matching profile's ratio to inform overall keyword score
+        context.keyword_score = round(min(best_ratio * 100.0, 100.0), 1)
 
         logger.info(
             f"Keyword score: {context.keyword_score}% — "
-            f"matched {len(matched_keywords)}/{len(all_keywords)} keywords"
+            f"matched {len(matched_total_unique)}/{len(all_keywords)} unique keywords globally"
         )

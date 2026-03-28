@@ -46,10 +46,12 @@ class CareerRecommender:
             expected_skills_lower = [s.lower() for s in expected_skills]
 
             if expected_skills_lower:
+                # Cap the expected denominator to 6 skills realistically
+                required_skills_count = min(len(expected_skills_lower), 6)
                 matched_skills = [
                     s for s in expected_skills_lower if s in self._extracted_skills
                 ]
-                skill_score = len(matched_skills) / len(expected_skills_lower) * 100
+                skill_score = min((len(matched_skills) / required_skills_count) * 100.0, 100.0)
             else:
                 skill_score = 0.0
                 matched_skills = []
@@ -60,13 +62,20 @@ class CareerRecommender:
             matched_keywords = self._keyword_matches.get(title, [])
 
             if expected_keywords:
-                keyword_score = len(matched_keywords) / len(expected_keywords) * 100
+                # Cap the expected denominator to 10 keywords realistically
+                required_keywords_count = min(len(expected_keywords), 10)
+                keyword_score = min((len(matched_keywords) / required_keywords_count) * 100.0, 100.0)
             else:
                 keyword_score = 0.0
 
             # Combined Score
             match_score = (skill_score * 0.6) + (keyword_score * 0.4)
             match_score = round(match_score, 1)
+
+            # Calculate Actual Missing Skills
+            missing_skills = [
+                s for s in expected_skills if s.lower() not in self._extracted_skills
+            ]
 
             # Generate Explanation
             if match_score >= 70:
@@ -79,12 +88,13 @@ class CareerRecommender:
                 explanation = (
                     f"Moderate match ({match_score}%). You have some foundational "
                     f"skills for this role. To improve your chances, consider developing "
-                    f"skills in {', '.join([s for s in expected_skills if s.lower() not in self._extracted_skills][:3])}."
+                    f"skills in {', '.join(missing_skills[:3])}."
                 )
             else:
+                missing_str = ', '.join(missing_skills[:4]) if missing_skills else 'various domain-specific skills'
                 explanation = (
                     f"Low match ({match_score}%). This role requires a different skill set. "
-                    f"Key missing skills include {', '.join(expected_skills[:3])}."
+                    f"Key missing focus areas include {missing_str}."
                 )
 
             results.append({
