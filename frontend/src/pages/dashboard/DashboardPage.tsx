@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
+import { CVUploader } from '../../components/cv/CVUploader';
 import api from '../../services/api';
 import { FileText, Activity, TrendingUp } from 'lucide-react';
 
@@ -13,6 +15,7 @@ interface DashboardStats {
 
 export function DashboardPage() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -95,18 +98,11 @@ export function DashboardPage() {
         </div>
       )}
 
-      <Card>
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <FileText className="w-16 h-16 text-[var(--color-muted-foreground)] mb-4 opacity-50" />
-          <h2 className="text-xl font-bold text-white mb-2">No Recent Activity</h2>
-          <p className="text-[var(--color-muted)] max-w-md mb-6">
-            Upload a new CV to run the analysis engine, extract skills, and get targeted career recommendations.
-          </p>
-          <button className="px-6 py-3 rounded-lg bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-medium transition-colors shadow-lg shadow-blue-500/20">
-            Upload New CV
-          </button>
-        </div>
-      </Card>
+      <div className="w-full">
+        <h2 className="text-xl font-bold text-white mb-4">Analyze New CV</h2>
+        <CVUploader onUploadSuccess={(cvId) => navigate(`/analysis/${cvId}`)} />
+      </div>
+
     </div>
   );
 }

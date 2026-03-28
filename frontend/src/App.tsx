@@ -5,6 +5,8 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 
+import { AnalysisPage } from './pages/analysis/AnalysisPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -24,6 +26,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/analysis/:id" element={<AnalysisPage />} />
           </Route>
           
           {/* Redirects */}
