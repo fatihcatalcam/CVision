@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
 import { CVUploader } from '../../components/cv/CVUploader';
 import api from '../../services/api';
-import { FileText, Activity, TrendingUp } from 'lucide-react';
+import { FileText, Activity, TrendingUp, Shield } from 'lucide-react';
 
 interface DashboardStats {
   total_cvs: number;
@@ -42,12 +42,23 @@ export function DashboardPage() {
             Welcome back, <span className="text-[var(--color-primary)] font-medium">{user?.full_name}</span>.
           </p>
         </div>
-        <button 
-          onClick={logout}
-          className="text-sm font-medium text-[var(--color-muted)] hover:text-white transition-colors"
-        >
-          Sign Out
-        </button>
+        <div className="flex items-center gap-4">
+          {user?.role === 'admin' && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-semibold hover:bg-amber-500/20 transition-all"
+            >
+              <Shield className="w-4 h-4" />
+              Admin Panel
+            </button>
+          )}
+          <button 
+            onClick={logout}
+            className="text-sm font-medium text-[var(--color-muted)] hover:text-white transition-colors"
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
 
       {isLoading ? (

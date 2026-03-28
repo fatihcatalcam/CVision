@@ -13,7 +13,7 @@ Implements FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
@@ -33,6 +33,7 @@ router = APIRouter(prefix="/cvs", tags=["CV Management"])
     summary="Upload a CV file",
 )
 async def upload_cv(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="CV file (PDF or TXT, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
     current_user: User = Depends(get_current_user),
@@ -48,13 +49,11 @@ async def upload_cv(
 
     **Status lifecycle**: pending → processing → completed / failed
     """
-    try:
-        cv = await CVService.upload_cv(file, target_domain, current_user, db)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
+    # The upload_cv service validates, saves, and creates the record quickly
+    cv = await CVService.upload_cv(file, target_domain, current_user, db)
+    
+    # Delegate parsing and analysis to background task
+    background_tasks.add_task(CVService.process_analysis_background, cv.id)
 
     return CVResponse(
         id=cv.id,

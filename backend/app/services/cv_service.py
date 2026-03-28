@@ -17,6 +17,7 @@ from app.parsing.parser_factory import (
     get_parser,
     get_extension_from_filename,
     ALLOWED_EXTENSIONS,
+    ALLOWED_MIME_TYPES,
 )
 
 logger = logging.getLogger("cvision.services.cv")
@@ -28,7 +29,7 @@ class CVService:
     @staticmethod
     def validate_file(file: UploadFile) -> tuple[str, str]:
         """
-        Validate the uploaded file's name, extension, and size.
+        Validate the uploaded file's name, extension, MIME type, and size.
 
         Returns:
             Tuple of (original_filename, file_extension).
@@ -40,6 +41,19 @@ class CVService:
             raise ValueError("File must have a filename.")
 
         extension = get_extension_from_filename(file.filename)
+        
+        # Stricter MIME type checking against parser_factory declarations
+        if file.content_type not in ALLOWED_MIME_TYPES:
+            raise ValueError(
+                f"Invalid file MIME type '{file.content_type}'. "
+                f"Supported types: {', '.join(ALLOWED_MIME_TYPES.keys())}"
+            )
+
+        # Cross-check MIME correlates to extension
+        if ALLOWED_MIME_TYPES[file.content_type] != extension:
+            raise ValueError(
+                f"File extension '.{extension}' does not match its content type '{file.content_type}'."
+            )
 
         return file.filename, extension
 
@@ -101,19 +115,9 @@ class CVService:
         db: Session,
     ) -> CV:
         """
-        Full upload pipeline: validate → save → extract text → persist to DB.
-
-        Args:
-            file: The uploaded file from the request.
-            target_domain: The target profession domain for the CV analysis.
-            user: The authenticated user performing the upload.
-            db: Database session.
-
-        Returns:
-            The created CV record.
-
-        Raises:
-            ValueError: On validation or extraction failure.
+        Upload pipeline: validate → save → create DB record -> fast return.
+        
+        The analysis must be dispatched to background_process_cv separately.
         """
         # Step 1: Validate file
         original_filename, extension = CVService.validate_file(file)
@@ -123,7 +127,7 @@ class CVService:
             file, extension
         )
 
-        # Step 3: Create DB record with 'processing' status
+        # Step 3: Create DB record with 'pending' status
         cv = CV(
             user_id=user.id,
             original_filename=original_filename,
@@ -131,7 +135,7 @@ class CVService:
             file_path=str(file_path),
             file_type=extension,
             file_size=file_size,
-            status="processing",
+            status="pending",
             target_domain=target_domain,
         )
         db.add(cv)
@@ -139,27 +143,52 @@ class CVService:
         db.refresh(cv)
 
         logger.info(f"CV record created: id={cv.id}, user={user.id}")
-
-        # Step 4: Extract text
-        try:
-            extracted_text = CVService.extract_text(file_path, extension)
-            cv.extracted_text = extracted_text
-            cv.status = "completed"
-            logger.info(
-                f"Text extraction successful for CV {cv.id}: "
-                f"{len(extracted_text)} chars"
-            )
-        except ValueError as e:
-            cv.status = "failed"
-            logger.warning(f"Text extraction failed for CV {cv.id}: {e}")
-            # We still keep the record — user can see it failed
-            db.commit()
-            raise ValueError(str(e))
-
-        db.commit()
-        db.refresh(cv)
-
         return cv
+
+    @staticmethod
+    def process_analysis_background(cv_id: int):
+        """
+        Background task to handle parsing and analysis automatically.
+        """
+        from app.database import SessionLocal
+        from app.services.analysis_service import AnalysisService
+        
+        db = SessionLocal()
+        logger.info(f"Background task starting for CV {cv_id}")
+        
+        try:
+            # Check exist and lock
+            cv = db.query(CV).filter(CV.id == cv_id).first()
+            if not cv:
+                logger.error(f"CV {cv_id} not found for background processing")
+                return
+                
+            logger.info(f"Background task starting for CV {cv_id} (User {cv.user_id})")
+                
+            # Update status
+            cv.status = "processing"
+            db.commit()
+            
+            # 1. Parse Text
+            cv.extracted_text = CVService.extract_text(Path(cv.file_path), cv.file_type)
+            cv.status = "completed"
+            db.commit()
+            
+            # 2. Run Engine
+            logger.info("Text processing completed, launching analysis engine...")
+            AnalysisService.run_analysis(cv, db)
+            logger.info(f"Background task successfully completed for CV {cv_id}")
+            
+        except Exception as e:
+            logger.error(f"Background task failed for CV {cv_id}: {str(e)}")
+            # Fallback handling
+            db.rollback()
+            cv = db.query(CV).filter(CV.id == cv_id).first()
+            if cv:
+                cv.status = "failed"
+                db.commit()
+        finally:
+            db.close()
 
     @staticmethod
     def list_user_cvs(
@@ -188,13 +217,24 @@ class CVService:
     @staticmethod
     def get_cv(cv_id: int, user: User, db: Session) -> CV | None:
         """
-        Get a specific CV by ID, ensuring it belongs to the requesting user.
+        Get a specific CV by ID. 
+        Enforces user isolation by raising an error if the user tries to access a CV they don't own.
         """
-        return (
-            db.query(CV)
-            .filter(CV.id == cv_id, CV.user_id == user.id)
-            .first()
-        )
+        from fastapi import HTTPException
+        
+        cv = db.query(CV).filter(CV.id == cv_id).first()
+        
+        if cv is None:
+            return None
+            
+        if cv.user_id != user.id and user.role != "admin":
+            logger.warning(f"SECURITY: User {user.id} attempted to access CV {cv_id} owned by {cv.user_id}")
+            raise HTTPException(
+                status_code=403,
+                detail="Forbidden: You do not have permission to access this CV."
+            )
+            
+        return cv
 
     @staticmethod
     def delete_cv(cv: CV, db: Session) -> None:

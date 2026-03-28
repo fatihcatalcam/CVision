@@ -4,8 +4,8 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
-
 import { AnalysisPage } from './pages/analysis/AnalysisPage';
+import { AdminPage } from './pages/admin/AdminPage';
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/analysis/:id" element={<AnalysisPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Route>
           
           {/* Redirects */}

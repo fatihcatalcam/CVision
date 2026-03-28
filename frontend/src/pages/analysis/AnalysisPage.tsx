@@ -27,7 +27,7 @@ export function AnalysisPage() {
   const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const hasTriggeredRef = useRef(false);
+
 
   // Simulated progress bar effect
   useEffect(() => {
@@ -51,59 +51,75 @@ export function AnalysisPage() {
     let active = true;
 
     const executeWorkflow = async () => {
-      // Step 1: Check if result already exists (prevent re-running ML pipeline on F5 refresh)
-      try {
-        const existingCall = await api.get(`/analysis/${id}/results`);
-        if (active) {
-          setData(existingCall.data);
-          setProgress(100);
-        }
-        return; // Analysis already exists and is loaded!
-      } catch (err: any) {
-        // If the error is not a 404 (Not Found), it's a real API failure.
-        if (err.response?.status !== 404) {
-          if (active) setError(err.response?.data?.detail || 'Failed to connect to backend.');
+      const startTime = Date.now();
+      const TIMEOUT_MS = 30000;
+
+      const pollStatus = async () => {
+        if (!active) return;
+        
+        if (Date.now() - startTime > TIMEOUT_MS) {
+          if (active) setError('Analysis timed out after 30 seconds.');
           return;
         }
-      }
+        
+        try {
+          const statusRes = await api.get(`/analysis/${id}/status`);
+          const statusData = statusRes.data;
 
-      // Step 2: Result doesn't exist (returns 404). We must trigger the ML pipeline!
-      // Prevent StrictMode double-triggering the heavy backend POST
-      if (hasTriggeredRef.current) return;
-      hasTriggeredRef.current = true;
+          if (statusData.status === 'failed') {
+            if (active) setError(statusData.error_message || 'Background analysis failed.');
+            return;
+          }
 
-      try {
-        setLoadingMsg('Extracting text and scanning ATS structure...');
-        await api.post(`/analysis/${id}`);
-        
-        // Wait briefly just to ensure backend commit finishes smoothly
-        await new Promise(r => setTimeout(r, 500));
-        
-        setLoadingMsg('Generating career recommendations...');
-        setProgress(99); 
-        
-        const freshResult = await api.get(`/analysis/${id}/results`);
-        
-        // Even if StrictMode tried to unmount us, we FORCE update the data so the user sees it!
-        // (React 18 safely ignores state updates on fully unmounted trees, but for StrictMode remounts 
-        // the state manager handles it smoothly).
-        setData(freshResult.data);
-        setProgress(100);
-        
-      } catch (err: any) {
-        console.error("Pipeline Error:", err);
-        setError(err.response?.data?.detail || 'Analysis pipeline failed unexpectedly.');
-      }
+          if (statusData.status === 'completed') {
+            setLoadingMsg('Finalizing report...');
+            setProgress(99); 
+            
+            try {
+              const resultRes = await api.get(`/analysis/${id}/results`);
+              if (active) {
+                setData(resultRes.data);
+                setProgress(100);
+              }
+            } catch (err: any) {
+              if (active) setError('Failed to retrieve finalized results.');
+            }
+            return;
+          }
+
+          // If pending or processing, update message and poll again
+          if (statusData.status === 'pending') {
+            setLoadingMsg('Waiting in queue...');
+          } else if (statusData.status === 'processing') {
+            setLoadingMsg('Analyzing CV structure and extracting insights...');
+          }
+
+          // Continue polling every 2 seconds
+          setTimeout(pollStatus, 2000);
+
+        } catch (err: any) {
+          if (err.response?.status === 404) {
+            if (active) setError('CV not found.');
+          } else {
+            console.error("Status check failed:", err);
+            // Don't kill polling on transient network errors, just retry
+            setTimeout(pollStatus, 3000);
+          }
+        }
+      };
+
+      // Start the polling loop
+      pollStatus();
     };
 
-    if (id) {
+    if (id && !data && !error) {
       executeWorkflow();
     }
 
     return () => {
       active = false;
     };
-  }, [id]);
+  }, [id, data, error]);
 
   if (error) {
     return (

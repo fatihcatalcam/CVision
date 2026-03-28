@@ -11,7 +11,10 @@ Registers all routers, configures CORS, and provides:
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -141,6 +144,58 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# ---- Advanced Error Handling System ----
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    # Ensure all HTTP exceptions return standard JSON format
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": "HTTP Exception",
+            "message": str(exc.detail),
+            "status": "failed"
+        }
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # Standardize data validation failures
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "Validation Error",
+            "message": "Invalid input data format.",
+            "status": "failed",
+            "details": exc.errors()
+        }
+    )
+
+@app.exception_handler(ValueError)
+async def value_error_handler(request: Request, exc: ValueError):
+    # Used extensively in services for domain logic validations
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "Bad Request",
+            "message": str(exc),
+            "status": "failed"
+        }
+    )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    # Fallback to prevent app crashes and hide internal errors
+    logger.exception(f"Unhandled server error: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "message": "An unexpected server error occurred. Please try again later.",
+            "status": "failed"
+        }
+    )
+
 
 # ---- CORS Middleware ----
 # Allow frontend dev server (Vite default port)

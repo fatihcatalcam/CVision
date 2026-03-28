@@ -1,0 +1,46 @@
+FATIH CATALCAM
+Industrial Engineering Student
+Istanbul, Turkey | fatih@example.com | +90 555 123 4567
+
+EDUCATION
+Istanbul Technical University — B.Sc. in Industrial Engineering (2022 – 2026)
+- GPA: 3.45/4.00
+- Relevant Coursework: Operations Research, Production Planning, Supply Chain Management, 
+  Quality Control, Statistics, Lean Manufacturing, Simulation, Optimization
+
+EXPERIENCE
+ABC Manufacturing Co. — Production Planning Intern (June 2025 – Sept 2025)
+- Assisted in developing production schedules using ERP systems (SAP)
+- Analyzed bottleneck processes and proposed Lean improvements reducing waste by 12%
+- Created inventory management reports using Excel and data visualization tools
+- Participated in Kaizen workshops and 5S implementation projects
+
+XYZ Logistics — Supply Chain Analyst Intern (June 2024 – Aug 2024)
+- Supported demand forecasting using historical data analysis
+- Optimized warehouse layout improving picking efficiency by 15%
+- Tracked KPIs for logistics operations and prepared weekly dashboards
+- Collaborated with procurement team on supplier evaluation
+
+PROJECTS
+Senior Project: Production Line Optimization Using Simulation (2025-2026)
+- Developed discrete event simulation model using Arena software
+- Reduced average throughput time by 18% through bottleneck analysis
+- Applied statistical process control (SPC) methods for quality improvement
+
+Lean Six Sigma Green Belt Project (2025)
+- Led a cross-functional team to reduce defect rate in packaging process
+- Used DMAIC methodology, root cause analysis, and value stream mapping
+- Achieved 25% reduction in defect rate over 3 months
+
+SKILLS
+Technical: SAP ERP, Excel (Advanced), MATLAB, Minitab, Arena Simulation, AutoCAD, Python, SQL, Data Analysis
+Methods: Lean Manufacturing, Six Sigma, Kaizen, 5S, Value Stream Mapping, Statistical Process Control
+Soft: Problem Solving, Teamwork, Communication, Project Management, Leadership, Time Management
+
+CERTIFICATIONS
+- Lean Six Sigma Green Belt (ASQ)
+- SAP ERP Fundamentals Certificate
+- Advanced Excel for Business Analytics
+
+LANGUAGES
+Turkish (Native), English (Advanced - TOEFL 100), German (Intermediate)

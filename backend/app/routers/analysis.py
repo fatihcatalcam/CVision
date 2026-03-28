@@ -12,6 +12,7 @@ Implements FR8, FR9, FR10, FR11, FR20.
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
@@ -28,27 +29,26 @@ logger = logging.getLogger("cvision.routers.analysis")
 router = APIRouter(prefix="/analysis", tags=["Analysis"])
 
 
-@router.post(
-    "/{cv_id}",
-    response_model=AnalysisResponse,
-    status_code=status.HTTP_201_CREATED,
-    summary="Trigger CV analysis",
+# (This schema can be defined inline here for simplicity)
+class AnalysisStatusResponse(BaseModel):
+    cv_id: int
+    status: str
+    error_message: str | None = None
+
+@router.get(
+    "/{cv_id}/status",
+    response_model=AnalysisStatusResponse,
+    summary="Get background analysis status",
 )
-def trigger_analysis(
+def get_analysis_status(
     cv_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """
-    Run the full analysis pipeline on an uploaded CV.
-
-    - CV must have 'completed' status (text extraction succeeded)
-    - Runs 7 analyzers: section detection, skill extraction, ATS checking,
-      keyword scoring, experience evaluation, score calculation, suggestions
-    - Re-analysis is supported (previous results are replaced)
-    - Returns the complete analysis result with scores, suggestions, and skills
+    Check the current status of an uploaded CV's analysis process.
+    Expected statuses: 'pending', 'processing', 'completed', 'failed'.
     """
-    # Verify CV exists and belongs to user
     cv = CVService.get_cv(cv_id, current_user, db)
     if cv is None:
         raise HTTPException(
@@ -56,15 +56,10 @@ def trigger_analysis(
             detail=f"CV with id {cv_id} not found",
         )
 
-    try:
-        analysis = AnalysisService.run_analysis(cv, db)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
-
-    return _build_analysis_response(analysis)
+    return AnalysisStatusResponse(
+        cv_id=cv.id,
+        status=cv.status,
+    )
 
 
 @router.get(

@@ -4,7 +4,7 @@ Requires 'admin' role privileges.
 Maps to FR21, FR22.
 """
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -78,3 +78,79 @@ def list_all_users(
         ],
         total=total
     )
+
+
+@router.patch(
+    "/users/{user_id}/role",
+    response_model=UserResponse,
+    summary="Change a user's role (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def change_user_role(
+    user_id: int,
+    role: str = Query(..., regex="^(user|admin)$", description="New role: 'user' or 'admin'"),
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """
+    Change a user's role between 'user' and 'admin'.
+    Admins cannot change their own role.
+    """
+    if current_admin.id == user_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot change your own role."
+        )
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found."
+        )
+
+    user.role = role
+    db.commit()
+    db.refresh(user)
+
+    return UserResponse(
+        id=user.id,
+        full_name=user.full_name,
+        email=user.email,
+        role=user.role,
+        created_at=user.created_at,
+    )
+
+
+@router.delete(
+    "/users/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete a user (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def delete_user(
+    user_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """
+    Delete a user and all their associated data (CVs, analyses, etc.).
+    Admins cannot delete themselves.
+    """
+    if current_admin.id == user_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete your own account."
+        )
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found."
+        )
+
+    db.delete(user)
+    db.commit()
+
+    return None
