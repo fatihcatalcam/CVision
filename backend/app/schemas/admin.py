@@ -1,48 +1,26 @@
 """
-Admin schemas — response validation for admin dashboard endpoints.
+Admin schemas — response validation for system-wide analytics and admin actions.
 """
 
-from datetime import datetime
+from typing import List
 from pydantic import BaseModel
+from datetime import datetime
+from app.schemas.user import UserResponse
 
 
 class AdminStatsResponse(BaseModel):
-    """Summary statistics for the admin dashboard."""
+    """System-wide metrics for the admin dashboard."""
     total_users: int
     total_cvs: int
     total_analyses: int
-    avg_score: float | None = None
-    recent_registrations: int  # Last 7 days
-    recent_analyses: int  # Last 7 days
-
-
-class AdminLogResponse(BaseModel):
-    """Admin log entry."""
-    id: int
-    event_type: str
-    message: str
-    related_user_id: int | None = None
-    created_at: datetime
+    average_system_score: float | None
 
     model_config = {"from_attributes": True}
 
 
-class AdminUserResponse(BaseModel):
-    """User info visible to admin."""
-    id: int
-    full_name: str
-    email: str
-    role: str
-    cv_count: int
-    created_at: datetime
+class AdminUsersListResponse(BaseModel):
+    """Paginated list of all users."""
+    users: List[UserResponse]
+    total: int
 
     model_config = {"from_attributes": True}
-
-
-class DashboardSummaryResponse(BaseModel):
-    """User dashboard summary data."""
-    total_cvs: int
-    total_analyses: int
-    avg_score: float | None = None
-    latest_score: float | None = None
-    latest_cv_filename: str | None = None
