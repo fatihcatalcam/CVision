@@ -198,15 +198,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 # ---- CORS Middleware ----
-# Allow frontend dev server (Vite default port)
+# Allow frontend dev server and production domains
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",   # Vite dev server
-        "http://localhost:3000",   # Alternative React port
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

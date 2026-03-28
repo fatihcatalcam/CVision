@@ -171,15 +171,21 @@ class CVService:
             
             # 1. Parse Text
             cv.extracted_text = CVService.extract_text(Path(cv.file_path), cv.file_type)
-            cv.status = "completed"
             db.commit()
             
             # 2. Run Engine
             logger.info("Text processing completed, launching analysis engine...")
             AnalysisService.run_analysis(cv, db)
+            
+            # 3. Mark as completed after analysis
+            cv.status = "completed"
+            db.commit()
             logger.info(f"Background task successfully completed for CV {cv_id}")
             
         except Exception as e:
+            import traceback
+            with open("crash_log.txt", "w") as f:
+                f.write(traceback.format_exc())
             logger.error(f"Background task failed for CV {cv_id}: {str(e)}")
             # Fallback handling
             db.rollback()

@@ -2,10 +2,10 @@
 echo CVision Sunuculari Baslatiliyor...
 
 echo Backend (FastAPI) baslatiliyor...
-start cmd /k "cd /d %~dp0backend && call venv\Scripts\activate.bat && uvicorn app.main:app --reload"
+start cmd /k "cd /d %~dp0backend && call cv_env_313\Scripts\activate.bat && python -m uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload"
 
 echo Frontend (Vite/React) baslatiliyor...
-start cmd /k "cd /d %~dp0frontend && npm run dev"
+start cmd /k "cd /d %~dp0frontend && npm run dev -- --host"
 
 echo.
 echo Islem tamam! Sunucularin hazir olmasi birkac saniye surebilir.

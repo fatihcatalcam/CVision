@@ -81,10 +81,10 @@ class AnalysisService:
                 "Upload and text extraction must complete first."
             )
 
-        if cv.status != "completed":
+        if cv.status not in ("completed", "processing"):
             raise ValueError(
                 f"CV {cv.id} is in '{cv.status}' state. "
-                "Only CVs with 'completed' status can be analyzed."
+                "Only CVs with 'completed' or 'processing' status can be analyzed."
             )
 
         # Check if analysis already exists

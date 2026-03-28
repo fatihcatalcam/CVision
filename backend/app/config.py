@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     # ---- Application ----
     APP_NAME: str = "CVision"
     DEBUG: bool = False
+    CORS_ORIGINS: list[str] = ["*"]
 
     # ---- File Upload ----
     UPLOAD_DIR: str = "uploads"
