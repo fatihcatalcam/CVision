@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Zap } from 'lucide-react';
 import api from '../../services/api';
@@ -25,11 +25,14 @@ export function AnalysisPage() {
   const [data, setData] = useState<AnalysisResponse | null>(null);
   const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
   const [error, setError] = useState<string | null>(null);
+  const hasTriggeredRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const runAnalysis = async () => {
+      if (hasTriggeredRef.current) return;
+      hasTriggeredRef.current = true;
       try {
         // Step 1: Trigger the heavy backend analysis pipeline
         setLoadingMsg('Extracting text and scanning ATS structure...');

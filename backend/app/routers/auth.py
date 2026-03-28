@@ -76,8 +76,8 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Create JWT with user ID as subject
-    access_token = create_access_token(data={"sub": user.id})
+    # Create JWT with user ID as subject (must be string for jose validation)
+    access_token = create_access_token(data={"sub": str(user.id)})
 
     return TokenResponse(
         access_token=access_token,
