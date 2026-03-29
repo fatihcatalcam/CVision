@@ -36,6 +36,11 @@ class AnalysisResult(Base):
     # Detected sections — e.g. {"education": true, "experience": true, "skills": false}
     detected_sections: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=dict)
 
+    # AI-enhanced fields (populated after GPT call)
+    ai_summary: Mapped[str | None] = mapped_column(Text, nullable=True)  # AI executive summary
+    ai_suggestions: Mapped[list | None] = mapped_column(JSON, nullable=True)  # [{category, priority, message, rewrite_hint}]
+    ai_enhanced: Mapped[bool] = mapped_column(Integer, nullable=False, default=0)  # 1 if AI ran successfully
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

@@ -30,6 +30,11 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE_MB: int = 5
 
+    # ---- OpenAI ----
+    OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    OPENAI_ENABLED: bool = True  # Automatically disabled if key is empty
+
     # Computed property for max file size in bytes
     @property
     def max_file_size_bytes(self) -> int:

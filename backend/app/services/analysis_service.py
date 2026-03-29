@@ -17,6 +17,7 @@ from app.models.role_profile import RoleProfile
 from app.analysis.engine import AnalysisEngine
 from app.analysis.base_analyzer import AnalysisContext
 from app.services.recommendation_service import RecommendationService
+from app.services.ai_service import ai_enhance_analysis, is_ai_enabled
 
 logger = logging.getLogger("cvision.services.analysis")
 
@@ -172,6 +173,61 @@ class AnalysisService:
             f"{len(context.suggestions)} suggestions, "
             f"{len(context.extracted_skills)} skills"
         )
+
+        # ---- AI Enhancement (runs after rule-based analysis is saved) ----
+        if is_ai_enabled():
+            logger.info(f"Starting AI enhancement for analysis {analysis.id}...")
+            try:
+                scores_dict = {
+                    "overall_score": analysis.overall_score,
+                    "ats_score": analysis.ats_score,
+                    "keyword_score": analysis.keyword_score,
+                    "completeness_score": analysis.completeness_score,
+                    "experience_score": analysis.experience_score,
+                }
+                # Pass top role profiles for better AI context
+                top_profiles = role_profiles[:5] if role_profiles else []
+                
+                rule_suggestions = context.suggestions[:6]
+                
+                ai_result = ai_enhance_analysis(
+                    cv_text=cv.extracted_text,
+                    rule_based_suggestions=rule_suggestions,
+                    scores=scores_dict,
+                    target_domain=cv.target_domain,
+                    role_profiles=top_profiles,
+                )
+                
+                if ai_result:
+                    # Replace summary with AI-generated executive summary
+                    if ai_result.get("executive_summary"):
+                        analysis.ai_summary = ai_result["executive_summary"]
+                        # Also update the main summary with AI version for display
+                        analysis.summary = ai_result["executive_summary"]
+                    
+                    # Merge AI strengths and weaknesses (prefer AI's specific ones)
+                    if ai_result.get("strengths"):
+                        analysis.strengths = ai_result["strengths"]
+                    if ai_result.get("weaknesses"):
+                        analysis.weaknesses = ai_result["weaknesses"]
+                    
+                    # Store AI suggestions separately (they include rewrite_hint)
+                    analysis.ai_suggestions = ai_result.get("ai_suggestions", [])
+                    analysis.ai_enhanced = 1
+                    
+                    db.commit()
+                    logger.info(
+                        f"AI enhancement complete for analysis {analysis.id}: "
+                        f"{len(analysis.ai_suggestions)} AI suggestions stored"
+                    )
+                else:
+                    logger.warning(f"AI returned no data for analysis {analysis.id}, keeping rule-based output")
+                    
+            except Exception as e:
+                logger.error(f"AI enhancement failed for analysis {analysis.id}: {e}")
+                # AI failure is non-fatal — analysis still has rule-based results
+        else:
+            logger.info("AI service not enabled, skipping enhancement")
 
         return analysis
 

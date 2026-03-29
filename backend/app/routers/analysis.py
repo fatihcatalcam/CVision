@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
 from app.models.user import User
-from app.schemas.analysis import AnalysisResponse, AnalysisScores
+from app.schemas.analysis import AnalysisResponse, AnalysisScores, AISuggestion
 from app.schemas.suggestion import SuggestionResponse
 from app.schemas.skill import ExtractedSkillResponse
 from app.schemas.career_recommendation import CareerRecommendationResponse
@@ -97,6 +97,19 @@ def get_analysis_results(
 
 def _build_analysis_response(analysis) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
+    # Parse AI suggestions from JSON if present
+    raw_ai_suggestions = analysis.ai_suggestions or []
+    ai_suggestions = [
+        AISuggestion(
+            category=s.get("category", "general"),
+            priority=s.get("priority", "medium"),
+            message=s.get("message", ""),
+            rewrite_hint=s.get("rewrite_hint", ""),
+        )
+        for s in raw_ai_suggestions
+        if isinstance(s, dict)
+    ]
+
     return AnalysisResponse(
         id=analysis.id,
         cv_id=analysis.cv_id,
@@ -138,5 +151,55 @@ def _build_analysis_response(analysis) -> AnalysisResponse:
             )
             for cr in analysis.career_recommendations
         ],
+        ai_summary=getattr(analysis, 'ai_summary', None),
+        ai_suggestions=ai_suggestions,
+        ai_enhanced=bool(getattr(analysis, 'ai_enhanced', 0)),
         created_at=analysis.created_at,
+    )
+
+
+# ---- Rewrite Bullet Endpoint ----
+
+class RewriteRequest(BaseModel):
+    bullet_text: str
+    cv_context: str = ""
+    target_role: str | None = None
+
+class RewriteResponse(BaseModel):
+    original: str
+    rewritten: str | None
+    success: bool
+
+
+@router.post(
+    "/rewrite-bullet",
+    response_model=RewriteResponse,
+    summary="AI rewrite of a single CV bullet point",
+)
+def rewrite_bullet(
+    body: RewriteRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Use GPT to rewrite a single CV bullet point to be more impactful.
+    Premium feature — requires AI to be enabled.
+    """
+    from app.services.ai_service import ai_rewrite_bullet, is_ai_enabled
+
+    if not is_ai_enabled():
+        raise HTTPException(
+            status_code=503,
+            detail="AI service is not available. Please try again later."
+        )
+
+    rewritten = ai_rewrite_bullet(
+        bullet_text=body.bullet_text,
+        cv_context=body.cv_context,
+        target_role=body.target_role,
+    )
+
+    return RewriteResponse(
+        original=body.bullet_text,
+        rewritten=rewritten,
+        success=rewritten is not None,
     )
