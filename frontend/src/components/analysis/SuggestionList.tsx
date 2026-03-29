@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { AlertCircle, CheckCircle, Info } from 'lucide-react';
 
 interface Suggestion {

@@ -1,0 +1,10 @@
+Using Default Environment
+INFO:     167.86.89.146:50269:0 - "POST /auth/register HTTP/1.1" 201 Created
+INFO:     167.86.89.146:50269:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     167.86.89.146:50269:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51194:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51194:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51194:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:51194:0 - "GET /analysis/1/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51194:0 - "GET /analysis/1/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51194:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
