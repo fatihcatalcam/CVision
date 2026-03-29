@@ -137,6 +137,7 @@ class AnalysisService:
                 category=sug_data["category"],
                 priority=sug_data["priority"],
                 message=sug_data["message"],
+                snippets=sug_data.get("snippets", []),
             )
             db.add(suggestion)
 

@@ -11,5 +11,6 @@ class SuggestionResponse(BaseModel):
     category: str
     priority: str
     message: str
+    snippets: list[str] = []
 
     model_config = {"from_attributes": True}

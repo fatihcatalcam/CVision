@@ -100,6 +100,7 @@ def _build_analysis_response(analysis) -> AnalysisResponse:
     return AnalysisResponse(
         id=analysis.id,
         cv_id=analysis.cv_id,
+        extracted_text=analysis.cv.extracted_text,
         scores=AnalysisScores(
             overall_score=analysis.overall_score,
             ats_score=analysis.ats_score,
@@ -117,6 +118,7 @@ def _build_analysis_response(analysis) -> AnalysisResponse:
                 category=s.category,
                 priority=s.priority,
                 message=s.message,
+                snippets=s.snippets or [],
             )
             for s in analysis.suggestions
         ],

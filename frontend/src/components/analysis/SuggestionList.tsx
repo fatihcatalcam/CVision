@@ -5,13 +5,16 @@ interface Suggestion {
   id: number;
   category: string;
   message: string;
+  snippets?: string[];
 }
 
 interface SuggestionListProps {
   suggestions: Suggestion[];
+  activeSuggestionId?: number | null;
+  onSelectSuggestion?: (suggestion: Suggestion) => void;
 }
 
-export function SuggestionList({ suggestions }: SuggestionListProps) {
+export function SuggestionList({ suggestions, activeSuggestionId, onSelectSuggestion }: SuggestionListProps) {
   if (!suggestions || suggestions.length === 0) {
     return <p className="text-[var(--color-muted)] text-sm">No suggestions found.</p>;
   }
@@ -47,19 +50,36 @@ export function SuggestionList({ suggestions }: SuggestionListProps) {
     <div className="space-y-3">
       {suggestions.map((suggestion) => {
         const { icon, style } = getIconAndStyle(suggestion.category);
+        const hasSnippets = suggestion.snippets && suggestion.snippets.length > 0;
+        const isActive = activeSuggestionId === suggestion.id;
+        
         return (
-          <div 
+          <button 
             key={suggestion.id}
-            className={`flex items-start gap-3 p-4 rounded-xl border ${style} transition-colors hover:bg-opacity-20`}
+            onClick={() => onSelectSuggestion && onSelectSuggestion(suggestion)}
+            className={`w-full text-left flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 ${
+              isActive 
+                ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/10 shadow-[0_0_15px_rgba(59,130,246,0.15)] ring-1 ring-[var(--color-primary)]' 
+                : `${style} hover:bg-opacity-20`
+            } ${hasSnippets ? 'cursor-pointer hover:-translate-y-0.5' : 'cursor-pointer'}`}
           >
             <div className="mt-0.5">{icon}</div>
-            <div>
-              <p className="text-white text-sm leading-relaxed">{suggestion.message}</p>
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 mt-1 block">
-                {suggestion.category}
-              </span>
+            <div className="flex-1">
+              <p className={`text-sm leading-relaxed ${isActive ? 'text-white' : 'text-zinc-200'}`}>
+                {suggestion.message}
+              </p>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 bg-black/20 px-2 py-0.5 rounded">
+                  {suggestion.category}
+                </span>
+                {hasSnippets && (
+                  <span className="text-[10px] text-red-400 font-semibold bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20">
+                    Fix ({suggestion.snippets!.length})
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+          </button>
         );
       })}
     </div>

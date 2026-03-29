@@ -23,6 +23,7 @@ class AnalysisResponse(BaseModel):
     """Complete analysis result returned to the user."""
     id: int
     cv_id: int
+    extracted_text: str | None = None
     scores: AnalysisScores
     summary: str | None = None
     strengths: list[str] = []

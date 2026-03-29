@@ -3,7 +3,7 @@ Suggestion model — individual improvement suggestions tied to an analysis.
 Each analysis generates at least 3 suggestions (FR10).
 """
 
-from sqlalchemy import Integer, String, Text, ForeignKey
+from sqlalchemy import Integer, String, Text, ForeignKey, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -23,6 +23,8 @@ class Suggestion(Base):
         String(20), nullable=False, default="medium"
     )  # "high", "medium", "low"
     message: Mapped[str] = mapped_column(Text, nullable=False)
+    snippets: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)
+
 
     # Relationships
     analysis: Mapped["AnalysisResult"] = relationship(

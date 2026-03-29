@@ -14,6 +14,8 @@ Implements FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form, BackgroundTasks
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
@@ -138,6 +140,134 @@ def get_cv(
             cv.extracted_text[:500] if cv.extracted_text else None
         ),
     )
+
+
+@router.get(
+    "/{cv_id}/download",
+    response_class=FileResponse,
+    summary="Download original CV file",
+)
+def download_cv(
+    cv_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Download or view the original CV file (PDF/txt).
+    """
+    cv = CVService.get_cv(cv_id, current_user, db)
+
+    if cv is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CV with id {cv_id} not found",
+        )
+
+    import os
+    if not os.path.exists(cv.file_path):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File physically missing from server.",
+        )
+
+    return FileResponse(
+        path=cv.file_path,
+        filename=cv.original_filename,
+        # Determine media type based on extension
+        media_type="application/pdf" if cv.file_type == "pdf" else "text/plain",
+        content_disposition_type="inline"  # Allows viewing in browser without forcing download
+    )
+
+
+class HighlightRequest(BaseModel):
+    snippets: list[str] = []
+
+
+@router.post(
+    "/{cv_id}/preview",
+    summary="Get PDF with highlighted problem areas",
+)
+def get_highlighted_pdf(
+    cv_id: int,
+    body: HighlightRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns the original PDF with red highlight annotations
+    drawn over the specified text snippets.
+    """
+    import os
+    import io
+    import fitz  # PyMuPDF
+    from fastapi.responses import StreamingResponse
+
+    cv = CVService.get_cv(cv_id, current_user, db)
+
+    if cv is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CV with id {cv_id} not found",
+        )
+
+    if cv.file_type != "pdf":
+        raise HTTPException(
+            status_code=400,
+            detail="Highlighting is only supported for PDF files.",
+        )
+
+    if not os.path.exists(cv.file_path):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File physically missing from server.",
+        )
+
+    snippets = body.snippets
+    if not snippets:
+        # No highlights requested, just return the original
+        return FileResponse(
+            path=cv.file_path,
+            filename=cv.original_filename,
+            media_type="application/pdf",
+            content_disposition_type="inline",
+        )
+
+    try:
+        doc = fitz.open(cv.file_path)
+
+        for page in doc:
+            for snippet in snippets:
+                # Search for each snippet on the page
+                text_instances = page.search_for(snippet)
+                for inst in text_instances:
+                    # Add a red-ish highlight annotation
+                    highlight = page.add_highlight_annot(inst)
+                    # Set highlight color to red (RGB)
+                    highlight.set_colors(stroke=(1.0, 0.2, 0.2))
+                    highlight.set_opacity(0.4)
+                    highlight.update()
+
+        # Write annotated PDF to memory buffer
+        pdf_bytes = doc.tobytes()
+        doc.close()
+
+        return StreamingResponse(
+            io.BytesIO(pdf_bytes),
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": "inline; filename=highlighted_cv.pdf",
+            },
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to highlight PDF: {e}")
+        # Fallback: return the original PDF
+        return FileResponse(
+            path=cv.file_path,
+            filename=cv.original_filename,
+            media_type="application/pdf",
+            content_disposition_type="inline",
+        )
 
 
 @router.delete(

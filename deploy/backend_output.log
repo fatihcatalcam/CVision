@@ -8,3 +8,156 @@ INFO:     78.163.170.91:51194:0 - "POST /cvs/upload HTTP/1.1" 201 Created
 INFO:     78.163.170.91:51194:0 - "GET /analysis/1/status HTTP/1.1" 200 OK
 INFO:     78.163.170.91:51194:0 - "GET /analysis/1/results HTTP/1.1" 200 OK
 INFO:     78.163.170.91:51194:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50093:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52128:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52128:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     141.196.4.83:28768:0 - "POST /auth/register HTTP/1.1" 201 Created
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:51290:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51290:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51290:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:51290:0 - "GET /analysis/2/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51290:0 - "GET /analysis/2/results HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:50862:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50862:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50862:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:50862:0 - "GET /analysis/3/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50862:0 - "GET /analysis/3/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50862:0 - "GET /cvs/3/download HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:49996:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:49996:0 - "GET /analysis/4/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "GET /analysis/4/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "GET /cvs/4/download HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "GET /cvs/4/download HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49996:0 - "GET /cvs/4/download HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+INFO:     127.0.0.1:51250 - "GET /api/health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51252 - "GET /docs HTTP/1.1" 200 OK
+INFO:     167.86.89.146:51305:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     167.86.89.146:51305:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:53043:0 - "GET /analysis/5/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /analysis/5/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /cvs/5/download HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "POST /cvs/5/preview HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:53043:0 - "GET /analysis/6/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /analysis/6/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "GET /analysis/6/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53043:0 - "POST /cvs/6/preview HTTP/1.1" 200 OK

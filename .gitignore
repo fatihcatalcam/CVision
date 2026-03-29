@@ -33,3 +33,15 @@ Thumbs.db
 
 # Alembic
 backend/alembic/__pycache__/
+
+# Custom Python Env
+cv_env_313/
+
+# Logs
+*.log
+crash_log.txt
+import_err.txt
+err.txt
+
+# Additional Env files
+.env.*
