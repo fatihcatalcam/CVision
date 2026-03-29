@@ -23,6 +23,7 @@ from app.schemas.skill import ExtractedSkillResponse
 from app.schemas.career_recommendation import CareerRecommendationResponse
 from app.services.cv_service import CVService
 from app.services.analysis_service import AnalysisService
+from app.utils.hashids import decode_id
 
 logger = logging.getLogger("cvision.routers.analysis")
 
@@ -41,7 +42,7 @@ class AnalysisStatusResponse(BaseModel):
     summary="Get background analysis status",
 )
 def get_analysis_status(
-    cv_id: int,
+    cv_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -49,7 +50,8 @@ def get_analysis_status(
     Check the current status of an uploaded CV's analysis process.
     Expected statuses: 'pending', 'processing', 'completed', 'failed'.
     """
-    cv = CVService.get_cv(cv_id, current_user, db)
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
     if cv is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -68,7 +70,7 @@ def get_analysis_status(
     summary="Get analysis results",
 )
 def get_analysis_results(
-    cv_id: int,
+    cv_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -77,15 +79,16 @@ def get_analysis_results(
     Includes scores, suggestions, extracted skills, and career recommendations.
     Users can only access analysis for their own CVs.
     """
+    db_cv_id = decode_id(cv_id)
     # Verify CV exists and belongs to user
-    cv = CVService.get_cv(cv_id, current_user, db)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
     if cv is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"CV with id {cv_id} not found",
         )
 
-    analysis = AnalysisService.get_analysis(cv_id, db)
+    analysis = AnalysisService.get_analysis(db_cv_id, db)
     if analysis is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

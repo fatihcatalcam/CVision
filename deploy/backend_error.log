@@ -7891,3 +7891,83 @@ INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
 2026-03-29 19:54:32,603 - cvision.services.ai - INFO - AI enhancement successful — 5 suggestions generated
 2026-03-29 19:54:32,608 - cvision.services.analysis - INFO - AI enhancement complete for analysis 21: 5 AI suggestions stored
 2026-03-29 19:54:32,611 - cvision.services.cv - INFO - Background task successfully completed for CV 21
+2026-03-29 20:46:27,227 - cvision.services.cv - INFO - Saved file: 70a786c41f604b11a0146a90ed15ad30.pdf (60614 bytes) to uploads\70a786c41f604b11a0146a90ed15ad30.pdf
+2026-03-29 20:46:27,234 - cvision.services.cv - INFO - CV record created: id=22, user=1
+2026-03-29 20:46:27,237 - cvision.services.cv - INFO - Background task starting for CV 22
+2026-03-29 20:46:27,239 - cvision.services.cv - INFO - Background task starting for CV 22 (User 1)
+2026-03-29 20:46:27,242 - cvision.parsing.pdf - INFO - Extracting text from PDF: 70a786c41f604b11a0146a90ed15ad30.pdf
+2026-03-29 20:46:27,274 - cvision.parsing.pdf - INFO - Total extracted: 1922 chars from 1 pages
+2026-03-29 20:46:27,276 - cvision.services.cv - INFO - Text processing completed, launching analysis engine...
+2026-03-29 20:46:27,281 - cvision.services.analysis - WARNING - No role profiles found for domain 'Other', falling back to all profiles
+2026-03-29 20:46:27,282 - cvision.services.analysis - INFO - Running analysis for CV 22 (Domain: Other) (140 skills, 44 role profiles)
+2026-03-29 20:46:27,282 - cvision.analysis.engine - INFO - Starting analysis pipeline...
+2026-03-29 20:46:27,283 - cvision.analysis.engine - INFO - Running: Section Detector
+2026-03-29 20:46:27,284 - cvision.analysis.section_detector - INFO - Detected 3/8 sections, completeness=65.0%
+2026-03-29 20:46:27,284 - cvision.analysis.engine - INFO - Running: Skill Extractor
+2026-03-29 20:46:27,288 - cvision.analysis.skill_extractor - INFO - Extracted 1 skills from CV text (searched 140 skill patterns)
+2026-03-29 20:46:27,289 - cvision.analysis.engine - INFO - Running: ATS Checker
+2026-03-29 20:46:27,290 - cvision.analysis.ats_checker - INFO - ATS Score: 90.0% — 7 passed, 1 issues
+2026-03-29 20:46:27,290 - cvision.analysis.engine - INFO - Running: Keyword Scorer
+2026-03-29 20:46:27,317 - cvision.analysis.keyword_scorer - INFO - Keyword score: 30.0% — matched 17/427 unique keywords globally
+2026-03-29 20:46:27,318 - cvision.analysis.engine - INFO - Running: Experience Evaluator
+2026-03-29 20:46:27,318 - cvision.analysis.experience_evaluator - INFO - Experience: ~7.0 years, score=100.0%, entries=5
+2026-03-29 20:46:27,319 - cvision.analysis.engine - INFO - Running: Score Calculator
+2026-03-29 20:46:27,319 - cvision.analysis.score_calculator - INFO - Overall score: 60.4% (completeness=65.0%, skills=26.7%, ats=90.0%, keywords=30.0%, experience=100.0%)
+2026-03-29 20:46:27,319 - cvision.analysis.engine - INFO - Running: Suggestion Generator
+2026-03-29 20:46:27,319 - cvision.analysis.suggestion_generator - INFO - Generated 8 suggestions
+2026-03-29 20:46:27,320 - cvision.analysis.engine - INFO - Analysis pipeline complete. Overall score: 60.4%
+2026-03-29 20:46:27,328 - cvision.services.recommendation - WARNING - No profiles for domain 'Other', using all profiles
+2026-03-29 20:46:27,331 - cvision.services.recommendation - INFO - Generated 3 career recommendations for analysis 22
+2026-03-29 20:46:27,334 - cvision.services.analysis - INFO - Analysis 22 saved for CV 22: score=60.4%, 8 suggestions, 1 skills
+2026-03-29 20:46:27,334 - cvision.services.analysis - INFO - Starting AI enhancement for analysis 22...
+2026-03-29 20:46:27,478 - cvision.services.ai - INFO - Calling OpenAI API (model: gpt-4o-mini, lang: en)
+2026-03-29 20:46:37,803 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-29 20:46:37,806 - cvision.services.ai - INFO - AI enhancement successful — 5 suggestions generated
+2026-03-29 20:46:37,811 - cvision.services.analysis - INFO - AI enhancement complete for analysis 22: 5 AI suggestions stored
+2026-03-29 20:46:37,813 - cvision.services.cv - INFO - Background task successfully completed for CV 22
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-29 22:06:38,000 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [252]
+INFO:     Started server process [2452]
+INFO:     Waiting for application startup.
+2026-03-29 22:06:40,884 - cvision - INFO - Starting CVision backend...
+2026-03-29 22:06:40,945 - cvision - INFO - Database tables ensured.
+2026-03-29 22:06:40,963 - cvision - INFO - Skills table already up to date (140 entries).
+2026-03-29 22:06:40,968 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-03-29 22:06:40,969 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+2026-03-29 22:06:51,594 - cvision.services.cv - INFO - Saved file: 8687a0b83ea44cdabc73c060430b6d5e.pdf (60614 bytes) to uploads\8687a0b83ea44cdabc73c060430b6d5e.pdf
+2026-03-29 22:06:51,606 - cvision.services.cv - INFO - CV record created: id=23, user=1
+2026-03-29 22:06:51,610 - cvision.services.cv - INFO - Background task starting for CV 23
+2026-03-29 22:06:51,612 - cvision.services.cv - INFO - Background task starting for CV 23 (User 1)
+2026-03-29 22:06:51,616 - cvision.parsing.pdf - INFO - Extracting text from PDF: 8687a0b83ea44cdabc73c060430b6d5e.pdf
+2026-03-29 22:06:51,648 - cvision.parsing.pdf - INFO - Total extracted: 1922 chars from 1 pages
+2026-03-29 22:06:51,664 - cvision.services.cv - INFO - Text processing completed, launching analysis engine...
+2026-03-29 22:06:51,671 - cvision.services.analysis - INFO - Running analysis for CV 23 (Domain: Data & Analytics) (140 skills, 4 role profiles)
+2026-03-29 22:06:51,673 - cvision.analysis.engine - INFO - Starting analysis pipeline...
+2026-03-29 22:06:51,673 - cvision.analysis.engine - INFO - Running: Section Detector
+2026-03-29 22:06:51,675 - cvision.analysis.section_detector - INFO - Detected 3/8 sections, completeness=65.0%
+2026-03-29 22:06:51,675 - cvision.analysis.engine - INFO - Running: Skill Extractor
+2026-03-29 22:06:51,679 - cvision.analysis.skill_extractor - INFO - Extracted 1 skills from CV text (searched 140 skill patterns)
+2026-03-29 22:06:51,679 - cvision.analysis.engine - INFO - Running: ATS Checker
+2026-03-29 22:06:51,681 - cvision.analysis.ats_checker - INFO - ATS Score: 90.0% — 7 passed, 1 issues
+2026-03-29 22:06:51,681 - cvision.analysis.engine - INFO - Running: Keyword Scorer
+2026-03-29 22:06:51,684 - cvision.analysis.keyword_scorer - INFO - Keyword score: 20.0% — matched 2/41 unique keywords globally
+2026-03-29 22:06:51,684 - cvision.analysis.engine - INFO - Running: Experience Evaluator
+2026-03-29 22:06:51,684 - cvision.analysis.experience_evaluator - INFO - Experience: ~7.0 years, score=100.0%, entries=5
+2026-03-29 22:06:51,684 - cvision.analysis.engine - INFO - Running: Score Calculator
+2026-03-29 22:06:51,684 - cvision.analysis.score_calculator - INFO - Overall score: 58.9% (completeness=65.0%, skills=26.7%, ats=90.0%, keywords=20.0%, experience=100.0%)
+2026-03-29 22:06:51,684 - cvision.analysis.engine - INFO - Running: Suggestion Generator
+2026-03-29 22:06:51,685 - cvision.analysis.suggestion_generator - INFO - Generated 8 suggestions
+2026-03-29 22:06:51,685 - cvision.analysis.engine - INFO - Analysis pipeline complete. Overall score: 58.9%
+2026-03-29 22:06:51,711 - cvision.services.recommendation - INFO - Generated 3 career recommendations for analysis 23
+2026-03-29 22:06:51,715 - cvision.services.analysis - INFO - Analysis 23 saved for CV 23: score=58.9%, 8 suggestions, 1 skills
+2026-03-29 22:06:51,715 - cvision.services.analysis - INFO - Starting AI enhancement for analysis 23...
+2026-03-29 22:06:52,381 - cvision.services.ai - INFO - Calling OpenAI API (model: gpt-4o-mini, lang: en)
+2026-03-29 22:07:12,677 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-29 22:07:12,683 - cvision.services.ai - INFO - AI enhancement successful — 5 suggestions generated
+2026-03-29 22:07:12,691 - cvision.services.analysis - INFO - AI enhancement complete for analysis 23: 5 AI suggestions stored
+2026-03-29 22:07:12,696 - cvision.services.cv - INFO - Background task successfully completed for CV 23

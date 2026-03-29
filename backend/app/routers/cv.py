@@ -23,6 +23,7 @@ from app.models.user import User
 from app.schemas.cv import CVResponse, CVDetailResponse, CVListResponse
 from app.services.cv_service import CVService
 from app.limiter import limiter
+from app.utils.hashids import decode_id
 
 logger = logging.getLogger("cvision.routers.cv")
 
@@ -114,7 +115,7 @@ def list_cvs(
     summary="Get CV details",
 )
 def get_cv(
-    cv_id: int,
+    cv_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -123,7 +124,8 @@ def get_cv(
     of the extracted text (first 500 characters).
     Users can only access their own CVs.
     """
-    cv = CVService.get_cv(cv_id, current_user, db)
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
 
     if cv is None:
         raise HTTPException(
@@ -151,14 +153,15 @@ def get_cv(
     summary="Download original CV file",
 )
 def download_cv(
-    cv_id: int,
+    cv_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """
     Download or view the original CV file (PDF/txt).
     """
-    cv = CVService.get_cv(cv_id, current_user, db)
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
 
     if cv is None:
         raise HTTPException(
@@ -203,7 +206,7 @@ class HighlightRequest(BaseModel):
     summary="Get PDF with highlighted problem areas",
 )
 def get_highlighted_pdf(
-    cv_id: int,
+    cv_id: str,
     body: HighlightRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -217,7 +220,8 @@ def get_highlighted_pdf(
     import fitz  # PyMuPDF
     from fastapi.responses import StreamingResponse
 
-    cv = CVService.get_cv(cv_id, current_user, db)
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
 
     if cv is None:
         raise HTTPException(
@@ -303,7 +307,7 @@ def get_highlighted_pdf(
     summary="Delete a CV",
 )
 def delete_cv(
-    cv_id: int,
+    cv_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -313,7 +317,8 @@ def delete_cv(
     via cascade delete.
     Users can only delete their own CVs.
     """
-    cv = CVService.get_cv(cv_id, current_user, db)
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
 
     if cv is None:
         raise HTTPException(
