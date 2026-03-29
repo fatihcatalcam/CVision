@@ -11,14 +11,16 @@ Registers all routers, configures CORS, and provides:
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
+from app.limiter import limiter
 from app.database import engine, SessionLocal, Base
 
 # Import all models so Base.metadata knows about them
@@ -130,8 +132,6 @@ async def lifespan(app: FastAPI):
     logger.info("Shutting down CVision backend...")
 
 
-# ---- Create FastAPI App ----
-
 app = FastAPI(
     title="CVision API",
     description=(
@@ -144,6 +144,10 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# ---- Rate Limiting (slowapi) ----
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # ---- Advanced Error Handling System ----
 @app.exception_handler(HTTPException)
@@ -201,7 +205,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Allow frontend dev server and production domains
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

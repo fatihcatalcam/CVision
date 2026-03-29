@@ -13,7 +13,7 @@ Implements FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status, Form, BackgroundTasks, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -22,6 +22,7 @@ from app.dependencies import get_db, get_current_user
 from app.models.user import User
 from app.schemas.cv import CVResponse, CVDetailResponse, CVListResponse
 from app.services.cv_service import CVService
+from app.limiter import limiter
 
 logger = logging.getLogger("cvision.routers.cv")
 
@@ -34,7 +35,9 @@ router = APIRouter(prefix="/cvs", tags=["CV Management"])
     status_code=status.HTTP_201_CREATED,
     summary="Upload a CV file",
 )
+@limiter.limit("5/minute")
 async def upload_cv(
+    request: Request,
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="CV file (PDF or TXT, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
@@ -163,8 +166,20 @@ def download_cv(
             detail=f"CV with id {cv_id} not found",
         )
 
+    from pathlib import Path
+    from app.config import settings
     import os
-    if not os.path.exists(cv.file_path):
+
+    target_path = Path(cv.file_path).resolve()
+    base_path = Path(settings.upload_path).resolve()
+
+    if not target_path.is_relative_to(base_path):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Path traversal detected.",
+        )
+
+    if not target_path.exists():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="File physically missing from server.",
@@ -216,7 +231,19 @@ def get_highlighted_pdf(
             detail="Highlighting is only supported for PDF files.",
         )
 
-    if not os.path.exists(cv.file_path):
+    from pathlib import Path
+    from app.config import settings
+    
+    target_path = Path(cv.file_path).resolve()
+    base_path = Path(settings.upload_path).resolve()
+
+    if not target_path.is_relative_to(base_path):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden: Path traversal detected.",
+        )
+
+    if not target_path.exists():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="File physically missing from server.",

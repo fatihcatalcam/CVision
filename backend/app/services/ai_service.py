@@ -96,8 +96,11 @@ def ai_enhance_analysis(
     # Build role context
     role_context = ""
     if target_domain:
-        role_context = f"Target Domain: {target_domain}"
-    if role_profiles:
+        if target_domain.lower() == "other":
+            role_context = "Target Domain: [Unknown/Other]. IMPORTANT: Please deduce the candidate's primary profession from the CV and evaluate them as an expert recruiter in that deduced profession."
+        else:
+            role_context = f"Target Domain: {target_domain}"
+    if role_profiles and target_domain and target_domain.lower() != "other":
         top_roles = [p.get("title", "") for p in role_profiles[:3]]
         role_context += f"\nBest Matching Roles: {', '.join(top_roles)}"
     

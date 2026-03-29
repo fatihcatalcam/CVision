@@ -19,6 +19,7 @@ const DOMAINS = [
   { value: 'Environmental & Energy', label: '🌱 Environmental & Energy' },
   { value: 'Cybersecurity', label: '🔒 Cybersecurity' },
   { value: 'UX / UI Design', label: '🎨 UX / UI Design' },
+  { value: 'Other', label: '👽 Other (AI Auto-Detect)' },
 ];
 
 interface CVUploaderProps {
