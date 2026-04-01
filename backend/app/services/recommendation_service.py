@@ -1,0 +1,103 @@
+"""
+Recommendation Service — business logic for generating and persisting recommendations.
+"""
+
+import logging
+
+from sqlalchemy.orm import Session
+
+from app.models.analysis import AnalysisResult
+from app.models.career_recommendation import CareerRecommendation
+from app.models.role_profile import RoleProfile
+from app.recommendation.recommender import CareerRecommender
+
+logger = logging.getLogger("cvision.services.recommendation")
+
+
+class RecommendationService:
+    """Handles career recommendation generation and retrieval."""
+
+    @staticmethod
+    def generate_recommendations(
+        analysis: AnalysisResult,
+        extracted_skills_list: list[dict],
+        keyword_matches: dict[str, list[str]],
+        db: Session,
+        target_domain: str | None = None,
+    ) -> list[CareerRecommendation]:
+        """
+        Generate recommendations for a freshly completed analysis and save them.
+
+        Args:
+            analysis: The AnalysisResult record (must have extracted_skills populated).
+            extracted_skills_list: List of skill dicts from the analysis engine.
+            keyword_matches: The keyword matches dict from AnalysisContext.
+            db: Database session.
+            target_domain: If provided, only match against roles in this domain.
+
+        Returns:
+            List of generated CareerRecommendation instances.
+        """
+        # Load role profiles filtered by domain
+        query = db.query(RoleProfile)
+        if target_domain:
+            query = query.filter(RoleProfile.domain == target_domain)
+        profiles = query.all()
+        
+        # Fallback to all if no profiles found for domain
+        if not profiles and target_domain:
+            logger.warning(f"No profiles for domain '{target_domain}', using all profiles")
+            profiles = db.query(RoleProfile).all()
+            
+        profiles_data = [
+            {
+                "id": p.id,
+                "title": p.title,
+                "expected_keywords": p.expected_keywords or [],
+                "expected_skills": p.expected_skills or [],
+            }
+            for p in profiles
+        ]
+
+        # Extract names of skills directly from the pre-computed engine context list
+        extracted_skills = [es["skill_name"] for es in extracted_skills_list]
+
+        # Run recommender engine
+        recommender = CareerRecommender(
+            role_profiles=profiles_data,
+            extracted_skills=extracted_skills,
+            keyword_matches=keyword_matches,
+        )
+
+        results = recommender.get_recommendations(top_n=3)
+
+        recommendations = []
+        for result in results:
+            rec = CareerRecommendation(
+                analysis_id=analysis.id,
+                role_profile_id=result["role_id"],
+                match_score=result["score"],
+                explanation=result["explanation"],
+            )
+            db.add(rec)
+            recommendations.append(rec)
+
+        db.flush()
+        logger.info(
+            f"Generated {len(recommendations)} career recommendations "
+            f"for analysis {analysis.id}"
+        )
+
+        return recommendations
+
+    @staticmethod
+    def get_recommendations_for_analysis(
+        analysis_id: int, db: Session
+    ) -> list[CareerRecommendation]:
+        """Retrieve recommendations for an analysis."""
+        return (
+            db.query(CareerRecommendation)
+            .filter(CareerRecommendation.analysis_id == analysis_id)
+            .order_by(CareerRecommendation.match_score.desc())
+            .all()
+        )

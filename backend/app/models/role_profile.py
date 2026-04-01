@@ -17,6 +17,7 @@ class RoleProfile(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String(150), nullable=False, unique=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    domain: Mapped[str] = mapped_column(String(100), nullable=False, default="Software Engineering")
 
     # JSON arrays of strings — e.g. ["python", "api", "backend", "database"]
     expected_keywords: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\services\cv_service.py", line 178, in process_analysis_background
+    AnalysisService.run_analysis(cv, db)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\services\analysis_service.py", line 85, in run_analysis
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: CV 41 is in 'processing' state. Only CVs with 'completed' status can be analyzed.

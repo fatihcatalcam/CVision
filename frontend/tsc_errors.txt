@@ -1,0 +1,5 @@
+src/components/analysis/SuggestionList.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/ui/Button.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/ui/Button.tsx(1,17): error TS1484: 'ButtonHTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/context/AuthContext.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/context/AuthContext.tsx(1,65): error TS1484: 'ReactNode' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.

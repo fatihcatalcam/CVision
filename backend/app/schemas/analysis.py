@@ -3,7 +3,8 @@ Analysis schemas — response validation for analysis results.
 """
 
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from app.utils.hashids import encode_id
 
 from app.schemas.suggestion import SuggestionResponse
 from app.schemas.skill import ExtractedSkillResponse
@@ -19,10 +20,19 @@ class AnalysisScores(BaseModel):
     experience_score: float
 
 
+class AISuggestion(BaseModel):
+    """An AI-generated suggestion with an optional rewrite hint."""
+    category: str
+    priority: str
+    message: str
+    rewrite_hint: str = ""
+
+
 class AnalysisResponse(BaseModel):
     """Complete analysis result returned to the user."""
-    id: int
-    cv_id: int
+    id: str
+    cv_id: str
+    extracted_text: str | None = None
     scores: AnalysisScores
     summary: str | None = None
     strengths: list[str] = []
@@ -31,15 +41,26 @@ class AnalysisResponse(BaseModel):
     suggestions: list[SuggestionResponse] = []
     extracted_skills: list[ExtractedSkillResponse] = []
     career_recommendations: list[CareerRecommendationResponse] = []
+    # AI-enhanced fields
+    ai_summary: str | None = None
+    ai_suggestions: list[AISuggestion] = []
+    ai_enhanced: bool = False
     created_at: datetime
 
     model_config = {"from_attributes": True}
 
+    @field_validator('id', 'cv_id', mode='before')
+    @classmethod
+    def encode_ids(cls, v):
+        if isinstance(v, int):
+            return encode_id(v)
+        return v
+
 
 class AnalysisSummaryResponse(BaseModel):
     """Lightweight analysis summary for dashboard/history views."""
-    id: int
-    cv_id: int
+    id: str
+    cv_id: str
     cv_filename: str
     overall_score: float
     ats_score: float
@@ -47,3 +68,10 @@ class AnalysisSummaryResponse(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+    @field_validator('id', 'cv_id', mode='before')
+    @classmethod
+    def encode_ids(cls, v):
+        if isinstance(v, int):
+            return encode_id(v)
+        return v

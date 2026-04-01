@@ -17,17 +17,29 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./cvision.db"
 
     # ---- JWT Authentication ----
-    SECRET_KEY: str = "change-this-in-production"
+    SECRET_KEY: str  # No default, must be set in .env
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # ---- Application ----
     APP_NAME: str = "CVision"
     DEBUG: bool = False
+    CORS_ORIGINS: str = ""  # Comma-separated string in .env
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        if not self.CORS_ORIGINS:
+            return []
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
     # ---- File Upload ----
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE_MB: int = 5
+
+    # ---- OpenAI ----
+    OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    OPENAI_ENABLED: bool = True  # Automatically disabled if key is empty
 
     # Computed property for max file size in bytes
     @property
