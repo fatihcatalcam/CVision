@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Loader2, Zap, FileText,
-  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check,
+  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock,
 } from 'lucide-react';
 import api from '../../services/api';
 import { Card } from '../../components/ui/Card';
@@ -17,8 +17,9 @@ import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 interface AISuggestion {
   category: string;
   priority: string;
-  message: string;
-  rewrite_hint: string;
+  message: string | null;
+  rewrite_hint: string | null;
+  is_locked: boolean;
 }
 
 interface AnalysisData {
@@ -39,6 +40,7 @@ interface AnalysisData {
   extracted_skills: any[];
   career_recommendations?: any[];
   ai_summary: string | null;
+  is_summary_locked: boolean;
   ai_suggestions: AISuggestion[];
   ai_enhanced: boolean;
 }
@@ -54,6 +56,28 @@ const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; lab
 // ─── AI Suggestion Card ─────────────────────────────────────────────────────
 
 function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; index: number }) {
+  if (suggestion.is_locked) {
+    return (
+      <div className="border border-zinc-800 rounded-xl overflow-hidden relative">
+        <div className="w-full flex items-start gap-3 p-4 text-left opacity-30 blur-[2px] pointer-events-none select-none">
+          <div className="mt-1.5 w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400">Hidden Insight</span>
+            </div>
+            <p className="text-sm text-zinc-200">This premium suggestion contains advanced feedback about your experience section, identifying key areas for improvement.</p>
+          </div>
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/40">
+           <div className="p-2 mb-2 bg-indigo-500/20 rounded-full">
+             <Lock className="w-5 h-5 text-indigo-400" />
+           </div>
+           <p className="text-xs font-semibold text-white">Premium Feature</p>
+        </div>
+      </div>
+    );
+  }
+
   const [expanded, setExpanded] = useState(index === 0);
   const [copied, setCopied] = useState(false);
   const meta = PRIORITY_META[suggestion.priority] ?? PRIORITY_META.medium;
@@ -323,12 +347,21 @@ export function AnalysisPage() {
 
           {/* AI Executive Summary */}
           {data!.ai_summary && (
-            <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-purple-500/5">
+            <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-indigo-400" />
                 <h3 className="text-sm font-bold text-indigo-300 uppercase tracking-wider">AI Executive Summary</h3>
               </div>
-              <p className="text-zinc-200 leading-relaxed text-[15px]">{data!.ai_summary}</p>
+              <p className={`text-zinc-200 leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
+                {data!.ai_summary}
+              </p>
+              {data!.is_summary_locked && (
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-card-bg)] via-[var(--color-card-bg)]/60 to-transparent flex items-center justify-center">
+                  <button className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-500/50 text-white shadow-xl shadow-indigo-500/20 text-sm font-bold hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                    <Lock className="w-4 h-4" /> Unlock Full AI Report
+                  </button>
+                </div>
+              )}
             </Card>
           )}
 

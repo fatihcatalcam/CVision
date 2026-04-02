@@ -95,23 +95,50 @@ def get_analysis_results(
             detail=f"No analysis found for CV {cv_id}. Trigger analysis first.",
         )
 
-    return _build_analysis_response(analysis)
+    return _build_analysis_response(analysis, current_user)
 
 
-def _build_analysis_response(analysis) -> AnalysisResponse:
+def _build_analysis_response(analysis, current_user: User | None = None) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
+    is_free = current_user.plan_type == "free" if current_user else False
+
     # Parse AI suggestions from JSON if present
     raw_ai_suggestions = analysis.ai_suggestions or []
-    ai_suggestions = [
-        AISuggestion(
-            category=s.get("category", "general"),
-            priority=s.get("priority", "medium"),
-            message=s.get("message", ""),
-            rewrite_hint=s.get("rewrite_hint", ""),
-        )
-        for s in raw_ai_suggestions
-        if isinstance(s, dict)
-    ]
+    ai_suggestions = []
+    
+    for i, s in enumerate(raw_ai_suggestions):
+        if not isinstance(s, dict):
+            continue
+            
+        if is_free and i > 0:
+            # Lock everything after the 1st suggestion
+            ai_suggestions.append(
+                AISuggestion(
+                    category=s.get("category", "general"),
+                    priority=s.get("priority", "medium"),
+                    message=None,
+                    rewrite_hint=None,
+                    is_locked=True
+                )
+            )
+        else:
+            # First suggestion or premium user
+            ai_suggestions.append(
+                AISuggestion(
+                    category=s.get("category", "general"),
+                    priority=s.get("priority", "medium"),
+                    message=s.get("message", ""),
+                    rewrite_hint=None if is_free else s.get("rewrite_hint", ""),
+                    is_locked=False
+                )
+            )
+
+    ai_summary = getattr(analysis, 'ai_summary', None)
+    is_summary_locked = False
+    
+    if is_free and ai_summary:
+        is_summary_locked = True
+        ai_summary = ai_summary[:120] + "..."
 
     return AnalysisResponse(
         id=analysis.id,
@@ -154,7 +181,8 @@ def _build_analysis_response(analysis) -> AnalysisResponse:
             )
             for cr in analysis.career_recommendations
         ],
-        ai_summary=getattr(analysis, 'ai_summary', None),
+        ai_summary=ai_summary,
+        is_summary_locked=is_summary_locked,
         ai_suggestions=ai_suggestions,
         ai_enhanced=bool(getattr(analysis, 'ai_enhanced', 0)),
         created_at=analysis.created_at,
@@ -188,6 +216,12 @@ def rewrite_bullet(
     Premium feature — requires AI to be enabled.
     """
     from app.services.ai_service import ai_rewrite_bullet, is_ai_enabled
+
+    if current_user.plan_type == "free":
+        raise HTTPException(
+            status_code=403,
+            detail="Rewriting CV bullets is a Premium feature."
+        )
 
     if not is_ai_enabled():
         raise HTTPException(

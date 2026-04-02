@@ -22,10 +22,11 @@ class AnalysisScores(BaseModel):
 
 class AISuggestion(BaseModel):
     """An AI-generated suggestion with an optional rewrite hint."""
-    category: str
-    priority: str
-    message: str
-    rewrite_hint: str = ""
+    category: str | None = None
+    priority: str | None = None
+    message: str | None = None
+    rewrite_hint: str | None = None
+    is_locked: bool = False
 
 
 class AnalysisResponse(BaseModel):
@@ -43,6 +44,7 @@ class AnalysisResponse(BaseModel):
     career_recommendations: list[CareerRecommendationResponse] = []
     # AI-enhanced fields
     ai_summary: str | None = None
+    is_summary_locked: bool = False
     ai_suggestions: list[AISuggestion] = []
     ai_enhanced: bool = False
     created_at: datetime

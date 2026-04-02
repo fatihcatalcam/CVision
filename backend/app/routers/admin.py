@@ -17,7 +17,7 @@ from app.schemas.user import UserResponse
 from app.schemas.analysis import AnalysisResponse
 from app.routers.analysis import _build_analysis_response
 
-router = APIRouter(prefix="/admin", tags=["Admin"])
+router = APIRouter(prefix="/hq-portal", tags=["Admin"])
 
 
 @router.get(
@@ -75,6 +75,9 @@ def list_all_users(
                 full_name=u.full_name,
                 email=u.email,
                 role=u.role,
+                plan_type=u.plan_type,
+                analysis_count=u.analysis_count,
+                quota_reset_at=u.quota_reset_at,
                 created_at=u.created_at
             ) for u in users
         ],
@@ -120,6 +123,47 @@ def change_user_role(
         full_name=user.full_name,
         email=user.email,
         role=user.role,
+        plan_type=user.plan_type,
+        analysis_count=user.analysis_count,
+        quota_reset_at=user.quota_reset_at,
+        created_at=user.created_at,
+    )
+
+
+@router.patch(
+    "/users/{user_id}/plan",
+    response_model=UserResponse,
+    summary="Change a user's subscription plan (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def change_user_plan(
+    user_id: int,
+    plan: str = Query(..., regex="^(free|premium)$", description="New plan: 'free' or 'premium'"),
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """
+    Change a user's subscription plan between 'free' and 'premium'.
+    """
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found."
+        )
+
+    user.plan_type = plan
+    db.commit()
+    db.refresh(user)
+
+    return UserResponse(
+        id=user.id,
+        full_name=user.full_name,
+        email=user.email,
+        role=user.role,
+        plan_type=user.plan_type,
+        analysis_count=user.analysis_count,
+        quota_reset_at=user.quota_reset_at,
         created_at=user.created_at,
     )
 

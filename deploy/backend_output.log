@@ -491,3 +491,582 @@ INFO:     78.163.170.91:49480:0 - "GET /analysis/3oa04k/status HTTP/1.1" 200 OK
 INFO:     78.163.170.91:49480:0 - "GET /analysis/3oa04k/status HTTP/1.1" 200 OK
 INFO:     78.163.170.91:49480:0 - "GET /analysis/3oa04k/status HTTP/1.1" 200 OK
 INFO:     78.163.170.91:49480:0 - "GET /analysis/3oa04k/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50955:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50955:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50955:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50955:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49822:0 - "GET /admin/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49822:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49822:0 - "GET /admin/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51591:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51591:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51344:0 - "GET /admin/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51344:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52685:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     78.163.170.91:50123:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     88.230.15.231:13995:0 - "POST /auth/register HTTP/1.1" 201 Created
+INFO:     88.230.15.231:13995:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     88.230.15.231:13995:0 - "GET /analysis/xE1N98/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/xE1N98/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/status HTTP/1.1" 200 OK
+INFO:     88.230.15.231:13995:0 - "GET /analysis/7Edj46/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52737:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52737:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52737:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52840:0 - "GET /admin/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52840:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     162.19.228.208:42348:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     70.153.144.104:51642:0 - "GET /v1/config HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52635:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     78.163.170.91:52635:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50893:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /admin/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "POST /auth/register HTTP/1.1" 201 Created
+INFO:     78.163.170.91:52635:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50893:0 - "GET /admin/recent-activity HTTP/1.1" 403 Forbidden
+INFO:     78.163.170.91:52635:0 - "GET /admin/stats HTTP/1.1" 403 Forbidden
+INFO:     78.163.170.91:52635:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52635:0 - "GET /admin/stats HTTP/1.1" 403 Forbidden
+INFO:     78.163.170.91:50893:0 - "GET /admin/recent-activity HTTP/1.1" 403 Forbidden
+INFO:     78.163.170.91:50893:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50893:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50893:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     43.128.81.242:58256:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     103.40.61.98:59052:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     110.35.80.116:57484:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     167.86.89.146:59692:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     167.86.89.146:59692:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59692:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59692:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/users?limit=100 HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59692:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59692:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59692:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     167.86.89.146:59691:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/users?limit=100 HTTP/1.1" 404 Not Found
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:52959:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/users?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /analysis/Ro6896/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52583:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59741:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59741:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59741:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59740:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     167.86.89.146:59740:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /hq-portal/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /hq-portal/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52583:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52959:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49676:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49676:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49676:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49676:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52490:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52490:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52490:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     150.241.108.255:38848:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52845:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /admin/users?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52845:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /admin/analyses?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /admin/users?limit=100 HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /admin/stats HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:52845:0 - "GET /admin/recent-activity HTTP/1.1" 404 Not Found
+INFO:     78.163.170.91:51690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:51690:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/analyses?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:51690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52845:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:50690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:52480:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 400 Bad Request
+INFO:     78.163.170.91:50690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:50690:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52480:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:50690:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52217:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52217:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52217:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52217:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "PATCH /hq-portal/users/7/plan?plan=premium HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52217:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /analysis/VomO9Z/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52476:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49874:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49874:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49874:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49874:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49874:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "PATCH /hq-portal/users/7/role?role=admin HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /analysis/j4wK4m/results HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /cvs/j4wK4m/download HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52677:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51087:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "PATCH /hq-portal/users/1/plan?plan=premium HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/status HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53200:0 - "GET /analysis/RELR4b/results HTTP/1.1" 200 OK
+INFO:     115.190.177.41:39714:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     213.209.159.175:60480:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     151.135.89.252:45766:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45766:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45766:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45371:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     151.135.89.252:45371:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:46062:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45649:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45650:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:46065:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45376:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:46067:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45309:0 - "GET /analysis/b4MOEQ/status HTTP/1.1" 200 OK
+INFO:     151.135.89.252:45309:0 - "GET /analysis/b4MOEQ/results HTTP/1.1" 200 OK
+INFO:     192.253.248.169:39534:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     89.167.98.113:60758:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /config.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /info HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /.env.back HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /.env.example HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /.env.sample HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /.env.save HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /debug HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /docs/ HTTP/1.1" 307 Temporary Redirect
+INFO:     185.177.72.13:21616:0 - "GET /env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /info.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /internal/ HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /keys HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /private/ HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /src/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /v1/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /v1/debug HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:21616:0 - "GET /v2/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1 HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /service HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /system/info HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /gateway HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /command HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/user HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/user/password HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/user/status HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/role HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin/role/id HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /admin HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/sms-sender HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/finchat/contact/manager HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/finchat/privilege-api/forwarder HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/finchat/privilege-api/forwarder/event HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/finchat/open-api HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /upload HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /savefile HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/files HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /files.remote.share HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/netdisk/download HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/finchat/open-api/auth/token HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/account/oauth/token HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/account/oauth/ticket HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /v1/tokens HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /login HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /authentication HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /auth/v1/pin/verify HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /register HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /resetpassword HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /config.json HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /secrets.json HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:38520:0 - "GET /user HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /v1/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /v1/workflows HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /v1/executions HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /v1/credentials HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /auth/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /users/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /data/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /webhook/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /serverless/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /credentials HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config/database.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /config/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /constant.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /env.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /node/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /node/config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /node/constant.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /node/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /phpinfo.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /server.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22434:0 - "GET /settings.py HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22482:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22498:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.13:22514:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     5.46.144.68:52017:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     185.177.72.56:64724:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.56:64738:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.56:64754:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60304:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60312:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60326:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60412:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60460:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60516:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60554:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60574:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60588:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60604:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60636:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:60646:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:14616:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:14632:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:14646:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:24052:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:24062:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.22:24064:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:17950:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:17962:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:17978:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     5.46.144.68:52650:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52650:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52650:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52650:0 - "GET /hq-portal/stats HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52376:0 - "GET /hq-portal/recent-activity HTTP/1.1" 200 OK
+INFO:     5.46.144.68:51963:0 - "GET /hq-portal/users?limit=100 HTTP/1.1" 200 OK
+INFO:     5.46.144.68:51896:0 - "PATCH /hq-portal/users/7/plan?plan=free HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52173:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52173:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52382:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52382:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52382:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52248:0 - "POST /cvs/upload HTTP/1.1" 201 Created
+INFO:     5.46.144.68:52248:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52387:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52181:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:51976:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52667:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52461:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:51910:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52670:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52671:0 - "GET /analysis/x4PVEe/status HTTP/1.1" 200 OK
+INFO:     5.46.144.68:52671:0 - "GET /analysis/x4PVEe/results HTTP/1.1" 200 OK
+INFO:     31.143.212.223:49021:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     31.143.212.223:49021:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     31.143.212.223:49021:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     31.143.212.223:49021:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     213.209.159.175:48630:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     213.209.159.175:48916:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     45.205.1.20:58146:0 - "POST /route HTTP/1.1" 404 Not Found
+INFO:     163.7.6.154:51960:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     46.249.101.24:55236:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     217.76.52.66:33614:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     185.38.148.2:45324:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     222.134.147.66:38552:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     84.247.148.26:52186:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:34710:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:21994:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /config.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /info HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /.env.back HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /.env.example HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /.env.sample HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /.env.save HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /debug HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /docs/ HTTP/1.1" 307 Temporary Redirect
+INFO:     185.177.72.23:49922:0 - "GET /env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /info.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /internal/ HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /keys HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /private/ HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /src/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /v1/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /v1/debug HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:49922:0 - "GET /v2/.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1 HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /service HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /system/info HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /gateway HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /command HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/user HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/user/password HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/user/status HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/role HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin/role/id HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /admin HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/sms-sender HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/finchat/contact/manager HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/finchat/privilege-api/forwarder HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/finchat/privilege-api/forwarder/event HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/finchat/open-api HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /upload HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /savefile HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/files HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /files.remote.share HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/netdisk/download HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/finchat/open-api/auth/token HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/account/oauth/token HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/account/oauth/ticket HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /v1/tokens HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /login HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /authentication HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /auth/v1/pin/verify HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /register HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /resetpassword HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /config.json HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /secrets.json HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:8102:0 - "GET /user HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /v1/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /v1/workflows HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /v1/executions HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /v1/credentials HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /auth/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /users/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /data/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /webhook/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /serverless/%2A HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /credentials HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config/database.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /config/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /constant.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /env.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /node/common.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /node/config.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /node/constant.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /node/constants.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /phpinfo.php HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /server.js HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:57676:0 - "GET /settings.py HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:25284:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:25286:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.23:25288:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:46960:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:46986:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47018:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47048:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47034:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47052:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47096:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47098:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47068:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47114:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47130:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47158:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47174:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47192:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47246:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47216:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47276:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.49:47316:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:40004:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:40018:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.30:40026:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     185.177.72.52:6794:0 - "POST /auth HTTP/1.1" 404 Not Found
+INFO:     185.177.72.52:6796:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
+INFO:     185.177.72.52:6802:0 - "POST /auth/session HTTP/1.1" 404 Not Found
+INFO:     173.212.204.28:49270:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found

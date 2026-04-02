@@ -28,7 +28,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/analysis/:id" element={<AnalysisPage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/hq-portal" element={<AdminPage />} />
           </Route>
           
           {/* Landing / Redirects */}

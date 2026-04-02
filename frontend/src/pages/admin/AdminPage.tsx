@@ -27,6 +27,7 @@ interface UserItem {
   full_name: string;
   email: string;
   role: string;
+  plan_type: string;
   created_at: string;
 }
 
@@ -79,16 +80,16 @@ export function AdminPage() {
     try {
       if (activeTab === 'dashboard') {
         const [statsRes, actRes] = await Promise.all([
-          api.get('/admin/stats'),
-          api.get('/admin/recent-activity')
+          api.get('/hq-portal/stats'),
+          api.get('/hq-portal/recent-activity')
         ]);
         setStats(statsRes.data);
         setActivities(actRes.data);
       } else if (activeTab === 'users') {
-        const usersRes = await api.get('/admin/users?limit=100');
+        const usersRes = await api.get('/hq-portal/users?limit=100');
         setUsers(usersRes.data.users);
       } else if (activeTab === 'content') {
-        const analysesRes = await api.get('/admin/analyses?limit=100');
+        const analysesRes = await api.get('/hq-portal/analyses?limit=100');
         setAnalyses(analysesRes.data.items);
       }
     } catch (error: any) {
@@ -102,7 +103,7 @@ export function AdminPage() {
   const handleRoleChange = async (userId: number, newRole: string) => {
     setActionLoading(`user-${userId}`);
     try {
-      await api.patch(`/admin/users/${userId}/role?role=${newRole}`);
+      await api.patch(`/hq-portal/users/${userId}/role?role=${newRole}`);
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
     } catch (error: any) {
       alert(error.response?.data?.detail || 'Failed to change role');
@@ -111,10 +112,22 @@ export function AdminPage() {
     }
   };
 
+  const handlePlanChange = async (userId: number, newPlan: string) => {
+    setActionLoading(`plan-${userId}`);
+    try {
+      await api.patch(`/hq-portal/users/${userId}/plan?plan=${newPlan}`);
+      setUsers(prev => prev.map(u => u.id === userId ? { ...u, plan_type: newPlan } : u));
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Failed to change plan');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const handleDeleteUser = async (userId: number) => {
     setActionLoading(`del-user-${userId}`);
     try {
-      await api.delete(`/admin/users/${userId}`);
+      await api.delete(`/hq-portal/users/${userId}`);
       setUsers(prev => prev.filter(u => u.id !== userId));
       setDeleteConfirm(null);
     } catch (error: any) {
@@ -127,7 +140,7 @@ export function AdminPage() {
   const handleDeleteAnalysis = async (analysisId: number) => {
     setActionLoading(`del-analysis-${analysisId}`);
     try {
-      await api.delete(`/admin/analyses/${analysisId}`);
+      await api.delete(`/hq-portal/analyses/${analysisId}`);
       setAnalyses(prev => prev.filter(a => a.id !== analysisId));
       setDeleteConfirm(null);
     } catch (error: any) {
@@ -437,6 +450,7 @@ export function AdminPage() {
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">User</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Email</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Role</th>
+                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Plan</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Joined</th>
                           <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Actions</th>
                         </tr>
@@ -461,6 +475,11 @@ export function AdminPage() {
                                 {u.role}
                               </span>
                             </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${u.plan_type === 'premium' ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'}`}>
+                                {u.plan_type}
+                              </span>
+                            </td>
                             <td className="px-6 py-4 text-zinc-500 text-sm">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
                             <td className="px-6 py-4 text-right">
                               {u.id !== user?.id ? (
@@ -474,11 +493,18 @@ export function AdminPage() {
                                 ) : (
                                   <div className="flex items-center justify-end gap-2">
                                     <button
+                                      onClick={() => handlePlanChange(u.id, u.plan_type === 'premium' ? 'free' : 'premium')}
+                                      disabled={actionLoading === `plan-${u.id}`}
+                                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors disabled:opacity-50 ${u.plan_type === 'premium' ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-800' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
+                                    >
+                                      {actionLoading === `plan-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.plan_type === 'premium' ? 'Demote to Free' : 'Give Premium')}
+                                    </button>
+                                    <button
                                       onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'user' : 'admin')}
                                       disabled={actionLoading === `user-${u.id}`}
                                       className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                                     >
-                                      {actionLoading === `user-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.role === 'admin' ? 'Demote' : 'Make Admin')}
+                                      {actionLoading === `user-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.role === 'admin' ? 'Remove Admin' : 'Make Admin')}
                                     </button>
                                     <button onClick={() => setDeleteConfirm(`u-${u.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors">
                                       <Trash2 className="w-4 h-4" />

@@ -21,10 +21,13 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    # ---- Application ----
     APP_NAME: str = "CVision"
     DEBUG: bool = False
     CORS_ORIGINS: str = ""  # Comma-separated string in .env
+    
+    # ---- Plan Limits ----
+    FREE_WEEKLY_LIMIT: int = 3
+    PREMIUM_WEEKLY_LIMIT: int = 50
 
     @property
     def cors_origins_list(self) -> list[str]:
