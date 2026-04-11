@@ -1070,3 +1070,118 @@ INFO:     185.177.72.52:6794:0 - "POST /auth HTTP/1.1" 404 Not Found
 INFO:     185.177.72.52:6796:0 - "POST /auth/callback HTTP/1.1" 404 Not Found
 INFO:     185.177.72.52:6802:0 - "POST /auth/session HTTP/1.1" 404 Not Found
 INFO:     173.212.204.28:49270:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+Using Default Environment
+INFO:     78.163.170.91:53183:0 - "GET /auth/me HTTP/1.1" 401 Unauthorized
+INFO:     78.163.170.91:53183:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53183:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:53183:0 - "GET /auth/me HTTP/1.1" 200 OK
+Terminate batch job (Y/N)? Using Default Environment
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:51698:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:52380:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     95.173.180.105:50834:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     45.205.1.20:38662:0 - "POST /route HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:51138:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:8918:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:61646:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:61708:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:17088:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:45364:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44058:0 - "GET /env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44048:0 - "GET /settings HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44046:0 - "GET /config HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44550:0 - "GET /debug/env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44562:0 - "GET /v1/namespaces/default/secrets HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44608:0 - "POST /v4/ci/lint HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44842:0 - "GET /v1/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44906:0 - "GET /.environment HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44836:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45220:0 - "GET /app/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45206:0 - "GET /core/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45226:0 - "GET /test/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45236:0 - "GET /dev/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:46172:0 - "GET /beta/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44990:0 - "GET /config/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45132:0 - "GET /v2/.env HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:46510:0 - "GET /phpinfo.php HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:46522:0 - "GET /info.php HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:45836:0 - "GET /v1/phpinfo.php HTTP/1.1" 404 Not Found
+INFO:     45.148.10.249:44810:0 - "GET /v2/phpinfo.php HTTP/1.1" 404 Not Found
+INFO:     101.47.8.187:51594:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     5.46.227.171:56614:0 - "POST /auth/register HTTP/1.1" 201 Created
+INFO:     5.46.227.171:56616:0 - "POST /auth/login HTTP/1.1" 401 Unauthorized
+INFO:     5.46.227.171:57376:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     5.46.227.171:57376:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     5.46.227.171:57376:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     5.46.227.171:57011:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     5.46.227.171:57011:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     5.46.227.171:57011:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49829:0 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49829:0 - "GET /dashboard/summary HTTP/1.1" 200 OK
+INFO:     78.163.170.91:49829:0 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     185.177.72.61:1460:0 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     185.177.72.61:20484:0 - "GET /.git/config HTTP/1.1" 404 Not Found
+INFO:     163.5.214.40:58332:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     216.57.110.81:46204:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+INFO:     161.97.164.177:42884:0 - "GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1" 404 Not Found
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? Using Default Environment
+Terminate batch job (Y/N)? 

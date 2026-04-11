@@ -69,18 +69,7 @@ def list_all_users(
     users = users_query.offset(skip).limit(limit).all()
     
     return AdminUsersListResponse(
-        users=[
-            UserResponse(
-                id=u.id,
-                full_name=u.full_name,
-                email=u.email,
-                role=u.role,
-                plan_type=u.plan_type,
-                analysis_count=u.analysis_count,
-                quota_reset_at=u.quota_reset_at,
-                created_at=u.created_at
-            ) for u in users
-        ],
+        users=[UserResponse.model_validate(u) for u in users],
         total=total
     )
 
@@ -118,16 +107,7 @@ def change_user_role(
     db.commit()
     db.refresh(user)
 
-    return UserResponse(
-        id=user.id,
-        full_name=user.full_name,
-        email=user.email,
-        role=user.role,
-        plan_type=user.plan_type,
-        analysis_count=user.analysis_count,
-        quota_reset_at=user.quota_reset_at,
-        created_at=user.created_at,
-    )
+    return UserResponse.model_validate(user)
 
 
 @router.patch(
@@ -156,16 +136,7 @@ def change_user_plan(
     db.commit()
     db.refresh(user)
 
-    return UserResponse(
-        id=user.id,
-        full_name=user.full_name,
-        email=user.email,
-        role=user.role,
-        plan_type=user.plan_type,
-        analysis_count=user.analysis_count,
-        quota_reset_at=user.quota_reset_at,
-        created_at=user.created_at,
-    )
+    return UserResponse.model_validate(user)
 
 
 @router.delete(

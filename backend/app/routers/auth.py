@@ -1,13 +1,16 @@
 """
-Authentication router — handles user registration and login.
+Authentication router — handles user registration, login, and profile management.
 Endpoints:
-    POST /auth/register — Create a new user
-    POST /auth/login    — Authenticate and receive JWT
-    GET  /auth/me       — Get current user profile
-Will be fully implemented in Phase 3.
+    POST  /auth/register          — Create a new user
+    POST  /auth/login             — Authenticate and receive JWT
+    GET   /auth/me                — Get current user profile
+    PATCH /auth/me                — Update display name
+    POST  /auth/me/password       — Change password
 """
 
+import re
 from fastapi import APIRouter, Depends, HTTPException, status, Request
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
@@ -20,6 +23,26 @@ from app.limiter import limiter
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
+class UserUpdateRequest(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=150)
+
+
+class PasswordChangeRequest(BaseModel):
+    current_password: str
+    new_password: str = Field(..., min_length=8, max_length=128)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_password_complexity(cls, v: str) -> str:
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"\d", v):
+            raise ValueError("Password must contain at least one number")
+        return v
+
+
 @router.post(
     "/register",
     response_model=UserResponse,
@@ -28,14 +51,6 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 )
 @limiter.limit("5/minute")
 def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
-    """
-    Create a new user account.
-    - Validates email uniqueness
-    - Hashes password with bcrypt
-    - Returns created user profile
-    Implements FR1.
-    """
-    # Check if email already exists
     existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
         raise HTTPException(
@@ -43,7 +58,6 @@ def register(request: Request, user_data: UserRegister, db: Session = Depends(ge
             detail="A user with this email already exists",
         )
 
-    # Create user with hashed password
     new_user = User(
         full_name=user_data.full_name,
         email=user_data.email,
@@ -64,12 +78,6 @@ def register(request: Request, user_data: UserRegister, db: Session = Depends(ge
 )
 @limiter.limit("5/minute")
 def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db)):
-    """
-    Authenticate user with email and password.
-    - Returns JWT access token on success
-    - Returns 401 on invalid credentials
-    Implements FR2, FR3.
-    """
     user = db.query(User).filter(User.email == credentials.email).first()
 
     if not user or not verify_password(credentials.password, user.password_hash):
@@ -79,7 +87,6 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Create JWT with user ID as subject (must be string for jose validation)
     access_token = create_access_token(data={"sub": str(user.id)})
 
     return TokenResponse(
@@ -96,3 +103,48 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
 def get_me(current_user: User = Depends(get_current_user)):
     """Return the profile of the currently authenticated user."""
     return current_user
+
+
+@router.patch(
+    "/me",
+    response_model=UserResponse,
+    summary="Update user display name",
+)
+def update_profile(
+    body: UserUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Update the authenticated user's display name."""
+    current_user.full_name = body.full_name.strip()
+    db.commit()
+    db.refresh(current_user)
+    return UserResponse.model_validate(current_user)
+
+
+@router.post(
+    "/me/password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Change user password",
+)
+def change_password(
+    body: PasswordChangeRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Change the authenticated user's password after verifying the current one."""
+    if not verify_password(body.current_password, current_user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Current password is incorrect",
+        )
+
+    if body.current_password == body.new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be different from current password",
+        )
+
+    current_user.password_hash = hash_password(body.new_password)
+    db.commit()
+    return None

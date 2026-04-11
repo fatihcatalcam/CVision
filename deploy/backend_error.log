@@ -8285,3 +8285,2479 @@ INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
 2026-04-01 10:44:36,406 - cvision.services.ai - INFO - AI enhancement successful — 5 suggestions generated
 2026-04-01 10:44:36,411 - cvision.services.analysis - INFO - AI enhancement complete for analysis 31: 5 AI suggestions stored
 2026-04-01 10:44:36,414 - cvision.services.cv - INFO - Background task successfully completed for CV 31
+INFO:     Started server process [11352]
+INFO:     Waiting for application startup.
+2026-04-02 15:58:34,377 - cvision - INFO - Starting CVision backend...
+2026-04-02 15:58:34,647 - cvision - INFO - Database tables ensured.
+2026-04-02 15:58:34,672 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-02 15:58:34,679 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-02 15:58:34,680 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Finished server process [11352]
+INFO:     Started server process [5972]
+INFO:     Waiting for application startup.
+2026-04-02 16:07:58,451 - cvision - INFO - Starting CVision backend...
+2026-04-02 16:07:58,915 - cvision - INFO - Database tables ensured.
+2026-04-02 16:07:58,958 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-02 16:07:58,978 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-02 16:07:58,982 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Finished server process [5972]
+INFO:     Started server process [5320]
+INFO:     Waiting for application startup.
+2026-04-05 21:30:53,886 - cvision - INFO - Starting CVision backend...
+2026-04-05 21:30:54,040 - cvision - INFO - Database tables ensured.
+2026-04-05 21:30:54,073 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-05 21:30:54,081 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-05 21:30:54,082 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-06 00:45:30,175 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5320]
+INFO:     Started server process [7396]
+INFO:     Waiting for application startup.
+2026-04-06 00:45:35,190 - cvision - INFO - Starting CVision backend...
+2026-04-06 00:45:35,273 - cvision - INFO - Database tables ensured.
+2026-04-06 00:45:35,291 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-06 00:45:35,297 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-06 00:45:35,298 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-06 12:44:45,150 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7396]
+INFO:     Started server process [6480]
+INFO:     Waiting for application startup.
+2026-04-06 12:44:48,899 - cvision - INFO - Starting CVision backend...
+2026-04-06 12:44:49,114 - cvision - INFO - Database tables ensured.
+2026-04-06 12:44:49,136 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-06 12:44:49,141 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-06 12:44:49,142 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-06 12:54:02,766 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6480]
+INFO:     Started server process [3988]
+INFO:     Waiting for application startup.
+2026-04-06 12:54:08,637 - cvision - INFO - Starting CVision backend...
+2026-04-06 12:54:08,730 - cvision - INFO - Database tables ensured.
+2026-04-06 12:54:08,756 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-06 12:54:08,762 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-06 12:54:08,763 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Finished server process [3988]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\click\core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 70, in serve
+    await self._serve(sockets)
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\server.py", line 77, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 22, in import_from_string
+    raise exc from None
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\main.py", line 34, in <module>
+    from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\app\routers\payment.py", line 16, in <module>
+    import stripe
+ModuleNotFoundError: No module named 'stripe'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Scripts\uvicorn.exe\__main__.py", line 2, in <module>
+    from uvicorn.main import main
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\__init__.py", line 1, in <module>
+    from uvicorn.config import Config
+  File "C:\Users\Administrator\Desktop\CVision\CVision\backend\cv_env_313\Lib\site-packages\uvicorn\config.py", line 3, in <module>
+    import asyncio
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\__init__.py", line 8, in <module>
+    from .base_events import *
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 18, in <module>
+    import concurrent.futures
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\__init__.py", line 8, in <module>
+    from concurrent.futures._base import (FIRST_COMPLETED,
+    ...<9 lines>...
+                                          as_completed)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py", line 7, in <module>
+    import logging
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py", line 29, in <module>
+    from string import Template
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1019, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1152, in get_code
+  File "<frozen importlib._bootstrap_external>", line 781, in _compile_bytecode
+KeyboardInterrupt
+^CINFO:     Started server process [2812]
+INFO:     Waiting for application startup.
+2026-04-11 01:06:45,577 - cvision - INFO - Starting CVision backend...
+2026-04-11 01:06:45,630 - cvision - INFO - Database tables ensured.
+2026-04-11 01:06:45,655 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-11 01:06:45,659 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-11 01:06:45,660 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-11 01:07:02,579 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2812]
+INFO:     Started server process [5924]
+INFO:     Waiting for application startup.
+2026-04-11 01:07:36,059 - cvision - INFO - Starting CVision backend...
+2026-04-11 01:07:36,147 - cvision - INFO - Database tables ensured.
+2026-04-11 01:07:36,170 - cvision - INFO - Skills table already up to date (140 entries).
+2026-04-11 01:07:36,175 - cvision - INFO - Role profiles table already has 44 entries, skipping seed.
+2026-04-11 01:07:36,176 - cvision - INFO - Upload directory ready at: uploads
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-04-11 12:18:03,532 - cvision - INFO - Shutting down CVision backend...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5924]

@@ -21,6 +21,10 @@ python-multipart==0.0.20
 # PDF parsing
 PyMuPDF==1.25.5
 
+# Payment Gateways
+iyzipay>=1.0.46
+stripe>=12.0.0
+
 # Testing
 pytest==8.3.5
 httpx==0.28.1

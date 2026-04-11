@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(pip install:*)",
+      "Bash(python -c \"import iyzipay; print\\(dir\\(iyzipay\\)\\)\")",
+      "Bash(python -c ':*)",
+      "Bash(pip show:*)",
+      "Bash(python -m pytest --collect-only)",
+      "Bash(python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(where python:*)",
+      "Bash(C:UsersAdministratorAppDataLocalProgramsPythonPython313python.exe -c ':*)",
+      "Bash(/c/Users/Administrator/AppData/Local/Programs/Python/Python313/python.exe:*)",
+      "Bash(npm run:*)",
+      "Bash(cv_env_313/Scripts/pip install:*)",
+      "Bash(cv_env_313/Scripts/python:*)",
+      "Bash(python -c \"from app.routers.auth import router; from app.routers.dashboard import router as dr; print\\('OK'\\)\")",
+      "Bash(python -m py_compile app/routers/auth.py app/routers/dashboard.py)",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL ok'\\)\")",
+      "Bash(python -c \"from PIL import Image; print\\('PIL ok'\\)\")",
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "Bash(cv_env_313/Scripts/pip show:*)"
+    ]
+  }
+}

@@ -10,6 +10,7 @@ export interface User {
   plan_type: string;
   analysis_count: number;
   quota_reset_at: string | null;
+  subscription_end_at: string | null;
   created_at: string;
 }
 

@@ -44,6 +44,19 @@ class Settings(BaseSettings):
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_ENABLED: bool = True  # Automatically disabled if key is empty
 
+    # ---- iyzico ----
+    IYZICO_API_KEY: str = ""
+    IYZICO_SECRET_KEY: str = ""
+    IYZICO_BASE_URL: str = "https://sandbox-api.iyzipay.com"
+
+    # ---- Stripe ----
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+
+    # ---- App URLs ----
+    BACKEND_URL: str = "http://167.86.89.146:8001"
+    FRONTEND_URL: str = "http://167.86.89.146"
+
     # Computed property for max file size in bytes
     @property
     def max_file_size_bytes(self) -> int:
