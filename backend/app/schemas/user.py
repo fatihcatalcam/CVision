@@ -41,6 +41,10 @@ class UserResponse(BaseModel):
     full_name: str
     email: str
     role: str
+    plan_type: str
+    analysis_count: int
+    quota_reset_at: datetime | None
+    subscription_end_at: datetime | None
     created_at: datetime
 
     model_config = {"from_attributes": True}

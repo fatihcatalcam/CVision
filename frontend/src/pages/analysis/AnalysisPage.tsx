@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Loader2, Zap, FileText,
-  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check,
+  ArrowLeft, Zap, FileText,
+  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock,
 } from 'lucide-react';
 import api from '../../services/api';
 import { Card } from '../../components/ui/Card';
@@ -17,8 +17,9 @@ import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 interface AISuggestion {
   category: string;
   priority: string;
-  message: string;
-  rewrite_hint: string;
+  message: string | null;
+  rewrite_hint: string | null;
+  is_locked: boolean;
 }
 
 interface AnalysisData {
@@ -39,6 +40,7 @@ interface AnalysisData {
   extracted_skills: any[];
   career_recommendations?: any[];
   ai_summary: string | null;
+  is_summary_locked: boolean;
   ai_suggestions: AISuggestion[];
   ai_enhanced: boolean;
 }
@@ -54,6 +56,28 @@ const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; lab
 // ─── AI Suggestion Card ─────────────────────────────────────────────────────
 
 function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; index: number }) {
+  if (suggestion.is_locked) {
+    return (
+      <div className="border border-zinc-800 rounded-xl overflow-hidden relative">
+        <div className="w-full flex items-start gap-3 p-4 text-left opacity-30 blur-[2px] pointer-events-none select-none">
+          <div className="mt-1.5 w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400">Hidden Insight</span>
+            </div>
+            <p className="text-sm text-zinc-200">This premium suggestion contains advanced feedback about your experience section, identifying key areas for improvement.</p>
+          </div>
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/40">
+           <div className="p-2 mb-2 bg-indigo-500/20 rounded-full">
+             <Lock className="w-5 h-5 text-indigo-400" />
+           </div>
+           <p className="text-xs font-semibold text-white">Premium Feature</p>
+        </div>
+      </div>
+    );
+  }
+
   const [expanded, setExpanded] = useState(index === 0);
   const [copied, setCopied] = useState(false);
   const meta = PRIORITY_META[suggestion.priority] ?? PRIORITY_META.medium;
@@ -223,24 +247,70 @@ export function AnalysisPage() {
   // ── Loading screen ──
   if (!data && !error) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center space-y-6">
-        <div className="relative">
-          <Loader2 className="w-16 h-16 text-[var(--color-primary)] animate-spin" />
-          <div className="absolute inset-0 border-4 border-[var(--color-primary)] opacity-20 rounded-full scale-150 animate-ping" />
-        </div>
-        <div className="text-center w-full max-w-md px-6">
-          <h2 className="text-xl font-bold text-white mb-2">AI Analyzing Your CV</h2>
-          <p className="text-[var(--color-muted)] text-sm mb-4 h-5">{loadingMsg}</p>
-          <div className="w-full bg-zinc-800 rounded-full h-2 mb-2 overflow-hidden border border-zinc-700">
-            <div
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-              style={{ width: `${Math.min(progress, 100)}%` }}
-            />
+      <div className="min-h-screen flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm">
+          {/* Animated ring */}
+          <div className="flex justify-center mb-8">
+            <div className="relative w-20 h-20">
+              <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#1e1e2e" strokeWidth="6" />
+                <circle
+                  cx="40" cy="40" r="34" fill="none" stroke="url(#grad)" strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeDasharray="213.6"
+                  strokeDashoffset={213.6 - (213.6 * Math.min(progress, 100)) / 100}
+                  className="transition-all duration-300 ease-out"
+                />
+                <defs>
+                  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#8b5cf6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-black text-white stat-number">{Math.floor(progress)}%</span>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-indigo-400 font-bold tracking-widest text-right mb-6">{Math.floor(progress)}%</p>
-          <p className="text-xs text-zinc-500 leading-relaxed">
-            AI is reading your CV and generating personalized feedback. This takes 15–30 seconds.
-          </p>
+
+          <div className="text-center">
+            <h2 className="text-2xl font-black text-white mb-2">Analyzing Your CV</h2>
+            <p className="text-indigo-400 text-sm font-medium mb-6 min-h-[20px]">{loadingMsg}</p>
+
+            {/* Step indicators */}
+            <div className="space-y-3 text-left mb-6">
+              {[
+                { label: 'Parsing document structure', threshold: 20 },
+                { label: 'Extracting skills & experience', threshold: 45 },
+                { label: 'Running AI analysis engine', threshold: 70 },
+                { label: 'Generating personalized feedback', threshold: 90 },
+              ].map((step) => (
+                <div key={step.label} className="flex items-center gap-3">
+                  <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                    progress >= step.threshold
+                      ? 'bg-emerald-500'
+                      : progress >= step.threshold - 15
+                      ? 'bg-indigo-500 animate-pulse'
+                      : 'bg-zinc-800 border border-zinc-700'
+                  }`}>
+                    {progress >= step.threshold && (
+                      <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className={`text-xs font-medium transition-colors ${
+                    progress >= step.threshold ? 'text-emerald-400' : progress >= step.threshold - 15 ? 'text-indigo-300' : 'text-zinc-600'
+                  }`}>{step.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-xs text-zinc-600 leading-relaxed">
+              AI is reading your CV and generating personalized insights. This typically takes 15–30 seconds.
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -251,13 +321,16 @@ export function AnalysisPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <Card className="text-center max-w-lg">
-          <div className="w-16 h-16 mx-auto bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-4">
+          <div className="w-16 h-16 mx-auto bg-red-500/10 text-red-400 rounded-2xl flex items-center justify-center mb-5">
             <Zap className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Analysis Failed</h2>
-          <p className="text-[var(--color-muted)] mb-6">{error}</p>
-          <button onClick={() => navigate('/dashboard')} className="text-[var(--color-primary)] hover:underline">
-            ← Return to Dashboard
+          <h2 className="text-2xl font-black text-white mb-2">Analysis Failed</h2>
+          <p className="text-zinc-400 text-sm mb-6 leading-relaxed">{error}</p>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 transition-all text-sm font-medium mx-auto"
+          >
+            <ArrowLeft className="w-4 h-4" /> Return to Dashboard
           </button>
         </Card>
       </div>
@@ -323,12 +396,21 @@ export function AnalysisPage() {
 
           {/* AI Executive Summary */}
           {data!.ai_summary && (
-            <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-purple-500/5">
+            <Card className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-indigo-400" />
                 <h3 className="text-sm font-bold text-indigo-300 uppercase tracking-wider">AI Executive Summary</h3>
               </div>
-              <p className="text-zinc-200 leading-relaxed text-[15px]">{data!.ai_summary}</p>
+              <p className={`text-zinc-200 leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
+                {data!.ai_summary}
+              </p>
+              {data!.is_summary_locked && (
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-card-bg)] via-[var(--color-card-bg)]/60 to-transparent flex items-center justify-center">
+                  <button className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-500/50 text-white shadow-xl shadow-indigo-500/20 text-sm font-bold hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                    <Lock className="w-4 h-4" /> Unlock Full AI Report
+                  </button>
+                </div>
+              )}
             </Card>
           )}
 

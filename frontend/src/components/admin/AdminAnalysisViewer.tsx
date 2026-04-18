@@ -24,7 +24,7 @@ export function AdminAnalysisViewer({ analysisId, isOpen, onClose }: AdminAnalys
     const fetchAnalysis = async () => {
       setLoading(true);
       try {
-        const res = await api.get(`/admin/analyses/${analysisId}`);
+        const res = await api.get(`/hq-portal/analyses/${analysisId}`);
         if (!cancelled) setData(res.data);
       } catch (err) {
         console.error('Failed to load full analysis details', err);
