@@ -133,12 +133,16 @@ class CVService:
         # Atomic Quota Check & Increment
         user_db = db.query(User).filter(User.id == user.id).with_for_update().first()
         now = datetime.now(timezone.utc)
-        
-        if user_db.quota_reset_at and user_db.quota_reset_at < now:
+        now_naive = datetime.utcnow()
+
+        def _as_naive(dt):
+            return dt.replace(tzinfo=None) if dt.tzinfo else dt
+
+        if user_db.quota_reset_at and _as_naive(user_db.quota_reset_at) < now_naive:
             user_db.analysis_count = 0
-            user_db.quota_reset_at = now + timedelta(days=7)
+            user_db.quota_reset_at = now_naive + timedelta(days=7)
         elif not user_db.quota_reset_at:
-            user_db.quota_reset_at = now + timedelta(days=7)
+            user_db.quota_reset_at = now_naive + timedelta(days=7)
             
         limit = settings.PREMIUM_WEEKLY_LIMIT if user_db.plan_type == "premium" else settings.FREE_WEEKLY_LIMIT
         

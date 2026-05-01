@@ -29,7 +29,13 @@ export function LoginPage() {
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || 'Invalid credentials');
+      const detail = error.response?.data?.detail;
+      if (detail === 'EMAIL_NOT_VERIFIED') {
+        toast.error('Please verify your email before signing in.');
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
+      toast.error(Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || 'Email or password is incorrect.');
     } finally {
       setIsLoading(false);
     }
@@ -143,7 +149,12 @@ export function LoginPage() {
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Password</label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Password</label>
+                <Link to="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+                  Forgot Password?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}

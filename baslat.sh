@@ -1,11 +1,15 @@
 #!/bin/bash
 echo "CVision Sunuculari Baslatiliyor..."
 
-# Script'in bulunduğu dizin
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Eski processleri temizle
+echo "Eski processler temizleniyor..."
+lsof -ti :8001 | xargs kill -9 2>/dev/null && echo "  Port 8001 temizlendi." || true
+lsof -ti :5173 | xargs kill -9 2>/dev/null && echo "  Port 5173 temizlendi." || true
+sleep 1
+
 echo "Backend (FastAPI) baslatiliyor..."
-# macOS/Linux için virtual env aktivasyonu ve uvicorn başlatma
 (
   cd "$SCRIPT_DIR/backend" || exit
   if [ -d "cv_env_313" ]; then
@@ -24,18 +28,17 @@ BACKEND_PID=$!
 echo "Frontend (Vite/React) baslatiliyor..."
 (
   cd "$SCRIPT_DIR/frontend" || exit
-  npm run dev -- --host
+  npm run dev -- --host --port 5173
 ) &
 FRONTEND_PID=$!
 
 echo ""
 echo "Islem tamam! Sunucularin hazir olmasi birkac saniye surebilir."
-echo "Backend PID: $BACKEND_PID"
-echo "Frontend PID: $FRONTEND_PID"
+echo "  Backend : http://localhost:8001"
+echo "  Frontend: http://localhost:5173"
 echo ""
 echo "Sunuculari durdurmak icin Ctrl+C basin."
 
-# Ctrl+C ile her iki süreci de temiz kapatma
 cleanup() {
   echo ""
   echo "Sunucular durduruluyor..."
@@ -49,5 +52,4 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM
 
-# Her iki süreç de çalışırken bekle
 wait

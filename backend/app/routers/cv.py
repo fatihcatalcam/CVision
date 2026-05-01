@@ -317,7 +317,11 @@ def delete_cv(
     via cascade delete.
     Users can only delete their own CVs.
     """
-    db_cv_id = decode_id(cv_id)
+    # Support both plain integer IDs (from history API) and hashid-encoded IDs
+    if cv_id.isdigit():
+        db_cv_id = int(cv_id)
+    else:
+        db_cv_id = decode_id(cv_id)
     cv = CVService.get_cv(db_cv_id, current_user, db)
 
     if cv is None:

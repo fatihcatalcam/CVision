@@ -44,6 +44,15 @@ class Settings(BaseSettings):
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_ENABLED: bool = True  # Automatically disabled if key is empty
 
+    # ---- Email / SMTP ----
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM_EMAIL: str = ""
+    SMTP_FROM_NAME: str = "CVision"
+    SMTP_TLS: bool = True
+
     # ---- iyzico ----
     IYZICO_API_KEY: str = ""
     IYZICO_SECRET_KEY: str = ""

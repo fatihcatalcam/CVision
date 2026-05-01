@@ -1,17 +1,21 @@
 """
 Authentication router — handles user registration, login, and profile management.
 Endpoints:
-    POST  /auth/register          — Create a new user
-    POST  /auth/login             — Authenticate and receive JWT
-    GET   /auth/me                — Get current user profile
-    PATCH /auth/me                — Update display name
-    POST  /auth/me/password       — Change password
+    POST  /auth/register            — Create a new user (unverified)
+    POST  /auth/verify-email        — Verify email with 5-digit code
+    POST  /auth/resend-verification — Resend verification code
+    POST  /auth/login               — Authenticate and receive JWT
+    GET   /auth/me                  — Get current user profile
+    PATCH /auth/me                  — Update display name
+    POST  /auth/me/password         — Change password
 """
 
 import re
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from app.dependencies import get_db, get_current_user
 from app.schemas.user import UserRegister, UserLogin, UserResponse, TokenResponse
@@ -20,7 +24,11 @@ from app.auth.hashing import hash_password, verify_password
 from app.auth.jwt_handler import create_access_token
 from app.limiter import limiter
 
+logger = logging.getLogger("cvision.routers.auth")
+
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+MAX_VERIFICATION_ATTEMPTS = 5
 
 
 class UserUpdateRequest(BaseModel):
@@ -43,6 +51,41 @@ class PasswordChangeRequest(BaseModel):
         return v
 
 
+class VerifyEmailRequest(BaseModel):
+    email: str
+    code: str
+
+
+class ResendVerificationRequest(BaseModel):
+    email: str
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class VerifyResetCodeRequest(BaseModel):
+    email: str
+    code: str
+
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    code: str
+    new_password: str = Field(..., min_length=8, max_length=128)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_new_password(cls, v: str) -> str:
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"\d", v):
+            raise ValueError("Password must contain at least one number")
+        return v
+
+
 @router.post(
     "/register",
     response_model=UserResponse,
@@ -51,24 +94,219 @@ class PasswordChangeRequest(BaseModel):
 )
 @limiter.limit("5/minute")
 def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
+    from app.services.email_service import generate_verification_code, get_code_expiry, send_verification_email
+
     existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
+        if not existing.is_verified:
+            # Resend code to unverified account
+            code = generate_verification_code()
+            existing.verification_code = code
+            existing.verification_code_expires_at = get_code_expiry()
+            existing.verification_attempts = 0
+            db.commit()
+            send_verification_email(existing.email, code, existing.full_name)
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="UNVERIFIED_EXISTS",
+            )
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="A user with this email already exists",
         )
 
+    code = generate_verification_code()
     new_user = User(
         full_name=user_data.full_name,
         email=user_data.email,
         password_hash=hash_password(user_data.password),
         role="user",
+        is_verified=False,
+        verification_code=code,
+        verification_code_expires_at=get_code_expiry(),
+        verification_attempts=0,
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
+    sent = send_verification_email(new_user.email, code, new_user.full_name)
+    if not sent:
+        logger.warning("Email could not be sent for user %s — code: %s", new_user.email, code)
+
     return new_user
+
+
+@router.post(
+    "/verify-email",
+    summary="Verify email address with 5-digit code",
+)
+@limiter.limit("10/minute")
+def verify_email(request: Request, body: VerifyEmailRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.is_verified:
+        return {"message": "Email already verified"}
+
+    if user.verification_attempts >= MAX_VERIFICATION_ATTEMPTS:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many attempts. Please request a new code.",
+        )
+
+    now = datetime.utcnow()
+    if not user.verification_code_expires_at or user.verification_code_expires_at < now:
+        raise HTTPException(status_code=400, detail="Verification code has expired. Please request a new one.")
+
+    user.verification_attempts += 1
+    db.commit()
+
+    if user.verification_code != body.code.strip():
+        remaining = MAX_VERIFICATION_ATTEMPTS - user.verification_attempts
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid code. {remaining} attempt(s) remaining.",
+        )
+
+    user.is_verified = True
+    user.verification_code = None
+    user.verification_code_expires_at = None
+    user.verification_attempts = 0
+    db.commit()
+    db.refresh(user)
+
+    access_token = create_access_token(data={"sub": str(user.id)})
+    return {
+        "message": "Email verified successfully",
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "full_name": user.full_name,
+            "email": user.email,
+            "role": user.role,
+            "plan_type": user.plan_type,
+            "analysis_count": user.analysis_count,
+            "quota_reset_at": user.quota_reset_at.isoformat() if user.quota_reset_at else None,
+            "subscription_end_at": user.subscription_end_at.isoformat() if user.subscription_end_at else None,
+            "created_at": user.created_at.isoformat() if user.created_at else None,
+        }
+    }
+
+
+@router.post(
+    "/resend-verification",
+    summary="Resend verification code",
+)
+@limiter.limit("3/minute")
+def resend_verification(request: Request, body: ResendVerificationRequest, db: Session = Depends(get_db)):
+    from app.services.email_service import generate_verification_code, get_code_expiry, send_verification_email
+
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user:
+        # Don't reveal if email exists
+        return {"message": "If that email exists, a new code has been sent."}
+
+    if user.is_verified:
+        return {"message": "Email already verified"}
+
+    code = generate_verification_code()
+    user.verification_code = code
+    user.verification_code_expires_at = get_code_expiry()
+    user.verification_attempts = 0
+    db.commit()
+
+    send_verification_email(user.email, code, user.full_name)
+    return {"message": "A new verification code has been sent to your email."}
+
+
+MAX_RESET_ATTEMPTS = 5
+
+
+@router.post("/forgot-password", summary="Request password reset code")
+@limiter.limit("3/minute")
+def forgot_password(request: Request, body: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    from app.services.email_service import generate_reset_code, get_reset_code_expiry, send_reset_password_email
+
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user:
+        # Don't reveal if email exists
+        return {"message": "If that email exists, a reset code has been sent."}
+
+    code = generate_reset_code()
+    user.reset_code = code
+    user.reset_code_expires_at = get_reset_code_expiry()
+    user.reset_code_attempts = 0
+    db.commit()
+
+    send_reset_password_email(user.email, code, user.full_name)
+    return {"message": "If that email exists, a reset code has been sent."}
+
+
+@router.post("/verify-reset-code", summary="Verify password reset code")
+@limiter.limit("10/minute")
+def verify_reset_code(request: Request, body: VerifyResetCodeRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user or not user.reset_code:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code.")
+
+    if user.reset_code_attempts >= MAX_RESET_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many attempts. Please request a new code.")
+
+    now = datetime.utcnow()
+    if not user.reset_code_expires_at or user.reset_code_expires_at < now:
+        raise HTTPException(status_code=400, detail="Reset code has expired. Please request a new one.")
+
+    user.reset_code_attempts += 1
+    db.commit()
+
+    # Case-sensitive comparison
+    if user.reset_code != body.code.strip():
+        remaining = MAX_RESET_ATTEMPTS - user.reset_code_attempts
+        raise HTTPException(status_code=400, detail=f"Invalid code. {remaining} attempt(s) remaining.")
+
+    return {"message": "Code verified. You may now set a new password.", "valid": True}
+
+
+@router.post("/reset-password", summary="Set new password after code verification")
+@limiter.limit("5/minute")
+def reset_password(request: Request, body: ResetPasswordRequest, db: Session = Depends(get_db)):
+    from app.auth.hashing import hash_password, check_password_history, update_password_history
+
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user or not user.reset_code:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code.")
+
+    if user.reset_code_attempts >= MAX_RESET_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many attempts. Please request a new code.")
+
+    now = datetime.utcnow()
+    if not user.reset_code_expires_at or user.reset_code_expires_at < now:
+        raise HTTPException(status_code=400, detail="Reset code has expired. Please request a new one.")
+
+    if user.reset_code != body.code.strip():
+        user.reset_code_attempts += 1
+        db.commit()
+        raise HTTPException(status_code=400, detail="Invalid code.")
+
+    # Check if new password matches any of last 3 passwords
+    if check_password_history(body.new_password, user.password_history):
+        raise HTTPException(status_code=400, detail="You cannot reuse one of your last 3 passwords.")
+
+    # Update password history with current password before changing it
+    user.password_history = update_password_history(user.password_hash, user.password_history)
+
+    # Update password and invalidate all existing sessions
+    user.password_hash = hash_password(body.new_password)
+    user.password_changed_at = now
+    user.reset_code = None
+    user.reset_code_expires_at = None
+    user.reset_code_attempts = 0
+    db.commit()
+
+    return {"message": "Password updated successfully. Please log in with your new password."}
 
 
 @router.post(
@@ -83,8 +321,14 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password",
+            detail="Email or password is incorrect.",
             headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if not user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="EMAIL_NOT_VERIFIED",
         )
 
     access_token = create_access_token(data={"sub": str(user.id)})
@@ -101,7 +345,6 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
     summary="Get current user profile",
 )
 def get_me(current_user: User = Depends(get_current_user)):
-    """Return the profile of the currently authenticated user."""
     return current_user
 
 
@@ -115,7 +358,6 @@ def update_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Update the authenticated user's display name."""
     current_user.full_name = body.full_name.strip()
     db.commit()
     db.refresh(current_user)
@@ -132,7 +374,8 @@ def change_password(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Change the authenticated user's password after verifying the current one."""
+    from app.auth.hashing import check_password_history, update_password_history
+
     if not verify_password(body.current_password, current_user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -145,6 +388,17 @@ def change_password(
             detail="New password must be different from current password",
         )
 
+    # Check if new password matches any of last 3 passwords
+    if check_password_history(body.new_password, current_user.password_history):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You cannot reuse one of your last 3 passwords.",
+        )
+
+    # Update password history with current password before changing it
+    current_user.password_history = update_password_history(current_user.password_hash, current_user.password_history)
+
     current_user.password_hash = hash_password(body.new_password)
+    current_user.password_changed_at = datetime.utcnow()
     db.commit()
     return None

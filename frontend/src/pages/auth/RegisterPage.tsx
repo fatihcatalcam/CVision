@@ -55,10 +55,18 @@ export function RegisterPage() {
     setIsLoading(true);
     try {
       await api.post('/auth/register', { full_name: fullName, email, password });
-      toast.success('Account created! Please sign in.');
-      navigate('/login');
+      toast.success('Verification code sent to your email!');
+      navigate(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (error: any) {
-      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || 'Registration failed');
+      const detail = error.response?.data?.detail;
+      if (detail === 'UNVERIFIED_EXISTS') {
+        toast.success('A new verification code has been sent to your email.');
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
+      toast.error(
+        Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || 'Registration failed. Please try again.'
+      );
     } finally {
       setIsLoading(false);
     }

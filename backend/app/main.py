@@ -127,6 +127,24 @@ async def lifespan(app: FastAPI):
     settings.upload_path
     logger.info(f"Upload directory ready at: {settings.UPLOAD_DIR}")
 
+    # Re-queue any CVs stuck in pending/processing state from a previous run
+    from app.models.cv import CV as CVModel
+    from app.services.cv_service import CVService
+    import threading
+    requeue_db = SessionLocal()
+    try:
+        stuck = requeue_db.query(CVModel).filter(CVModel.status.in_(["pending", "processing"])).all()
+        if stuck:
+            logger.info(f"Re-queuing {len(stuck)} stuck CV(s) from previous run...")
+            for cv in stuck:
+                cv.status = "pending"
+            requeue_db.commit()
+            for cv in stuck:
+                t = threading.Thread(target=CVService.process_analysis_background, args=(cv.id,), daemon=True)
+                t.start()
+    finally:
+        requeue_db.close()
+
     yield  # Application runs here
 
     logger.info("Shutting down CVision backend...")

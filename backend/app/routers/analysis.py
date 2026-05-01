@@ -50,7 +50,7 @@ def get_analysis_status(
     Check the current status of an uploaded CV's analysis process.
     Expected statuses: 'pending', 'processing', 'completed', 'failed'.
     """
-    db_cv_id = decode_id(cv_id)
+    db_cv_id = int(cv_id) if cv_id.isdigit() else decode_id(cv_id)
     cv = CVService.get_cv(db_cv_id, current_user, db)
     if cv is None:
         raise HTTPException(
@@ -79,7 +79,7 @@ def get_analysis_results(
     Includes scores, suggestions, extracted skills, and career recommendations.
     Users can only access analysis for their own CVs.
     """
-    db_cv_id = decode_id(cv_id)
+    db_cv_id = int(cv_id) if cv_id.isdigit() else decode_id(cv_id)
     # Verify CV exists and belongs to user
     cv = CVService.get_cv(db_cv_id, current_user, db)
     if cv is None:

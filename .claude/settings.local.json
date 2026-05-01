@@ -20,7 +20,13 @@
       "Bash(python -c \"from PIL import Image; print\\('PIL ok'\\)\")",
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(cv_env_313/Scripts/pip show:*)"
+      "Bash(cv_env_313/Scripts/pip show:*)",
+      "Bash(lsof -ti:8001)",
+      "Bash(xargs kill *)",
+      "Bash(python3 -c \"import secrets; print\\('SECRET_KEY=' + secrets.token_hex\\(32\\)\\)\")",
+      "Bash(sqlite3 /Users/Huseyin/CVision/backend/cvision.db \"PRAGMA table_info\\(cvs\\);\")",
+      "Bash(sqlite3 /Users/Huseyin/CVision/backend/cvision.db \"ALTER TABLE cvs ADD COLUMN target_domain VARCHAR\\(100\\);\")",
+      "Bash(sqlite3 /Users/Huseyin/CVision/backend/cvision.db ' *)"
     ]
   }
 }

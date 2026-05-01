@@ -6,6 +6,7 @@ Shared FastAPI dependencies used across routers.
 """
 
 from typing import Generator
+from datetime import datetime
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -56,6 +57,16 @@ def get_current_user(
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise credentials_exception
+
+    # Invalidate tokens issued before the last password change
+    if user.password_changed_at:
+        iat = payload.get("iat")
+        if iat:
+            from datetime import timezone as tz
+            token_issued_at = datetime.fromtimestamp(iat, tz=tz.utc) if isinstance(iat, (int, float)) else iat
+            changed_at = user.password_changed_at.replace(tzinfo=tz.utc) if user.password_changed_at.tzinfo is None else user.password_changed_at
+            if token_issued_at < changed_at:
+                raise credentials_exception
 
     return user
 
