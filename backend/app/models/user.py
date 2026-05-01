@@ -5,7 +5,7 @@ Maps to FR1, FR2, FR3, FR16, FR25.
 """
 
 from datetime import datetime, timezone
-from sqlalchemy import String, Integer, DateTime, func
+from sqlalchemy import String, Integer, Boolean, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -24,6 +24,10 @@ class User(Base):
     quota_reset_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_end_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     stripe_customer_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    is_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    verification_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    verification_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    verification_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
