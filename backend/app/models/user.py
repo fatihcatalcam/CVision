@@ -28,6 +28,10 @@ class User(Base):
     verification_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
     verification_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     verification_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    reset_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    reset_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    reset_code_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    password_changed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

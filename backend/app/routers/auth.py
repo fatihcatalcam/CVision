@@ -60,6 +60,107 @@ class ResendVerificationRequest(BaseModel):
     email: str
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class VerifyResetCodeRequest(BaseModel):
+    email: str
+    code: str
+
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    code: str
+    new_password: str = Field(..., min_length=8, max_length=128)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_new_password(cls, v: str) -> str:
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"\d", v):
+            raise ValueError("Password must contain at least one number")
+        return v
+
+
+MAX_RESET_ATTEMPTS = 5
+
+
+@router.post("/forgot-password", summary="Request password reset code")
+@limiter.limit("3/minute")
+def forgot_password(request: Request, body: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    from app.services.email_service import generate_reset_code, get_reset_code_expiry, send_reset_password_email
+
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user:
+        return {"message": "If that email exists, a reset code has been sent."}
+
+    code = generate_reset_code()
+    user.reset_code = code
+    user.reset_code_expires_at = get_reset_code_expiry()
+    user.reset_code_attempts = 0
+    db.commit()
+
+    send_reset_password_email(user.email, code, user.full_name)
+    return {"message": "If that email exists, a reset code has been sent."}
+
+
+@router.post("/verify-reset-code", summary="Verify password reset code")
+@limiter.limit("10/minute")
+def verify_reset_code(request: Request, body: VerifyResetCodeRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user or not user.reset_code:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code.")
+
+    if user.reset_code_attempts >= MAX_RESET_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many attempts. Please request a new code.")
+
+    now = datetime.utcnow()
+    if not user.reset_code_expires_at or user.reset_code_expires_at < now:
+        raise HTTPException(status_code=400, detail="Reset code has expired. Please request a new one.")
+
+    user.reset_code_attempts += 1
+    db.commit()
+
+    if user.reset_code != body.code.strip():
+        remaining = MAX_RESET_ATTEMPTS - user.reset_code_attempts
+        raise HTTPException(status_code=400, detail=f"Invalid code. {remaining} attempt(s) remaining.")
+
+    return {"message": "Code verified. You may now set a new password.", "valid": True}
+
+
+@router.post("/reset-password", summary="Set new password after code verification")
+@limiter.limit("5/minute")
+def reset_password(request: Request, body: ResetPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user or not user.reset_code:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code.")
+
+    if user.reset_code_attempts >= MAX_RESET_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="Too many attempts. Please request a new code.")
+
+    now = datetime.utcnow()
+    if not user.reset_code_expires_at or user.reset_code_expires_at < now:
+        raise HTTPException(status_code=400, detail="Reset code has expired. Please request a new one.")
+
+    if user.reset_code != body.code.strip():
+        user.reset_code_attempts += 1
+        db.commit()
+        raise HTTPException(status_code=400, detail="Invalid code.")
+
+    user.password_hash = hash_password(body.new_password)
+    user.password_changed_at = now
+    user.reset_code = None
+    user.reset_code_expires_at = None
+    user.reset_code_attempts = 0
+    db.commit()
+
+    return {"message": "Password updated successfully. Please log in with your new password."}
+
+
 @router.post(
     "/register",
     response_model=UserResponse,
