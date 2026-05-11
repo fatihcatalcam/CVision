@@ -6,6 +6,7 @@ Each suggestion has a category, priority, and message.
 
 import logging
 import re
+from typing import Any
 
 from app.analysis.base_analyzer import BaseAnalyzer, AnalysisContext
 

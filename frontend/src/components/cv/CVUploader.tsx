@@ -70,7 +70,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
       toast.success('CV uploaded! AI is analyzing...');
       onUploadSuccess(response.data.id);
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Upload failed. Please try again.');
+      toast.error(error.response?.data?.detail || error.response?.data?.message || 'Upload failed. Please try again.');
     } finally {
       setIsUploading(false);
     }

@@ -20,7 +20,10 @@
       "Bash(python -c \"from PIL import Image; print\\('PIL ok'\\)\")",
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(cv_env_313/Scripts/pip show:*)"
+      "Bash(cv_env_313/Scripts/pip show:*)",
+      "PowerShell(Add-Type -AssemblyName System.IO.Compression.FileSystem; $pdf = \"C:\\\\Users\\\\fthct\\\\Downloads\\\\HW5-READ Refinement and First SaaS Prototype-Updated \\(1\\).pdf\"; Write-Host \"PDF Size: $\\(\\(Get-Item $pdf\\).Length\\) bytes\")",
+      "PowerShell(python -c \"import pdfplumber; print\\('pdfplumber ok'\\)\" 2>&1)",
+      "PowerShell($p = \"C:\\\\Users\\\\fthct\\\\OneDrive\\\\Desktop\\\\Fatih\\\\Sinavlarim\\\\3.yil\\\\2.donem\\\\turgut ozal\\\\HW5_Part2\"; if\\(Test-Path $p\\){Write-Host \"OK: $p\"} else {Write-Host \"NOT FOUND\"})"
     ]
   }
 }

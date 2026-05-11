@@ -55,18 +55,10 @@ export function RegisterPage() {
     setIsLoading(true);
     try {
       await api.post('/auth/register', { full_name: fullName, email, password });
-      toast.success('Doğrulama kodu e-postana gönderildi!');
-      navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+      toast.success('Account created! Please sign in.');
+      navigate('/login');
     } catch (error: any) {
-      const detail = error.response?.data?.detail;
-      if (detail === 'UNVERIFIED_EXISTS') {
-        toast.success('Bu e-posta için yeni doğrulama kodu gönderildi.');
-        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
-        return;
-      }
-      toast.error(
-        Array.isArray(detail) ? detail[0]?.msg : detail || 'Kayıt başarısız'
-      );
+      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
