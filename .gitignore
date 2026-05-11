@@ -36,6 +36,8 @@ backend/alembic/__pycache__/
 
 # Custom Python Env
 cv_env_313/
+cv_env_local/
+cv_env/
 
 # Logs
 *.log
