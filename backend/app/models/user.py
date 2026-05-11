@@ -24,6 +24,11 @@ class User(Base):
     quota_reset_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_end_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     stripe_customer_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    reset_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    reset_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    reset_code_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    password_changed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    password_history: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
