@@ -18,6 +18,9 @@ bcrypt==4.2.1
 # File upload
 python-multipart==0.0.20
 
+# Rate limiting
+slowapi==0.1.9
+
 # PDF parsing
 PyMuPDF==1.25.5
 
