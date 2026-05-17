@@ -1,14 +1,12 @@
 """
-Email service — sends transactional emails via SMTP.
+Email service — sends transactional emails via Resend HTTP API.
 """
 
 import logging
-import smtplib
+import resend
 import secrets
 import string
 from datetime import datetime, timedelta
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 from app.config import settings
 
@@ -27,12 +25,13 @@ def get_reset_code_expiry() -> datetime:
 
 
 def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
-    """Send password reset email with the alphanumeric code."""
-    if not settings.SMTP_HOST or not settings.SMTP_USERNAME:
-        logger.warning("SMTP not configured — skipping email send. Reset code: %s", code)
+    """Send password reset email with the alphanumeric code via Resend."""
+    if not settings.RESEND_API_KEY:
+        logger.warning("Resend API key not configured — skipping email send. Reset code: %s", code)
         return False
 
-    subject = "CVision — Şifre Sıfırlama Kodunuz"
+    resend.api_key = settings.RESEND_API_KEY
+
     html_body = f"""
     <!DOCTYPE html>
     <html>
@@ -68,20 +67,12 @@ def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
     """
 
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = f"{settings.SMTP_FROM_NAME} <{settings.SMTP_FROM_EMAIL}>"
-        msg["To"] = to_email
-        msg.attach(MIMEText(html_body, "html"))
-
-        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10) as server:
-            server.ehlo()
-            if settings.SMTP_TLS:
-                server.starttls()
-                server.ehlo()
-            server.login(settings.SMTP_USERNAME, settings.SMTP_PASSWORD)
-            server.sendmail(settings.SMTP_FROM_EMAIL, to_email, msg.as_string())
-
+        resend.Emails.send({
+            "from": settings.EMAIL_FROM,
+            "to": [to_email],
+            "subject": "CVision — Şifre Sıfırlama Kodunuz",
+            "html": html_body,
+        })
         logger.info("Password reset email sent to %s", to_email)
         return True
 
