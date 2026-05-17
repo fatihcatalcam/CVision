@@ -1,5 +1,5 @@
 """
-Suggestion model — individual improvement suggestions tied to an analysis.
+Suggestion model - individual improvement suggestions tied to an analysis.
 Each analysis generates at least 3 suggestions (FR10).
 """
 

@@ -1,5 +1,5 @@
 """
-Abstract base parser — defines the contract all CV parsers must follow.
+Abstract base parser - defines the contract all CV parsers must follow.
 Concrete implementations: PdfParser, TxtParser.
 """
 

@@ -1,12 +1,12 @@
 """
-CV router — handles CV upload, retrieval, listing, and deletion.
+CV router - handles CV upload, retrieval, listing, and deletion.
 All endpoints require authentication.
 
 Endpoints:
-    POST   /cvs/upload     — Upload a CV file (PDF or TXT)
-    GET    /cvs/           — List current user's CVs
-    GET    /cvs/{cv_id}    — Get detailed CV info
-    DELETE /cvs/{cv_id}    — Delete a CV and its file
+    POST   /cvs/upload     - Upload a CV file (PDF or TXT)
+    GET    /cvs/           - List current user's CVs
+    GET    /cvs/{cv_id}    - Get detailed CV info
+    DELETE /cvs/{cv_id}    - Delete a CV and its file
 
 Implements FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 """

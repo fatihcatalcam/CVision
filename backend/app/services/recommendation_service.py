@@ -1,5 +1,5 @@
 """
-Recommendation Service — business logic for generating and persisting recommendations.
+Recommendation Service - business logic for generating and persisting recommendations.
 """
 
 import logging

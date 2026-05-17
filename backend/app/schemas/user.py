@@ -1,5 +1,5 @@
 """
-User schemas — request/response validation for auth and user endpoints.
+User schemas - request/response validation for auth and user endpoints.
 """
 
 from datetime import datetime

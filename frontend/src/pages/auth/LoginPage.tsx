@@ -38,7 +38,7 @@ export function LoginPage() {
   return (
     <div className="min-h-screen flex">
 
-      {/* Left panel — branding */}
+      {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 via-[var(--color-background)] to-violet-950/40" />
@@ -67,7 +67,7 @@ export function LoginPage() {
               <span className="gradient-text">career advantage.</span>
             </h2>
             <p className="text-zinc-400 leading-relaxed">
-              Analyze your resume, uncover gaps, and get actionable feedback from advanced AI — in under 30 seconds.
+              Analyze your resume, uncover gaps, and get actionable feedback from advanced AI - in under 30 seconds.
             </p>
           </div>
 
@@ -107,7 +107,7 @@ export function LoginPage() {
         </div>
       </div>
 
-      {/* Right panel — form */}
+      {/* Right panel - form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 lg:px-16">
         <div className="w-full max-w-md animate-in slide-up">
 

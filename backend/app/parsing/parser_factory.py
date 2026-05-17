@@ -1,5 +1,5 @@
 """
-Parser factory — returns the correct parser based on file extension.
+Parser factory - returns the correct parser based on file extension.
 Implements the Factory pattern (Open/Closed principle).
 """
 

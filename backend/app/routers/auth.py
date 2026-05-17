@@ -1,14 +1,14 @@
 """
-Authentication router — handles user registration, login, and profile management.
+Authentication router - handles user registration, login, and profile management.
 Endpoints:
-    POST  /auth/register          — Create a new user
-    POST  /auth/login             — Authenticate and receive JWT
-    GET   /auth/me                — Get current user profile
-    PATCH /auth/me                — Update display name
-    POST  /auth/me/password       — Change password
-    POST  /auth/forgot-password   — Request password reset code
-    POST  /auth/verify-reset-code — Verify reset code
-    POST  /auth/reset-password    — Set new password
+    POST  /auth/register          - Create a new user
+    POST  /auth/login             - Authenticate and receive JWT
+    GET   /auth/me                - Get current user profile
+    PATCH /auth/me                - Update display name
+    POST  /auth/me/password       - Change password
+    POST  /auth/forgot-password   - Request password reset code
+    POST  /auth/verify-reset-code - Verify reset code
+    POST  /auth/reset-password    - Set new password
 """
 
 import re

@@ -1,5 +1,5 @@
 """
-AI Service — wraps OpenAI GPT API to enhance CV analysis results.
+AI Service - wraps OpenAI GPT API to enhance CV analysis results.
 
 Provides:
 - AI-powered CV summary and executive narrative
@@ -72,7 +72,7 @@ def ai_enhance_analysis(
         Returns empty dict on failure (caller falls back to rule-based output).
     """
     if not is_ai_enabled():
-        logger.info("AI service disabled — using rule-based output only.")
+        logger.info("AI service disabled - using rule-based output only.")
         return {}
 
     client = _get_client()
@@ -165,7 +165,7 @@ Rules:
         result = json.loads(raw_content)
         
         logger.info(
-            f"AI enhancement successful — "
+            f"AI enhancement successful - "
             f"{len(result.get('ai_suggestions', []))} suggestions generated"
         )
         

@@ -1,5 +1,5 @@
 """
-Suggestion Generator — produces rule-based, actionable improvement suggestions.
+Suggestion Generator - produces rule-based, actionable improvement suggestions.
 Generates at least 3 suggestions per analysis (FR10).
 Each suggestion has a category, priority, and message.
 """
@@ -146,7 +146,7 @@ class SuggestionGenerator(BaseAnalyzer):
                     "priority": "low",
                     "message": (
                         "Reduce the use of ALL CAPS formatting. Use bold text or "
-                        "larger font sizes for headers instead — ATS systems may "
+                        "larger font sizes for headers instead - ATS systems may "
                         "misinterpret excessive capitalization."
                     ),
                     "snippets": []

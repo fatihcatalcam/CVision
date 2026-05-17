@@ -1,5 +1,5 @@
 """
-Analysis Engine — orchestrates all analyzers into a sequential pipeline.
+Analysis Engine - orchestrates all analyzers into a sequential pipeline.
 Runs: SectionDetector → SkillExtractor → ATSChecker → KeywordScorer
       → ExperienceEvaluator → ScoreCalculator → SuggestionGenerator
 """
@@ -67,7 +67,7 @@ class AnalysisEngine:
                 logger.error(
                     f"Analyzer '{analyzer.name}' failed: {e}", exc_info=True
                 )
-                # Continue with other analyzers — don't let one failure
+                # Continue with other analyzers - don't let one failure
                 # stop the entire pipeline
                 continue
 

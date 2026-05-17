@@ -1,5 +1,5 @@
 """
-Keyword Scorer — TF-based keyword matching against role profiles.
+Keyword Scorer - TF-based keyword matching against role profiles.
 Compares CV text against expected keywords from each role profile
 and produces a keyword match score.
 """
@@ -74,6 +74,6 @@ class KeywordScorer(BaseAnalyzer):
         context.keyword_score = round(min(best_ratio * 100.0, 100.0), 1)
 
         logger.info(
-            f"Keyword score: {context.keyword_score}% — "
+            f"Keyword score: {context.keyword_score}% - "
             f"matched {len(matched_total_unique)}/{len(all_keywords)} unique keywords globally"
         )

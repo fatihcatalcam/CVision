@@ -1,5 +1,5 @@
 """
-Skill model — master list of recognized skills.
+Skill model - master list of recognized skills.
 Populated via seed data (skills_data.py).
 Maps to FR11.
 """

@@ -1,5 +1,5 @@
 """
-PDF parser — extracts text from digital PDF files using PyMuPDF (fitz).
+PDF parser - extracts text from digital PDF files using PyMuPDF (fitz).
 Gracefully handles scanned/image-only PDFs with a clear error message.
 """
 

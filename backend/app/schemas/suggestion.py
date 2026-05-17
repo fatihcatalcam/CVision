@@ -1,5 +1,5 @@
 """
-Suggestion schemas — response validation for improvement suggestions.
+Suggestion schemas - response validation for improvement suggestions.
 """
 
 from pydantic import BaseModel, field_validator

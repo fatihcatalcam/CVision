@@ -19,7 +19,7 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch PDF — if snippets exist, request the highlighted version
+  // Fetch PDF - if snippets exist, request the highlighted version
   useEffect(() => {
     if (!isOpen) return;
 
@@ -136,7 +136,7 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
           </div>
         </div>
 
-        {/* Modal Body — Full PDF */}
+        {/* Modal Body - Full PDF */}
         <div className="flex-1 relative bg-[#1a1a1e]">
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center z-20">

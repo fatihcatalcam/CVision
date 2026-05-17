@@ -1,5 +1,5 @@
 """
-CVision Backend — FastAPI Application Entry Point
+CVision Backend - FastAPI Application Entry Point
 
 Registers all routers, configures CORS, and provides:
 - /health endpoint for liveness checks

@@ -1,5 +1,5 @@
 """
-Analysis schemas — response validation for analysis results.
+Analysis schemas - response validation for analysis results.
 """
 
 from datetime import datetime

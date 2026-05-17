@@ -14,7 +14,7 @@ from app.database import SessionLocal
 from app.auth.jwt_handler import verify_access_token
 from app.models.user import User
 
-# OAuth2 scheme — tells Swagger UI to show the "Authorize" button
+# OAuth2 scheme - tells Swagger UI to show the "Authorize" button
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 

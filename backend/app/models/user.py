@@ -1,5 +1,5 @@
 """
-User model — represents registered users of the platform.
+User model - represents registered users of the platform.
 Supports 'user' and 'admin' roles.
 Maps to FR1, FR2, FR3, FR16, FR25.
 """

@@ -1,5 +1,5 @@
 """
-Section Detector — identifies standard CV sections using keyword/synonym matching.
+Section Detector - identifies standard CV sections using keyword/synonym matching.
 Detects: education, experience, skills, projects, certifications, summary/objective, languages, references.
 Contributes to the completeness score.
 """
@@ -60,7 +60,7 @@ SECTION_PATTERNS: dict[str, list[str]] = {
     ],
 }
 
-# Weights for completeness scoring — how important each section is
+# Weights for completeness scoring - how important each section is
 SECTION_WEIGHTS: dict[str, float] = {
     "education": 20.0,
     "experience": 25.0,

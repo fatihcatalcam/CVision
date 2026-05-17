@@ -67,7 +67,7 @@ export function RegisterPage() {
   return (
     <div className="min-h-screen flex">
 
-      {/* Left panel — branding */}
+      {/* Left panel - branding */}
       <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950/80 via-[var(--color-background)] to-indigo-950/40" />
         <div className="absolute inset-0 opacity-[0.015]" style={{
@@ -124,7 +124,7 @@ export function RegisterPage() {
         <div className="relative z-10 text-xs text-zinc-700">Free plan · No credit card required</div>
       </div>
 
-      {/* Right panel — form */}
+      {/* Right panel - form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 lg:px-16">
         <div className="w-full max-w-md animate-in slide-up">
 

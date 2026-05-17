@@ -177,7 +177,7 @@ export function PricingPage() {
                   } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                 >
                   {loadingIyzico ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  {isTurkey ? 'Pay with iyzico — ₺149/mo' : 'iyzico (Turkey) — ₺149/mo'}
+                  {isTurkey ? 'Pay with iyzico - ₺149/mo' : 'iyzico (Turkey) - ₺149/mo'}
                 </button>
 
                 <button
@@ -190,7 +190,7 @@ export function PricingPage() {
                   } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                 >
                   {loadingStripe ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
-                  {!isTurkey ? 'Pay with Stripe — $4.99/mo' : 'Stripe (International) — $4.99/mo'}
+                  {!isTurkey ? 'Pay with Stripe - $4.99/mo' : 'Stripe (International) - $4.99/mo'}
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 text-[10px] text-zinc-700">

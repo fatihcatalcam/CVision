@@ -1,5 +1,5 @@
 """
-CV service — business logic for CV upload, retrieval, parsing, and deletion.
+CV service - business logic for CV upload, retrieval, parsing, and deletion.
 Handles file storage, text extraction, and database operations.
 """
 

@@ -1,11 +1,11 @@
 """
-Payment router — iyzico (TR) and Stripe (International) subscription integration.
+Payment router - iyzico (TR) and Stripe (International) subscription integration.
 Endpoints:
-  POST /payment/iyzico/init          — Create iyzico Checkoutform session
-  POST /payment/iyzico/callback      — iyzico payment result callback
-  POST /payment/stripe/create-session — Create Stripe Checkout Session
-  POST /payment/stripe/webhook       — Stripe webhook handler
-  GET  /payment/status               — Current user subscription status
+  POST /payment/iyzico/init          - Create iyzico Checkoutform session
+  POST /payment/iyzico/callback      - iyzico payment result callback
+  POST /payment/stripe/create-session - Create Stripe Checkout Session
+  POST /payment/stripe/webhook       - Stripe webhook handler
+  GET  /payment/status               - Current user subscription status
 """
 
 import json

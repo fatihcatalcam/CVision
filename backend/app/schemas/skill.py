@@ -1,5 +1,5 @@
 """
-Skill schemas — response validation for skills and extracted skills.
+Skill schemas - response validation for skills and extracted skills.
 """
 
 from pydantic import BaseModel

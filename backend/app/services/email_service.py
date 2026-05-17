@@ -1,5 +1,5 @@
 """
-Email service — sends transactional emails via Resend HTTP API.
+Email service - sends transactional emails via Resend HTTP API.
 """
 
 import logging
@@ -27,7 +27,7 @@ def get_reset_code_expiry() -> datetime:
 def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
     """Send password reset email with the alphanumeric code via Resend."""
     if not settings.RESEND_API_KEY:
-        logger.warning("Resend API key not configured — skipping email send. Reset code: %s", code)
+        logger.warning("Resend API key not configured - skipping email send. Reset code: %s", code)
         return False
 
     resend.api_key = settings.RESEND_API_KEY
@@ -70,7 +70,7 @@ def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
         resend.Emails.send({
             "from": settings.EMAIL_FROM,
             "to": [to_email],
-            "subject": "CVision — Şifre Sıfırlama Kodunuz",
+            "subject": "CVision - Şifre Sıfırlama Kodunuz",
             "html": html_body,
         })
         logger.info("Password reset email sent to %s", to_email)

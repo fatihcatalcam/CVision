@@ -1,5 +1,5 @@
 """
-Skill Extractor — dictionary-based skill lookup using word-boundary matching.
+Skill Extractor - dictionary-based skill lookup using word-boundary matching.
 Matches CV text against the skills database using \b regex for precision.
 Prevents false positives like "Pythonic" matching "Python".
 """

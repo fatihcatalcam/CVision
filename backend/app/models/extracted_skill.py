@@ -1,5 +1,5 @@
 """
-ExtractedSkill model — junction table linking analysis results to detected skills.
+ExtractedSkill model - junction table linking analysis results to detected skills.
 Includes confidence score for each detected skill.
 Maps to FR11.
 """

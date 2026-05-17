@@ -1,5 +1,5 @@
 """
-RoleProfile model — predefined career role profiles used for recommendation matching.
+RoleProfile model - predefined career role profiles used for recommendation matching.
 Contains expected keywords and skills for each role.
 Maps to FR12, FR13.
 """
@@ -19,10 +19,10 @@ class RoleProfile(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     domain: Mapped[str] = mapped_column(String(100), nullable=False, default="Software Engineering")
 
-    # JSON arrays of strings — e.g. ["python", "api", "backend", "database"]
+    # JSON arrays of strings - e.g. ["python", "api", "backend", "database"]
     expected_keywords: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)
 
-    # JSON arrays of skill names — e.g. ["Python", "SQL", "FastAPI"]
+    # JSON arrays of skill names - e.g. ["Python", "SQL", "FastAPI"]
     expected_skills: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)
 
     created_at: Mapped[datetime] = mapped_column(

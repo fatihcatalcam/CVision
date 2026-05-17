@@ -1,5 +1,5 @@
 """
-Score Calculator — weighted aggregation of all sub-scores into an overall score.
+Score Calculator - weighted aggregation of all sub-scores into an overall score.
 Weights: completeness (25%) + skills (25%) + ATS (20%) + keywords (15%) + experience (15%)
 """
 
@@ -9,7 +9,7 @@ from app.analysis.base_analyzer import BaseAnalyzer, AnalysisContext
 
 logger = logging.getLogger("cvision.analysis.score_calculator")
 
-# Score weights — must sum to 1.0
+# Score weights - must sum to 1.0
 SCORE_WEIGHTS = {
     "completeness": 0.25,
     "skills": 0.25,
@@ -84,7 +84,7 @@ class ScoreCalculator(BaseAnalyzer):
                 f"Strong technical profile with {count} recognized skills"
             )
         if context.ats_score >= 70:
-            context.strengths.append("Good ATS compatibility — most formatting checks passed")
+            context.strengths.append("Good ATS compatibility - most formatting checks passed")
         if context.keyword_score >= 50:
             context.strengths.append("Good keyword coverage for target roles")
         if context.experience_score >= 60:
@@ -93,7 +93,7 @@ class ScoreCalculator(BaseAnalyzer):
                 f"Relevant experience demonstrated (~{years:.0f} years)"
             )
         if context.detected_sections.get("projects"):
-            context.strengths.append("Projects section included — demonstrates practical experience")
+            context.strengths.append("Projects section included - demonstrates practical experience")
 
         # Weaknesses
         if context.completeness_score < 50:
@@ -105,19 +105,19 @@ class ScoreCalculator(BaseAnalyzer):
             )
         if skills_score < 40:
             context.weaknesses.append(
-                "Few recognized technical skills — consider adding a dedicated skills section"
+                "Few recognized technical skills - consider adding a dedicated skills section"
             )
         if context.ats_score < 50:
             context.weaknesses.append(
-                "Low ATS compatibility — review formatting and required sections"
+                "Low ATS compatibility - review formatting and required sections"
             )
         if context.keyword_score < 30:
             context.weaknesses.append(
-                "Low keyword match — tailor your CV with industry-relevant terms"
+                "Low keyword match - tailor your CV with industry-relevant terms"
             )
         if context.experience_score < 40:
             context.weaknesses.append(
-                "Limited experience detected — highlight internships, projects, or volunteer work"
+                "Limited experience detected - highlight internships, projects, or volunteer work"
             )
 
     def _generate_summary(

@@ -1,5 +1,5 @@
 """
-Central model registry — imports all models so SQLAlchemy and Alembic
+Central model registry - imports all models so SQLAlchemy and Alembic
 can discover them through Base.metadata.
 
 Import this module wherever you need all models registered

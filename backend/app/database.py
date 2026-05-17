@@ -21,7 +21,7 @@ else:
         echo=settings.DEBUG,
     )
 
-# Session factory — each request gets its own session via dependency injection
+# Session factory - each request gets its own session via dependency injection
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

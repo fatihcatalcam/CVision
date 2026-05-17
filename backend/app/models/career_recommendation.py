@@ -1,5 +1,5 @@
 """
-CareerRecommendation model — links an analysis result to a matching role profile.
+CareerRecommendation model - links an analysis result to a matching role profile.
 Includes match score and explanation.
 Maps to FR13.
 """

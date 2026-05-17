@@ -1,5 +1,5 @@
 """
-Analysis service — business logic for triggering CV analysis
+Analysis service - business logic for triggering CV analysis
 and persisting results to the database.
 """
 
@@ -23,7 +23,7 @@ logger = logging.getLogger("cvision.services.analysis")
 
 
 class AnalysisService:
-    """Handles analysis business logic — triggering, persisting, and retrieving."""
+    """Handles analysis business logic - triggering, persisting, and retrieving."""
 
     @staticmethod
     def _load_skills(db: Session) -> list[dict[str, Any]]:
@@ -225,7 +225,7 @@ class AnalysisService:
                     
             except Exception as e:
                 logger.error(f"AI enhancement failed for analysis {analysis.id}: {e}")
-                # AI failure is non-fatal — analysis still has rule-based results
+                # AI failure is non-fatal - analysis still has rule-based results
         else:
             logger.info("AI service not enabled, skipping enhancement")
 

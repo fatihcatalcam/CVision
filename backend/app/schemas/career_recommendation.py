@@ -1,5 +1,5 @@
 """
-CareerRecommendation schemas — response validation for career recommendations.
+CareerRecommendation schemas - response validation for career recommendations.
 """
 
 from pydantic import BaseModel

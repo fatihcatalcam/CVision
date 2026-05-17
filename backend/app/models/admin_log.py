@@ -1,5 +1,5 @@
 """
-AdminLog model — tracks administrative events and system errors.
+AdminLog model - tracks administrative events and system errors.
 Maps to FR17, FR18.
 """
 

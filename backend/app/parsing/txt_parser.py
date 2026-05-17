@@ -1,5 +1,5 @@
 """
-Plain text parser — reads text directly from .txt files.
+Plain text parser - reads text directly from .txt files.
 Supports UTF-8 encoding with fallback to latin-1.
 """
 

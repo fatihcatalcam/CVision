@@ -1,5 +1,5 @@
 """
-CV model — represents an uploaded CV file and its extracted text.
+CV model - represents an uploaded CV file and its extracted text.
 Status lifecycle: pending → processing → completed → failed
 Maps to FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 """

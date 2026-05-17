@@ -1,5 +1,5 @@
 """
-Admin router — provides system-wide analytics and user management endpoints.
+Admin router - provides system-wide analytics and user management endpoints.
 Requires 'admin' role privileges.
 Maps to FR21, FR22.
 """

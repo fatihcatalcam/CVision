@@ -1,5 +1,5 @@
 """
-Abstract base analyzer — defines the contract all analysis components follow.
+Abstract base analyzer - defines the contract all analysis components follow.
 Each analyzer receives extracted CV text and produces a partial result dict.
 Implements the Strategy pattern for pluggable analysis strategies.
 """

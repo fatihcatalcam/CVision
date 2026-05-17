@@ -1,5 +1,5 @@
 """
-CV schemas — request/response validation for CV upload and retrieval.
+CV schemas - request/response validation for CV upload and retrieval.
 """
 
 from datetime import datetime

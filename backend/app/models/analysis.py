@@ -1,5 +1,5 @@
 """
-AnalysisResult model — stores the complete analysis output for a CV.
+AnalysisResult model - stores the complete analysis output for a CV.
 Contains sub-scores, summary, strengths, and weaknesses as JSON.
 Maps to FR8, FR9, FR20.
 """
@@ -29,11 +29,11 @@ class AnalysisResult(Base):
     # Textual analysis
     summary: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    # JSON arrays — e.g. ["Strong technical skills", "Good formatting"]
+    # JSON arrays - e.g. ["Strong technical skills", "Good formatting"]
     strengths: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)
     weaknesses: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=list)
 
-    # Detected sections — e.g. {"education": true, "experience": true, "skills": false}
+    # Detected sections - e.g. {"education": true, "experience": true, "skills": false}
     detected_sections: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=dict)
 
     # AI-enhanced fields (populated after GPT call)

@@ -1,5 +1,5 @@
 """
-RoleProfile schemas — response validation for career role profiles.
+RoleProfile schemas - response validation for career role profiles.
 """
 
 from pydantic import BaseModel

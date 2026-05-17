@@ -1,10 +1,10 @@
 """
-Analysis router — triggers CV analysis and returns results.
+Analysis router - triggers CV analysis and returns results.
 All endpoints require authentication.
 
 Endpoints:
-    POST /analysis/{cv_id}          — Trigger analysis for a CV
-    GET  /analysis/{cv_id}/results  — Get analysis results
+    POST /analysis/{cv_id}          - Trigger analysis for a CV
+    GET  /analysis/{cv_id}/results  - Get analysis results
 
 Implements FR8, FR9, FR10, FR11, FR20.
 """
@@ -213,7 +213,7 @@ def rewrite_bullet(
 ):
     """
     Use GPT to rewrite a single CV bullet point to be more impactful.
-    Premium feature — requires AI to be enabled.
+    Premium feature - requires AI to be enabled.
     """
     from app.services.ai_service import ai_rewrite_bullet, is_ai_enabled
 

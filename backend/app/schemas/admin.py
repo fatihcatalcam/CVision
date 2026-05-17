@@ -1,5 +1,5 @@
 """
-Admin schemas — response validation for system-wide analytics and admin actions.
+Admin schemas - response validation for system-wide analytics and admin actions.
 """
 
 from typing import List

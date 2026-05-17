@@ -1,5 +1,5 @@
 """
-ATS Checker — deterministic rules for Applicant Tracking System compatibility.
+ATS Checker - deterministic rules for Applicant Tracking System compatibility.
 Checks formatting, structure, and content elements that ATS systems look for.
 """
 
@@ -23,31 +23,31 @@ ATS_CHECKS = [
         "name": "email_present",
         "weight": 10.0,
         "pass_msg": "Email address found",
-        "fail_msg": "No email address found — most ATS systems require this",
+        "fail_msg": "No email address found - most ATS systems require this",
     },
     {
         "name": "sufficient_length",
         "weight": 10.0,
         "pass_msg": "CV has sufficient content length",
-        "fail_msg": "CV content is too short — aim for at least 200 words",
+        "fail_msg": "CV content is too short - aim for at least 200 words",
     },
     {
         "name": "no_excessive_caps",
         "weight": 10.0,
         "pass_msg": "Text formatting is ATS-friendly (no excessive caps)",
-        "fail_msg": "Excessive use of ALL CAPS detected — ATS may misparse",
+        "fail_msg": "Excessive use of ALL CAPS detected - ATS may misparse",
     },
     {
         "name": "has_action_verbs",
         "weight": 10.0,
         "pass_msg": "Action verbs used in descriptions (e.g., developed, managed, designed)",
-        "fail_msg": "Few action verbs detected — use verbs like 'developed', 'managed', 'designed'",
+        "fail_msg": "Few action verbs detected - use verbs like 'developed', 'managed', 'designed'",
     },
     {
         "name": "has_education",
         "weight": 15.0,
         "pass_msg": "Education section detected",
-        "fail_msg": "No education section detected — most roles require education details",
+        "fail_msg": "No education section detected - most roles require education details",
     },
     {
         "name": "has_experience",
@@ -59,7 +59,7 @@ ATS_CHECKS = [
         "name": "has_skills_section",
         "weight": 15.0,
         "pass_msg": "Skills section detected",
-        "fail_msg": "No dedicated skills section — ATS systems look for explicit skill listings",
+        "fail_msg": "No dedicated skills section - ATS systems look for explicit skill listings",
     },
 ]
 
@@ -99,7 +99,7 @@ class ATSChecker(BaseAnalyzer):
         context.ats_score = round((earned_weight / total_weight) * 100, 1)
 
         logger.info(
-            f"ATS Score: {context.ats_score}% — "
+            f"ATS Score: {context.ats_score}% - "
             f"{len(context.ats_passes)} passed, {len(context.ats_issues)} issues"
         )
 

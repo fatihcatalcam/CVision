@@ -47,7 +47,7 @@ const FEATURES = [
 ];
 
 const HOW_IT_WORKS = [
-  { step: '01', title: 'Upload Your CV', desc: 'Drop your PDF or TXT resume — we handle the rest.', icon: '📄' },
+  { step: '01', title: 'Upload Your CV', desc: 'Drop your PDF or TXT resume - we handle the rest.', icon: '📄' },
   { step: '02', title: 'Choose Target Role', desc: 'Select the domain and job type you\'re applying for.', icon: '🎯' },
   { step: '03', title: 'Get AI Insights', desc: 'Receive a detailed score, strengths, and improvement tips.', icon: '✨' },
 ];

@@ -1,5 +1,5 @@
 """
-Dashboard router — provides user-specific summary metrics and CV history.
+Dashboard router - provides user-specific summary metrics and CV history.
 Maps to FR20.
 """
 

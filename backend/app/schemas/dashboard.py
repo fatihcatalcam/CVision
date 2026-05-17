@@ -1,5 +1,5 @@
 """
-Dashboard schemas — response validation for user dashboard summaries.
+Dashboard schemas - response validation for user dashboard summaries.
 """
 
 from datetime import datetime

@@ -1,5 +1,5 @@
 """
-Recommendations router — retrieves career recommendations for an analysis.
+Recommendations router - retrieves career recommendations for an analysis.
 Maps to FR12, FR13.
 """
 

@@ -121,7 +121,7 @@ export function SettingsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Left sidebar — account summary */}
+        {/* Left sidebar - account summary */}
         <div className="lg:col-span-1 space-y-4">
           <Card className="flex flex-col items-center text-center gap-3 py-8">
             {/* Avatar */}
@@ -178,7 +178,7 @@ export function SettingsPage() {
                   <Calendar className="w-3.5 h-3.5" /> Member since
                 </span>
                 <span className="text-zinc-300 text-xs">
-                  {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '—'}
+                  {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '-'}
                 </span>
               </div>
               {user?.role === 'admin' && (
@@ -204,7 +204,7 @@ export function SettingsPage() {
           </Card>
         </div>
 
-        {/* Right — forms */}
+        {/* Right - forms */}
         <div className="lg:col-span-2 space-y-6">
 
           {/* Profile section */}

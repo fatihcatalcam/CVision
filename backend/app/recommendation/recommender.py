@@ -1,5 +1,5 @@
 """
-Recommender logic — calculates career match scores based on CV analysis.
+Recommender logic - calculates career match scores based on CV analysis.
 Matches extracted skills and keywords against role profiles.
 """
 
