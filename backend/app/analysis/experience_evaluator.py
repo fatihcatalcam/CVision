@@ -22,7 +22,7 @@ YEARS_PATTERN = re.compile(
 DATE_RANGE_PATTERN = re.compile(
     r"(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s*)?"
     r"(20\d{2}|19\d{2})"
-    r"\s*[-–-~to]+\s*"
+    r"\s*[-–—~to]+\s*"
     r"(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s*)?"
     r"(20\d{2}|19\d{2}|[Pp]resent|[Cc]urrent)",
     re.IGNORECASE,
