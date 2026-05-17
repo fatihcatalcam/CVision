@@ -40,11 +40,29 @@ cv_env_313/
 cv_env_local/
 cv_env/
 
-# Logs
+# Logs & debug artifacts
 *.log
+*.txt
+!backend/uploads/.gitkeep
+!backend/alembic/README
+!backend/runtime.txt
 crash_log.txt
 import_err.txt
 err.txt
+*_err.txt
+*_error.txt
+*_out.txt
+debug_*.txt
+db_check.txt
+tsc_errors.txt
+
+# One-off scripts
+serve_mock.py
+create_tables.py
+migrate_local.py
+setup_pg.py
+verify_pg.py
+test_ai.py
 
 # Additional Env files
 .env.*
