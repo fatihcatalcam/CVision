@@ -33,16 +33,16 @@ function getGreeting() {
 
 function Avatar({ name }: { name: string }) {
   const initials = name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-  const colors = ['from-indigo-500 to-violet-600', 'from-blue-500 to-indigo-600', 'from-violet-500 to-purple-600', 'from-emerald-500 to-teal-600'];
+  const bgColors = ['bg-[#1B3A6B]', 'bg-[#1F6C9F]', 'bg-[#346538]', 'bg-[#956400]'];
   return (
-    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${colors[name.charCodeAt(0) % 4]} flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg`}>
+    <div className={`w-9 h-9 rounded-xl ${bgColors[name.charCodeAt(0) % 4]} flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg`}>
       {initials}
     </div>
   );
 }
 
 function ScoreDot({ score }: { score: number }) {
-  const color = score >= 80 ? 'text-emerald-400' : score >= 60 ? 'text-amber-400' : 'text-red-400';
+  const color = score >= 80 ? 'text-[#346538]' : score >= 60 ? 'text-amber-600' : 'text-red-600';
   return <span className={`font-black stat-number ${color}`}>{Math.round(score)}%</span>;
 }
 
@@ -85,7 +85,7 @@ export function DashboardPage() {
         <div className="flex items-center gap-3.5">
           <Avatar name={user?.full_name || 'U'} />
           <div>
-            <p className="text-xs text-zinc-500 font-medium">{getGreeting()},</p>
+            <p className="text-xs text-[#787774] font-medium">{getGreeting()},</p>
             <h1 className="font-serif text-2xl tracking-tight text-[#111111]">{user?.full_name}</h1>
           </div>
           {user?.plan_type === 'premium' && (
@@ -101,11 +101,11 @@ export function DashboardPage() {
               <Shield className="w-3.5 h-3.5" /> Admin
             </button>
           )}
-          <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-zinc-500 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all text-xs font-medium" title="Settings">
+          <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] border border-transparent hover:border-[#EAEAEA] transition-all text-xs font-medium" title="Settings">
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Settings</span>
           </button>
-          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-zinc-500 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all text-xs font-medium">
+          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] border border-transparent hover:border-[#EAEAEA] transition-all text-xs font-medium">
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Sign Out</span>
           </button>
@@ -164,16 +164,16 @@ export function DashboardPage() {
               </span>
               <span className="text-xs text-[#787774]">{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
             </div>
-            <div className="w-full bg-zinc-900 rounded-full h-1.5 overflow-hidden border border-zinc-800">
+            <div className="w-full bg-[#EAEAEA] rounded-full h-1.5 overflow-hidden">
               <div
-                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-gradient-to-r from-amber-500 to-orange-400' : 'bg-gradient-to-r from-indigo-500 to-violet-500'}`}
+                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-amber-500' : 'bg-[#1B3A6B]'}`}
                 style={{ width: `${usedPct}%` }}
               />
             </div>
             {user?.plan_type === 'free' && (
               <button
                 onClick={() => navigate('/pricing')}
-                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-gradient-to-r from-indigo-600/80 to-violet-600/80 border border-indigo-500/30 text-white text-xs font-bold hover:from-indigo-600 hover:to-violet-600 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)] transition-all"
+                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-[#111111] text-white text-xs font-bold hover:bg-[#2a2a2a] active:scale-[0.98] transition-all"
               >
                 <Sparkles className="w-3 h-3" /> Upgrade to Pro <ChevronRight className="w-3 h-3" />
               </button>
@@ -187,12 +187,12 @@ export function DashboardPage() {
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
-              <History className="w-5 h-5 text-zinc-500" />
+              <History className="w-5 h-5 text-[#787774]" />
               Recent Analyses
             </h2>
             <button
               onClick={() => navigate('/history')}
-              className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-indigo-400 transition-colors font-medium"
+              className="flex items-center gap-1.5 text-xs text-[#787774] hover:text-[#1B3A6B] transition-colors font-medium"
             >
               View all <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -207,12 +207,12 @@ export function DashboardPage() {
                   item.status === 'completed' ? 'cursor-pointer hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] group' : ''
                 }`}
               >
-                <div className="p-2 rounded-lg bg-zinc-900 text-zinc-500 flex-shrink-0">
+                <div className="p-2 rounded-lg bg-[#F7F6F3] text-[#787774] flex-shrink-0">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">{item.original_filename}</p>
-                  <p className="text-xs text-zinc-600 mt-0.5">
+                  <p className="text-sm font-semibold text-[#111111] truncate">{item.original_filename}</p>
+                  <p className="text-xs text-[#787774] mt-0.5">
                     {item.target_domain && <span className="mr-2">{item.target_domain}</span>}
                     {new Date(item.uploaded_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                   </p>
@@ -221,13 +221,13 @@ export function DashboardPage() {
                   <ScoreDot score={item.overall_score} />
                 ) : (
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    item.status === 'failed' ? 'text-red-400 bg-red-500/10' : 'text-zinc-500 bg-zinc-800'
+                    item.status === 'failed' ? 'text-red-600 bg-red-50' : 'text-[#787774] bg-[#F7F6F3]'
                   }`}>
                     {item.status}
                   </span>
                 )}
                 {item.status === 'completed' && (
-                  <ChevronRight className="w-4 h-4 text-zinc-700 group-hover:text-indigo-400 transition-colors flex-shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-[#A09D9A] group-hover:text-[#1B3A6B] transition-colors flex-shrink-0" />
                 )}
               </div>
             ))}
@@ -240,13 +240,13 @@ export function DashboardPage() {
         <div className="flex items-center justify-between mb-5">
           <div>
             <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
-              <Upload className="w-5 h-5 text-indigo-400" />
+              <Upload className="w-5 h-5 text-[#1B3A6B]" />
               Analyze New CV
             </h2>
-            <p className="text-xs text-zinc-600 mt-1">Upload your resume and get instant AI feedback</p>
+            <p className="text-xs text-[#787774] mt-1">Upload your resume and get instant AI feedback</p>
           </div>
           {stats?.latest_score != null && (
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#F7F6F3] border border-[#EAEAEA] text-xs">
               <span className="text-zinc-500">Latest</span>
               <ScoreDot score={stats.latest_score} />
             </div>

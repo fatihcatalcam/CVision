@@ -12,22 +12,22 @@ export function CancelPage() {
           <XCircle className="w-10 h-10 text-red-400" />
         </div>
 
-        <h1 className="text-3xl font-bold text-white mb-3">Ödeme İptal Edildi</h1>
-        <p className="text-[var(--color-muted)] mb-8 leading-relaxed">
+        <h1 className="text-3xl font-bold text-[#111111] mb-3">Ödeme İptal Edildi</h1>
+        <p className="text-[#787774] mb-8 leading-relaxed">
           Ödeme işlemi tamamlanamadı veya iptal edildi. Hesabınızda herhangi bir ücret alınmadı.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={() => navigate('/pricing')}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:brightness-110 transition-all text-sm"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#111111] text-white font-semibold hover:bg-[#2a2a2a] active:scale-[0.98] transition-all text-sm"
           >
             <RefreshCw className="w-4 h-4" />
             Tekrar Dene
           </button>
           <button
             onClick={() => navigate('/dashboard')}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 font-semibold hover:bg-zinc-700 transition-all text-sm"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#F7F6F3] border border-[#EAEAEA] text-[#111111] font-semibold hover:bg-[#EAEAEA] transition-all text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Dashboard'a Dön

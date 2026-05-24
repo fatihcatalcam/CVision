@@ -38,7 +38,7 @@ export function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Email Address</label>
+            <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Email Address</label>
             <input
               type="email"
               placeholder="you@example.com"
@@ -53,13 +53,13 @@ export function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 rounded-xl font-bold text-sm bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+            className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send Reset Code'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-zinc-700">
+        <p className="mt-6 text-center text-xs text-[#787774]">
           Check your spam folder if you don't see the email.
         </p>
       </div>
