@@ -102,19 +102,19 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
       />
 
       {/* Modal Container */}
-      <div className="relative z-10 w-[95vw] h-[92vh] max-w-[1400px] bg-[#0c0c10] border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+      <div className="relative z-10 w-[95vw] h-[92vh] max-w-[1400px] bg-white border border-[#EAEAEA] rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden animate-in zoom-in-95 fade-in duration-300">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-[rgba(255,255,255,0.02)] shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAEAEA] bg-[#F7F6F3] shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
-              <svg className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-8 h-8 rounded-lg bg-[#EEF2F8] flex items-center justify-center">
+              <svg className="w-4 h-4 text-[#1B3A6B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div>
-              <h2 className="text-white font-bold text-lg">Original CV Document</h2>
-              <p className="text-zinc-500 text-xs">Press ESC or click outside to close</p>
+              <h2 className="text-[#111111] font-bold text-lg">Original CV Document</h2>
+              <p className="text-[#666666] text-xs">Press ESC or click outside to close</p>
             </div>
           </div>
 
@@ -129,20 +129,20 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
             )}
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-lg bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors"
+              className="w-9 h-9 rounded-lg bg-[#F7F6F3] hover:bg-[#EAEAEA] flex items-center justify-center transition-colors"
             >
-              <X className="w-5 h-5 text-zinc-400" />
+              <X className="w-5 h-5 text-[#555555]" />
             </button>
           </div>
         </div>
 
         {/* Modal Body - Full PDF */}
-        <div className="flex-1 relative bg-[#1a1a1e]">
+        <div className="flex-1 relative bg-[#F7F6F3]">
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-[3px] border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
-                <span className="text-zinc-400 text-sm">
+                <div className="w-10 h-10 border-[3px] border-[#EAEAEA] border-t-[#1B3A6B] rounded-full animate-spin" />
+                <span className="text-[#555555] text-sm">
                   {activeSnippets.length > 0 ? 'Generating highlighted PDF...' : 'Loading PDF...'}
                 </span>
               </div>

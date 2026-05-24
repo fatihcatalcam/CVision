@@ -21,11 +21,11 @@ export function SkillTags({ skills }: SkillTagsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {sorted.map((skill, index) => {
-        let colorClasses = 'bg-zinc-800 text-zinc-300 border-zinc-700'; // Low confidence
+        let colorClasses = 'bg-[#F7F6F3] text-[#111111] border-[#EAEAEA]'; // Low confidence
         if (skill.confidence_score >= 0.8) {
           colorClasses = 'bg-blue-500/10 text-blue-400 border-blue-500/20'; // High confidence
         } else if (skill.confidence_score >= 0.5) {
-          colorClasses = 'bg-violet-500/10 text-violet-400 border-violet-500/20'; // Medium confidence
+          colorClasses = 'bg-[#EEF2F8] text-[#1B3A6B] border-[#C5D4E8]'; // Medium confidence
         }
 
         return (
