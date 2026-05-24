@@ -115,7 +115,7 @@ export function DashboardPage() {
       {/* Stats Grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          {[1, 2, 3, 4].map(i => <div key={i} className="glass-card rounded-2xl h-36 shimmer" />)}
+          {[1, 2, 3, 4].map(i => <div key={i} className="surface h-36 shimmer" />)}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
