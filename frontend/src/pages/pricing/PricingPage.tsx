@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -80,7 +80,7 @@ export function PricingPage() {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="font-serif text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
+          <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
             Simple, honest pricing
           </h1>
           <p className="text-base text-[#787774] dark:text-[#908d89]">Start free. Upgrade when you need more.</p>
@@ -115,7 +115,7 @@ export function PricingPage() {
           <div className="bg-[#111111] rounded-[var(--radius-xl)] p-8">
             <p className="label-sm mb-6 text-[#787774]">Pro</p>
             <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-white">₺149</span>
+              <span className="stat-number text-4xl font-semibold text-white">â‚º149</span>
               <span className="text-sm text-[#787774] ml-1">/ month</span>
               <span className="text-[#787774] text-xs ml-2">or $4.99/mo</span>
             </div>
@@ -151,7 +151,7 @@ export function PricingPage() {
                   }`}
                 >
                   {loadingIyzico ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  {isTurkey ? 'Pay with iyzico - ₺149/mo' : 'iyzico (Turkey) - ₺149/mo'}
+                  {isTurkey ? 'Pay with iyzico - â‚º149/mo' : 'iyzico (Turkey) - â‚º149/mo'}
                 </button>
 
                 <button
@@ -168,7 +168,7 @@ export function PricingPage() {
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#787774]">
-                  <Lock className="w-3 h-3" /> Secure payment · Cancel anytime
+                  <Lock className="w-3 h-3" /> Secure payment Â· Cancel anytime
                 </div>
               </div>
             )}
@@ -177,7 +177,7 @@ export function PricingPage() {
 
         <div className="flex items-center justify-center gap-2 text-xs text-[#787774]">
           <Shield className="w-3.5 h-3.5" />
-          Secure checkout &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; 24/7 support
+          Secure checkout &nbsp;Â·&nbsp; Cancel anytime &nbsp;Â·&nbsp; 24/7 support
         </div>
 
       </div>

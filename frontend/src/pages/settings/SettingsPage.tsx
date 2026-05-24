@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
@@ -118,7 +118,7 @@ export function SettingsPage() {
       </button>
 
       <div className="mb-8">
-        <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Account Settings</h1>
+        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Account Settings</h1>
         <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">Manage your profile, security, and subscription</p>
       </div>
 

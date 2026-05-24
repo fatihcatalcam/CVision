@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
@@ -147,7 +147,7 @@ export function HistoryPage() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis History</h1>
+            <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis History</h1>
             <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
           </div>
           <button
@@ -279,7 +279,7 @@ export function HistoryPage() {
 
                     {/* Domain */}
                     <td className="px-5 py-3 hidden sm:table-cell">
-                      <span className="text-[#787774] text-xs">{item.target_domain ?? '—'}</span>
+                      <span className="text-[#787774] text-xs">{item.target_domain ?? 'â€”'}</span>
                     </td>
 
                     {/* Score bars */}
@@ -296,7 +296,7 @@ export function HistoryPage() {
                           </div>
                         </div>
                       ) : (
-                        <span className="text-[#787774]">—</span>
+                        <span className="text-[#787774]">â€”</span>
                       )}
                     </td>
 
@@ -307,7 +307,7 @@ export function HistoryPage() {
                       ) : item.status === 'failed' ? (
                         <span className="text-xs text-[#9F2F2D]">Failed</span>
                       ) : (
-                        <span className="text-xs text-[#787774]">—</span>
+                        <span className="text-xs text-[#787774]">â€”</span>
                       )}
                     </td>
 

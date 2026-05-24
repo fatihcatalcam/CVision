@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:opsz,wght@6..30,400;6..30,500;6..30,600&family=JetBrains+Mono:wght@400;500&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:opsz,wght@6..30,400;6..30,500;6..30,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
 
@@ -22,7 +22,7 @@
   --color-info-bg: #E1F3FE;
   --color-accent: #EEF2F8;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -69,7 +69,7 @@ html.dark body {
   color: var(--color-foreground);
 }
 
-/* Global raw element overrides — catches all inline input/select usage */
+/* Global raw element overrides â€” catches all inline input/select usage */
 html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]),
 html.dark select,
 html.dark textarea {
@@ -115,14 +115,14 @@ body {
 
 @layer utilities {
   .display-xl {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: clamp(2.5rem, 5vw, 4rem);
     line-height: 1.08;
     letter-spacing: -0.03em;
     color: var(--color-foreground);
   }
   .display-lg {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: clamp(1.75rem, 3vw, 2.5rem);
     line-height: 1.1;
     letter-spacing: -0.025em;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Zap, FileText,
@@ -12,7 +12,7 @@ import { SuggestionList } from '../../components/analysis/SuggestionList';
 import { RoleMatcher } from '../../components/analysis/RoleMatcher';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
-// ─── Types ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface AISuggestion {
   category: string;
@@ -45,7 +45,7 @@ interface AnalysisData {
   ai_enhanced: boolean;
 }
 
-// ─── Priority styles ────────────────────────────────────────────────────────
+// â”€â”€â”€ Priority styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; label: string }> = {
   high:   { dot: 'bg-[#9F2F2D]', bg: 'bg-[#9F2F2D]/10', text: 'text-[#9F2F2D]', label: 'High Priority' },
@@ -53,7 +53,7 @@ const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; lab
   low:    { dot: 'bg-[#346538]', bg: 'bg-[#346538]/10', text: 'text-[#346538]', label: 'Low' },
 };
 
-// ─── AI Suggestion Card ─────────────────────────────────────────────────────
+// â”€â”€â”€ AI Suggestion Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; index: number }) {
   if (suggestion.is_locked) {
@@ -91,9 +91,9 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
   const hint = suggestion.rewrite_hint?.trim() ?? '';
   const hasRewrite = hint.length > 5;
 
-  // Parse "Before: X → After: Y"
-  const beforeMatch = hint.match(/before[:\s]+(.+?)(?=→|after:|$)/i);
-  const afterMatch  = hint.match(/(?:→|after[:\s]+)(.+)/i);
+  // Parse "Before: X â†’ After: Y"
+  const beforeMatch = hint.match(/before[:\s]+(.+?)(?=â†’|after:|$)/i);
+  const afterMatch  = hint.match(/(?:â†’|after[:\s]+)(.+)/i);
   const beforeText  = beforeMatch?.[1]?.trim() ?? '';
   const afterText   = afterMatch?.[1]?.trim()  ?? hint;
 
@@ -136,7 +136,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           {beforeText ? (
             <>
               <div className="p-3 bg-[#9F2F2D]/5 border border-[#9F2F2D]/20 rounded-lg">
-                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">✗ Before (Current)</p>
+                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">âœ— Before (Current)</p>
                 <p className="text-sm text-[#111111] italic">"{beforeText}"</p>
               </div>
               <div className="flex justify-center">
@@ -175,7 +175,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
   );
 }
 
-// ─── Main Page ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
@@ -236,7 +236,7 @@ export function AnalysisPage() {
             return;
           }
           if (status.status === 'pending')    setLoadingMsg('Waiting in queue...');
-          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AI… this takes 15–30 s');
+          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AIâ€¦ this takes 15â€“30 s');
           setTimeout(check, 2000);
         } catch (err: any) {
           if (err.response?.status === 404) { if (active) setError('CV not found.'); }
@@ -250,7 +250,7 @@ export function AnalysisPage() {
     return () => { active = false; };
   }, [id, data, error]);
 
-  // ── Loading screen ──
+  // â”€â”€ Loading screen â”€â”€
   if (!data && !error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
@@ -275,7 +275,7 @@ export function AnalysisPage() {
           </div>
 
           <div className="text-center">
-            <h2 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">Analyzing Your CV</h2>
+            <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">Analyzing Your CV</h2>
             <p className="text-[#787774] dark:text-[#908d89] text-sm font-medium mb-6 min-h-[20px]">{loadingMsg}</p>
 
             {/* Step indicators */}
@@ -308,7 +308,7 @@ export function AnalysisPage() {
             </div>
 
             <p className="text-xs text-[#BDBDBD] dark:text-[#6a6764] leading-relaxed">
-              AI is reading your CV and generating personalized insights. This typically takes 15–30 seconds.
+              AI is reading your CV and generating personalized insights. This typically takes 15â€“30 seconds.
             </p>
           </div>
         </div>
@@ -316,7 +316,7 @@ export function AnalysisPage() {
     );
   }
 
-  // ── Error screen ──
+  // â”€â”€ Error screen â”€â”€
   if (error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -324,7 +324,7 @@ export function AnalysisPage() {
           <div className="w-16 h-16 mx-auto bg-[#9F2F2D]/10 text-[#9F2F2D] rounded-2xl flex items-center justify-center mb-5">
             <Zap className="w-8 h-8" />
           </div>
-          <h2 className="font-serif text-2xl tracking-tight text-[#111111] mb-2">Analysis Failed</h2>
+          <h2 className="font-sans text-2xl tracking-tight text-[#111111] mb-2">Analysis Failed</h2>
           <p className="text-[#787774] text-sm mb-6 leading-relaxed">{error}</p>
           <button
             onClick={() => navigate('/dashboard')}
@@ -361,14 +361,14 @@ export function AnalysisPage() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="font-serif text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis Report</h1>
+              <h1 className="font-sans text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis Report</h1>
               {data!.ai_enhanced && (
                 <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#787774] text-xs font-bold uppercase tracking-wider">
                   <Sparkles className="w-3 h-3" /> AI Enhanced
                 </span>
               )}
             </div>
-            <p className="text-[#787774] text-sm">Report #{data!.id} • Processed by CVision AI</p>
+            <p className="text-[#787774] text-sm">Report #{data!.id} â€¢ Processed by CVision AI</p>
           </div>
           <button
             onClick={() => setIsPdfModalOpen(true)}
@@ -526,7 +526,7 @@ export function AnalysisPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card noPadding className="overflow-hidden">
               <div className="p-6 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                <h3 className="font-serif text-xl tracking-tight text-[#111111]">Career Profile Matches</h3>
+                <h3 className="font-sans text-xl tracking-tight text-[#111111]">Career Profile Matches</h3>
                 <p className="text-sm text-[#787774] mt-1">Comparing extracted skills against our role database</p>
               </div>
               <div className="p-6">
@@ -534,7 +534,7 @@ export function AnalysisPage() {
               </div>
             </Card>
             <Card>
-              <h3 className="font-serif text-xl tracking-tight text-[#111111] mb-4">Extracted Skills</h3>
+              <h3 className="font-sans text-xl tracking-tight text-[#111111] mb-4">Extracted Skills</h3>
               <SkillTags skills={data!.extracted_skills} />
             </Card>
           </div>

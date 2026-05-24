@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
@@ -31,9 +31,9 @@ export function ForgotPasswordPage() {
           onClick={() => navigate('/login')}
           className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] transition-colors text-[#787774] bg-transparent border-0 cursor-pointer"
         >
-          ← Back to sign in
+          â† Back to sign in
         </button>
-        <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Reset your password</h1>
+        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Reset your password</h1>
         <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Enter your email and we will send you a reset link.</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">

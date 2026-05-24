@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CVUploader } from '../../components/cv/CVUploader';
@@ -86,7 +86,7 @@ export function DashboardPage() {
           <Avatar name={user?.full_name || 'U'} />
           <div>
             <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium">{getGreeting()},</p>
-            <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{user?.full_name}</h1>
+            <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{user?.full_name}</h1>
           </div>
           {user?.plan_type === 'premium' && (
             <span className="ml-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider">

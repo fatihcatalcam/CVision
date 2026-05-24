@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { ArrowRight, Brain, BarChart3, FileText } from 'lucide-react';
@@ -97,7 +97,7 @@ export function HomePage() {
             <div className="w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center mb-6" style={{ background: 'var(--color-accent)' }}>
               <Brain className="w-4 h-4" style={{ color: 'var(--color-primary)' }} strokeWidth={1.5} />
             </div>
-            <h3 className="font-serif text-2xl tracking-tight mb-3" style={{ color: 'var(--color-foreground)' }}>Intelligent scoring</h3>
+            <h3 className="font-sans text-2xl tracking-tight mb-3" style={{ color: 'var(--color-foreground)' }}>Intelligent scoring</h3>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
               A multi-dimensional score across formatting, content, keyword density,
               and domain fit. Each dimension is explained so you know precisely what to improve.
@@ -143,7 +143,7 @@ export function HomePage() {
       {/* CTA */}
       <section className="max-w-5xl mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
-          <h2 className="font-serif text-3xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>
+          <h2 className="font-sans text-3xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>
             Ready to improve your CV?
           </h2>
           <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Free to start. No credit card required.</p>
@@ -168,7 +168,7 @@ export function HomePage() {
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--color-muted)' }}>
             <a href="#" className="hover:text-[#111111] transition-colors">Privacy</a>
             <a href="#" className="hover:text-[#111111] transition-colors">Terms</a>
-            <span>© 2025 CVision</span>
+            <span>Â© 2025 CVision</span>
           </div>
         </div>
       </footer>

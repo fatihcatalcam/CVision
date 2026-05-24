@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
@@ -72,18 +72,18 @@ export function RegisterPage() {
       <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] dark:bg-[#1a1a18] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA] dark:border-white/[0.07]">
         <span className="font-mono font-medium tracking-tight text-base text-[#111111] dark:text-[#e8e7e4]">CVision</span>
         <div>
-          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
+          <blockquote className="font-sans text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
             "Your next role starts with a stronger CV."
           </blockquote>
           <p className="text-sm text-[#787774] dark:text-[#908d89]">Used by career professionals across 14 industries.</p>
         </div>
-        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">© 2025 CVision</p>
+        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">Â© 2025 CVision</p>
       </div>
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
-          <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Create account</h1>
+          <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Create account</h1>
           <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Fill in your details to get started.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">

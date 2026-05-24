@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+﻿import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
@@ -122,7 +122,7 @@ export function ResetPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] dark:bg-[#111110] p-6">
       <div className="w-full max-w-sm">
-        <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Set new password</h1>
+        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Set new password</h1>
         <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Enter the code from your email, then choose a new password.</p>
 
         {step === 'code' ? (
@@ -132,7 +132,7 @@ export function ResetPasswordPage() {
                 We sent a 5-character reset code to<br />
                 <span className="text-[#111111] dark:text-[#e8e7e4]">{maskedEmail}</span>
               </p>
-              <p className="text-amber-500/80 text-xs mt-2">⚠ Code is case-sensitive</p>
+              <p className="text-amber-500/80 text-xs mt-2">âš  Code is case-sensitive</p>
             </div>
 
             <form onSubmit={handleVerifyCode} className="space-y-6">
