@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CVUploader } from '../../components/cv/CVUploader';
+import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import api from '../../services/api';
 import {
   FileText, Activity, TrendingUp, Shield, Lock, Sparkles,
@@ -78,7 +79,7 @@ export function DashboardPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-10">
@@ -101,6 +102,7 @@ export function DashboardPage() {
               <Shield className="w-3.5 h-3.5" /> Admin
             </button>
           )}
+          <ThemeToggle />
           <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] border border-transparent hover:border-[#EAEAEA] transition-all text-xs font-medium" title="Settings">
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Settings</span>
@@ -118,62 +120,61 @@ export function DashboardPage() {
           {[1, 2, 3, 4].map(i => <div key={i} className="surface h-36 shimmer" />)}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          <div className="surface p-5">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#E1F3FE' }}>
-              <FileText className="w-5 h-5" style={{ color: '#1F6C9F' }} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10 stagger-grid">
+          <div className="surface p-5 flex flex-col gap-4">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-info-bg)' }}>
+              <FileText className="w-5 h-5" style={{ color: 'var(--color-info)' }} />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">{stats?.total_cvs || 0}</span>
-              <span className="text-xs text-[#787774]">Uploaded CVs</span>
+              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>{stats?.total_cvs || 0}</span>
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Uploaded CVs</span>
             </div>
           </div>
 
-          <div className="surface p-5">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#EDF3EC' }}>
-              <TrendingUp className="w-5 h-5" style={{ color: '#346538' }} />
+          <div className="surface p-5 flex flex-col gap-4">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-success-bg)' }}>
+              <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-success)' }} />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">
+              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>
                 {stats?.average_score != null ? `${stats.average_score}%` : 'N/A'}
               </span>
-              <span className="text-xs text-[#787774]">Avg Match Score</span>
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Avg Match Score</span>
             </div>
           </div>
 
-          <div className="surface p-5">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#EEF2F8' }}>
-              <Activity className="w-5 h-5" style={{ color: '#1B3A6B' }} />
+          <div className="surface p-5 flex flex-col gap-4">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-accent)' }}>
+              <Activity className="w-5 h-5" style={{ color: 'var(--color-primary)' }} />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">{stats?.total_analyses || 0}</span>
-              <span className="text-xs text-[#787774]">Total Analyses</span>
+              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>{stats?.total_analyses || 0}</span>
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Total Analyses</span>
             </div>
           </div>
 
           {/* Quota card */}
           <div className="surface p-5 flex flex-col gap-3">
-            <div className="flex items-start justify-between">
-              <div className="p-2.5 rounded-xl" style={{ background: '#FBF3DB' }}>
-                {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4" style={{ color: '#956400' }} /> : <Lock className="w-4 h-4" style={{ color: '#956400' }} />}
-              </div>
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-warning-bg)' }}>
+              {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4" style={{ color: 'var(--color-warning)' }} /> : <Lock className="w-4 h-4" style={{ color: 'var(--color-warning)' }} />}
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">
-                {remaining}<span className="text-lg font-semibold text-[#787774]"> / {quota}</span>
+              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>
+                {remaining}<span className="text-lg font-semibold" style={{ color: 'var(--color-muted)' }}> / {quota}</span>
               </span>
-              <span className="text-xs text-[#787774]">{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
             </div>
-            <div className="w-full bg-[#EAEAEA] rounded-full h-1.5 overflow-hidden">
+            <div className="w-full rounded-full h-1.5 overflow-hidden" style={{ background: 'var(--color-card-border)' }}>
               <div
-                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-amber-500' : 'bg-[#1B3A6B]'}`}
-                style={{ width: `${usedPct}%` }}
+                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-amber-500' : ''}`}
+                style={{ width: `${usedPct}%`, ...(user?.plan_type !== 'premium' ? { background: 'var(--color-primary)' } : {}) }}
               />
             </div>
             {user?.plan_type === 'free' && (
               <button
                 onClick={() => navigate('/pricing')}
-                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-[#111111] text-white text-xs font-bold hover:bg-[#2a2a2a] active:scale-[0.98] transition-all"
+                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg text-white text-xs font-bold active:scale-[0.98] transition-all"
+                style={{ background: 'var(--color-foreground)' }}
               >
                 <Sparkles className="w-3 h-3" /> Upgrade to Pro <ChevronRight className="w-3 h-3" />
               </button>
@@ -186,19 +187,20 @@ export function DashboardPage() {
       {!isLoading && recentItems.length > 0 && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
-              <History className="w-5 h-5 text-[#787774]" />
+            <h2 className="font-semibold text-sm flex items-center gap-2" style={{ color: 'var(--color-foreground)' }}>
+              <History className="w-5 h-5" style={{ color: 'var(--color-muted)' }} />
               Recent Analyses
             </h2>
             <button
               onClick={() => navigate('/history')}
-              className="flex items-center gap-1.5 text-xs text-[#787774] hover:text-[#1B3A6B] transition-colors font-medium"
+              className="flex items-center gap-1.5 text-xs font-medium transition-colors"
+              style={{ color: 'var(--color-muted)' }}
             >
               View all <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 stagger-list">
             {recentItems.map((item) => (
               <div
                 key={item.cv_id}
@@ -207,12 +209,12 @@ export function DashboardPage() {
                   item.status === 'completed' ? 'cursor-pointer hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] group' : ''
                 }`}
               >
-                <div className="p-2 rounded-lg bg-[#F7F6F3] text-[#787774] flex-shrink-0">
+                <div className="p-2 rounded-lg flex-shrink-0" style={{ background: 'var(--color-card-border)', color: 'var(--color-muted)' }}>
                   <FileText className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#111111] truncate">{item.original_filename}</p>
-                  <p className="text-xs text-[#787774] mt-0.5">
+                  <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-foreground)' }}>{item.original_filename}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>
                     {item.target_domain && <span className="mr-2">{item.target_domain}</span>}
                     {new Date(item.uploaded_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                   </p>
@@ -221,13 +223,13 @@ export function DashboardPage() {
                   <ScoreDot score={item.overall_score} />
                 ) : (
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    item.status === 'failed' ? 'text-red-600 bg-red-50' : 'text-[#787774] bg-[#F7F6F3]'
-                  }`}>
+                    item.status === 'failed' ? 'text-red-600 bg-red-50' : ''
+                  }`} style={item.status !== 'failed' ? { color: 'var(--color-muted)', background: 'var(--color-card-border)' } : {}}>
                     {item.status}
                   </span>
                 )}
                 {item.status === 'completed' && (
-                  <ChevronRight className="w-4 h-4 text-[#A09D9A] group-hover:text-[#1B3A6B] transition-colors flex-shrink-0" />
+                  <ChevronRight className="w-4 h-4 flex-shrink-0 transition-colors" style={{ color: 'var(--color-muted-foreground)' }} />
                 )}
               </div>
             ))}
