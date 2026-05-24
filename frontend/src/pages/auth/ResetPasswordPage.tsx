@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Loader2, ArrowLeft, ShieldCheck, Eye, EyeOff, Check, X } from 'lucide-react';
+import { Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
 
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
@@ -121,29 +121,14 @@ export function ResetPasswordPage() {
     : '';
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md animate-in slide-up">
-
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="CVision" className="h-8 w-auto object-contain" />
-            <span className="text-lg font-black text-white">CVision<span className="text-indigo-400">.</span></span>
-          </div>
-          <Link to="/forgot-password" className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
-          </Link>
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-rose-600/20 border border-violet-500/20 flex items-center justify-center">
-            <ShieldCheck className="w-8 h-8 text-violet-400" />
-          </div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] p-6">
+      <div className="w-full max-w-sm">
+        <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Set new password</h1>
+        <p className="text-sm text-[#787774] mb-8">Enter the code from your email, then choose a new password.</p>
 
         {step === 'code' ? (
           <>
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-black text-white mb-2">Enter Reset Code</h1>
               <p className="text-zinc-500 text-sm leading-relaxed">
                 We sent a 5-character reset code to<br />
                 <span className="text-zinc-400">{maskedEmail}</span>
@@ -184,7 +169,6 @@ export function ResetPasswordPage() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-black text-white mb-2">Set New Password</h1>
               <p className="text-zinc-500 text-sm">Choose a strong password.</p>
             </div>
 

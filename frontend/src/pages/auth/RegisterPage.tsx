@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Loader2, Eye, EyeOff, ArrowRight, ArrowLeft, Check, X } from 'lucide-react';
+import { Loader2, Eye, EyeOff, ArrowRight, Check, X } from 'lucide-react';
 
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
@@ -65,84 +65,24 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-
-      {/* Left panel - branding */}
-      <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-950/80 via-[var(--color-background)] to-indigo-950/40" />
-        <div className="absolute inset-0 opacity-[0.015]" style={{
-          backgroundImage: `linear-gradient(rgba(139,92,246,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.8) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px',
-        }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-[80px] pointer-events-none" />
-
-        <div className="relative z-10">
-          <div className="flex items-center justify-between mb-16">
-            <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="CVision" className="h-9 w-auto object-contain" />
-              <span className="text-xl font-black tracking-tight text-white">
-                CVision<span className="text-indigo-400">.</span>
-              </span>
-            </div>
-            <Link to="/" className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors">
-              <ArrowLeft className="w-3.5 h-3.5" /> Home
-            </Link>
-          </div>
-
-          <div className="mb-10">
-            <h2 className="text-4xl font-black text-white leading-tight mb-4">
-              Land interviews<br />
-              <span className="gradient-text">2x faster.</span>
-            </h2>
-            <p className="text-zinc-400 leading-relaxed">
-              Create your free account and get instant AI feedback on your resume. No credit card required.
-            </p>
-          </div>
-
-          {/* Testimonial card */}
-          <div className="glass-card rounded-2xl p-5 border border-violet-500/15">
-            <div className="flex gap-1 mb-3">
-              {[1,2,3,4,5].map(i => (
-                <svg key={i} className="w-4 h-4 text-amber-400 fill-amber-400" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <p className="text-zinc-300 text-sm italic leading-relaxed mb-3">
-              "CVision spotted gaps I never noticed. After implementing the suggestions, I got 3 interview calls in one week."
-            </p>
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white">A</div>
-              <div>
-                <p className="text-xs font-semibold text-zinc-300">Ayşe K.</p>
-                <p className="text-[10px] text-zinc-600">Software Engineer</p>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen flex bg-white">
+      {/* Left decorative panel */}
+      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA]">
+        <span className="font-serif text-xl text-[#111111]">CVision</span>
+        <div>
+          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] mb-6">
+            "Your next role starts with a stronger CV."
+          </blockquote>
+          <p className="text-sm text-[#787774]">Used by career professionals across 14 industries.</p>
         </div>
-
-        <div className="relative z-10 text-xs text-zinc-700">Free plan · No credit card required</div>
+        <p className="text-xs text-[#A09D9A]">© 2025 CVision</p>
       </div>
 
-      {/* Right panel - form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 lg:px-16">
-        <div className="w-full max-w-md animate-in slide-up">
-
-          {/* Mobile logo */}
-          <div className="flex items-center justify-between mb-10 lg:hidden">
-            <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="CVision" className="h-8 w-auto object-contain" />
-              <span className="text-lg font-black text-white">CVision<span className="text-indigo-400">.</span></span>
-            </div>
-            <Link to="/" className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors">
-              <ArrowLeft className="w-3.5 h-3.5" /> Home
-            </Link>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="text-3xl font-black text-white mb-2">Create your account</h1>
-            <p className="text-zinc-500 text-sm">Free forever · No credit card required</p>
-          </div>
+      {/* Right form panel */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-sm">
+          <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Create account</h1>
+          <p className="text-sm text-[#787774] mb-8">Fill in your details to get started.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">

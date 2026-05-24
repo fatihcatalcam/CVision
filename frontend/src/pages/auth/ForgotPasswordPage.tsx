@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Loader2, ArrowLeft, KeyRound } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -25,31 +25,16 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md animate-in slide-up">
-
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="CVision" className="h-8 w-auto object-contain" />
-            <span className="text-lg font-black text-white">CVision<span className="text-indigo-400">.</span></span>
-          </div>
-          <Link to="/login" className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors">
-            <ArrowLeft className="w-3.5 h-3.5" /> Sign In
-          </Link>
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-rose-600/20 border border-violet-500/20 flex items-center justify-center">
-            <KeyRound className="w-8 h-8 text-violet-400" />
-          </div>
-        </div>
-
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-black text-white mb-2">Forgot your password?</h1>
-          <p className="text-zinc-500 text-sm leading-relaxed">
-            Enter your email address and we'll send you a reset code.
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] p-6">
+      <div className="w-full max-w-sm">
+        <button
+          onClick={() => navigate('/login')}
+          className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] transition-colors text-[#787774] bg-transparent border-0 cursor-pointer"
+        >
+          ← Back to sign in
+        </button>
+        <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Reset your password</h1>
+        <p className="text-sm text-[#787774] mb-8">Enter your email and we will send you a reset link.</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
