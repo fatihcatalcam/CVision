@@ -279,7 +279,7 @@ export function HistoryPage() {
 
                     {/* Domain */}
                     <td className="px-5 py-3 hidden sm:table-cell">
-                      <span className="text-[#787774] text-xs">{item.target_domain ?? 'â€”'}</span>
+                      <span className="text-[#787774] text-xs">{item.target_domain ?? '—'}</span>
                     </td>
 
                     {/* Score bars */}
@@ -296,7 +296,7 @@ export function HistoryPage() {
                           </div>
                         </div>
                       ) : (
-                        <span className="text-[#787774]">â€”</span>
+                        <span className="text-[#787774]">—</span>
                       )}
                     </td>
 
@@ -307,7 +307,7 @@ export function HistoryPage() {
                       ) : item.status === 'failed' ? (
                         <span className="text-xs text-[#9F2F2D]">Failed</span>
                       ) : (
-                        <span className="text-xs text-[#787774]">â€”</span>
+                        <span className="text-xs text-[#787774]">—</span>
                       )}
                     </td>
 

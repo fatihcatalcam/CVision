@@ -68,7 +68,7 @@ html.dark body {
   color: var(--color-foreground);
 }
 
-/* Global raw element overrides â€” catches all inline input/select usage */
+/* Global raw element overrides — catches all inline input/select usage */
 html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]),
 html.dark select,
 html.dark textarea {

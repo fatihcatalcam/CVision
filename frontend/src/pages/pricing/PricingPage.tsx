@@ -115,7 +115,7 @@ export function PricingPage() {
           <div className="bg-[#111111] rounded-[var(--radius-xl)] p-8">
             <p className="label-sm mb-6 text-[#787774]">Pro</p>
             <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-white">â‚º149</span>
+              <span className="stat-number text-4xl font-semibold text-white">₺149</span>
               <span className="text-sm text-[#787774] ml-1">/ month</span>
               <span className="text-[#787774] text-xs ml-2">or $4.99/mo</span>
             </div>
@@ -151,7 +151,7 @@ export function PricingPage() {
                   }`}
                 >
                   {loadingIyzico ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  {isTurkey ? 'Pay with iyzico - â‚º149/mo' : 'iyzico (Turkey) - â‚º149/mo'}
+                  {isTurkey ? 'Pay with iyzico - ₺149/mo' : 'iyzico (Turkey) - ₺149/mo'}
                 </button>
 
                 <button

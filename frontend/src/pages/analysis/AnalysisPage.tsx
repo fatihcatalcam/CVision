@@ -236,7 +236,7 @@ export function AnalysisPage() {
             return;
           }
           if (status.status === 'pending')    setLoadingMsg('Waiting in queue...');
-          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AIâ€¦ this takes 15â€“30 s');
+          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AI… this takes 15—30 s');
           setTimeout(check, 2000);
         } catch (err: any) {
           if (err.response?.status === 404) { if (active) setError('CV not found.'); }
@@ -308,7 +308,7 @@ export function AnalysisPage() {
             </div>
 
             <p className="text-xs text-[#BDBDBD] dark:text-[#6a6764] leading-relaxed">
-              AI is reading your CV and generating personalized insights. This typically takes 15â€“30 seconds.
+              AI is reading your CV and generating personalized insights. This typically takes 15—30 seconds.
             </p>
           </div>
         </div>
@@ -368,7 +368,7 @@ export function AnalysisPage() {
                 </span>
               )}
             </div>
-            <p className="text-[#787774] text-sm">Report #{data!.id} â€¢ Processed by CVision AI</p>
+            <p className="text-[#787774] text-sm">Report #{data!.id} • Processed by CVision AI</p>
           </div>
           <button
             onClick={() => setIsPdfModalOpen(true)}

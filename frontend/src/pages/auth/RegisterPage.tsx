@@ -77,7 +77,7 @@ export function RegisterPage() {
           </blockquote>
           <p className="text-sm text-[#787774] dark:text-[#908d89]">Used by career professionals across 14 industries.</p>
         </div>
-        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">Â© 2025 CVision</p>
+        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">© 2025 CVision</p>
       </div>
 
       {/* Right form panel */}

@@ -168,7 +168,7 @@ export function HomePage() {
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--color-muted)' }}>
             <a href="#" className="hover:text-[#111111] transition-colors">Privacy</a>
             <a href="#" className="hover:text-[#111111] transition-colors">Terms</a>
-            <span>Â© 2025 CVision</span>
+            <span>© 2025 CVision</span>
           </div>
         </div>
       </footer>
