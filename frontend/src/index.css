@@ -21,8 +21,7 @@
   --color-info: #1F6C9F;
   --color-info-bg: #E1F3FE;
   --color-accent: #EEF2F8;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-sans: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
   --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
   --radius-sm: 4px;
   --radius-md: 6px;
