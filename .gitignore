@@ -66,3 +66,5 @@ test_ai.py
 
 # Additional Env files
 .env.*
+/.agents
+skills-lock.json
