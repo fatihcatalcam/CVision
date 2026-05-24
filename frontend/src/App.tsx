@@ -19,8 +19,6 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        {/* Background mesh gradient */}
-        <div className="fixed inset-0 z-[-1] mesh-bg" />
 
         <Routes>
           <Route path="/login" element={<LoginPage />} />

@@ -7,19 +7,23 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
-    <Toaster 
-      position="top-right" 
+    <Toaster
+      position="top-right"
       toastOptions={{
         style: {
-          background: '#18181b',
-          color: '#fafafa',
-          border: '1px solid #27272a',
+          background: '#FFFFFF',
+          color: '#111111',
+          border: '1px solid #EAEAEA',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+          boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
         },
         success: {
-          iconTheme: {
-            primary: '#10b981',
-            secondary: '#18181b',
-          },
+          iconTheme: { primary: '#346538', secondary: '#EDF3EC' },
+        },
+        error: {
+          iconTheme: { primary: '#9F2F2D', secondary: '#FDEBEC' },
         },
       }}
     />
