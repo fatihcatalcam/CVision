@@ -83,6 +83,12 @@ export function RegisterPage() {
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
+          >
+            ← Ana sayfaya dön
+          </button>
           <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Create account</h1>
           <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Fill in your details to get started.</p>
 
