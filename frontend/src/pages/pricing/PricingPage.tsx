@@ -68,22 +68,22 @@ export function PricingPage() {
   const isPremium = user?.plan_type === 'premium';
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA]">
+    <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#111110]">
       <div className="max-w-4xl mx-auto py-16 px-6">
 
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-[#787774] hover:text-[#111111] transition-colors mb-10"
+          className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </button>
 
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="font-serif text-4xl tracking-tight text-[#111111] mb-3">
+          <h1 className="font-serif text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
             Simple, honest pricing
           </h1>
-          <p className="text-base text-[#787774]">Start free. Upgrade when you need more.</p>
+          <p className="text-base text-[#787774] dark:text-[#908d89]">Start free. Upgrade when you need more.</p>
         </div>
 
         {/* Plan cards */}
@@ -106,7 +106,7 @@ export function PricingPage() {
               ))}
             </ul>
 
-            <div className="w-full py-2.5 px-4 bg-white text-[#111111] text-sm font-medium rounded-[var(--radius-md)] border border-[#EAEAEA] text-center">
+            <div className="w-full py-2.5 px-4 bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] text-sm font-medium rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] text-center">
               {isPremium ? 'Previous Plan' : 'Current Plan'}
             </div>
           </div>

@@ -10,8 +10,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={[
-        'bg-white border border-[#EAEAEA] rounded-[var(--radius-xl)]',
-        'transition-shadow duration-200',
+        'bg-white dark:bg-[#1c1c1a]',
+        'border border-[#EAEAEA] dark:border-white/[0.07]',
+        'rounded-[var(--radius-xl)]',
+        'transition-all duration-200',
         'hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
         !noPadding && 'p-6',
         className,

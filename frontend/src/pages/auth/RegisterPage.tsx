@@ -4,6 +4,8 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { Loader2, Eye, EyeOff, ArrowRight, Check, X } from 'lucide-react';
 
+const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
+
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
     { label: 'At least 8 characters', pass: password.length >= 8 },
@@ -21,7 +23,7 @@ function PasswordStrength({ password }: { password: string }) {
     <div className="mt-2 space-y-2">
       <div className="flex gap-1">
         {[1,2,3,4].map(i => (
-          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA]'}`} />
+          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA] dark:bg-white/[0.07]'}`} />
         ))}
       </div>
       <div className="grid grid-cols-2 gap-1">
@@ -29,8 +31,8 @@ function PasswordStrength({ password }: { password: string }) {
           <div key={c.label} className="flex items-center gap-1.5">
             {c.pass
               ? <Check className="w-3 h-3 text-[#346538] flex-shrink-0" />
-              : <X className="w-3 h-3 text-[#A09D9A] flex-shrink-0" />}
-            <span className={`text-[10px] ${c.pass ? 'text-[#787774]' : 'text-[#A09D9A]'}`}>{c.label}</span>
+              : <X className="w-3 h-3 text-[#A09D9A] dark:text-[#6a6764] flex-shrink-0" />}
+            <span className={`text-[10px] ${c.pass ? 'text-[#787774] dark:text-[#908d89]' : 'text-[#A09D9A] dark:text-[#6a6764]'}`}>{c.label}</span>
           </div>
         ))}
       </div>
@@ -65,28 +67,28 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white dark:bg-[#111110]">
       {/* Left decorative panel */}
-      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA]">
-        <span className="font-mono font-medium tracking-tight text-base text-[#111111]">CVision</span>
+      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] dark:bg-[#1a1a18] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA] dark:border-white/[0.07]">
+        <span className="font-mono font-medium tracking-tight text-base text-[#111111] dark:text-[#e8e7e4]">CVision</span>
         <div>
-          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] mb-6">
+          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
             "Your next role starts with a stronger CV."
           </blockquote>
-          <p className="text-sm text-[#787774]">Used by career professionals across 14 industries.</p>
+          <p className="text-sm text-[#787774] dark:text-[#908d89]">Used by career professionals across 14 industries.</p>
         </div>
-        <p className="text-xs text-[#A09D9A]">© 2025 CVision</p>
+        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">© 2025 CVision</p>
       </div>
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
-          <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Create account</h1>
-          <p className="text-sm text-[#787774] mb-8">Fill in your details to get started.</p>
+          <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Create account</h1>
+          <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Fill in your details to get started.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Full Name</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Full Name</label>
               <input
                 type="text"
                 placeholder="John Doe"
@@ -94,24 +96,24 @@ export function RegisterPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 required
                 minLength={2}
-                className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                className={inputCls}
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Email Address</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Email Address</label>
               <input
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                className={inputCls}
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Password</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -120,12 +122,12 @@ export function RegisterPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={8}
-                  className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                  className={`${inputCls} pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] hover:text-[#111111] transition-colors p-1"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -136,21 +138,19 @@ export function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 mt-2"
+              className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 mt-2"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>
-                  Create Free Account <ArrowRight className="w-4 h-4" />
-                </>
+                <>Create Free Account <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-[#787774]">
+          <p className="mt-8 text-center text-sm text-[#787774] dark:text-[#908d89]">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#1B3A6B] hover:text-[#111111] font-semibold transition-colors">
+            <Link to="/login" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] font-semibold transition-colors">
               Sign in
             </Link>
           </p>
