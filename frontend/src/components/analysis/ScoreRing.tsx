@@ -22,10 +22,18 @@ export function ScoreRing({
 
   // Determine color based on threshold if no specific color provided
   let defaultColor = 'text-[var(--color-primary)]';
+  let trackColorClass = 'text-[var(--color-success-bg)]';
   if (!colorClass) {
-    if (score >= 80) defaultColor = 'text-[var(--color-success)]';
-    else if (score >= 60) defaultColor = 'text-[var(--color-warning)]';
-    else defaultColor = 'text-[var(--color-danger)]';
+    if (score >= 80) {
+      defaultColor = 'text-[var(--color-success)]';
+      trackColorClass = 'text-[var(--color-success-bg)]';
+    } else if (score >= 60) {
+      defaultColor = 'text-[var(--color-warning)]';
+      trackColorClass = 'text-[var(--color-warning-bg)]';
+    } else {
+      defaultColor = 'text-[var(--color-danger)]';
+      trackColorClass = 'text-[var(--color-danger-bg)]';
+    }
   }
 
   const finalColorClass = colorClass || defaultColor;
@@ -36,7 +44,7 @@ export function ScoreRing({
         {/* Background Track */}
         <svg className="absolute transform -rotate-90" width={size} height={size}>
           <circle
-            className="text-zinc-800"
+            className={trackColorClass}
             strokeWidth={strokeWidth}
             stroke="currentColor"
             fill="transparent"
