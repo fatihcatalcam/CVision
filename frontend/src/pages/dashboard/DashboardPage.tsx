@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Card } from '../../components/ui/Card';
 import { CVUploader } from '../../components/cv/CVUploader';
 import api from '../../services/api';
 import {
@@ -87,7 +86,7 @@ export function DashboardPage() {
           <Avatar name={user?.full_name || 'U'} />
           <div>
             <p className="text-xs text-zinc-500 font-medium">{getGreeting()},</p>
-            <h1 className="text-lg font-black text-white leading-tight">{user?.full_name}</h1>
+            <h1 className="font-serif text-2xl tracking-tight text-[#111111]">{user?.full_name}</h1>
           </div>
           {user?.plan_type === 'premium' && (
             <span className="ml-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
@@ -120,54 +119,50 @@ export function DashboardPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          <Card className="flex flex-col gap-3 h-full hover:border-white/10 transition-all duration-300 group">
-            <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl w-fit group-hover:scale-110 transition-transform">
-              <FileText className="w-5 h-5" />
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#E1F3FE' }}>
+              <FileText className="w-5 h-5" style={{ color: '#1F6C9F' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Uploaded CVs</p>
-              <h3 className="text-3xl font-black text-white stat-number">{stats?.total_cvs || 0}</h3>
-              <p className="text-xs text-zinc-600 mt-1">Total resumes</p>
+              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">{stats?.total_cvs || 0}</span>
+              <span className="text-xs text-[#787774]">Uploaded CVs</span>
             </div>
-          </Card>
+          </div>
 
-          <Card className="flex flex-col gap-3 h-full hover:border-white/10 transition-all duration-300 group">
-            <div className="p-2.5 bg-violet-500/10 text-violet-400 rounded-xl w-fit group-hover:scale-110 transition-transform">
-              <TrendingUp className="w-5 h-5" />
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#EDF3EC' }}>
+              <TrendingUp className="w-5 h-5" style={{ color: '#346538' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Avg Match Score</p>
-              <h3 className="text-3xl font-black text-white stat-number">
+              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">
                 {stats?.average_score != null ? `${stats.average_score}%` : 'N/A'}
-              </h3>
-              <p className="text-xs text-zinc-600 mt-1">Across all analyses</p>
+              </span>
+              <span className="text-xs text-[#787774]">Avg Match Score</span>
             </div>
-          </Card>
+          </div>
 
-          <Card className="flex flex-col gap-3 h-full hover:border-white/10 transition-all duration-300 group">
-            <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl w-fit group-hover:scale-110 transition-transform">
-              <Activity className="w-5 h-5" />
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit" style={{ background: '#EEF2F8' }}>
+              <Activity className="w-5 h-5" style={{ color: '#1B3A6B' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Total Analyses</p>
-              <h3 className="text-3xl font-black text-white stat-number">{stats?.total_analyses || 0}</h3>
-              <p className="text-xs text-zinc-600 mt-1">AI reports generated</p>
+              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">{stats?.total_analyses || 0}</span>
+              <span className="text-xs text-[#787774]">Total Analyses</span>
             </div>
-          </Card>
+          </div>
 
           {/* Quota card */}
-          <Card className="flex flex-col gap-3 h-full hover:border-white/10 transition-all duration-300">
+          <div className="surface p-5 flex flex-col gap-3">
             <div className="flex items-start justify-between">
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Remaining</p>
-              <div className={`p-2 rounded-xl ${user?.plan_type === 'premium' ? 'bg-amber-500/10 text-amber-400' : 'bg-indigo-500/10 text-indigo-400'}`}>
-                {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+              <div className="p-2.5 rounded-xl" style={{ background: '#FBF3DB' }}>
+                {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4" style={{ color: '#956400' }} /> : <Lock className="w-4 h-4" style={{ color: '#956400' }} />}
               </div>
             </div>
             <div>
-              <h3 className="text-3xl font-black text-white stat-number">
-                {remaining}<span className="text-lg font-semibold text-zinc-600"> / {quota}</span>
-              </h3>
-              <p className="text-xs text-zinc-600 mt-1">{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</p>
+              <span className="stat-number text-2xl font-semibold text-[#111111] block mb-0.5">
+                {remaining}<span className="text-lg font-semibold text-[#787774]"> / {quota}</span>
+              </span>
+              <span className="text-xs text-[#787774]">{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
             </div>
             <div className="w-full bg-zinc-900 rounded-full h-1.5 overflow-hidden border border-zinc-800">
               <div
@@ -183,7 +178,7 @@ export function DashboardPage() {
                 <Sparkles className="w-3 h-3" /> Upgrade to Pro <ChevronRight className="w-3 h-3" />
               </button>
             )}
-          </Card>
+          </div>
         </div>
       )}
 
@@ -191,7 +186,7 @@ export function DashboardPage() {
       {!isLoading && recentItems.length > 0 && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-black text-white flex items-center gap-2">
+            <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
               <History className="w-5 h-5 text-zinc-500" />
               Recent Analyses
             </h2>
@@ -208,8 +203,8 @@ export function DashboardPage() {
               <div
                 key={item.cv_id}
                 onClick={() => item.status === 'completed' && navigate(`/analysis/${item.cv_id}`)}
-                className={`glass-card rounded-xl border border-white/5 px-4 py-3 flex items-center gap-4 transition-all duration-200 ${
-                  item.status === 'completed' ? 'hover:border-indigo-500/20 hover:bg-indigo-500/[0.02] cursor-pointer group' : ''
+                className={`surface p-4 flex items-center gap-4 transition-shadow ${
+                  item.status === 'completed' ? 'cursor-pointer hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] group' : ''
                 }`}
               >
                 <div className="p-2 rounded-lg bg-zinc-900 text-zinc-500 flex-shrink-0">
@@ -244,7 +239,7 @@ export function DashboardPage() {
       <div className="w-full">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="text-xl font-black text-white flex items-center gap-2">
+            <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
               <Upload className="w-5 h-5 text-indigo-400" />
               Analyze New CV
             </h2>
