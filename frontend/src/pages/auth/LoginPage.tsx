@@ -33,7 +33,7 @@ export function LoginPage() {
     <div className="min-h-screen flex bg-white">
       {/* Left decorative panel */}
       <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA]">
-        <span className="font-serif text-xl text-[#111111]">CVision</span>
+        <span className="font-mono font-medium tracking-tight text-base text-[#111111]">CVision</span>
         <div>
           <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] mb-6">
             "Know exactly where your CV stands."

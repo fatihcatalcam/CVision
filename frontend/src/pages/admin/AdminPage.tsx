@@ -182,7 +182,7 @@ export function AdminPage() {
           </button>
           <div className="flex items-center gap-2">
             <Shield className="w-6 h-6 text-amber-400" />
-            <h1 className="text-2xl font-bold text-white">Admin</h1>
+            <h1 className="text-2xl font-bold text-[#111111]">Admin</h1>
           </div>
           <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] uppercase tracking-wider font-bold">
             <Crown className="w-3 h-3" /> System Administrator
@@ -248,7 +248,7 @@ export function AdminPage() {
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Total Users</p>
-                        <h3 className="text-2xl font-bold text-white">{stats?.total_users || 0}</h3>
+                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_users || 0}</h3>
                       </div>
                     </div>
                   </Card>
@@ -259,7 +259,7 @@ export function AdminPage() {
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Total CVs</p>
-                        <h3 className="text-2xl font-bold text-white">{stats?.total_cvs || 0}</h3>
+                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_cvs || 0}</h3>
                       </div>
                     </div>
                   </Card>
@@ -270,7 +270,7 @@ export function AdminPage() {
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Analyses</p>
-                        <h3 className="text-2xl font-bold text-white">{stats?.total_analyses || 0}</h3>
+                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_analyses || 0}</h3>
                       </div>
                     </div>
                   </Card>
@@ -281,7 +281,7 @@ export function AdminPage() {
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Avg Score</p>
-                        <h3 className="text-2xl font-bold text-white">
+                        <h3 className="text-2xl font-bold text-[#111111]">
                           {stats?.average_system_score != null ? `${stats.average_system_score}%` : 'N/A'}
                         </h3>
                       </div>
@@ -346,7 +346,7 @@ export function AdminPage() {
             {activeTab === 'content' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-white">Analyzed Content</h2>
+                  <h2 className="text-2xl font-bold text-[#111111]">Analyzed Content</h2>
                   <div className="relative w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                     <input
@@ -429,7 +429,7 @@ export function AdminPage() {
             {activeTab === 'users' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-white">User Management</h2>
+                  <h2 className="text-2xl font-bold text-[#111111]">User Management</h2>
                   <div className="relative w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                     <input
