@@ -247,7 +247,7 @@ export function DashboardPage() {
           </div>
           {stats?.latest_score != null && (
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#F7F6F3] border border-[#EAEAEA] text-xs">
-              <span className="text-zinc-500">Latest</span>
+              <span className="text-[#787774]">Latest</span>
               <ScoreDot score={stats.latest_score} />
             </div>
           )}
