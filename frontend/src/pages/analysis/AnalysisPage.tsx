@@ -65,7 +65,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774]">Hidden Insight</span>
             </div>
-            <p className="text-sm text-[#111111]">This premium suggestion contains advanced feedback about your experience section, identifying key areas for improvement.</p>
+            <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">This premium suggestion contains advanced feedback about your experience section, identifying key areas for improvement.</p>
           </div>
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 dark:bg-[#111110]/70 backdrop-blur-sm">
@@ -124,7 +124,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
               </span>
             )}
           </div>
-          <p className="text-sm text-[#111111] leading-snug">{suggestion.message}</p>
+          <p className="text-sm text-[#111111] dark:text-[#e8e7e4] leading-snug">{suggestion.message}</p>
         </div>
         {expanded
           ? <ChevronUp   className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />
@@ -137,7 +137,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
             <>
               <div className="p-3 bg-[#9F2F2D]/5 border border-[#9F2F2D]/20 rounded-lg">
                 <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">âœ— Before (Current)</p>
-                <p className="text-sm text-[#111111] italic">"{beforeText}"</p>
+                <p className="text-sm text-[#111111] dark:text-[#e8e7e4] italic">"{beforeText}"</p>
               </div>
               <div className="flex justify-center">
                 <ArrowRight className="w-4 h-4 text-[#787774]" />
@@ -147,12 +147,12 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
                   <p className="text-[10px] uppercase font-bold text-[#346538] flex items-center gap-1">
                     <Sparkles className="w-3 h-3" /> After (AI Rewrite)
                   </p>
-                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] transition-colors">
+                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                     {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                     {copied ? 'Copied!' : 'Copy'}
                   </button>
                 </div>
-                <p className="text-sm text-[#111111]">"{afterText}"</p>
+                <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">"{afterText}"</p>
               </div>
             </>
           ) : (
@@ -161,12 +161,12 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
                 <p className="text-[10px] uppercase font-bold text-[#787774] flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> AI Suggestion
                 </p>
-                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] transition-colors">
+                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                   {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                   {copied ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <p className="text-sm text-[#111111]">{hint}</p>
+              <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">{hint}</p>
             </div>
           )}
         </div>
@@ -269,7 +269,7 @@ export function AnalysisPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-sm font-black text-[#111111] stat-number">{Math.floor(progress)}%</span>
+                <span className="text-sm font-black text-[#111111] dark:text-[#e8e7e4] stat-number">{Math.floor(progress)}%</span>
               </div>
             </div>
           </div>
@@ -324,11 +324,11 @@ export function AnalysisPage() {
           <div className="w-16 h-16 mx-auto bg-[#9F2F2D]/10 text-[#9F2F2D] rounded-2xl flex items-center justify-center mb-5">
             <Zap className="w-8 h-8" />
           </div>
-          <h2 className="font-sans text-2xl tracking-tight text-[#111111] mb-2">Analysis Failed</h2>
+          <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">Analysis Failed</h2>
           <p className="text-[#787774] text-sm mb-6 leading-relaxed">{error}</p>
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#111111] hover:bg-[#EAEAEA] transition-colors text-sm font-medium mx-auto"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#111111] dark:text-[#e8e7e4] hover:bg-[#EAEAEA] transition-colors text-sm font-medium mx-auto"
           >
             <ArrowLeft className="w-4 h-4" /> Return to Dashboard
           </button>
@@ -351,7 +351,7 @@ export function AnalysisPage() {
         {/* Back */}
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center text-sm font-medium text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-6"
+          className="flex items-center text-sm font-medium text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:text-[#e8e7e4] dark:hover:text-[#e8e7e4] transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -399,9 +399,9 @@ export function AnalysisPage() {
             <Card className="surface relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-[#787774]" />
-                <h3 className="font-semibold text-base text-[#111111]">AI Executive Summary</h3>
+                <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">AI Executive Summary</h3>
               </div>
-              <p className={`text-[#111111] leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
+              <p className={`text-[#111111] dark:text-[#e8e7e4] leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
                 {data!.ai_summary}
               </p>
               {data!.is_summary_locked && (
@@ -425,11 +425,11 @@ export function AnalysisPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card noPadding className="overflow-hidden">
                 <div className="px-5 py-4 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                  <h3 className="font-semibold text-base text-[#111111]">Key Strengths</h3>
+                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">Key Strengths</h3>
                 </div>
                 <ul className="p-5 space-y-2.5">
                   {data!.strengths.map((s, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-sm text-[#111111]">
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-[#111111] dark:text-[#e8e7e4]">
                       <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#346538] flex-shrink-0" />
                       {s}
                     </li>
@@ -438,11 +438,11 @@ export function AnalysisPage() {
               </Card>
               <Card noPadding className="overflow-hidden">
                 <div className="px-5 py-4 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                  <h3 className="font-semibold text-base text-[#111111]">Areas to Improve</h3>
+                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">Areas to Improve</h3>
                 </div>
                 <ul className="p-5 space-y-2.5">
                   {data!.weaknesses.map((w, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-sm text-[#111111]">
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-[#111111] dark:text-[#e8e7e4]">
                       <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#9F2F2D] flex-shrink-0" />
                       {w}
                     </li>
@@ -461,8 +461,8 @@ export function AnalysisPage() {
                   className={[
                     'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px',
                     activeTab === 'ai'
-                      ? 'border-[#111111] text-[#111111]'
-                      : 'border-transparent text-[#787774] hover:text-[#111111]',
+                      ? 'border-[#111111] dark:border-[#e8e7e4] text-[#111111] dark:text-[#e8e7e4]'
+                      : 'border-transparent text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
                   ].join(' ')}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
@@ -477,8 +477,8 @@ export function AnalysisPage() {
                 className={[
                   'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px',
                   activeTab === 'classic'
-                    ? 'border-[#111111] text-[#111111]'
-                    : 'border-transparent text-[#787774] hover:text-[#111111]',
+                    ? 'border-[#111111] dark:border-[#e8e7e4] text-[#111111] dark:text-[#e8e7e4]'
+                    : 'border-transparent text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
                 ].join(' ')}
               >
                 <Zap className="w-3.5 h-3.5" />
@@ -506,7 +506,7 @@ export function AnalysisPage() {
                   {activeSuggestion?.snippets?.length > 0 && (
                     <button
                       onClick={() => setIsPdfModalOpen(true)}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] text-[#111111] border border-[#EAEAEA] hover:bg-[#EAEAEA] transition-colors flex items-center gap-1.5"
+                      className="text-xs font-semibold px-3 py-1.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] text-[#111111] dark:text-[#e8e7e4] border border-[#EAEAEA] hover:bg-[#EAEAEA] transition-colors flex items-center gap-1.5"
                     >
                       <FileText className="w-3.5 h-3.5" />
                       View in CV ({activeSuggestion.snippets.length} highlight{activeSuggestion.snippets.length !== 1 ? 's' : ''})
@@ -526,7 +526,7 @@ export function AnalysisPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card noPadding className="overflow-hidden">
               <div className="p-6 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                <h3 className="font-sans text-xl tracking-tight text-[#111111]">Career Profile Matches</h3>
+                <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Career Profile Matches</h3>
                 <p className="text-sm text-[#787774] mt-1">Comparing extracted skills against our role database</p>
               </div>
               <div className="p-6">
@@ -534,7 +534,7 @@ export function AnalysisPage() {
               </div>
             </Card>
             <Card>
-              <h3 className="font-sans text-xl tracking-tight text-[#111111] mb-4">Extracted Skills</h3>
+              <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-4">Extracted Skills</h3>
               <SkillTags skills={data!.extracted_skills} />
             </Card>
           </div>

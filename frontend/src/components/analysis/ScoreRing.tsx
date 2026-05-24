@@ -67,7 +67,7 @@ export function ScoreRing({
           />
         </svg>
         <div className="absolute flex flex-col items-center justify-center text-center">
-          <span className="text-3xl font-bold text-white tracking-tighter">{score}</span>
+          <span className="text-3xl font-bold text-[#111111] dark:text-[#e8e7e4] tracking-tighter">{score}</span>
           <span className="text-xs font-semibold text-[var(--color-muted)]">%</span>
         </div>
       </div>
