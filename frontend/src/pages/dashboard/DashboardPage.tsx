@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CVUploader } from '../../components/cv/CVUploader';
-import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import api from '../../services/api';
 import {
   FileText, Activity, TrendingUp, Shield, Lock, Sparkles,
@@ -79,15 +78,15 @@ export function DashboardPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-3.5">
           <Avatar name={user?.full_name || 'U'} />
           <div>
-            <p className="text-xs text-[#787774] font-medium">{getGreeting()},</p>
-            <h1 className="font-serif text-2xl tracking-tight text-[#111111]">{user?.full_name}</h1>
+            <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium">{getGreeting()},</p>
+            <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{user?.full_name}</h1>
           </div>
           {user?.plan_type === 'premium' && (
             <span className="ml-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
@@ -102,12 +101,11 @@ export function DashboardPage() {
               <Shield className="w-3.5 h-3.5" /> Admin
             </button>
           )}
-          <ThemeToggle />
-          <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] border border-transparent hover:border-[#EAEAEA] transition-all text-xs font-medium" title="Settings">
+          <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium" title="Settings">
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Settings</span>
           </button>
-          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] border border-transparent hover:border-[#EAEAEA] transition-all text-xs font-medium">
+          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium">
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Sign Out</span>
           </button>
@@ -120,61 +118,62 @@ export function DashboardPage() {
           {[1, 2, 3, 4].map(i => <div key={i} className="surface h-36 shimmer" />)}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10 stagger-grid">
-          <div className="surface p-5 flex flex-col gap-4">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-info-bg)' }}>
-              <FileText className="w-5 h-5" style={{ color: 'var(--color-info)' }} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit bg-[#E1F3FE] dark:bg-[#1F6C9F]/20">
+              <FileText className="w-5 h-5 text-[#1F6C9F]" />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>{stats?.total_cvs || 0}</span>
-              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Uploaded CVs</span>
+              <span className="stat-number text-2xl font-semibold text-[#111111] dark:text-[#e8e7e4] block mb-0.5">{stats?.total_cvs || 0}</span>
+              <span className="text-xs text-[#787774] dark:text-[#908d89]">Uploaded CVs</span>
             </div>
           </div>
 
-          <div className="surface p-5 flex flex-col gap-4">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-success-bg)' }}>
-              <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-success)' }} />
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit bg-[#EDF3EC] dark:bg-[#346538]/20">
+              <TrendingUp className="w-5 h-5 text-[#346538]" />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>
+              <span className="stat-number text-2xl font-semibold text-[#111111] dark:text-[#e8e7e4] block mb-0.5">
                 {stats?.average_score != null ? `${stats.average_score}%` : 'N/A'}
               </span>
-              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Avg Match Score</span>
+              <span className="text-xs text-[#787774] dark:text-[#908d89]">Avg Match Score</span>
             </div>
           </div>
 
-          <div className="surface p-5 flex flex-col gap-4">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-accent)' }}>
-              <Activity className="w-5 h-5" style={{ color: 'var(--color-primary)' }} />
+          <div className="surface p-5">
+            <div className="p-2.5 rounded-xl w-fit bg-[#EEF2F8] dark:bg-[#1B3A6B]/20">
+              <Activity className="w-5 h-5 text-[#1B3A6B] dark:text-[#4a7dd1]" />
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>{stats?.total_analyses || 0}</span>
-              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>Total Analyses</span>
+              <span className="stat-number text-2xl font-semibold text-[#111111] dark:text-[#e8e7e4] block mb-0.5">{stats?.total_analyses || 0}</span>
+              <span className="text-xs text-[#787774] dark:text-[#908d89]">Total Analyses</span>
             </div>
           </div>
 
           {/* Quota card */}
           <div className="surface p-5 flex flex-col gap-3">
-            <div className="p-2.5 rounded-xl w-fit" style={{ background: 'var(--color-warning-bg)' }}>
-              {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4" style={{ color: 'var(--color-warning)' }} /> : <Lock className="w-4 h-4" style={{ color: 'var(--color-warning)' }} />}
+            <div className="flex items-start justify-between">
+              <div className="p-2.5 rounded-xl bg-[#FBF3DB] dark:bg-[#956400]/20">
+                {user?.plan_type === 'premium' ? <Sparkles className="w-4 h-4 text-[#956400]" /> : <Lock className="w-4 h-4 text-[#956400]" />}
+              </div>
             </div>
             <div>
-              <span className="stat-number text-2xl font-semibold block mb-0.5" style={{ color: 'var(--color-foreground)' }}>
-                {remaining}<span className="text-lg font-semibold" style={{ color: 'var(--color-muted)' }}> / {quota}</span>
+              <span className="stat-number text-2xl font-semibold text-[#111111] dark:text-[#e8e7e4] block mb-0.5">
+                {remaining}<span className="text-lg font-semibold text-[#787774] dark:text-[#908d89]"> / {quota}</span>
               </span>
-              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
+              <span className="text-xs text-[#787774] dark:text-[#908d89]">{user?.plan_type === 'premium' ? 'Pro analyses / week' : 'Free analyses / week'}</span>
             </div>
-            <div className="w-full rounded-full h-1.5 overflow-hidden" style={{ background: 'var(--color-card-border)' }}>
+            <div className="w-full bg-[#EAEAEA] dark:bg-white/[0.07] rounded-full h-1.5 overflow-hidden">
               <div
-                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-amber-500' : ''}`}
-                style={{ width: `${usedPct}%`, ...(user?.plan_type !== 'premium' ? { background: 'var(--color-primary)' } : {}) }}
+                className={`h-1.5 rounded-full transition-all duration-700 ${user?.plan_type === 'premium' ? 'bg-amber-500' : 'bg-[#1B3A6B]'}`}
+                style={{ width: `${usedPct}%` }}
               />
             </div>
             {user?.plan_type === 'free' && (
               <button
                 onClick={() => navigate('/pricing')}
-                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg text-white text-xs font-bold active:scale-[0.98] transition-all"
-                style={{ background: 'var(--color-foreground)' }}
+                className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-[#111111] text-white text-xs font-bold hover:bg-[#2a2a2a] active:scale-[0.98] transition-all"
               >
                 <Sparkles className="w-3 h-3" /> Upgrade to Pro <ChevronRight className="w-3 h-3" />
               </button>
@@ -187,20 +186,19 @@ export function DashboardPage() {
       {!isLoading && recentItems.length > 0 && (
         <div className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-sm flex items-center gap-2" style={{ color: 'var(--color-foreground)' }}>
-              <History className="w-5 h-5" style={{ color: 'var(--color-muted)' }} />
+            <h2 className="font-semibold text-[#111111] dark:text-[#e8e7e4] text-sm flex items-center gap-2">
+              <History className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
               Recent Analyses
             </h2>
             <button
               onClick={() => navigate('/history')}
-              className="flex items-center gap-1.5 text-xs font-medium transition-colors"
-              style={{ color: 'var(--color-muted)' }}
+              className="flex items-center gap-1.5 text-xs text-[#787774] hover:text-[#1B3A6B] transition-colors font-medium"
             >
               View all <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="space-y-2 stagger-list">
+          <div className="space-y-2">
             {recentItems.map((item) => (
               <div
                 key={item.cv_id}
@@ -209,12 +207,12 @@ export function DashboardPage() {
                   item.status === 'completed' ? 'cursor-pointer hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] group' : ''
                 }`}
               >
-                <div className="p-2 rounded-lg flex-shrink-0" style={{ background: 'var(--color-card-border)', color: 'var(--color-muted)' }}>
+                <div className="p-2 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] flex-shrink-0">
                   <FileText className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-foreground)' }}>{item.original_filename}</p>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>
+                  <p className="text-sm font-semibold text-[#111111] dark:text-[#e8e7e4] truncate">{item.original_filename}</p>
+                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">
                     {item.target_domain && <span className="mr-2">{item.target_domain}</span>}
                     {new Date(item.uploaded_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                   </p>
@@ -223,13 +221,13 @@ export function DashboardPage() {
                   <ScoreDot score={item.overall_score} />
                 ) : (
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                    item.status === 'failed' ? 'text-red-600 bg-red-50' : ''
-                  }`} style={item.status !== 'failed' ? { color: 'var(--color-muted)', background: 'var(--color-card-border)' } : {}}>
+                    item.status === 'failed' ? 'text-red-600 bg-red-50 dark:bg-red-500/10' : 'text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05]'
+                  }`}>
                     {item.status}
                   </span>
                 )}
                 {item.status === 'completed' && (
-                  <ChevronRight className="w-4 h-4 flex-shrink-0 transition-colors" style={{ color: 'var(--color-muted-foreground)' }} />
+                  <ChevronRight className="w-4 h-4 text-[#A09D9A] group-hover:text-[#1B3A6B] transition-colors flex-shrink-0" />
                 )}
               </div>
             ))}
@@ -241,11 +239,11 @@ export function DashboardPage() {
       <div className="w-full">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="font-semibold text-[#111111] text-sm flex items-center gap-2">
-              <Upload className="w-5 h-5 text-[#1B3A6B]" />
+            <h2 className="font-semibold text-[#111111] dark:text-[#e8e7e4] text-sm flex items-center gap-2">
+              <Upload className="w-5 h-5 text-[#1B3A6B] dark:text-[#4a7dd1]" />
               Analyze New CV
             </h2>
-            <p className="text-xs text-[#787774] mt-1">Upload your resume and get instant AI feedback</p>
+            <p className="text-xs text-[#787774] dark:text-[#908d89] mt-1">Upload your resume and get instant AI feedback</p>
           </div>
           {stats?.latest_score != null && (
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#F7F6F3] border border-[#EAEAEA] text-xs">

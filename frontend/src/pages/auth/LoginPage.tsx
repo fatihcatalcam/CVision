@@ -5,6 +5,8 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { Loader2, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
+const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
+
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,44 +32,42 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white dark:bg-[#111110]">
       {/* Left decorative panel */}
-      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA]">
-        <span className="font-mono font-medium tracking-tight text-base text-[#111111]">CVision</span>
+      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] dark:bg-[#1a1a18] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA] dark:border-white/[0.07]">
+        <span className="font-mono font-medium tracking-tight text-base text-[#111111] dark:text-[#e8e7e4]">CVision</span>
         <div>
-          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] mb-6">
+          <blockquote className="font-serif text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
             "Know exactly where your CV stands."
           </blockquote>
-          <p className="text-sm text-[#787774]">Used by career professionals across 14 industries.</p>
+          <p className="text-sm text-[#787774] dark:text-[#908d89]">Used by career professionals across 14 industries.</p>
         </div>
-        <p className="text-xs text-[#A09D9A]">© 2025 CVision</p>
+        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">© 2025 CVision</p>
       </div>
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-sm">
-          <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Sign in</h1>
-          <p className="text-sm text-[#787774] mb-8">Enter your credentials to continue.</p>
+          <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Sign in</h1>
+          <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Enter your credentials to continue.</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Email address</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Email address</label>
               <input
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                className={inputCls}
               />
             </div>
 
-            {/* Password */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">Password</label>
-                <Link to="/forgot-password" className="text-xs text-[#1B3A6B] hover:text-[#111111] transition-colors">
+                <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Password</label>
+                <Link to="/forgot-password" className="text-xs text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">
                   Forgot Password?
                 </Link>
               </div>
@@ -78,12 +78,12 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                  className={`${inputCls} pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] hover:text-[#111111] transition-colors p-1"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -93,21 +93,19 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+              className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>
-                  Sign In <ArrowRight className="w-4 h-4" />
-                </>
+                <>Sign In <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-[#787774]">
+          <p className="mt-8 text-center text-sm text-[#787774] dark:text-[#908d89]">
             Don't have an account?{' '}
-            <Link to="/register" className="text-[#1B3A6B] hover:text-[#111111] font-semibold transition-colors">
+            <Link to="/register" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] font-semibold transition-colors">
               Create one free
             </Link>
           </p>

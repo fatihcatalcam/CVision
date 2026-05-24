@@ -60,9 +60,27 @@ html.dark {
   --color-accent: rgba(74, 125, 209, 0.14);
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 html.dark body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+}
+
+/* Global raw element overrides — catches all inline input/select usage */
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]),
+html.dark select,
+html.dark textarea {
+  background-color: var(--color-card);
+  color: var(--color-foreground);
+  border-color: var(--color-card-border);
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--color-muted-foreground);
 }
 
 /* Dark mode component overrides for hardcoded-color elements */

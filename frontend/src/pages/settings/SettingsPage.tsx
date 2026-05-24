@@ -12,12 +12,12 @@ import {
 function SectionHeader({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
   return (
     <div className="flex items-start gap-3 mb-6">
-      <div className="p-2 rounded-[var(--radius-md)] bg-[#EEF2F8] text-[#1B3A6B] flex-shrink-0 mt-0.5">
+      <div className="p-2 rounded-[var(--radius-md)] bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] dark:text-[#4a7dd1] flex-shrink-0 mt-0.5">
         <Icon className="w-4 h-4" />
       </div>
       <div>
-        <h2 className="text-base font-bold text-[#111111]">{title}</h2>
-        <p className="text-xs text-[#787774] mt-0.5">{desc}</p>
+        <h2 className="text-base font-bold text-[#111111] dark:text-[#e8e7e4]">{title}</h2>
+        <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{desc}</p>
       </div>
     </div>
   );
@@ -36,7 +36,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
   return (
     <div className="flex gap-1 mt-2">
       {[1, 2, 3, 4].map(i => (
-        <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA]'}`} />
+        <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA] dark:bg-white/[0.07]'}`} />
       ))}
     </div>
   );
@@ -112,14 +112,14 @@ export function SettingsPage() {
       {/* Back */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="flex items-center gap-2 text-sm text-[#787774] hover:text-[#111111] transition-colors mb-8"
+        className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" /> Back to Dashboard
       </button>
 
       <div className="mb-8">
-        <h1 className="font-serif text-2xl tracking-tight text-[#111111]">Account Settings</h1>
-        <p className="text-[#787774] text-sm mt-1">Manage your profile, security, and subscription</p>
+        <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Account Settings</h1>
+        <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">Manage your profile, security, and subscription</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -128,12 +128,12 @@ export function SettingsPage() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="flex flex-col items-center text-center gap-3 py-8">
             {/* Avatar */}
-            <div className="w-16 h-16 rounded-full bg-[#F7F6F3] border border-[#EAEAEA] flex items-center justify-center mb-3">
-              <span className="text-lg font-medium text-[#787774]">{initials}</span>
+            <div className="w-16 h-16 rounded-full bg-[#F7F6F3] dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] flex items-center justify-center mb-3">
+              <span className="text-lg font-medium text-[#787774] dark:text-[#908d89]">{initials}</span>
             </div>
             <div>
-              <p className="text-[#111111] font-bold text-lg leading-tight">{user?.full_name}</p>
-              <p className="text-[#787774] text-xs mt-0.5 flex items-center gap-1 justify-center">
+              <p className="text-[#111111] dark:text-[#e8e7e4] font-bold text-lg leading-tight">{user?.full_name}</p>
+              <p className="text-[#787774] dark:text-[#908d89] text-xs mt-0.5 flex items-center gap-1 justify-center">
                 <Mail className="w-3 h-3" /> {user?.email}
               </p>
             </div>
@@ -161,30 +161,30 @@ export function SettingsPage() {
             <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">Usage</p>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-[#787774]">Analyses used</span>
-                <span className="text-[#111111] font-bold stat-number">{used} / {quota}</span>
+                <span className="text-[#787774] dark:text-[#908d89]">Analyses used</span>
+                <span className="text-[#111111] dark:text-[#e8e7e4] font-bold stat-number">{used} / {quota}</span>
               </div>
-              <div className="w-full h-1.5 bg-[#EAEAEA] rounded-full mt-3">
+              <div className="w-full h-1.5 bg-[#EAEAEA] dark:bg-white/[0.07] rounded-full mt-3">
                 <div
                   className="h-full bg-[#1B3A6B] rounded-full transition-all"
                   style={{ width: `${usagePercent}%` }}
                 />
               </div>
-              <p className="text-[10px] text-[#787774]">{Math.max(0, quota - used)} remaining this week</p>
+              <p className="text-[10px] text-[#787774] dark:text-[#908d89]">{Math.max(0, quota - used)} remaining this week</p>
             </div>
 
-            <div className="pt-2 border-t border-[#EAEAEA] space-y-2">
+            <div className="pt-2 border-t border-[#EAEAEA] dark:border-white/[0.07] space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-[#787774] flex items-center gap-1.5">
+                <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5" /> Member since
                 </span>
-                <span className="text-[#111111] text-xs">
+                <span className="text-[#111111] dark:text-[#e8e7e4] text-xs">
                   {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '-'}
                 </span>
               </div>
               {user?.role === 'admin' && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#787774] flex items-center gap-1.5">
+                  <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" /> Role
                   </span>
                   <span className="text-[#956400] text-xs font-bold">Administrator</span>
@@ -198,7 +198,7 @@ export function SettingsPage() {
             <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-3">Account</p>
             <button
               onClick={() => { logout(); navigate('/'); }}
-              className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] text-[#787774] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
+              className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] dark:border-white/[0.07] text-[#787774] dark:text-[#908d89] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
             >
               Sign Out
             </button>
@@ -210,7 +210,7 @@ export function SettingsPage() {
 
           {/* Profile section */}
           <div className="surface p-6 mb-4">
-            <h3 className="text-sm font-semibold text-[#111111] mb-4 pb-3 border-b border-[#EAEAEA]">
+            <h3 className="text-sm font-semibold text-[#111111] dark:text-[#e8e7e4] mb-4 pb-3 border-b border-[#EAEAEA] dark:border-white/[0.07]">
               Profile Information
             </h3>
             <SectionHeader
@@ -228,7 +228,7 @@ export function SettingsPage() {
                   onChange={e => setFullName(e.target.value)}
                   minLength={2}
                   maxLength={150}
-                  className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                  className="w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all"
                 />
               </div>
 
@@ -239,9 +239,9 @@ export function SettingsPage() {
                     type="email"
                     value={user?.email ?? ''}
                     disabled
-                    className="w-full bg-[#F7F6F3] border border-[#EAEAEA] text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 cursor-not-allowed pr-28"
+                    className="w-full bg-[#F7F6F3] dark:bg-white/[0.03] border border-[#EAEAEA] dark:border-white/[0.07] text-[#A09D9A] dark:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 cursor-not-allowed pr-28"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#787774] bg-[#EAEAEA] px-2 py-0.5 rounded border border-[#D5D3D0]">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#787774] dark:text-[#908d89] bg-[#EAEAEA] dark:bg-white/[0.07] px-2 py-0.5 rounded border border-[#D5D3D0] dark:border-white/[0.05]">
                     Cannot change
                   </span>
                 </div>
@@ -264,7 +264,7 @@ export function SettingsPage() {
 
           {/* Password section */}
           <div className="surface p-6 mb-4">
-            <h3 className="text-sm font-semibold text-[#111111] mb-4 pb-3 border-b border-[#EAEAEA]">
+            <h3 className="text-sm font-semibold text-[#111111] dark:text-[#e8e7e4] mb-4 pb-3 border-b border-[#EAEAEA] dark:border-white/[0.07]">
               Change Password
             </h3>
             <SectionHeader
@@ -284,7 +284,7 @@ export function SettingsPage() {
                     onChange={e => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
                     required
-                    className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                    className="w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all"
                   />
                   <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
                     {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -303,7 +303,7 @@ export function SettingsPage() {
                     placeholder="Min. 8 characters"
                     required
                     minLength={8}
-                    className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+                    className="w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all"
                   />
                   <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
                     {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -322,12 +322,12 @@ export function SettingsPage() {
                     onChange={e => setConfirmPassword(e.target.value)}
                     placeholder="Repeat new password"
                     required
-                    className={`w-full bg-white border rounded-[var(--radius-md)] h-11 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:ring-2 transition-all ${
+                    className={`w-full bg-white dark:bg-[#1c1c1a] border rounded-[var(--radius-md)] h-11 px-4 pr-12 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:ring-2 transition-all ${
                       confirmPassword && !passwordsMatch
                         ? 'border-[#9F2F2D]/50 focus:ring-[#9F2F2D]/15 focus:border-[#9F2F2D]'
                         : confirmPassword && passwordsMatch
                         ? 'border-[#346538]/40 focus:ring-[#346538]/15 focus:border-[#346538]'
-                        : 'border-[#EAEAEA] focus:ring-[#EEF2F8] focus:border-[#1B3A6B]'
+                        : 'border-[#EAEAEA] dark:border-white/[0.07] focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1]'
                     }`}
                   />
                   {confirmPassword && (

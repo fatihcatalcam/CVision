@@ -140,15 +140,15 @@ export function HistoryPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-[#787774] hover:text-[#111111] transition-colors mb-5"
+          className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-5"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="font-serif text-2xl tracking-tight text-[#111111]">Analysis History</h1>
-            <p className="text-[#787774] text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
+            <h1 className="font-serif text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis History</h1>
+            <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
@@ -190,7 +190,7 @@ export function HistoryPage() {
             placeholder="Search by filename or domain..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-10 pl-10 pr-4 text-sm focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
+            className="w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-10 pl-10 pr-4 text-sm focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all"
           />
         </div>
         <div className="relative">
@@ -198,7 +198,7 @@ export function HistoryPage() {
           <select
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value)}
-            className="appearance-none bg-white border border-[#EAEAEA] text-[#111111] text-sm px-3 py-2 pl-9 pr-8 rounded-[var(--radius-md)] h-10 cursor-pointer focus:outline-none focus:border-[#1B3A6B] transition-all"
+            className="appearance-none bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] text-sm px-3 py-2 pl-9 pr-8 rounded-[var(--radius-md)] h-10 cursor-pointer focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] transition-all"
           >
             <option value="all">All Status</option>
             <option value="completed">Completed</option>
@@ -218,10 +218,10 @@ export function HistoryPage() {
         </div>
       ) : filtered.length === 0 ? (
         <Card className="text-center py-16">
-          <div className="w-16 h-16 rounded-[var(--radius-lg)] bg-[#F7F6F3] border border-[#EAEAEA] flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="w-8 h-8 text-[#787774]" />
+          <div className="w-16 h-16 rounded-[var(--radius-lg)] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-[#787774] dark:text-[#908d89]" />
           </div>
-          <h3 className="text-lg font-bold text-[#111111] mb-2">
+          <h3 className="text-lg font-bold text-[#111111] dark:text-[#e8e7e4] mb-2">
             {items.length === 0 ? 'No analyses yet' : 'No results found'}
           </h3>
           <p className="text-[#787774] text-sm mb-6">
@@ -242,7 +242,7 @@ export function HistoryPage() {
         <div className="surface overflow-hidden" style={{ padding: 0 }}>
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#F7F6F3] border-b border-[#EAEAEA]">
+              <tr className="bg-[#F7F6F3] dark:bg-white/[0.03] border-b border-[#EAEAEA] dark:border-white/[0.07]">
                 <th className="px-5 py-3 text-left label-sm">File</th>
                 <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">Domain</th>
                 <th className="px-5 py-3 text-left label-sm hidden md:table-cell">ATS / Keywords</th>
@@ -262,16 +262,16 @@ export function HistoryPage() {
                 return (
                   <tr
                     key={item.cv_id}
-                    className="border-b border-[#EAEAEA] hover:bg-[#F7F6F3] transition-colors cursor-pointer last:border-0"
+                    className="border-b border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.03] transition-colors cursor-pointer last:border-0"
                     onClick={() => canView && navigate(`/analysis/${item.cv_id}`)}
                   >
                     {/* File */}
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className={`p-2 rounded-[var(--radius-sm)] flex-shrink-0 ${canView ? 'bg-[#EEF2F8] text-[#1B3A6B]' : 'bg-[#F7F6F3] text-[#787774]'}`}>
+                        <div className={`p-2 rounded-[var(--radius-sm)] flex-shrink-0 ${canView ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] dark:text-[#4a7dd1]' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89]'}`}>
                           <FileText className="w-4 h-4" />
                         </div>
-                        <span className="font-medium text-[#111111] truncate max-w-[160px] sm:max-w-[220px]">
+                        <span className="font-medium text-[#111111] dark:text-[#e8e7e4] truncate max-w-[160px] sm:max-w-[220px]">
                           {item.original_filename}
                         </span>
                       </div>
@@ -339,7 +339,7 @@ export function HistoryPage() {
                             </button>
                             <button
                               onClick={() => setConfirmDelete(null)}
-                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] text-[#787774] border border-[#EAEAEA] text-xs font-medium hover:bg-[#EAEAEA] transition-colors"
+                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
                             >
                               Cancel
                             </button>

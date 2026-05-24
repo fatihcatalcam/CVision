@@ -21,7 +21,7 @@ export function SkillTags({ skills }: SkillTagsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {sorted.map((skill, index) => {
-        let colorClasses = 'bg-[#F7F6F3] text-[#111111] border-[#EAEAEA]'; // Low confidence
+        let colorClasses = 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#111111] dark:text-[#e8e7e4] border-[#EAEAEA] dark:border-white/[0.07]'; // Low confidence
         if (skill.confidence_score >= 0.8) {
           colorClasses = 'bg-blue-500/10 text-blue-400 border-blue-500/20'; // High confidence
         } else if (skill.confidence_score >= 0.5) {
