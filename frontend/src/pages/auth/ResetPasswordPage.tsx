@@ -148,10 +148,10 @@ export function ResetPasswordPage() {
                     onChange={e => handleCharChange(i, e.target.value)}
                     onKeyDown={e => handleKeyDown(i, e)}
                     className={`w-14 h-16 text-center text-2xl font-black rounded-xl border transition-all outline-none
-                      bg-[rgba(15,15,24,0.8)] text-white font-mono
+                      bg-white text-[#111111] font-mono
                       ${char
                         ? 'border-violet-500 ring-2 ring-violet-500/20'
-                        : 'border-[var(--color-card-border)] focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/15'
+                        : 'border-[#EAEAEA] focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8]'
                       }`}
                   />
                 ))}
@@ -183,7 +183,7 @@ export function ResetPasswordPage() {
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
                     autoFocus
-                    className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-12 px-4 pr-12 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+                    className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
                   />
                   <button
                     type="button"
