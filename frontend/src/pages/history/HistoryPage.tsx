@@ -22,38 +22,34 @@ interface HistoryItem {
   analysis_id: number | null;
 }
 
-const STATUS_META: Record<string, { label: string; icon: React.ReactNode; color: string; bg: string }> = {
+const STATUS_META: Record<string, { label: string; icon: React.ReactNode; badgeClass: string }> = {
   completed: {
     label: 'Completed',
     icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10 border-emerald-500/20',
+    badgeClass: 'badge badge-success',
   },
   processing: {
     label: 'Processing',
     icon: <Loader2 className="w-3.5 h-3.5 animate-spin" />,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10 border-blue-500/20',
+    badgeClass: 'badge badge-warning',
   },
   pending: {
     label: 'Pending',
     icon: <Clock className="w-3.5 h-3.5" />,
-    color: 'text-zinc-400',
-    bg: 'bg-zinc-800 border-zinc-700',
+    badgeClass: 'badge badge-warning',
   },
   failed: {
     label: 'Failed',
     icon: <XCircle className="w-3.5 h-3.5" />,
-    color: 'text-red-400',
-    bg: 'bg-red-500/10 border-red-500/20',
+    badgeClass: 'badge badge-danger',
   },
 };
 
 function ScoreBadge({ score }: { score: number }) {
   const color =
-    score >= 80 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' :
-    score >= 60 ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' :
-    'text-red-400 bg-red-500/10 border-red-500/20';
+    score >= 80 ? 'text-[#346538] bg-[#346538]/10 border-[#346538]/20' :
+    score >= 60 ? 'text-[#956400] bg-[#956400]/10 border-[#956400]/20' :
+    'text-[#9F2F2D] bg-[#9F2F2D]/10 border-[#9F2F2D]/20';
 
   return (
     <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-sm font-black border ${color} stat-number`}>
@@ -62,13 +58,18 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
-function MiniBar({ value, color }: { value: number; color: string }) {
+function MiniBar({ value }: { value: number }) {
+  const bg =
+    value >= 80 ? '#346538' : value >= 60 ? '#956400' : '#9F2F2D';
   return (
     <div className="flex items-center gap-2 min-w-[80px]">
-      <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-700 ${color}`} style={{ width: `${Math.min(value, 100)}%` }} />
+      <div className="flex-1 h-1.5 bg-[#EAEAEA] rounded-full overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-700"
+          style={{ width: `${Math.min(value, 100)}%`, background: bg }}
+        />
       </div>
-      <span className="text-xs text-zinc-500 stat-number w-8 text-right">{Math.round(value)}%</span>
+      <span className="text-xs text-[#787774] stat-number w-8 text-right">{Math.round(value)}%</span>
     </div>
   );
 }
@@ -139,19 +140,19 @@ export function HistoryPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors mb-5"
+          className="flex items-center gap-2 text-sm text-[#787774] hover:text-[#111111] transition-colors mb-5"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black text-white">Analysis History</h1>
-            <p className="text-zinc-500 text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
+            <h1 className="font-serif text-2xl tracking-tight text-[#111111]">Analysis History</h1>
+            <p className="text-[#787774] text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 transition-all self-start sm:self-auto"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-semibold hover:bg-[#122a52] transition-colors self-start sm:self-auto"
           >
             <FileText className="w-4 h-4" /> New Analysis
           </button>
@@ -162,18 +163,18 @@ export function HistoryPage() {
       {!isLoading && items.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total CVs', value: total, icon: FileText, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-            { label: 'Avg Score', value: avgScore > 0 ? `${Math.round(avgScore)}%` : 'N/A', icon: BarChart3, color: 'text-violet-400', bg: 'bg-violet-500/10' },
-            { label: 'Best Score', value: bestScore > 0 ? `${Math.round(bestScore)}%` : 'N/A', icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-            { label: 'Completed', value: items.filter(i => i.status === 'completed').length, icon: CheckCircle2, color: 'text-amber-400', bg: 'bg-amber-500/10' },
+            { label: 'Total CVs', value: total, icon: FileText, iconColor: 'text-[#1B3A6B]', iconBg: 'bg-[#EEF2F8]' },
+            { label: 'Avg Score', value: avgScore > 0 ? `${Math.round(avgScore)}%` : 'N/A', icon: BarChart3, iconColor: 'text-[#956400]', iconBg: 'bg-[#956400]/10' },
+            { label: 'Best Score', value: bestScore > 0 ? `${Math.round(bestScore)}%` : 'N/A', icon: TrendingUp, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
+            { label: 'Completed', value: items.filter(i => i.status === 'completed').length, icon: CheckCircle2, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
           ].map(s => (
-            <Card key={s.label} className="flex items-center gap-3 p-4 hover:border-white/10 transition-all">
-              <div className={`p-2 rounded-xl ${s.bg} flex-shrink-0`}>
-                <s.icon className={`w-4 h-4 ${s.color}`} />
+            <Card key={s.label} className="flex items-center gap-3 p-4 hover:border-[#EAEAEA] transition-all">
+              <div className={`p-2 rounded-[var(--radius-md)] ${s.iconBg} flex-shrink-0`}>
+                <s.icon className={`w-4 h-4 ${s.iconColor}`} />
               </div>
               <div>
-                <p className="text-xs text-zinc-500 font-medium">{s.label}</p>
-                <p className="text-xl font-black text-white stat-number">{s.value}</p>
+                <p className="text-xs text-[#787774] font-medium">{s.label}</p>
+                <p className="text-xl font-black text-[#111111] stat-number">{s.value}</p>
               </div>
             </Card>
           ))}
@@ -183,21 +184,21 @@ export function HistoryPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A09D9A] pointer-events-none" />
           <input
             type="text"
             placeholder="Search by filename or domain..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-10 pl-10 pr-4 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+            className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-10 pl-10 pr-4 text-sm focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 pointer-events-none" />
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#A09D9A] pointer-events-none" />
           <select
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value)}
-            className="appearance-none bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-10 pl-9 pr-8 text-sm text-white cursor-pointer focus:outline-none focus:border-indigo-500/60 transition-all"
+            className="appearance-none bg-white border border-[#EAEAEA] text-[#111111] text-sm px-3 py-2 pl-9 pr-8 rounded-[var(--radius-md)] h-10 cursor-pointer focus:outline-none focus:border-[#1B3A6B] transition-all"
           >
             <option value="all">All Status</option>
             <option value="completed">Completed</option>
@@ -212,18 +213,18 @@ export function HistoryPage() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="glass-card rounded-2xl h-20 shimmer" />
+            <div key={i} className="surface rounded-[var(--radius-lg)] h-20 shimmer" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
         <Card className="text-center py-16">
-          <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="w-8 h-8 text-zinc-600" />
+          <div className="w-16 h-16 rounded-[var(--radius-lg)] bg-[#F7F6F3] border border-[#EAEAEA] flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-[#787774]" />
           </div>
-          <h3 className="text-lg font-bold text-white mb-2">
+          <h3 className="text-lg font-bold text-[#111111] mb-2">
             {items.length === 0 ? 'No analyses yet' : 'No results found'}
           </h3>
-          <p className="text-zinc-500 text-sm mb-6">
+          <p className="text-[#787774] text-sm mb-6">
             {items.length === 0
               ? 'Upload your first CV to get started.'
               : 'Try adjusting your search or filter.'}
@@ -231,116 +232,144 @@ export function HistoryPage() {
           {items.length === 0 && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold hover:-translate-y-0.5 transition-all"
+              className="px-6 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-semibold hover:bg-[#122a52] transition-colors"
             >
               Upload CV
             </button>
           )}
         </Card>
       ) : (
-        <div className="space-y-3">
-          {filtered.map((item) => {
-            const meta = STATUS_META[item.status] ?? STATUS_META.pending;
-            const canView = item.status === 'completed' && item.cv_id;
-            const isDeleting = deletingId === item.cv_id;
-            const isConfirming = confirmDelete === item.cv_id;
+        <div className="surface overflow-hidden" style={{ padding: 0 }}>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[#F7F6F3] border-b border-[#EAEAEA]">
+                <th className="px-5 py-3 text-left label-sm">File</th>
+                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">Domain</th>
+                <th className="px-5 py-3 text-left label-sm hidden md:table-cell">ATS / Keywords</th>
+                <th className="px-5 py-3 text-left label-sm">Score</th>
+                <th className="px-5 py-3 text-left label-sm">Status</th>
+                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">Date</th>
+                <th className="px-5 py-3 text-right label-sm">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((item) => {
+                const meta = STATUS_META[item.status] ?? STATUS_META.pending;
+                const canView = item.status === 'completed' && item.cv_id;
+                const isDeleting = deletingId === item.cv_id;
+                const isConfirming = confirmDelete === item.cv_id;
 
-            return (
-              <div
-                key={item.cv_id}
-                className="glass-card rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-200 group"
-              >
-                <div className="flex items-center gap-4 p-4 sm:p-5">
-                  {/* File icon */}
-                  <div className={`p-2.5 rounded-xl flex-shrink-0 ${canView ? 'bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20' : 'bg-zinc-900 text-zinc-600'} transition-colors`}>
-                    <FileText className="w-5 h-5" />
-                  </div>
+                return (
+                  <tr
+                    key={item.cv_id}
+                    className="border-b border-[#EAEAEA] hover:bg-[#F7F6F3] transition-colors cursor-pointer last:border-0"
+                    onClick={() => canView && navigate(`/analysis/${item.cv_id}`)}
+                  >
+                    {/* File */}
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className={`p-2 rounded-[var(--radius-sm)] flex-shrink-0 ${canView ? 'bg-[#EEF2F8] text-[#1B3A6B]' : 'bg-[#F7F6F3] text-[#787774]'}`}>
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium text-[#111111] truncate max-w-[160px] sm:max-w-[220px]">
+                          {item.original_filename}
+                        </span>
+                      </div>
+                    </td>
 
-                  {/* Main info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="text-white font-semibold text-sm truncate max-w-[200px] sm:max-w-none">
-                        {item.original_filename}
-                      </span>
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${meta.bg} ${meta.color}`}>
+                    {/* Domain */}
+                    <td className="px-5 py-3 hidden sm:table-cell">
+                      <span className="text-[#787774] text-xs">{item.target_domain ?? '—'}</span>
+                    </td>
+
+                    {/* Score bars */}
+                    <td className="px-5 py-3 hidden md:table-cell">
+                      {item.overall_score !== null ? (
+                        <div className="space-y-1.5 min-w-[120px]">
+                          <div className="flex items-center gap-2 text-[10px] text-[#787774]">
+                            <span className="w-14">ATS</span>
+                            <MiniBar value={item.ats_score ?? 0} />
+                          </div>
+                          <div className="flex items-center gap-2 text-[10px] text-[#787774]">
+                            <span className="w-14">Keywords</span>
+                            <MiniBar value={item.keyword_score ?? 0} />
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-[#787774]">—</span>
+                      )}
+                    </td>
+
+                    {/* Overall score */}
+                    <td className="px-5 py-3">
+                      {item.overall_score !== null ? (
+                        <ScoreBadge score={item.overall_score} />
+                      ) : item.status === 'failed' ? (
+                        <span className="text-xs text-[#9F2F2D]">Failed</span>
+                      ) : (
+                        <span className="text-xs text-[#787774]">—</span>
+                      )}
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-5 py-3">
+                      <span className={`inline-flex items-center gap-1 ${meta.badgeClass}`}>
                         {meta.icon} {meta.label}
                       </span>
-                    </div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      {item.target_domain && (
-                        <span className="text-xs text-zinc-500">{item.target_domain}</span>
-                      )}
-                      <span className="text-xs text-zinc-700">
+                    </td>
+
+                    {/* Date */}
+                    <td className="px-5 py-3 hidden sm:table-cell">
+                      <span className="text-xs text-[#787774]">
                         {new Date(item.uploaded_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </span>
-                    </div>
-                  </div>
+                    </td>
 
-                  {/* Scores */}
-                  {item.overall_score !== null && (
-                    <div className="hidden md:flex flex-col gap-1.5 min-w-[140px]">
-                      <div className="flex items-center justify-between text-[10px] text-zinc-600 mb-0.5">
-                        <span>ATS</span>
-                        <span>Keywords</span>
-                      </div>
-                      <MiniBar value={item.ats_score ?? 0} color="bg-blue-500" />
-                      <MiniBar value={item.keyword_score ?? 0} color="bg-violet-500" />
-                    </div>
-                  )}
-
-                  {/* Score badge */}
-                  <div className="flex-shrink-0">
-                    {item.overall_score !== null ? (
-                      <ScoreBadge score={item.overall_score} />
-                    ) : item.status === 'failed' ? (
-                      <span className="text-xs text-red-400/60">Failed</span>
-                    ) : (
-                      <span className="text-xs text-zinc-600">-</span>
-                    )}
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {isConfirming ? (
-                      <>
-                        <button
-                          onClick={() => handleDelete(item.cv_id)}
-                          disabled={isDeleting}
-                          className="px-3 py-1.5 rounded-lg bg-red-500/15 text-red-400 border border-red-500/20 text-xs font-bold hover:bg-red-500/25 transition-colors disabled:opacity-50"
-                        >
-                          {isDeleting ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Confirm'}
-                        </button>
-                        <button
-                          onClick={() => setConfirmDelete(null)}
-                          className="px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-400 text-xs font-medium hover:bg-zinc-700 transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => setConfirmDelete(item.cv_id)}
-                          className="p-2 rounded-xl text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        {canView && (
-                          <button
-                            onClick={() => navigate(`/analysis/${item.cv_id}`)}
-                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold hover:bg-indigo-500/20 transition-all"
-                          >
-                            View Report <ChevronRight className="w-3.5 h-3.5" />
-                          </button>
+                    {/* Actions */}
+                    <td className="px-5 py-3 text-right" onClick={e => e.stopPropagation()}>
+                      <div className="flex items-center gap-2 justify-end">
+                        {isConfirming ? (
+                          <>
+                            <button
+                              onClick={() => handleDelete(item.cv_id)}
+                              disabled={isDeleting}
+                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#9F2F2D]/10 text-[#9F2F2D] border border-[#9F2F2D]/20 text-xs font-bold hover:bg-[#9F2F2D]/20 transition-colors disabled:opacity-50"
+                            >
+                              {isDeleting ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Confirm'}
+                            </button>
+                            <button
+                              onClick={() => setConfirmDelete(null)}
+                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] text-[#787774] border border-[#EAEAEA] text-xs font-medium hover:bg-[#EAEAEA] transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => setConfirmDelete(item.cv_id)}
+                              className="p-2 rounded-[var(--radius-sm)] text-[#A09D9A] hover:text-[#9F2F2D] hover:bg-[#9F2F2D]/10 transition-all"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            {canView && (
+                              <button
+                                onClick={() => navigate(`/analysis/${item.cv_id}`)}
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-[var(--radius-sm)] bg-[#EEF2F8] border border-[#1B3A6B]/20 text-[#1B3A6B] text-xs font-semibold hover:bg-[#D6E4F7] transition-all"
+                              >
+                                View Report <ChevronRight className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </>
                         )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
