@@ -1,41 +1,48 @@
-import type { ButtonHTMLAttributes } from 'react';
+import { forwardRef } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
 
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonSize = 'sm' | 'md' | 'lg';
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  loading?: boolean;
+  children: ReactNode;
 }
 
-export function Button({
-  className = '',
-  variant = 'primary',
-  size = 'md',
-  isLoading = false,
-  children,
-  ...props
-}: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-background)] disabled:opacity-50 disabled:pointer-events-none';
-  
-  const variants = {
-    primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] shadow-lg shadow-blue-500/20 focus:ring-[var(--color-primary)]',
-    secondary: 'bg-[rgba(255,255,255,0.05)] text-white border border-[var(--color-card-border)] hover:bg-[rgba(255,255,255,0.1)] focus:ring-[var(--color-muted)]',
-    ghost: 'hover:bg-[rgba(255,255,255,0.05)] text-white focus:ring-[var(--color-muted)]',
-    danger: 'bg-[var(--color-danger)] text-white hover:bg-red-600 focus:ring-[var(--color-danger)] shadow-lg shadow-red-500/20',
-  };
+const variants: Record<ButtonVariant, string> = {
+  primary:   'bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98]',
+  secondary: 'bg-white text-[#111111] border border-[#EAEAEA] hover:bg-[#F7F6F3] active:scale-[0.98]',
+  ghost:     'bg-transparent text-[#787774] hover:bg-[#F7F6F3] hover:text-[#111111] active:scale-[0.98]',
+  danger:    'bg-[#FDEBEC] text-[#9F2F2D] hover:bg-[#f5d8d9] active:scale-[0.98]',
+};
 
-  const sizes = {
-    sm: 'h-9 px-4 text-sm',
-    md: 'h-11 px-6 text-base',
-    lg: 'h-14 px-8 text-lg',
-  };
+const sizes: Record<ButtonSize, string> = {
+  sm: 'px-3 py-1.5 text-xs',
+  md: 'px-4 py-2 text-sm',
+  lg: 'px-6 py-2.5 text-sm',
+};
 
-  const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
-
-  return (
-    <button className={classes} disabled={isLoading || props.disabled} {...props}>
-      {isLoading && <Loader2 className="w-5 h-5 mr-2 animate-spin" />}
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant = 'primary', size = 'md', loading, disabled, className = '', children, ...props }, ref) => (
+    <button
+      ref={ref}
+      disabled={disabled || loading}
+      className={[
+        'inline-flex items-center justify-center gap-2 font-medium rounded-[var(--radius-md)]',
+        'transition-all duration-150 select-none',
+        'disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100',
+        variants[variant],
+        sizes[size],
+        className,
+      ].join(' ')}
+      {...props}
+    >
+      {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
       {children}
     </button>
-  );
-}
+  )
+);
+Button.displayName = 'Button';

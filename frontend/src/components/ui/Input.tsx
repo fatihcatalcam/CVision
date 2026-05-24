@@ -7,35 +7,32 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className = '', label, error, ...props }, ref) => {
+  ({ label, error, className = '', id, ...props }, ref) => {
+    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
     return (
-      <div className="w-full flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5">
         {label && (
-          <label className="text-sm font-medium text-[var(--color-foreground)]">
+          <label htmlFor={inputId} className="text-sm font-medium text-[#111111]">
             {label}
           </label>
         )}
         <input
           ref={ref}
-          className={`
-            w-full bg-[rgba(24,24,27,0.5)] border border-[var(--color-card-border)] 
-            rounded-lg h-11 px-4 text-[var(--color-foreground)] 
-            placeholder:text-[var(--color-muted-foreground)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:bg-[rgba(24,24,27,0.8)]
-            transition-all disabled:opacity-50 disabled:cursor-not-allowed
-            ${error ? 'border-[var(--color-danger)] focus:ring-[var(--color-danger)]' : ''}
-            ${className}
-          `}
+          id={inputId}
+          className={[
+            'w-full px-3 py-2 text-sm bg-white border border-[#EAEAEA]',
+            'rounded-[var(--radius-md)] text-[#111111] placeholder:text-[#A09D9A]',
+            'transition-all duration-150',
+            'focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8]',
+            'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[#F7F6F3]',
+            error ? 'border-[#9F2F2D] focus:ring-[#FDEBEC]' : '',
+            className,
+          ].join(' ')}
           {...props}
         />
-        {error && (
-          <span className="text-sm text-[var(--color-danger)] mt-1 animate-in">
-            {error}
-          </span>
-        )}
+        {error && <p className="text-xs text-[#9F2F2D]">{error}</p>}
       </div>
     );
   }
 );
-
 Input.displayName = 'Input';

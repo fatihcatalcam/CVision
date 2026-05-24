@@ -30,7 +30,7 @@ export function SuggestionList({ suggestions, activeSuggestionId, onSelectSugges
       case 'success':
       case 'good':
         return {
-          icon: <CheckCircle className="w-5 h-5 text-emerald-400" />,
+          icon: <CheckCircle className="w-5 h-5 text-[#346538]" />,
           style: 'border-emerald-500/20 bg-emerald-500/5',
         };
       case 'warning':
@@ -65,7 +65,7 @@ export function SuggestionList({ suggestions, activeSuggestionId, onSelectSugges
           >
             <div className="mt-0.5">{icon}</div>
             <div className="flex-1">
-              <p className={`text-sm leading-relaxed ${isActive ? 'text-white' : 'text-zinc-200'}`}>
+              <p className={`text-sm leading-relaxed ${isActive ? 'text-white' : 'text-[#111111]'}`}>
                 {suggestion.message}
               </p>
               <div className="flex items-center justify-between mt-2">

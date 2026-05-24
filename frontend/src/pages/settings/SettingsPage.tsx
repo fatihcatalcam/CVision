@@ -12,12 +12,12 @@ import {
 function SectionHeader({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
   return (
     <div className="flex items-start gap-3 mb-6">
-      <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 flex-shrink-0 mt-0.5">
+      <div className="p-2 rounded-[var(--radius-md)] bg-[#EEF2F8] text-[#1B3A6B] flex-shrink-0 mt-0.5">
         <Icon className="w-4 h-4" />
       </div>
       <div>
-        <h2 className="text-base font-bold text-white">{title}</h2>
-        <p className="text-xs text-zinc-500 mt-0.5">{desc}</p>
+        <h2 className="text-base font-bold text-[#111111]">{title}</h2>
+        <p className="text-xs text-[#787774] mt-0.5">{desc}</p>
       </div>
     </div>
   );
@@ -32,11 +32,11 @@ function PasswordStrengthBar({ password }: { password: string }) {
     password.length >= 8,
   ];
   const score = checks.filter(Boolean).length;
-  const colors = ['', 'bg-red-500', 'bg-amber-500', 'bg-yellow-400', 'bg-emerald-500'];
+  const colors = ['', 'bg-[#9F2F2D]', 'bg-[#956400]', 'bg-[#956400]', 'bg-[#346538]'];
   return (
     <div className="flex gap-1 mt-2">
       {[1, 2, 3, 4].map(i => (
-        <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-zinc-800'}`} />
+        <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA]'}`} />
       ))}
     </div>
   );
@@ -102,6 +102,9 @@ export function SettingsPage() {
 
   const quota = user?.plan_type === 'premium' ? 50 : 3;
   const used = user?.analysis_count ?? 0;
+  const usagePercent = Math.min((used / quota) * 100, 100);
+
+  const initials = (user?.full_name ?? 'U')[0].toUpperCase();
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8 animate-in slide-up">
@@ -109,14 +112,14 @@ export function SettingsPage() {
       {/* Back */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors mb-8"
+        className="flex items-center gap-2 text-sm text-[#787774] hover:text-[#111111] transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" /> Back to Dashboard
       </button>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-white">Account Settings</h1>
-        <p className="text-zinc-500 text-sm mt-1">Manage your profile, security, and subscription</p>
+        <h1 className="font-serif text-2xl tracking-tight text-[#111111]">Account Settings</h1>
+        <p className="text-[#787774] text-sm mt-1">Manage your profile, security, and subscription</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -125,29 +128,27 @@ export function SettingsPage() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="flex flex-col items-center text-center gap-3 py-8">
             {/* Avatar */}
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-black text-3xl shadow-xl shadow-indigo-500/25">
-              {(user?.full_name ?? 'U')[0].toUpperCase()}
+            <div className="w-16 h-16 rounded-full bg-[#F7F6F3] border border-[#EAEAEA] flex items-center justify-center mb-3">
+              <span className="text-lg font-medium text-[#787774]">{initials}</span>
             </div>
             <div>
-              <p className="text-white font-bold text-lg leading-tight">{user?.full_name}</p>
-              <p className="text-zinc-500 text-xs mt-0.5 flex items-center gap-1 justify-center">
+              <p className="text-[#111111] font-bold text-lg leading-tight">{user?.full_name}</p>
+              <p className="text-[#787774] text-xs mt-0.5 flex items-center gap-1 justify-center">
                 <Mail className="w-3 h-3" /> {user?.email}
               </p>
             </div>
 
             {/* Plan badge */}
             {user?.plan_type === 'premium' ? (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
-                <Crown className="w-3.5 h-3.5" /> Pro Member
-              </div>
+              <span className="badge badge-info">
+                <Crown className="w-3.5 h-3.5 inline-block mr-1" /> Pro Member
+              </span>
             ) : (
               <div className="w-full">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 text-xs font-semibold mb-3">
-                  Free Plan
-                </div>
+                <span className="badge badge-neutral mb-3 inline-block">Free Plan</span>
                 <button
                   onClick={() => navigate('/pricing')}
-                  className="w-full py-2 rounded-xl bg-gradient-to-r from-indigo-600/80 to-violet-600/80 border border-indigo-500/30 text-white text-xs font-bold hover:from-indigo-600 hover:to-violet-600 transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-2 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-xs font-bold hover:bg-[#122a52] transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Sparkles className="w-3 h-3" /> Upgrade to Pro
                 </button>
@@ -157,47 +158,47 @@ export function SettingsPage() {
 
           {/* Quick stats */}
           <Card className="p-4 space-y-3">
-            <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Usage</p>
+            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">Usage</p>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-400">Analyses used</span>
-                <span className="text-white font-bold stat-number">{used} / {quota}</span>
+                <span className="text-[#787774]">Analyses used</span>
+                <span className="text-[#111111] font-bold stat-number">{used} / {quota}</span>
               </div>
-              <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+              <div className="w-full h-1.5 bg-[#EAEAEA] rounded-full mt-3">
                 <div
-                  className={`h-full rounded-full ${user?.plan_type === 'premium' ? 'bg-amber-500' : 'bg-indigo-500'}`}
-                  style={{ width: `${Math.min((used / quota) * 100, 100)}%` }}
+                  className="h-full bg-[#1B3A6B] rounded-full transition-all"
+                  style={{ width: `${usagePercent}%` }}
                 />
               </div>
-              <p className="text-[10px] text-zinc-600">{Math.max(0, quota - used)} remaining this week</p>
+              <p className="text-[10px] text-[#787774]">{Math.max(0, quota - used)} remaining this week</p>
             </div>
 
-            <div className="pt-2 border-t border-zinc-800 space-y-2">
+            <div className="pt-2 border-t border-[#EAEAEA] space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-400 flex items-center gap-1.5">
+                <span className="text-[#787774] flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5" /> Member since
                 </span>
-                <span className="text-zinc-300 text-xs">
+                <span className="text-[#111111] text-xs">
                   {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '-'}
                 </span>
               </div>
               {user?.role === 'admin' && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-zinc-400 flex items-center gap-1.5">
+                  <span className="text-[#787774] flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" /> Role
                   </span>
-                  <span className="text-amber-400 text-xs font-bold">Administrator</span>
+                  <span className="text-[#956400] text-xs font-bold">Administrator</span>
                 </div>
               )}
             </div>
           </Card>
 
           {/* Danger zone */}
-          <Card className="p-4 border-red-500/10">
-            <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-3">Account</p>
+          <Card className="p-4 border-[#EAEAEA]">
+            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-3">Account</p>
             <button
               onClick={() => { logout(); navigate('/'); }}
-              className="w-full py-2 rounded-lg border border-zinc-800 text-zinc-500 text-xs font-medium hover:text-red-400 hover:border-red-500/30 hover:bg-red-500/5 transition-all"
+              className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] text-[#787774] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
             >
               Sign Out
             </button>
@@ -208,7 +209,10 @@ export function SettingsPage() {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Profile section */}
-          <Card>
+          <div className="surface p-6 mb-4">
+            <h3 className="text-sm font-semibold text-[#111111] mb-4 pb-3 border-b border-[#EAEAEA]">
+              Profile Information
+            </h3>
             <SectionHeader
               icon={User}
               title="Profile Information"
@@ -217,27 +221,27 @@ export function SettingsPage() {
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Full Name</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Full Name</label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
                   minLength={2}
                   maxLength={150}
-                  className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-11 px-4 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+                  className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Email Address</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Email Address</label>
                 <div className="relative">
                   <input
                     type="email"
                     value={user?.email ?? ''}
                     disabled
-                    className="w-full bg-[rgba(15,15,24,0.4)] border border-[var(--color-card-border)] rounded-xl h-11 px-4 text-zinc-500 cursor-not-allowed pr-24"
+                    className="w-full bg-[#F7F6F3] border border-[#EAEAEA] text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 cursor-not-allowed pr-28"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-zinc-600 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#787774] bg-[#EAEAEA] px-2 py-0.5 rounded border border-[#D5D3D0]">
                     Cannot change
                   </span>
                 </div>
@@ -247,7 +251,7 @@ export function SettingsPage() {
                 <button
                   onClick={handleSaveProfile}
                   disabled={!profileChanged || isSavingProfile}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-bold transition-all hover:bg-[#122a52] disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {isSavingProfile
                     ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
@@ -256,10 +260,13 @@ export function SettingsPage() {
                 </button>
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Password section */}
-          <Card>
+          <div className="surface p-6 mb-4">
+            <h3 className="text-sm font-semibold text-[#111111] mb-4 pb-3 border-b border-[#EAEAEA]">
+              Change Password
+            </h3>
             <SectionHeader
               icon={Lock}
               title="Change Password"
@@ -269,7 +276,7 @@ export function SettingsPage() {
             <form onSubmit={handleChangePassword} className="space-y-4">
               {/* Current password */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Current Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Current Password</label>
                 <div className="relative">
                   <input
                     type={showCurrent ? 'text' : 'password'}
@@ -277,9 +284,9 @@ export function SettingsPage() {
                     onChange={e => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
                     required
-                    className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-11 px-4 pr-12 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+                    className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
                   />
-                  <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1">
+                  <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
                     {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
@@ -287,7 +294,7 @@ export function SettingsPage() {
 
               {/* New password */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">New Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">New Password</label>
                 <div className="relative">
                   <input
                     type={showNew ? 'text' : 'password'}
@@ -296,9 +303,9 @@ export function SettingsPage() {
                     placeholder="Min. 8 characters"
                     required
                     minLength={8}
-                    className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-11 px-4 pr-12 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+                    className="w-full bg-white border border-[#EAEAEA] text-[#111111] placeholder:text-[#A09D9A] rounded-[var(--radius-md)] h-11 px-4 pr-12 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
                   />
-                  <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1">
+                  <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
                     {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
@@ -307,7 +314,7 @@ export function SettingsPage() {
 
               {/* Confirm password */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Confirm New Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Confirm New Password</label>
                 <div className="relative">
                   <input
                     type="password"
@@ -315,24 +322,24 @@ export function SettingsPage() {
                     onChange={e => setConfirmPassword(e.target.value)}
                     placeholder="Repeat new password"
                     required
-                    className={`w-full bg-[rgba(15,15,24,0.8)] border rounded-xl h-11 px-4 pr-12 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 transition-all ${
+                    className={`w-full bg-white border rounded-[var(--radius-md)] h-11 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:ring-2 transition-all ${
                       confirmPassword && !passwordsMatch
-                        ? 'border-red-500/50 focus:ring-red-500/15 focus:border-red-500/60'
+                        ? 'border-[#9F2F2D]/50 focus:ring-[#9F2F2D]/15 focus:border-[#9F2F2D]'
                         : confirmPassword && passwordsMatch
-                        ? 'border-emerald-500/40 focus:ring-emerald-500/15 focus:border-emerald-500/50'
-                        : 'border-[var(--color-card-border)] focus:ring-indigo-500/15 focus:border-indigo-500/60'
+                        ? 'border-[#346538]/40 focus:ring-[#346538]/15 focus:border-[#346538]'
+                        : 'border-[#EAEAEA] focus:ring-[#EEF2F8] focus:border-[#1B3A6B]'
                     }`}
                   />
                   {confirmPassword && (
                     <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
                       {passwordsMatch
-                        ? <Check className="w-4 h-4 text-emerald-400" />
-                        : <X className="w-4 h-4 text-red-400" />}
+                        ? <Check className="w-4 h-4 text-[#346538]" />
+                        : <X className="w-4 h-4 text-[#9F2F2D]" />}
                     </div>
                   )}
                 </div>
                 {confirmPassword && !passwordsMatch && (
-                  <p className="text-xs text-red-400">Passwords do not match</p>
+                  <p className="text-xs text-[#9F2F2D]">Passwords do not match</p>
                 )}
               </div>
 
@@ -340,7 +347,7 @@ export function SettingsPage() {
                 <button
                   type="submit"
                   disabled={isSavingPassword || !currentPassword || !passwordValid || !passwordsMatch}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-bold transition-all hover:bg-[#122a52] disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {isSavingPassword
                     ? <><Loader2 className="w-4 h-4 animate-spin" /> Changing...</>
@@ -349,7 +356,7 @@ export function SettingsPage() {
                 </button>
               </div>
             </form>
-          </Card>
+          </div>
 
         </div>
       </div>

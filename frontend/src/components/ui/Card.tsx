@@ -6,17 +6,20 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className = '', noPadding = false, children, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={`glass-card rounded-2xl ${noPadding ? '' : 'p-6 sm:p-8'} ${className}`}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
+  ({ noPadding, className = '', children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={[
+        'bg-white border border-[#EAEAEA] rounded-[var(--radius-xl)]',
+        'transition-shadow duration-200',
+        'hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]',
+        !noPadding && 'p-6',
+        className,
+      ].filter(Boolean).join(' ')}
+      {...props}
+    >
+      {children}
+    </div>
+  )
 );
-
 Card.displayName = 'Card';

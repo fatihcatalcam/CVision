@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { Loader2, ArrowLeft, ShieldCheck, Eye, EyeOff, Check, X } from 'lucide-react';
+import { Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
 
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
@@ -20,14 +20,14 @@ function PasswordStrength({ password }: { password: string }) {
     <div className="mt-2 space-y-2">
       <div className="flex gap-1">
         {[1,2,3,4].map(i => (
-          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-zinc-800'}`} />
+          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= score ? colors[score] : 'bg-[#EAEAEA]'}`} />
         ))}
       </div>
       <div className="grid grid-cols-2 gap-1">
         {checks.map(c => (
           <div key={c.label} className="flex items-center gap-1.5">
-            {c.pass ? <Check className="w-3 h-3 text-emerald-400 flex-shrink-0" /> : <X className="w-3 h-3 text-zinc-600 flex-shrink-0" />}
-            <span className={`text-[10px] ${c.pass ? 'text-zinc-400' : 'text-zinc-600'}`}>{c.label}</span>
+            {c.pass ? <Check className="w-3 h-3 text-[#346538] flex-shrink-0" /> : <X className="w-3 h-3 text-[#A09D9A] flex-shrink-0" />}
+            <span className={`text-[10px] ${c.pass ? 'text-[#787774]' : 'text-[#A09D9A]'}`}>{c.label}</span>
           </div>
         ))}
       </div>
@@ -121,32 +121,17 @@ export function ResetPasswordPage() {
     : '';
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md animate-in slide-up">
-
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="CVision" className="h-8 w-auto object-contain" />
-            <span className="text-lg font-black text-white">CVision<span className="text-indigo-400">.</span></span>
-          </div>
-          <Link to="/forgot-password" className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
-          </Link>
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-rose-600/20 border border-violet-500/20 flex items-center justify-center">
-            <ShieldCheck className="w-8 h-8 text-violet-400" />
-          </div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] p-6">
+      <div className="w-full max-w-sm">
+        <h1 className="font-serif text-2xl tracking-tight text-[#111111] mb-1">Set new password</h1>
+        <p className="text-sm text-[#787774] mb-8">Enter the code from your email, then choose a new password.</p>
 
         {step === 'code' ? (
           <>
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-black text-white mb-2">Enter Reset Code</h1>
-              <p className="text-zinc-500 text-sm leading-relaxed">
+              <p className="text-[#787774] text-sm leading-relaxed">
                 We sent a 5-character reset code to<br />
-                <span className="text-zinc-400">{maskedEmail}</span>
+                <span className="text-[#111111]">{maskedEmail}</span>
               </p>
               <p className="text-amber-500/80 text-xs mt-2">⚠ Code is case-sensitive</p>
             </div>
@@ -163,10 +148,10 @@ export function ResetPasswordPage() {
                     onChange={e => handleCharChange(i, e.target.value)}
                     onKeyDown={e => handleKeyDown(i, e)}
                     className={`w-14 h-16 text-center text-2xl font-black rounded-xl border transition-all outline-none
-                      bg-[rgba(15,15,24,0.8)] text-white font-mono
+                      bg-white text-[#111111] font-mono
                       ${char
                         ? 'border-violet-500 ring-2 ring-violet-500/20'
-                        : 'border-[var(--color-card-border)] focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/15'
+                        : 'border-[#EAEAEA] focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8]'
                       }`}
                   />
                 ))}
@@ -175,7 +160,7 @@ export function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading || chars.join('').length !== 5}
-                className="w-full h-12 rounded-xl font-bold text-sm bg-gradient-to-r from-violet-600 to-rose-600 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Verify Code'}
               </button>
@@ -184,13 +169,12 @@ export function ResetPasswordPage() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-black text-white mb-2">Set New Password</h1>
-              <p className="text-zinc-500 text-sm">Choose a strong password.</p>
+              <p className="text-[#787774] text-sm">Choose a strong password.</p>
             </div>
 
             <form onSubmit={handleResetPassword} className="space-y-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">New Password</label>
+                <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">New Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -199,12 +183,12 @@ export function ResetPasswordPage() {
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
                     autoFocus
-                    className="w-full bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] rounded-xl h-12 px-4 pr-12 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15 transition-all"
+                    className="w-full bg-white border border-[#EAEAEA] rounded-xl h-12 px-4 pr-12 text-[#111111] placeholder:text-[#A09D9A] focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] hover:text-[#111111] transition-colors p-1"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -215,7 +199,7 @@ export function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading || newPassword.length < 8}
-                className="w-full h-12 rounded-xl font-bold text-sm bg-gradient-to-r from-violet-600 to-rose-600 text-white shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Update Password'}
               </button>
@@ -223,9 +207,9 @@ export function ResetPasswordPage() {
           </>
         )}
 
-        <p className="mt-8 text-center text-xs text-zinc-700">
+        <p className="mt-8 text-center text-xs text-[#787774]">
           Having trouble?{' '}
-          <Link to="/forgot-password" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+          <Link to="/forgot-password" className="text-[#1B3A6B] hover:text-[#111111] transition-colors">
             Request a new code
           </Link>
         </p>

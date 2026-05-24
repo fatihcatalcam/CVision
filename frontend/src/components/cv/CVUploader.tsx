@@ -79,48 +79,48 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
   const selectedDomainObj = DOMAINS.find(d => d.value === selectedDomain);
 
   return (
-    <div className="w-full glass-card rounded-2xl p-6 border border-white/5">
+    <div className="w-full surface rounded-2xl p-6 border border-[#EAEAEA]">
 
       {/* Step indicator */}
       <div className="flex items-center gap-0 mb-6">
         <div className="flex items-center gap-2">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${file ? 'bg-emerald-500 text-white' : 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'}`}>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${file ? 'bg-[#346538] text-white' : 'bg-[#EEF2F8] text-[#1B3A6B] border border-[#1B3A6B]/20'}`}>
             {file ? <CheckCircle2 className="w-3.5 h-3.5" /> : '1'}
           </div>
-          <span className="text-xs font-semibold text-zinc-400">Upload File</span>
+          <span className="text-xs font-semibold text-[#787774]">Upload File</span>
         </div>
-        <div className={`flex-1 h-px mx-3 transition-colors ${file ? 'bg-emerald-500/30' : 'bg-zinc-800'}`} />
+        <div className={`flex-1 h-px mx-3 transition-colors ${file ? 'bg-[#346538]/30' : 'bg-[#EAEAEA]'}`} />
         <div className="flex items-center gap-2">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${selectedDomain ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' : 'bg-zinc-800 text-zinc-600'}`}>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${selectedDomain ? 'bg-[#EEF2F8] text-[#1B3A6B] border border-[#1B3A6B]/20' : 'bg-[#F7F6F3] text-[#787774]'}`}>
             2
           </div>
-          <span className="text-xs font-semibold text-zinc-400">Select Domain</span>
+          <span className="text-xs font-semibold text-[#787774]">Select Domain</span>
         </div>
-        <div className={`flex-1 h-px mx-3 transition-colors ${isUploading ? 'bg-indigo-500/30' : 'bg-zinc-800'}`} />
+        <div className={`flex-1 h-px mx-3 transition-colors ${isUploading ? 'bg-[#1B3A6B]/30' : 'bg-[#EAEAEA]'}`} />
         <div className="flex items-center gap-2">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${isUploading ? 'bg-indigo-500 text-white' : 'bg-zinc-800 text-zinc-600'}`}>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${isUploading ? 'bg-[#1B3A6B] text-white' : 'bg-[#F7F6F3] text-[#787774]'}`}>
             3
           </div>
-          <span className="text-xs font-semibold text-zinc-400">Analyze</span>
+          <span className="text-xs font-semibold text-[#787774]">Analyze</span>
         </div>
       </div>
 
       {/* Domain selector */}
       <div className="mb-5">
-        <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">
+        <label className="block text-xs font-bold text-[#787774] uppercase tracking-widest mb-2">
           Target Industry Domain
         </label>
         <div className="relative">
           <select
             value={selectedDomain}
             onChange={(e) => setSelectedDomain(e.target.value)}
-            className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-[rgba(15,15,24,0.8)] border border-[var(--color-card-border)] text-white font-medium cursor-pointer transition-all hover:border-indigo-500/40 focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/15"
+            className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white border border-[#EAEAEA] text-[#111111] font-medium cursor-pointer transition-all hover:border-[#1B3A6B]/40 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8]"
           >
             {DOMAINS.map((d) => (
               <option key={d.value} value={d.value}>{d.emoji} {d.label}</option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+          <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787774] pointer-events-none" />
         </div>
       </div>
 
@@ -133,26 +133,26 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
           onClick={() => fileInputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 flex flex-col items-center justify-center min-h-[220px] group ${
             isDragging
-              ? 'border-indigo-500 bg-indigo-500/5 shadow-[0_0_30px_rgba(99,102,241,0.1)]'
-              : 'border-zinc-800 hover:border-zinc-700 hover:bg-white/[0.01]'
+              ? 'border-[#1B3A6B] bg-[#EEF2F8] shadow-[0_0_30px_rgba(27,58,107,0.08)]'
+              : 'border-[#EAEAEA] hover:border-[#1B3A6B]/40 hover:bg-[#F7F6F3]'
           }`}
         >
           <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf,.txt" className="hidden" />
 
-          <div className={`p-4 rounded-2xl mb-4 transition-all duration-300 ${isDragging ? 'bg-indigo-500/15 text-indigo-400 scale-110' : 'bg-zinc-900 text-zinc-500 group-hover:bg-zinc-800 group-hover:text-zinc-400'}`}>
+          <div className={`p-4 rounded-2xl mb-4 transition-all duration-300 ${isDragging ? 'bg-[#EEF2F8] text-[#1B3A6B] scale-110' : 'bg-[#F7F6F3] text-[#787774] group-hover:bg-[#EAEAEA] group-hover:text-[#111111]'}`}>
             <UploadCloud className="w-8 h-8" />
           </div>
 
-          <h3 className="text-base font-bold text-white mb-1">
+          <h3 className="text-base font-bold text-[#111111] mb-1">
             {isDragging ? 'Drop to upload' : 'Upload your CV'}
           </h3>
-          <p className="text-sm text-zinc-500 mb-5">
-            Drag & drop or <span className="text-indigo-400 font-semibold">browse files</span>
+          <p className="text-sm text-[#787774] mb-5">
+            Drag & drop or <span className="text-[#1B3A6B] font-semibold">browse files</span>
           </p>
 
           <div className="flex gap-2">
             {['PDF', 'TXT', 'Max 5MB'].map(label => (
-              <span key={label} className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-500 text-[10px] font-semibold uppercase tracking-wider">
+              <span key={label} className="px-2.5 py-1 rounded-lg bg-[#F7F6F3] border border-[#EAEAEA] text-[#787774] text-[10px] font-semibold uppercase tracking-wider">
                 {label}
               </span>
             ))}
@@ -161,21 +161,21 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
       ) : (
         <div className="space-y-4 animate-in scale-in">
           {/* File preview */}
-          <div className="flex items-center gap-3 p-4 bg-zinc-900/80 rounded-xl border border-emerald-500/20">
-            <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-lg flex-shrink-0">
+          <div className="flex items-center gap-3 p-4 bg-[#F7F6F3] rounded-xl border border-[#346538]/20">
+            <div className="p-2.5 bg-[#EDF3EC] text-[#346538] rounded-lg flex-shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm truncate">{file.name}</p>
-              <p className="text-zinc-500 text-xs mt-0.5">
+              <p className="text-[#111111] font-semibold text-sm truncate">{file.name}</p>
+              <p className="text-[#787774] text-xs mt-0.5">
                 {(file.size / 1024 / 1024).toFixed(2)} MB · {file.type.includes('pdf') ? 'PDF Document' : 'Text File'}
               </p>
             </div>
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-[#346538] flex-shrink-0" />
             {!isUploading && (
               <button
                 onClick={() => setFile(null)}
-                className="p-1.5 text-zinc-600 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors ml-1"
+                className="p-1.5 text-[#787774] hover:text-[#111111] hover:bg-[#EAEAEA] rounded-lg transition-colors ml-1"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -183,11 +183,11 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
           </div>
 
           {/* Selected domain badge */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-indigo-500/5 rounded-xl border border-indigo-500/15">
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#EEF2F8] rounded-xl border border-[#1B3A6B]/15">
             <span className="text-lg">{selectedDomainObj?.emoji}</span>
             <div>
-              <p className="text-[10px] text-zinc-600 uppercase font-bold tracking-wider">Target Domain</p>
-              <p className="text-sm text-indigo-300 font-semibold">{selectedDomainObj?.label}</p>
+              <p className="text-[10px] text-[#787774] uppercase font-bold tracking-wider">Target Domain</p>
+              <p className="text-sm text-[#1B3A6B] font-semibold">{selectedDomainObj?.label}</p>
             </div>
           </div>
 
@@ -195,7 +195,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
           <button
             onClick={triggerUpload}
             disabled={isUploading}
-            className="w-full h-12 rounded-xl font-bold text-sm bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+            className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
           >
             {isUploading ? (
               <>
