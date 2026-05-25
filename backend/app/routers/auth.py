@@ -13,7 +13,7 @@ Endpoints:
 
 import re
 import logging
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
@@ -135,8 +135,28 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
     response_model=UserResponse,
     summary="Get current user profile",
 )
-def get_me(current_user: User = Depends(get_current_user)):
-    """Return the profile of the currently authenticated user."""
+def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """
+    Return the profile of the currently authenticated user.
+
+    Performs a lazy quota reset: if the weekly window has expired since the last
+    upload, analysis_count is zeroed out here so the dashboard always shows
+    accurate remaining quota — not the stale value from when the window was active.
+    """
+    now = datetime.now(timezone.utc)
+    quota_reset = current_user.quota_reset_at
+
+    if quota_reset:
+        if quota_reset.tzinfo is None:
+            quota_reset = quota_reset.replace(tzinfo=timezone.utc)
+        if quota_reset < now:
+            # Window expired: reset count so frontend shows correct remaining quota.
+            # Keep quota_reset_at as-is (null would be set on next upload anyway).
+            current_user.analysis_count = 0
+            current_user.quota_reset_at = None  # cleared — next upload starts fresh window
+            db.commit()
+            db.refresh(current_user)
+
     return current_user
 
 

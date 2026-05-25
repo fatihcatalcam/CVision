@@ -80,7 +80,12 @@ export function DashboardPage() {
   }, []);
 
   const quota = user?.plan_type === 'premium' ? 50 : 3;
-  const used = user?.analysis_count || 0;
+  // If quota_reset_at is in the past the window has expired — backend will reset lazily
+  // on next upload. Treat analysis_count as 0 so we don't show misleading "0 remaining".
+  const quotaWindowExpired = user?.quota_reset_at
+    ? new Date(user.quota_reset_at).getTime() <= now
+    : false;
+  const used = quotaWindowExpired ? 0 : (user?.analysis_count ?? 0);
   const remaining = Math.max(0, quota - used);
   const usedPct = Math.min((remaining / quota) * 100, 100);
   const countdown = formatCountdown(user?.quota_reset_at ?? null, now);

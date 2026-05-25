@@ -115,22 +115,18 @@ class CVService:
         db: Session,
     ) -> CV:
         """
-        Upload pipeline: validate → save → create DB record -> fast return.
-        
+        Upload pipeline: validate → quota check → save → create DB record → fast return.
+
+        Quota is checked BEFORE saving to disk so that a 403 never leaks an orphan file.
         The analysis must be dispatched to background_process_cv separately.
         """
-        # Step 1: Validate file
-        original_filename, extension = CVService.validate_file(file)
-
-        # Step 2: Save to disk
-        stored_filename, file_path, file_size = await CVService.save_file(
-            file, extension
-        )
-
         from fastapi import HTTPException
         from datetime import datetime, timezone, timedelta
-        
-        # Atomic Quota Check & Increment
+
+        # Step 1: Validate file (no I/O yet)
+        original_filename, extension = CVService.validate_file(file)
+
+        # Step 2: Atomic Quota Check & Increment (before any disk write)
         user_db = db.query(User).filter(User.id == user.id).with_for_update().first()
         now = datetime.now(timezone.utc)
 
@@ -139,19 +135,27 @@ class CVService:
             quota_reset = quota_reset.replace(tzinfo=timezone.utc)
 
         if quota_reset and quota_reset < now:
+            # Window expired: reset count and open a new 7-day window from now
             user_db.analysis_count = 0
             user_db.quota_reset_at = now + timedelta(days=7)
         elif not user_db.quota_reset_at:
+            # First-ever upload: start the first window
             user_db.quota_reset_at = now + timedelta(days=7)
-            
+
         limit = settings.PREMIUM_WEEKLY_LIMIT if user_db.plan_type == "premium" else settings.FREE_WEEKLY_LIMIT
-        
+
         if user_db.analysis_count >= limit:
+            # Raise BEFORE saving file — no orphan files left on disk
             raise HTTPException(status_code=403, detail="Weekly upload quota exceeded.")
-            
+
         user_db.analysis_count += 1
 
-        # Step 3: Create DB record with 'pending' status
+        # Step 3: Save to disk (only reached when quota check passes)
+        stored_filename, file_path, file_size = await CVService.save_file(
+            file, extension
+        )
+
+        # Step 4: Create DB record with 'pending' status
         cv = CV(
             user_id=user.id,
             original_filename=original_filename,
