@@ -5,7 +5,7 @@ import { CVUploader } from '../../components/cv/CVUploader';
 import api from '../../services/api';
 import {
   FileText, Activity, TrendingUp, Shield, Lock, Sparkles,
-  LogOut, ChevronRight, Upload, History, Settings,
+  LogOut, ChevronRight, Upload, History, Settings, RotateCcw,
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -46,6 +46,26 @@ function ScoreDot({ score }: { score: number }) {
   return <span className={`font-black stat-number ${color}`}>{Math.round(score)}%</span>;
 }
 
+function formatCountdown(resetAt: string | null, now: number): string | null {
+  if (!resetAt) return null;
+  const diff = new Date(resetAt).getTime() - now;
+  if (diff <= 0) return null;
+  const days = Math.floor(diff / 86_400_000);
+  const hours = Math.floor((diff % 86_400_000) / 3_600_000);
+  const mins = Math.floor((diff % 3_600_000) / 60_000);
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${mins}m`;
+  if (mins > 0) return `${mins}m`;
+  return '< 1m';
+}
+
+function formatResetDate(resetAt: string | null): string | null {
+  if (!resetAt) return null;
+  const d = new Date(resetAt);
+  if (isNaN(d.getTime()) || d.getTime() <= Date.now()) return null;
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
 export function DashboardPage() {
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
@@ -53,10 +73,18 @@ export function DashboardPage() {
   const [recentItems, setRecentItems] = useState<HistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   const quota = user?.plan_type === 'premium' ? 50 : 3;
   const used = user?.analysis_count || 0;
   const remaining = Math.max(0, quota - used);
   const usedPct = Math.min((remaining / quota) * 100, 100);
+  const countdown = formatCountdown(user?.quota_reset_at ?? null, now);
+  const resetDate = formatResetDate(user?.quota_reset_at ?? null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -170,6 +198,18 @@ export function DashboardPage() {
                 style={{ width: `${usedPct}%` }}
               />
             </div>
+            {countdown && (
+              <div className="flex items-center gap-1.5 text-[10px] text-[#787774] dark:text-[#6a6764]">
+                <RotateCcw className="w-3 h-3 flex-shrink-0" />
+                <span>
+                  Resets in{' '}
+                  <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{countdown}</span>
+                  {resetDate && (
+                    <span className="text-[#A09D9A] dark:text-[#6a6764]"> · {resetDate}</span>
+                  )}
+                </span>
+              </div>
+            )}
             {user?.plan_type === 'free' && (
               <button
                 onClick={() => navigate('/pricing')}
