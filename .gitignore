@@ -68,3 +68,4 @@ test_ai.py
 .env.*
 /.agents
 skills-lock.json
+tasks/todo.md
