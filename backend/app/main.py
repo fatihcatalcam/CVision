@@ -105,13 +105,23 @@ def seed_role_profiles(db: Session) -> None:
 async def lifespan(app: FastAPI):
     """
     Application lifespan handler.
-    - On startup: Create tables (for dev) and seed data.
+    - On startup: Run Alembic migrations, seed data.
     - On shutdown: Clean up resources.
     """
     logger.info("Starting CVision backend...")
 
-    # Create all tables (safe to call if tables already exist)
-    # In production, rely on Alembic migrations instead.
+    # Run any pending Alembic migrations automatically on startup.
+    # This ensures schema changes are applied on every Render deploy.
+    try:
+        from alembic.config import Config as AlembicConfig
+        from alembic import command as alembic_command
+        alembic_cfg = AlembicConfig("alembic.ini")
+        alembic_command.upgrade(alembic_cfg, "head")
+        logger.info("Alembic migrations applied (or already up to date).")
+    except Exception as e:
+        logger.warning(f"Alembic migration skipped or failed: {e}")
+
+    # Fallback: ensure tables exist for any model not yet covered by migrations
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables ensured.")
 

@@ -5,7 +5,7 @@ Maps to FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 """
 
 from datetime import datetime
-from sqlalchemy import String, Integer, Text, DateTime, ForeignKey, func
+from sqlalchemy import String, Integer, Text, DateTime, ForeignKey, func, LargeBinary
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -21,6 +21,7 @@ class CV(Base):
     file_path: Mapped[str] = mapped_column(String(500), nullable=False)
     file_type: Mapped[str] = mapped_column(String(10), nullable=False)  # "pdf" or "txt"
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)  # bytes
+    file_content: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True)  # raw bytes stored for persistence
     extracted_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     target_domain: Mapped[str | None] = mapped_column(String(100), nullable=True)
     status: Mapped[str] = mapped_column(

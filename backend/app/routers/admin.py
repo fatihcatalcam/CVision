@@ -435,10 +435,19 @@ def get_cv_file_admin(cv_id: int, db: Session = Depends(get_db)):
     if not target_path.is_relative_to(base_path):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Path traversal detected.")
 
-    if not target_path.exists():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not on disk.")
-
     media_type = "application/pdf" if cv.file_type == "pdf" else "text/plain"
+
+    if not target_path.exists():
+        # Disk file gone — fall back to bytes stored in the database
+        if cv.file_content:
+            from fastapi.responses import Response
+            return Response(
+                content=cv.file_content,
+                media_type=media_type,
+                headers={"Content-Disposition": f'inline; filename="{cv.original_filename}"'},
+            )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File is no longer available. The user would need to re-upload their CV.")
+
     return FileResponse(
         path=str(target_path),
         filename=cv.original_filename,

@@ -10,7 +10,7 @@ interface Snippet {
 interface PDFViewerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  cvId: number;
+  cvId: string | number;
   activeSnippets: Snippet[];
 }
 

@@ -171,7 +171,6 @@ def download_cv(
 
     from pathlib import Path
     from app.config import settings
-    import os
 
     target_path = Path(cv.file_path).resolve()
     base_path = Path(settings.upload_path).resolve()
@@ -182,18 +181,28 @@ def download_cv(
             detail="Forbidden: Path traversal detected.",
         )
 
+    media_type = "application/pdf" if cv.file_type == "pdf" else "text/plain"
+
     if not target_path.exists():
+        # Disk file gone (e.g. Render ephemeral filesystem wiped on restart).
+        # Fall back to bytes stored in the database.
+        if cv.file_content:
+            from fastapi.responses import Response
+            return Response(
+                content=cv.file_content,
+                media_type=media_type,
+                headers={"Content-Disposition": f'inline; filename="{cv.original_filename}"'},
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="File physically missing from server.",
+            detail="File is no longer available. Please re-upload your CV.",
         )
 
     return FileResponse(
         path=cv.file_path,
         filename=cv.original_filename,
-        # Determine media type based on extension
-        media_type="application/pdf" if cv.file_type == "pdf" else "text/plain",
-        content_disposition_type="inline"  # Allows viewing in browser without forcing download
+        media_type=media_type,
+        content_disposition_type="inline"
     )
 
 
@@ -247,24 +256,28 @@ def get_highlighted_pdf(
             detail="Forbidden: Path traversal detected.",
         )
 
-    if not target_path.exists():
+    # Resolve PDF bytes: prefer disk, fall back to DB content
+    if target_path.exists():
+        pdf_source_bytes = target_path.read_bytes()
+    elif cv.file_content:
+        pdf_source_bytes = cv.file_content
+    else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="File physically missing from server.",
+            detail="File is no longer available. Please re-upload your CV.",
         )
 
     snippets = body.snippets
     if not snippets:
-        # No highlights requested, just return the original
-        return FileResponse(
-            path=cv.file_path,
-            filename=cv.original_filename,
+        # No highlights requested — return the raw bytes
+        return StreamingResponse(
+            io.BytesIO(pdf_source_bytes),
             media_type="application/pdf",
-            content_disposition_type="inline",
+            headers={"Content-Disposition": f'inline; filename="{cv.original_filename}"'},
         )
 
     try:
-        doc = fitz.open(cv.file_path)
+        doc = fitz.open(stream=pdf_source_bytes, filetype="pdf")
 
         for page in doc:
             for snippet in snippets:
@@ -292,12 +305,11 @@ def get_highlighted_pdf(
 
     except Exception as e:
         logger.error(f"Failed to highlight PDF: {e}")
-        # Fallback: return the original PDF
-        return FileResponse(
-            path=cv.file_path,
-            filename=cv.original_filename,
+        # Fallback: return the original PDF bytes
+        return StreamingResponse(
+            io.BytesIO(pdf_source_bytes),
             media_type="application/pdf",
-            content_disposition_type="inline",
+            headers={"Content-Disposition": f'inline; filename="{cv.original_filename}"'},
         )
 
 

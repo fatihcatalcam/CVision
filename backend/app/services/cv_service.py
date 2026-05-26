@@ -58,12 +58,12 @@ class CVService:
         return file.filename, extension
 
     @staticmethod
-    async def save_file(file: UploadFile, extension: str) -> tuple[str, Path, int]:
+    async def save_file(file: UploadFile, extension: str) -> tuple[str, Path, int, bytes]:
         """
         Save the uploaded file to disk with a UUID-based name.
 
         Returns:
-            Tuple of (stored_filename, file_path, file_size_bytes).
+            Tuple of (stored_filename, file_path, file_size_bytes, file_content).
 
         Raises:
             ValueError: If the file exceeds the maximum size.
@@ -85,13 +85,13 @@ class CVService:
                 f"maximum allowed size ({settings.MAX_FILE_SIZE_MB} MB)."
             )
 
-        # Write to disk
+        # Write to disk (ephemeral on Render; content also stored in DB as fallback)
         file_path.write_bytes(content)
         logger.info(
             f"Saved file: {stored_filename} ({file_size} bytes) to {file_path}"
         )
 
-        return stored_filename, file_path, file_size
+        return stored_filename, file_path, file_size, content
 
     @staticmethod
     def extract_text(file_path: Path, extension: str) -> str:
@@ -151,11 +151,12 @@ class CVService:
         user_db.analysis_count += 1
 
         # Step 3: Save to disk (only reached when quota check passes)
-        stored_filename, file_path, file_size = await CVService.save_file(
+        stored_filename, file_path, file_size, file_content = await CVService.save_file(
             file, extension
         )
 
         # Step 4: Create DB record with 'pending' status
+        # file_content is stored in DB so files remain accessible after Render restarts
         cv = CV(
             user_id=user.id,
             original_filename=original_filename,
@@ -163,6 +164,7 @@ class CVService:
             file_path=str(file_path),
             file_type=extension,
             file_size=file_size,
+            file_content=file_content,
             status="pending",
             target_domain=target_domain,
         )

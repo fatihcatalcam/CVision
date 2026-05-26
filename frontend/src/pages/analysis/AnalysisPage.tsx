@@ -23,8 +23,8 @@ interface AISuggestion {
 }
 
 interface AnalysisData {
-  id: number;
-  cv_id: number;
+  id: string;
+  cv_id: string;
   scores: {
     overall_score: number;
     ats_score: number;
