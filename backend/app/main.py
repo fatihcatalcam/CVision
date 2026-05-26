@@ -110,20 +110,38 @@ async def lifespan(app: FastAPI):
     """
     logger.info("Starting CVision backend...")
 
-    # Run any pending Alembic migrations automatically on startup.
-    # This ensures schema changes are applied on every Render deploy.
-    try:
-        from alembic.config import Config as AlembicConfig
-        from alembic import command as alembic_command
-        alembic_cfg = AlembicConfig("alembic.ini")
-        alembic_command.upgrade(alembic_cfg, "head")
-        logger.info("Alembic migrations applied (or already up to date).")
-    except Exception as e:
-        logger.warning(f"Alembic migration skipped or failed: {e}")
-
-    # Fallback: ensure tables exist for any model not yet covered by migrations
+    # Ensure tables exist (safe no-op if they already do)
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables ensured.")
+
+    # Apply any schema columns that Alembic migrations may not have run.
+    # We use raw SQL with IF NOT EXISTS so this is always safe and idempotent.
+    _schema_patches = [
+        # Added to store CV bytes in DB so files survive Render restarts
+        "ALTER TABLE cvs ADD COLUMN IF NOT EXISTS file_content BYTEA",
+        # Added for subscription management
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_end_at TIMESTAMPTZ",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(100)",
+        # Added for password reset flow
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code VARCHAR(10)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code_expires_at TIMESTAMP",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code_attempts INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMP",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_history VARCHAR(1000)",
+        # Added for domain-aware role profiles
+        "ALTER TABLE role_profiles ADD COLUMN IF NOT EXISTS domain VARCHAR(100)",
+        # Added for AI suggestion snippets
+        "ALTER TABLE ai_suggestions ADD COLUMN IF NOT EXISTS snippets JSON",
+    ]
+    from sqlalchemy import text as _text
+    with engine.connect() as _conn:
+        for _sql in _schema_patches:
+            try:
+                _conn.execute(_text(_sql))
+            except Exception as _e:
+                logger.debug(f"Schema patch skipped (table may not exist yet): {_e}")
+        _conn.commit()
+    logger.info("Schema patches applied.")
 
     # Seed initial data
     db = SessionLocal()
