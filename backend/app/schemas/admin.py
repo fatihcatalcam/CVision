@@ -8,6 +8,39 @@ from datetime import datetime
 from app.schemas.user import UserResponse
 
 
+class DailyActivity(BaseModel):
+    date: str
+    analyses: int
+    signups: int
+
+
+class ScoreDistribution(BaseModel):
+    low: int
+    medium: int
+    high: int
+
+
+class DomainStat(BaseModel):
+    domain: str
+    count: int
+
+
+class AdminOverviewResponse(BaseModel):
+    total_users: int
+    total_cvs: int
+    total_analyses: int
+    average_system_score: float | None
+    free_users: int
+    premium_users: int
+    new_users_this_week: int
+    new_analyses_this_week: int
+    ai_enhanced_count: int
+    score_distribution: ScoreDistribution
+    top_domains: List[DomainStat]
+    daily_activity: List[DailyActivity]
+    recent_activities: List["RecentActivity"]
+
+
 class AdminStatsResponse(BaseModel):
     """System-wide metrics for the admin dashboard."""
     total_users: int

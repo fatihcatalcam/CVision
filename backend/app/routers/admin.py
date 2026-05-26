@@ -7,17 +7,130 @@ Maps to FR21, FR22.
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from datetime import datetime, timedelta, timezone
+from collections import defaultdict
 
 from app.dependencies import get_db, require_admin
 from app.models.user import User
 from app.models.cv import CV
 from app.models.analysis import AnalysisResult
-from app.schemas.admin import AdminStatsResponse, AdminUsersListResponse, RecentActivity, AdminAnalysisListResponse, AdminAnalysisListItem, AdminCVContent
+from app.schemas.admin import (
+    AdminStatsResponse, AdminUsersListResponse, RecentActivity,
+    AdminAnalysisListResponse, AdminAnalysisListItem, AdminCVContent,
+    AdminOverviewResponse, DailyActivity, ScoreDistribution, DomainStat
+)
 from app.schemas.user import UserResponse
 from app.schemas.analysis import AnalysisResponse
 from app.routers.analysis import _build_analysis_response
 
 router = APIRouter(prefix="/hq-portal", tags=["Admin"])
+
+
+@router.get(
+    "/overview",
+    response_model=AdminOverviewResponse,
+    summary="Get detailed system overview (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def get_overview(db: Session = Depends(get_db)):
+    """Returns all dashboard metrics in a single call."""
+    now = datetime.now(timezone.utc)
+    week_ago = now - timedelta(days=7)
+    fourteen_days_ago = now - timedelta(days=13)
+
+    # Basic counts
+    total_users = db.query(User).count()
+    total_cvs = db.query(CV).count()
+    total_analyses = db.query(AnalysisResult).count()
+    avg_score = db.query(func.avg(AnalysisResult.overall_score)).scalar()
+
+    # User breakdown
+    free_users = db.query(User).filter(User.plan_type == "free").count()
+    premium_users = db.query(User).filter(User.plan_type == "premium").count()
+    new_users_this_week = db.query(User).filter(User.created_at >= week_ago).count()
+
+    # Analysis breakdown
+    new_analyses_this_week = db.query(AnalysisResult).filter(AnalysisResult.created_at >= week_ago).count()
+    ai_enhanced_count = db.query(AnalysisResult).filter(AnalysisResult.ai_enhanced == 1).count()
+
+    # Score distribution
+    low = db.query(AnalysisResult).filter(AnalysisResult.overall_score < 50).count()
+    medium = db.query(AnalysisResult).filter(
+        AnalysisResult.overall_score >= 50, AnalysisResult.overall_score < 80
+    ).count()
+    high = db.query(AnalysisResult).filter(AnalysisResult.overall_score >= 80).count()
+
+    # Top domains (top 6)
+    domain_rows = (
+        db.query(CV.target_domain, func.count(CV.id))
+        .filter(CV.target_domain.isnot(None))
+        .group_by(CV.target_domain)
+        .order_by(func.count(CV.id).desc())
+        .limit(6)
+        .all()
+    )
+    top_domains = [DomainStat(domain=d or "Unknown", count=c) for d, c in domain_rows]
+
+    # Daily activity last 14 days
+    recent_analyses = db.query(AnalysisResult.created_at).filter(
+        AnalysisResult.created_at >= fourteen_days_ago
+    ).all()
+    recent_signups = db.query(User.created_at).filter(
+        User.created_at >= fourteen_days_ago
+    ).all()
+
+    analyses_by_day: dict[str, int] = defaultdict(int)
+    signups_by_day: dict[str, int] = defaultdict(int)
+
+    for (dt,) in recent_analyses:
+        analyses_by_day[dt.date().isoformat()] += 1
+    for (dt,) in recent_signups:
+        signups_by_day[dt.date().isoformat()] += 1
+
+    daily_activity = []
+    for i in range(13, -1, -1):
+        d = (now - timedelta(days=i)).date().isoformat()
+        daily_activity.append(DailyActivity(
+            date=d,
+            analyses=analyses_by_day.get(d, 0),
+            signups=signups_by_day.get(d, 0)
+        ))
+
+    # Recent activity (reuse existing logic)
+    activities = []
+    recent_users_list = db.query(User).order_by(User.created_at.desc()).limit(5).all()
+    for u in recent_users_list:
+        activities.append(RecentActivity(
+            id=f"u_{u.id}", type="user",
+            title="New User Registered",
+            description=f"{u.full_name} ({u.email}) joined CVision.",
+            timestamp=u.created_at
+        ))
+    recent_analyses_list = db.query(AnalysisResult).order_by(AnalysisResult.created_at.desc()).limit(5).all()
+    for a in recent_analyses_list:
+        activities.append(RecentActivity(
+            id=f"a_{a.id}", type="analysis",
+            title="New CV Analyzed",
+            description=f"{a.cv.owner.full_name} analyzed '{a.cv.original_filename}'. Score: {a.overall_score}%",
+            timestamp=a.created_at
+        ))
+    activities.sort(key=lambda x: x.timestamp, reverse=True)
+
+    return AdminOverviewResponse(
+        total_users=total_users,
+        total_cvs=total_cvs,
+        total_analyses=total_analyses,
+        average_system_score=round(avg_score, 1) if avg_score is not None else None,
+        free_users=free_users,
+        premium_users=premium_users,
+        new_users_this_week=new_users_this_week,
+        new_analyses_this_week=new_analyses_this_week,
+        ai_enhanced_count=ai_enhanced_count,
+        score_distribution=ScoreDistribution(low=low, medium=medium, high=high),
+        top_domains=top_domains,
+        daily_activity=daily_activity,
+        recent_activities=activities[:10],
+    )
 
 
 @router.get(

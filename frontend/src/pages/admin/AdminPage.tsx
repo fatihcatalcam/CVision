@@ -12,14 +12,24 @@ import { AdminAnalysisViewer } from '../../components/admin/AdminAnalysisViewer'
 
 // Recharts for Data Visualization
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart, Line, Legend, Cell
 } from 'recharts';
 
-interface AdminStats {
+interface AdminOverview {
   total_users: number;
   total_cvs: number;
   total_analyses: number;
   average_system_score: number | null;
+  free_users: number;
+  premium_users: number;
+  new_users_this_week: number;
+  new_analyses_this_week: number;
+  ai_enhanced_count: number;
+  score_distribution: { low: number; medium: number; high: number };
+  top_domains: { domain: string; count: number }[];
+  daily_activity: { date: string; analyses: number; signups: number }[];
+  recent_activities: RecentActivity[];
 }
 
 interface UserItem {
@@ -70,9 +80,8 @@ export function AdminPage() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'users'>('dashboard');
 
   // Data States
-  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [overview, setOverview] = useState<AdminOverview | null>(null);
   const [users, setUsers] = useState<UserItem[]>([]);
-  const [activities, setActivities] = useState<RecentActivity[]>([]);
   const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
   
   // UI States
@@ -94,12 +103,8 @@ export function AdminPage() {
     setIsLoading(true);
     try {
       if (activeTab === 'dashboard') {
-        const [statsRes, actRes] = await Promise.all([
-          api.get('/hq-portal/stats'),
-          api.get('/hq-portal/recent-activity')
-        ]);
-        setStats(statsRes.data);
-        setActivities(actRes.data);
+        const res = await api.get('/hq-portal/overview');
+        setOverview(res.data);
       } else if (activeTab === 'users') {
         const usersRes = await api.get('/hq-portal/users?limit=100');
         setUsers(usersRes.data.users);
@@ -188,12 +193,24 @@ export function AdminPage() {
     a.role_profile.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Mock chart data based on loaded stats
-  const chartData = [
-    { name: 'Users', amount: stats?.total_users || 0 },
-    { name: 'CVs Uploaded', amount: stats?.total_cvs || 0 },
-    { name: 'Total Analyses', amount: stats?.total_analyses || 0 },
-  ];
+  const scoreDistData = overview ? [
+    { name: 'Low (<50)', value: overview.score_distribution.low, fill: '#ef4444' },
+    { name: 'Medium (50–79)', value: overview.score_distribution.medium, fill: '#f59e0b' },
+    { name: 'High (≥80)', value: overview.score_distribution.high, fill: '#10b981' },
+  ] : [];
+
+  const domainChartData = (overview?.top_domains || []).map(d => ({
+    name: d.domain.length > 20 ? d.domain.slice(0, 18) + '…' : d.domain,
+    count: d.count,
+  }));
+
+  const conversionRate = overview && overview.total_users > 0
+    ? Math.round((overview.premium_users / overview.total_users) * 100)
+    : 0;
+
+  const aiRate = overview && overview.total_analyses > 0
+    ? Math.round((overview.ai_enhanced_count / overview.total_analyses) * 100)
+    : 0;
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 animate-in slide-up">
@@ -267,95 +284,184 @@ export function AdminPage() {
             {/* TAB: DASHBOARD */}
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Card className="flex flex-col gap-3 p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl">
-                        <Users className="w-5 h-5" />
+
+                {/* Row 1 — 6 stat cards */}
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                  {/* Total Users */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg">
+                        <Users className="w-4 h-4" />
                       </div>
-                      <div>
-                        <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Total Users</p>
-                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_users || 0}</h3>
-                      </div>
+                      {overview && overview.new_users_this_week > 0 && (
+                        <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">+{overview.new_users_this_week} wk</span>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{overview?.total_users || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Total Users</p>
+                    </div>
+                    <div className="flex gap-2 mt-1">
+                      <span className="text-[10px] text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded">{overview?.free_users || 0} free</span>
+                      <span className="text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{overview?.premium_users || 0} pro</span>
                     </div>
                   </Card>
-                  <Card className="flex flex-col gap-3 p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 bg-violet-500/10 text-violet-400 rounded-xl">
-                        <FileText className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Total CVs</p>
-                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_cvs || 0}</h3>
-                      </div>
+
+                  {/* Pro Conversion */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg w-fit">
+                      <Crown className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{conversionRate}%</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Pro Conversion</p>
+                    </div>
+                    <div className="w-full bg-zinc-800 rounded-full h-1 mt-1">
+                      <div className="bg-amber-500 h-1 rounded-full transition-all" style={{ width: `${conversionRate}%` }} />
                     </div>
                   </Card>
-                  <Card className="flex flex-col gap-3 p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl">
-                        <Activity className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Analyses</p>
-                        <h3 className="text-2xl font-bold text-[#111111]">{stats?.total_analyses || 0}</h3>
-                      </div>
+
+                  {/* Total CVs */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="p-2 bg-violet-500/10 text-violet-400 rounded-lg w-fit">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{overview?.total_cvs || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">CVs Uploaded</p>
                     </div>
                   </Card>
-                  <Card className="flex flex-col gap-3 p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl">
-                        <TrendingUp className="w-5 h-5" />
+
+                  {/* Total Analyses */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
+                        <Activity className="w-4 h-4" />
                       </div>
-                      <div>
-                        <p className="text-xs font-medium text-[var(--color-muted)] uppercase tracking-wider">Avg Score</p>
-                        <h3 className="text-2xl font-bold text-[#111111]">
-                          {stats?.average_system_score != null ? `${stats.average_system_score}%` : 'N/A'}
-                        </h3>
-                      </div>
+                      {overview && overview.new_analyses_this_week > 0 && (
+                        <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">+{overview.new_analyses_this_week} wk</span>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{overview?.total_analyses || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Total Analyses</p>
+                    </div>
+                  </Card>
+
+                  {/* Avg Score */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="p-2 bg-teal-500/10 text-teal-400 rounded-lg w-fit">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">
+                        {overview?.average_system_score != null ? `${overview.average_system_score}%` : 'N/A'}
+                      </p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Avg Score</p>
+                    </div>
+                  </Card>
+
+                  {/* AI Enhanced */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="p-2 bg-pink-500/10 text-pink-400 rounded-lg w-fit">
+                      <Shield className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{aiRate}%</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">AI Enhanced</p>
+                    </div>
+                    <div className="w-full bg-zinc-800 rounded-full h-1 mt-1">
+                      <div className="bg-pink-500 h-1 rounded-full transition-all" style={{ width: `${aiRate}%` }} />
                     </div>
                   </Card>
                 </div>
 
+                {/* Row 2 — Daily Activity chart + Score Distribution */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Chart */}
                   <Card className="col-span-1 lg:col-span-2 p-6 flex flex-col">
-                    <h2 className="text-lg font-bold text-white mb-6">System Growth</h2>
-                    <div className="flex-1 min-h-[300px]">
+                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Daily Activity — Last 14 Days</h2>
+                    <div className="flex-1 min-h-[220px]">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#2a2a30" vertical={false} />
-                          <XAxis dataKey="name" stroke="#71717a" tick={{fill: '#71717a', fontSize: 12}} axisLine={false} tickLine={false} />
-                          <YAxis stroke="#71717a" tick={{fill: '#71717a', fontSize: 12}} axisLine={false} tickLine={false} />
-                          <Tooltip 
-                            cursor={{fill: 'rgba(255,255,255,0.05)'}} 
-                            contentStyle={{backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', color: '#fff'}}
+                        <LineChart data={overview?.daily_activity || []} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                          <XAxis dataKey="date" stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false}
+                            tickFormatter={(v) => v.slice(5)} interval={1} />
+                          <YAxis stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '12px' }}
+                            labelStyle={{ color: '#a1a1aa' }}
                           />
-                          <Bar dataKey="amount" fill="#6366f1" radius={[6, 6, 0, 0]} maxBarSize={60} />
+                          <Legend wrapperStyle={{ fontSize: '11px', color: '#71717a' }} />
+                          <Line type="monotone" dataKey="analyses" stroke="#6366f1" strokeWidth={2} dot={false} name="Analyses" />
+                          <Line type="monotone" dataKey="signups" stroke="#10b981" strokeWidth={2} dot={false} name="Signups" />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </Card>
+
+                  <Card className="p-6 flex flex-col">
+                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Score Distribution</h2>
+                    <div className="flex-1 min-h-[220px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={scoreDistData} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
+                          <XAxis type="number" stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                          <YAxis type="category" dataKey="name" stroke="#52525b" tick={{ fill: '#71717a', fontSize: 10 }} axisLine={false} tickLine={false} width={80} />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '12px' }}
+                          />
+                          <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={28}>
+                            {scoreDistData.map((entry, i) => (
+                              <Cell key={i} fill={entry.fill} />
+                            ))}
+                          </Bar>
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
+                  </Card>
+                </div>
+
+                {/* Row 3 — Top Domains + Activity Feed */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <Card className="col-span-1 lg:col-span-2 p-6 flex flex-col">
+                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Top Domains</h2>
+                    {domainChartData.length === 0 ? (
+                      <div className="flex-1 flex items-center justify-center text-zinc-500 text-sm">No domain data yet</div>
+                    ) : (
+                      <div className="flex-1 min-h-[200px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={domainChartData} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
+                            <XAxis type="number" stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                            <YAxis type="category" dataKey="name" stroke="#52525b" tick={{ fill: '#71717a', fontSize: 10 }} axisLine={false} tickLine={false} width={120} />
+                            <Tooltip contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '12px' }} />
+                            <Bar dataKey="count" fill="#6366f1" radius={[0, 4, 4, 0]} maxBarSize={24} name="Analyses" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
                   </Card>
 
                   {/* Activity Feed */}
                   <Card className="col-span-1 p-0 flex flex-col overflow-hidden">
                     <div className="p-5 border-b border-[var(--color-card-border)] bg-[rgba(255,255,255,0.02)]">
-                      <h2 className="text-base font-bold text-white flex items-center gap-2">
+                      <h2 className="text-sm font-bold text-zinc-300 flex items-center gap-2">
                         <Activity className="w-4 h-4 text-indigo-400" />
                         Recent Activity
                       </h2>
                     </div>
-                    <div className="flex-1 overflow-y-auto max-h-[350px] p-2">
-                      {activities.length === 0 ? (
-                        <div className="p-6 text-center text-zinc-500 text-sm">No recent activity detected.</div>
+                    <div className="flex-1 overflow-y-auto max-h-[250px] p-2">
+                      {(overview?.recent_activities || []).length === 0 ? (
+                        <div className="p-6 text-center text-zinc-500 text-sm">No recent activity.</div>
                       ) : (
                         <div className="flex flex-col">
-                          {activities.map((act) => (
-                            <div key={act.id} className="p-4 hover:bg-zinc-800/50 rounded-xl transition-colors flex gap-4 group">
-                              <div className={`mt-1 flex-shrink-0 w-2 h-2 rounded-full ${act.type === 'user' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
+                          {(overview?.recent_activities || []).map((act) => (
+                            <div key={act.id} className="p-3 hover:bg-zinc-800/50 rounded-xl transition-colors flex gap-3 group">
+                              <div className={`mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full ${act.type === 'user' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
                               <div>
-                                <h4 className="text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">{act.title}</h4>
-                                <p className="text-xs text-zinc-500 mt-1">{act.description}</p>
-                                <span className="text-[10px] text-zinc-600 mt-2 block">
+                                <h4 className="text-xs font-semibold text-zinc-200">{act.title}</h4>
+                                <p className="text-[10px] text-zinc-500 mt-0.5 leading-relaxed">{act.description}</p>
+                                <span className="text-[10px] text-zinc-600 mt-1 block">
                                   {new Date(act.timestamp).toLocaleString()}
                                 </span>
                               </div>
@@ -366,6 +472,7 @@ export function AdminPage() {
                     </div>
                   </Card>
                 </div>
+
               </div>
             )}
 
