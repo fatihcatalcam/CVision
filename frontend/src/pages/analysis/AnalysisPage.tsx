@@ -181,6 +181,7 @@ export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<AnalysisData | null>(null);
+  const [isNewAnalysis, setIsNewAnalysis] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -188,9 +189,9 @@ export function AnalysisPage() {
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'classic'>('ai');
 
-  // Animated progress bar
+  // Animated progress bar — only when doing a new analysis
   useEffect(() => {
-    if (data || error) return;
+    if (!isNewAnalysis || data || error) return;
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev < 30) return prev + 2;
@@ -201,13 +202,29 @@ export function AnalysisPage() {
       });
     }, 200);
     return () => clearInterval(interval);
-  }, [data, error]);
+  }, [isNewAnalysis, data, error]);
 
-  // Poll analysis status
   useEffect(() => {
+    if (!id || data || error) return;
     let active = true;
 
-    const poll = async () => {
+    const init = async () => {
+      // 1. Try to get results immediately — handles navigating back to an existing analysis
+      try {
+        const { data: result } = await api.get(`/analysis/${id}/results`);
+        if (active) { setData(result); setProgress(100); }
+        return;
+      } catch (err: any) {
+        if (err.response?.status !== 404) {
+          // Real error (e.g. 400 bad ID, 403 forbidden)
+          if (active) setError(err.response?.data?.detail || 'Failed to load analysis.');
+          return;
+        }
+        // 404 = analysis not done yet → show loading screen and poll
+      }
+
+      // 2. Analysis not ready — show loading screen and poll
+      setIsNewAnalysis(true);
       const startTime = Date.now();
       const timeout = 60000;
 
@@ -219,7 +236,6 @@ export function AnalysisPage() {
         }
         try {
           const { data: status } = await api.get(`/analysis/${id}/status`);
-
           if (status.status === 'failed') {
             if (active) setError(status.error_message || 'Analysis failed.');
             return;
@@ -246,12 +262,12 @@ export function AnalysisPage() {
       check();
     };
 
-    if (id && !data && !error) poll();
+    init();
     return () => { active = false; };
-  }, [id, data, error]);
+  }, [id]);
 
-  // â”€â”€ Loading screen â”€â”€
-  if (!data && !error) {
+  // ── Loading screen (only for new analyses being processed) ──
+  if (!data && !error && isNewAnalysis) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
         <div className="w-full max-w-sm">

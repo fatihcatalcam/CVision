@@ -5,10 +5,12 @@ Maps to FR21, FR22.
 """
 
 from fastapi import APIRouter, Depends, Query, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
+from pathlib import Path
 
 from app.dependencies import get_db, require_admin
 from app.models.user import User
@@ -412,6 +414,36 @@ def get_cv_content(cv_id: int, db: Session = Depends(get_db)):
         uploaded_at=cv.uploaded_at,
         user_name=cv.owner.full_name if cv.owner else "Unknown",
         user_email=cv.owner.email if cv.owner else "Unknown",
+    )
+
+
+@router.get(
+    "/cvs/{cv_id}/file",
+    summary="Serve original CV file (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def get_cv_file_admin(cv_id: int, db: Session = Depends(get_db)):
+    """Streams the original CV file for admin preview — bypasses ownership check."""
+    from app.config import settings
+    cv = db.query(CV).filter(CV.id == cv_id).first()
+    if not cv:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="CV not found.")
+
+    target_path = Path(cv.file_path).resolve()
+    base_path = Path(settings.upload_path).resolve()
+
+    if not target_path.is_relative_to(base_path):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Path traversal detected.")
+
+    if not target_path.exists():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not on disk.")
+
+    media_type = "application/pdf" if cv.file_type == "pdf" else "text/plain"
+    return FileResponse(
+        path=str(target_path),
+        filename=cv.original_filename,
+        media_type=media_type,
+        content_disposition_type="inline",
     )
 
 

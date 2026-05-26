@@ -11,7 +11,7 @@ import {
 import toast from 'react-hot-toast';
 
 interface HistoryItem {
-  cv_id: number;
+  cv_id: string;
   original_filename: string;
   target_domain: string | null;
   status: string;

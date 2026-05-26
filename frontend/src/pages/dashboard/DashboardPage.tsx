@@ -17,7 +17,7 @@ interface DashboardStats {
 }
 
 interface HistoryItem {
-  cv_id: number;
+  cv_id: string;
   original_filename: string;
   target_domain: string | null;
   status: string;

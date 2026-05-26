@@ -91,6 +91,7 @@ export function AdminPage() {
   const [viewingAnalysis, setViewingAnalysis] = useState<number | null>(null);
   const [viewingCV, setViewingCV] = useState<CVContent | null>(null);
   const [cvLoading, setCvLoading] = useState(false);
+  const [cvBlobUrl, setCvBlobUrl] = useState<string | null>(null);
 
   // Search / Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -172,11 +173,18 @@ export function AdminPage() {
 
   const handleViewCV = async (cvId: number) => {
     setCvLoading(true);
+    setCvBlobUrl(null);
     try {
-      const res = await api.get(`/hq-portal/cvs/${cvId}`);
-      setViewingCV(res.data);
+      const [metaRes, fileRes] = await Promise.all([
+        api.get(`/hq-portal/cvs/${cvId}`),
+        api.get(`/hq-portal/cvs/${cvId}/file`, { responseType: 'blob' }),
+      ]);
+      setViewingCV(metaRes.data);
+      const mimeType = metaRes.data.file_type === 'pdf' ? 'application/pdf' : 'text/plain';
+      const blob = new Blob([fileRes.data], { type: mimeType });
+      setCvBlobUrl(URL.createObjectURL(blob));
     } catch (error: any) {
-      alert(error.response?.data?.detail || 'Failed to load CV content');
+      alert(error.response?.data?.detail || 'Failed to load CV');
     } finally {
       setCvLoading(false);
     }
@@ -676,7 +684,7 @@ export function AdminPage() {
 
       {/* CV Text Viewer Modal */}
       {viewingCV && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setViewingCV(null)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => { setViewingCV(null); if (cvBlobUrl) URL.revokeObjectURL(cvBlobUrl); setCvBlobUrl(null); }}>
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl" onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 flex-shrink-0">
@@ -698,21 +706,30 @@ export function AdminPage() {
                     {viewingCV.target_domain}
                   </span>
                 )}
-                <button onClick={() => setViewingCV(null)} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors ml-2">
+                <button onClick={() => { setViewingCV(null); if (cvBlobUrl) URL.revokeObjectURL(cvBlobUrl); setCvBlobUrl(null); }} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors ml-2">
                   <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
-            {/* CV Text */}
-            <div className="flex-1 overflow-y-auto p-6">
-              {viewingCV.extracted_text ? (
-                <pre className="text-xs text-zinc-300 font-mono whitespace-pre-wrap leading-relaxed">
-                  {viewingCV.extracted_text}
-                </pre>
+            {/* CV Content */}
+            <div className="flex-1 overflow-hidden">
+              {cvBlobUrl && viewingCV.file_type === 'pdf' ? (
+                <iframe
+                  src={cvBlobUrl}
+                  className="w-full h-full border-0"
+                  style={{ minHeight: '60vh' }}
+                  title="CV Preview"
+                />
+              ) : cvBlobUrl && viewingCV.file_type !== 'pdf' ? (
+                <div className="flex-1 overflow-y-auto p-6 h-full">
+                  <pre className="text-xs text-zinc-300 font-mono whitespace-pre-wrap leading-relaxed">
+                    {viewingCV.extracted_text}
+                  </pre>
+                </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-40 text-zinc-500">
                   <ScrollText className="w-8 h-8 mb-2 opacity-40" />
-                  <p className="text-sm">No extracted text available</p>
+                  <p className="text-sm">Loading file...</p>
                 </div>
               )}
             </div>
