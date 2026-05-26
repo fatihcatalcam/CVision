@@ -353,6 +353,15 @@ export function AnalysisPage() {
     );
   }
 
+  // Guard: data not yet loaded (first render while fetching an existing analysis)
+  if (!data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#EAEAEA] border-t-[#111111] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   const modalSnippets = (activeSuggestion?.snippets ?? []).map((s: string) => ({
     text: s,
     priority: activeSuggestion?.priority ?? 'medium',
