@@ -145,6 +145,19 @@ export function DashboardPage() {
         </div>
       </div>
 
+      {/* First-analysis AI banner — shown to free users who haven't analyzed yet */}
+      {!isLoading && user?.plan_type === 'free' && stats?.total_analyses === 0 && (
+        <div className="mb-8 flex items-start gap-3 px-4 py-3.5 rounded-xl bg-amber-500/8 border border-amber-500/20">
+          <Sparkles className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-amber-400">Your first analysis is fully AI-powered — free</p>
+            <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">
+              Upload your CV to get a full AI report: executive summary, strengths, weaknesses, and personalized suggestions.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Stats Grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">

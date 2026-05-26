@@ -151,7 +151,7 @@ export function PricingPage() {
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#787774]">
-                  <Lock className="w-3 h-3" /> Secure payment Â· Cancel anytime
+                  <Lock className="w-3 h-3" /> Secure payment · Cancel anytime
                 </div>
               </div>
             )}
@@ -160,7 +160,7 @@ export function PricingPage() {
 
         <div className="flex items-center justify-center gap-2 text-xs text-[#787774]">
           <Shield className="w-3.5 h-3.5" />
-          Secure checkout &nbsp;Â·&nbsp; Cancel anytime &nbsp;Â·&nbsp; 24/7 support
+          Secure checkout &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; 24/7 support
         </div>
 
       </div>

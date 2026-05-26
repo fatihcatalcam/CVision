@@ -21,6 +21,8 @@ from app.schemas.analysis import AnalysisResponse, AnalysisScores, AISuggestion
 from app.schemas.suggestion import SuggestionResponse
 from app.schemas.skill import ExtractedSkillResponse
 from app.schemas.career_recommendation import CareerRecommendationResponse
+from app.models.cv import CV
+from app.models.analysis import AnalysisResult
 from app.services.cv_service import CVService
 from app.services.analysis_service import AnalysisService
 from app.utils.hashids import decode_id
@@ -95,12 +97,20 @@ def get_analysis_results(
             detail=f"No analysis found for CV {cv_id}. Trigger analysis first.",
         )
 
-    return _build_analysis_response(analysis, current_user)
+    total_analyses = (
+        db.query(AnalysisResult)
+        .join(CV, CV.id == AnalysisResult.cv_id)
+        .filter(CV.user_id == current_user.id)
+        .count()
+    )
+    is_first_analysis = total_analyses == 1
+
+    return _build_analysis_response(analysis, current_user, is_first_analysis=is_first_analysis)
 
 
-def _build_analysis_response(analysis, current_user: User | None = None) -> AnalysisResponse:
+def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
-    is_free = current_user.plan_type == "free" if current_user else False
+    is_free = (current_user.plan_type == "free" if current_user else False) and not is_first_analysis
 
     # Parse AI suggestions from JSON if present
     raw_ai_suggestions = analysis.ai_suggestions or []
