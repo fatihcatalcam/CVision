@@ -33,16 +33,32 @@ class RecentActivity(BaseModel):
     description: str
     timestamp: datetime
 
+class AdminCVContent(BaseModel):
+    """CV content details for admin viewer."""
+    cv_id: int
+    original_filename: str
+    file_type: str
+    file_size: int
+    target_domain: str | None
+    extracted_text: str | None
+    uploaded_at: datetime
+    user_name: str
+    user_email: str
+
+    model_config = {"from_attributes": True}
+
+
 class AdminAnalysisListItem(BaseModel):
     """Summary of a specific analysis for the Admin content list."""
     id: int
+    cv_id: int
     user_email: str
     user_name: str
     cv_filename: str
     role_profile: str
     score: int | float
     created_at: datetime
-    
+
     model_config = {"from_attributes": True}
 
 class AdminAnalysisListResponse(BaseModel):

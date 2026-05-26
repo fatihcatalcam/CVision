@@ -12,7 +12,7 @@ from app.dependencies import get_db, require_admin
 from app.models.user import User
 from app.models.cv import CV
 from app.models.analysis import AnalysisResult
-from app.schemas.admin import AdminStatsResponse, AdminUsersListResponse, RecentActivity, AdminAnalysisListResponse, AdminAnalysisListItem
+from app.schemas.admin import AdminStatsResponse, AdminUsersListResponse, RecentActivity, AdminAnalysisListResponse, AdminAnalysisListItem, AdminCVContent
 from app.schemas.user import UserResponse
 from app.schemas.analysis import AnalysisResponse
 from app.routers.analysis import _build_analysis_response
@@ -243,6 +243,7 @@ def list_all_analyses(
         items.append(
             AdminAnalysisListItem(
                 id=a.id,
+                cv_id=a.cv.id if a.cv else 0,
                 user_email=a.cv.owner.email if a.cv else "Unknown",
                 user_name=a.cv.owner.full_name if a.cv else "Unknown",
                 cv_filename=a.cv.original_filename if a.cv else "Unknown",
@@ -272,6 +273,33 @@ def get_admin_analysis(
             detail=f"Analysis with id {analysis_id} not found."
         )
     return _build_analysis_response(analysis)
+
+
+@router.get(
+    "/cvs/{cv_id}",
+    response_model=AdminCVContent,
+    summary="Get CV content (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def get_cv_content(cv_id: int, db: Session = Depends(get_db)):
+    """Returns the extracted text and metadata of a CV for admin review."""
+    cv = db.query(CV).filter(CV.id == cv_id).first()
+    if not cv:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CV with id {cv_id} not found."
+        )
+    return AdminCVContent(
+        cv_id=cv.id,
+        original_filename=cv.original_filename,
+        file_type=cv.file_type,
+        file_size=cv.file_size,
+        target_domain=cv.target_domain,
+        extracted_text=cv.extracted_text,
+        uploaded_at=cv.uploaded_at,
+        user_name=cv.owner.full_name if cv.owner else "Unknown",
+        user_email=cv.owner.email if cv.owner else "Unknown",
+    )
 
 
 @router.delete(

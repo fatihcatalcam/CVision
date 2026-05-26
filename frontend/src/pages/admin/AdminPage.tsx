@@ -6,7 +6,7 @@ import api from '../../services/api';
 import {
   Users, FileText, Activity, TrendingUp, Shield, Trash2,
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
-  Eye, Search
+  Eye, Search, ScrollText, X
 } from 'lucide-react';
 import { AdminAnalysisViewer } from '../../components/admin/AdminAnalysisViewer';
 
@@ -41,12 +41,25 @@ interface RecentActivity {
 
 interface AnalysisItem {
   id: number;
+  cv_id: number;
   user_email: string;
   user_name: string;
   cv_filename: string;
   role_profile: string;
   score: number;
   created_at: string;
+}
+
+interface CVContent {
+  cv_id: number;
+  original_filename: string;
+  file_type: string;
+  file_size: number;
+  target_domain: string | null;
+  extracted_text: string | null;
+  uploaded_at: string;
+  user_name: string;
+  user_email: string;
 }
 
 export function AdminPage() {
@@ -67,7 +80,9 @@ export function AdminPage() {
   const [actionLoading, setActionLoading] = useState<number | string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | string | null>(null);
   const [viewingAnalysis, setViewingAnalysis] = useState<number | null>(null);
-  
+  const [viewingCV, setViewingCV] = useState<CVContent | null>(null);
+  const [cvLoading, setCvLoading] = useState(false);
+
   // Search / Filters
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -150,7 +165,19 @@ export function AdminPage() {
     }
   };
 
-  const filteredUsers = users.filter(u => 
+  const handleViewCV = async (cvId: number) => {
+    setCvLoading(true);
+    try {
+      const res = await api.get(`/hq-portal/cvs/${cvId}`);
+      setViewingCV(res.data);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Failed to load CV content');
+    } finally {
+      setCvLoading(false);
+    }
+  };
+
+  const filteredUsers = users.filter(u =>
     u.full_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     u.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -407,7 +434,10 @@ export function AdminPage() {
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-end gap-2">
-                                  <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Detailed Report">
+                                  <button onClick={() => handleViewCV(a.cv_id)} disabled={cvLoading} className="p-1.5 rounded-lg text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" title="View CV Text">
+                                    <ScrollText className="w-4 h-4" />
+                                  </button>
+                                  <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
                                     <Eye className="w-4 h-4" />
                                   </button>
                                   <button onClick={() => setDeleteConfirm(`a-${a.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
@@ -535,6 +565,52 @@ export function AdminPage() {
           isOpen={true}
           onClose={() => setViewingAnalysis(null)}
         />
+      )}
+
+      {/* CV Text Viewer Modal */}
+      {viewingCV && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setViewingCV(null)}>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-500/10 rounded-lg">
+                  <FileText className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">{viewingCV.original_filename}</p>
+                  <p className="text-xs text-zinc-500">{viewingCV.user_name} · {viewingCV.user_email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-zinc-500 bg-zinc-800 px-2 py-1 rounded">
+                  {(viewingCV.file_size / 1024).toFixed(1)} KB · {viewingCV.file_type.toUpperCase()}
+                </span>
+                {viewingCV.target_domain && (
+                  <span className="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-1 rounded">
+                    {viewingCV.target_domain}
+                  </span>
+                )}
+                <button onClick={() => setViewingCV(null)} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors ml-2">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            {/* CV Text */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {viewingCV.extracted_text ? (
+                <pre className="text-xs text-zinc-300 font-mono whitespace-pre-wrap leading-relaxed">
+                  {viewingCV.extracted_text}
+                </pre>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-40 text-zinc-500">
+                  <ScrollText className="w-8 h-8 mb-2 opacity-40" />
+                  <p className="text-sm">No extracted text available</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
