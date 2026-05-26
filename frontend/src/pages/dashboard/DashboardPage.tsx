@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CVUploader } from '../../components/cv/CVUploader';
+import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import api from '../../services/api';
 import {
   FileText, Activity, TrendingUp, Shield, Lock, Sparkles,
@@ -134,6 +135,7 @@ export function DashboardPage() {
               <Shield className="w-3.5 h-3.5" /> Admin
             </button>
           )}
+          <ThemeToggle />
           <button onClick={() => navigate('/settings')} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium" title="Settings">
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Settings</span>
@@ -161,7 +163,7 @@ export function DashboardPage() {
       {/* Stats Grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-          {[1, 2, 3, 4].map(i => <div key={i} className="surface h-36 shimmer" />)}
+          {[1, 2, 3, 4].map(i => <div key={i} className="surface h-48 shimmer" />)}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">

@@ -200,6 +200,11 @@ body {
     animation: shimmer 1.5s ease-in-out infinite;
   }
 
+  .dark .shimmer {
+    background: linear-gradient(90deg, #1c1c1a 25%, #252523 50%, #1c1c1a 75%);
+    background-size: 200% 100%;
+  }
+
   .input-focus {
     outline: none;
     border-color: var(--color-primary);
