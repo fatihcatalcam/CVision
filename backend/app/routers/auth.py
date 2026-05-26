@@ -205,6 +205,66 @@ def change_password(
     return None
 
 
+@router.delete(
+    "/me",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete own account and all associated data",
+)
+def delete_account(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Permanently deletes the authenticated user and all their CVs and analyses (cascade)."""
+    db.delete(current_user)
+    db.commit()
+    return None
+
+
+@router.get("/me/export", summary="Export all user data as JSON")
+def export_user_data(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Returns a JSON snapshot of all the user's analyses for download."""
+    from app.models.cv import CV
+    from datetime import datetime, timezone
+
+    cvs = db.query(CV).filter(CV.user_id == current_user.id).all()
+
+    analyses_data = []
+    for cv in cvs:
+        a = cv.analysis_result
+        if a:
+            analyses_data.append({
+                "cv_filename": cv.original_filename,
+                "uploaded_at": cv.uploaded_at.isoformat() if cv.uploaded_at else None,
+                "target_domain": cv.target_domain,
+                "overall_score": a.overall_score,
+                "ats_score": a.ats_score,
+                "keyword_score": a.keyword_score,
+                "completeness_score": a.completeness_score,
+                "experience_score": a.experience_score,
+                "summary": a.summary,
+                "strengths": a.strengths,
+                "weaknesses": a.weaknesses,
+                "ai_summary": a.ai_summary,
+                "ai_suggestions": a.ai_suggestions,
+                "created_at": a.created_at.isoformat() if a.created_at else None,
+            })
+
+    return {
+        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "user": {
+            "full_name": current_user.full_name,
+            "email": current_user.email,
+            "plan_type": current_user.plan_type,
+            "member_since": current_user.created_at.isoformat() if current_user.created_at else None,
+        },
+        "total_analyses": len(analyses_data),
+        "analyses": analyses_data,
+    }
+
+
 @router.post("/forgot-password", summary="Request password reset code")
 @limiter.limit("3/minute")
 def forgot_password(request: Request, body: ForgotPasswordRequest, db: Session = Depends(get_db)):

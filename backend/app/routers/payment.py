@@ -375,6 +375,57 @@ async def stripe_webhook(request: Request):
     return {"received": True}
 
 
+@router.post("/stripe/cancel")
+def stripe_cancel_subscription(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Cancels the active Stripe subscription at period end.
+    User keeps Pro access until subscription_end_at, then downgrades to free.
+    """
+    if current_user.plan_type != "premium":
+        raise HTTPException(status_code=400, detail="No active subscription to cancel.")
+
+    if not current_user.stripe_customer_id:
+        # Manually assigned premium (e.g. admin grant) — just downgrade immediately
+        user = db.query(User).filter(User.id == current_user.id).first()
+        user.plan_type = "free"
+        user.subscription_end_at = None
+        db.commit()
+        return {"status": "cancelled", "message": "Subscription cancelled."}
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    if not stripe.api_key or stripe.api_key.startswith("sk_test_your"):
+        raise HTTPException(status_code=503, detail="Stripe is not configured.")
+
+    try:
+        subscriptions = stripe.Subscription.list(
+            customer=current_user.stripe_customer_id,
+            status="active",
+            limit=1,
+        )
+        if not subscriptions.data:
+            # No active Stripe sub found — downgrade directly
+            user = db.query(User).filter(User.id == current_user.id).first()
+            user.plan_type = "free"
+            user.subscription_end_at = None
+            db.commit()
+            return {"status": "cancelled", "message": "Subscription cancelled."}
+
+        sub = subscriptions.data[0]
+        stripe.Subscription.modify(sub.id, cancel_at_period_end=True)
+
+        return {
+            "status": "cancel_at_period_end",
+            "message": "Your subscription will not renew. Pro access continues until the end of the billing period.",
+            "subscription_end_at": current_user.subscription_end_at.isoformat() if current_user.subscription_end_at else None,
+        }
+    except stripe.StripeError as e:
+        logger.error(f"Stripe cancel error: {e}")
+        raise HTTPException(status_code=502, detail="Failed to cancel subscription.")
+
+
 # ─────────────────────────────── Status ───────────────────────────────────────
 
 @router.get("/status")
