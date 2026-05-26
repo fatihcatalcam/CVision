@@ -29,7 +29,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedDomain, setSelectedDomain] = useState(DOMAINS[0].value);
+  const [selectedDomain, setSelectedDomain] = useState('Other');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (f: File): boolean => {
