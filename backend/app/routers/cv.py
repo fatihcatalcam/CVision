@@ -40,7 +40,7 @@ router = APIRouter(prefix="/cvs", tags=["CV Management"])
 async def upload_cv(
     request: Request,
     background_tasks: BackgroundTasks,
-    file: UploadFile = File(..., description="CV file (PDF or TXT, max 5MB)"),
+    file: UploadFile = File(..., description="CV file (PDF only, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

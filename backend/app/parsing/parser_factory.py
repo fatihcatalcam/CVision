@@ -5,12 +5,11 @@ Implements the Factory pattern (Open/Closed principle).
 
 from app.parsing.base_parser import BaseParser
 from app.parsing.pdf_parser import PdfParser
-from app.parsing.txt_parser import TxtParser
 
 # Supported file extensions mapped to their parser classes
+# TXT was removed — PDF-only to reduce attack surface
 _PARSERS: dict[str, type[BaseParser]] = {
     "pdf": PdfParser,
-    "txt": TxtParser,
 }
 
 # Allowed file extensions for upload validation
@@ -19,7 +18,6 @@ ALLOWED_EXTENSIONS: set[str] = set(_PARSERS.keys())
 # MIME types accepted during file upload
 ALLOWED_MIME_TYPES: dict[str, str] = {
     "application/pdf": "pdf",
-    "text/plain": "txt",
 }
 
 

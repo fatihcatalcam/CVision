@@ -22,7 +22,7 @@ const DOMAINS = [
 ];
 
 interface CVUploaderProps {
-  onUploadSuccess: (cvId: number) => void;
+  onUploadSuccess: (cvId: string) => void;
 }
 
 export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
@@ -33,8 +33,8 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (f: File): boolean => {
-    if (!['application/pdf', 'text/plain'].includes(f.type)) {
-      toast.error('Only PDF and TXT files are supported.');
+    if (f.type !== 'application/pdf') {
+      toast.error('Only PDF files are supported.');
       return false;
     }
     if (f.size > 5 * 1024 * 1024) {
@@ -137,7 +137,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
               : 'border-[#EAEAEA] dark:border-white/[0.07] hover:border-[#1B3A6B]/40 hover:bg-[#F7F6F3] dark:hover:bg-white/[0.04]'
           }`}
         >
-          <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf,.txt" className="hidden" />
+          <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf" className="hidden" />
 
           <div className={`p-4 rounded-2xl mb-4 transition-all duration-300 ${isDragging ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] scale-110' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] group-hover:bg-[#EAEAEA] dark:group-hover:bg-white/[0.08] group-hover:text-[#111111] dark:group-hover:text-[#e8e7e4]'}`}>
             <UploadCloud className="w-8 h-8" />
@@ -151,7 +151,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
           </p>
 
           <div className="flex gap-2">
-            {['PDF', 'TXT', 'Max 5MB'].map(label => (
+            {['PDF', 'Max 5MB'].map(label => (
               <span key={label} className="px-2.5 py-1 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] text-[#787774] text-[10px] font-semibold uppercase tracking-wider">
                 {label}
               </span>
@@ -168,7 +168,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
             <div className="flex-1 min-w-0">
               <p className="text-[#111111] dark:text-[#e8e7e4] font-semibold text-sm truncate">{file.name}</p>
               <p className="text-[#787774] dark:text-[#908d89] text-xs mt-0.5">
-                {(file.size / 1024 / 1024).toFixed(2)} MB · {file.type.includes('pdf') ? 'PDF Document' : 'Text File'}
+                {(file.size / 1024 / 1024).toFixed(2)} MB · PDF Document
               </p>
             </div>
             <CheckCircle2 className="w-5 h-5 text-[#346538] flex-shrink-0" />

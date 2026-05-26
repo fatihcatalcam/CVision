@@ -83,8 +83,8 @@ export function HistoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [deletingId, setDeletingId] = useState<number | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const PAGE_SIZE = 20;
 
@@ -104,7 +104,7 @@ export function HistoryPage() {
     fetch();
   }, []);
 
-  const handleDelete = async (cvId: number) => {
+  const handleDelete = async (cvId: string) => {
     setDeletingId(cvId);
     try {
       await api.delete(`/cvs/${cvId}`);
