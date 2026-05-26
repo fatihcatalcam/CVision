@@ -115,7 +115,8 @@ async def lifespan(app: FastAPI):
     logger.info("Database tables ensured.")
 
     # Apply any schema columns that Alembic migrations may not have run.
-    # We use raw SQL with IF NOT EXISTS so this is always safe and idempotent.
+    # Each patch runs in its own transaction so a single failure cannot
+    # roll back the others (PostgreSQL aborts the whole tx on any error).
     _schema_patches = [
         # Added to store CV bytes in DB so files survive Render restarts
         "ALTER TABLE cvs ADD COLUMN IF NOT EXISTS file_content BYTEA",
@@ -130,18 +131,21 @@ async def lifespan(app: FastAPI):
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_history VARCHAR(1000)",
         # Added for domain-aware role profiles
         "ALTER TABLE role_profiles ADD COLUMN IF NOT EXISTS domain VARCHAR(100)",
-        # Added for AI suggestion snippets
-        "ALTER TABLE ai_suggestions ADD COLUMN IF NOT EXISTS snippets JSON",
+        # Added for AI suggestion snippets (table is "suggestions", not "ai_suggestions")
+        "ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS snippets JSON",
     ]
     from sqlalchemy import text as _text
-    with engine.connect() as _conn:
-        for _sql in _schema_patches:
-            try:
+    _applied, _skipped = 0, 0
+    for _sql in _schema_patches:
+        try:
+            with engine.connect() as _conn:
                 _conn.execute(_text(_sql))
-            except Exception as _e:
-                logger.debug(f"Schema patch skipped (table may not exist yet): {_e}")
-        _conn.commit()
-    logger.info("Schema patches applied.")
+                _conn.commit()
+            _applied += 1
+        except Exception as _e:
+            logger.debug(f"Schema patch skipped: {_e}")
+            _skipped += 1
+    logger.info(f"Schema patches complete: {_applied} applied, {_skipped} skipped.")
 
     # Seed initial data
     db = SessionLocal()
