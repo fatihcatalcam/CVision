@@ -37,21 +37,8 @@ export function PricingPage() {
   const navigate = useNavigate();
   const isTurkey = useIsTurkey();
 
-  const [loadingIyzico, setLoadingIyzico] = useState(false);
   const [loadingStripe, setLoadingStripe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const handleIyzico = async () => {
-    setError(null);
-    setLoadingIyzico(true);
-    try {
-      const res = await api.post('/payment/iyzico/init');
-      window.location.href = res.data.paymentPageUrl;
-    } catch (err: unknown) {
-      setError((err as any)?.response?.data?.detail || 'iyzico payment could not be initiated.');
-      setLoadingIyzico(false);
-    }
-  };
 
   const handleStripe = async () => {
     setError(null);
@@ -142,21 +129,17 @@ export function PricingPage() {
                 )}
 
                 <button
-                  onClick={handleIyzico}
-                  disabled={loadingIyzico || loadingStripe}
-                  className={`w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                    isTurkey
-                      ? 'bg-white text-[#111111] hover:bg-[#F7F6F3]'
-                      : 'bg-white/10 text-[#A09D9A] border border-white/10 hover:bg-white/20'
-                  }`}
+                  disabled
+                  title="iyzico payment is coming soon"
+                  className="w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium flex items-center justify-center gap-2 opacity-40 cursor-not-allowed bg-white/10 text-[#A09D9A] border border-white/10"
                 >
-                  {loadingIyzico ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  {isTurkey ? 'Pay with iyzico - ₺149/mo' : 'iyzico (Turkey) - ₺149/mo'}
+                  <CreditCard className="w-4 h-4" />
+                  {isTurkey ? 'iyzico - ₺149/mo (Coming soon)' : 'iyzico (Turkey) - Coming soon'}
                 </button>
 
                 <button
                   onClick={handleStripe}
-                  disabled={loadingIyzico || loadingStripe}
+                  disabled={loadingStripe}
                   className={`w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
                     !isTurkey
                       ? 'bg-white text-[#111111] hover:bg-[#F7F6F3]'

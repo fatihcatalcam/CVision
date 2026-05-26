@@ -69,3 +69,4 @@ test_ai.py
 /.agents
 skills-lock.json
 tasks/todo.md
+docs/superpowers/specs/2026-05-26-producthunt-launch-design.md
