@@ -6,9 +6,10 @@ import api from '../../services/api';
 import {
   Users, FileText, Activity, TrendingUp, Shield, Trash2,
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
-  Eye, Search, ScrollText, X
+  Eye, Search, ScrollText,
 } from 'lucide-react';
 import { AdminAnalysisViewer } from '../../components/admin/AdminAnalysisViewer';
+import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
 // Recharts for Data Visualization
 import {
@@ -60,17 +61,6 @@ interface AnalysisItem {
   created_at: string;
 }
 
-interface CVContent {
-  cv_id: number;
-  original_filename: string;
-  file_type: string;
-  file_size: number;
-  target_domain: string | null;
-  extracted_text: string | null;
-  uploaded_at: string;
-  user_name: string;
-  user_email: string;
-}
 
 export function AdminPage() {
   const { user } = useAuth();
@@ -89,9 +79,8 @@ export function AdminPage() {
   const [actionLoading, setActionLoading] = useState<number | string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | string | null>(null);
   const [viewingAnalysis, setViewingAnalysis] = useState<number | null>(null);
-  const [viewingCV, setViewingCV] = useState<CVContent | null>(null);
-  const [cvLoading, setCvLoading] = useState(false);
-  const [cvBlobUrl, setCvBlobUrl] = useState<string | null>(null);
+  const [viewingCvId, setViewingCvId] = useState<number | null>(null);
+  const [viewingCvMeta, setViewingCvMeta] = useState<{ filename: string; user: string } | null>(null);
 
   // Search / Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -171,23 +160,9 @@ export function AdminPage() {
     }
   };
 
-  const handleViewCV = async (cvId: number) => {
-    setCvLoading(true);
-    setCvBlobUrl(null);
-    try {
-      const [metaRes, fileRes] = await Promise.all([
-        api.get(`/hq-portal/cvs/${cvId}`),
-        api.get(`/hq-portal/cvs/${cvId}/file`, { responseType: 'blob' }),
-      ]);
-      setViewingCV(metaRes.data);
-      const mimeType = metaRes.data.file_type === 'pdf' ? 'application/pdf' : 'text/plain';
-      const blob = new Blob([fileRes.data], { type: mimeType });
-      setCvBlobUrl(URL.createObjectURL(blob));
-    } catch (error: any) {
-      alert(error.response?.data?.detail || 'Failed to load CV');
-    } finally {
-      setCvLoading(false);
-    }
+  const handleViewCV = async (cvId: number, filename: string, userName: string) => {
+    setViewingCvMeta({ filename, user: userName });
+    setViewingCvId(cvId);
   };
 
   const filteredUsers = users.filter(u =>
@@ -549,7 +524,7 @@ export function AdminPage() {
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-end gap-2">
-                                  <button onClick={() => handleViewCV(a.cv_id)} disabled={cvLoading} className="p-1.5 rounded-lg text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" title="View CV Text">
+                                  <button onClick={() => handleViewCV(a.cv_id, a.cv_filename, a.user_name)} className="p-1.5 rounded-lg text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" title="View CV PDF">
                                     <ScrollText className="w-4 h-4" />
                                   </button>
                                   <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
@@ -682,60 +657,13 @@ export function AdminPage() {
         />
       )}
 
-      {/* CV Text Viewer Modal */}
-      {viewingCV && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => { setViewingCV(null); if (cvBlobUrl) URL.revokeObjectURL(cvBlobUrl); setCvBlobUrl(null); }}>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 flex-shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-500/10 rounded-lg">
-                  <FileText className="w-4 h-4 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-white">{viewingCV.original_filename}</p>
-                  <p className="text-xs text-zinc-500">{viewingCV.user_name} · {viewingCV.user_email}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-500 bg-zinc-800 px-2 py-1 rounded">
-                  {(viewingCV.file_size / 1024).toFixed(1)} KB · {viewingCV.file_type.toUpperCase()}
-                </span>
-                {viewingCV.target_domain && (
-                  <span className="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-1 rounded">
-                    {viewingCV.target_domain}
-                  </span>
-                )}
-                <button onClick={() => { setViewingCV(null); if (cvBlobUrl) URL.revokeObjectURL(cvBlobUrl); setCvBlobUrl(null); }} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors ml-2">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            {/* CV Content */}
-            <div className="flex-1 overflow-hidden">
-              {cvBlobUrl && viewingCV.file_type === 'pdf' ? (
-                <iframe
-                  src={cvBlobUrl}
-                  className="w-full h-full border-0"
-                  style={{ minHeight: '60vh' }}
-                  title="CV Preview"
-                />
-              ) : cvBlobUrl && viewingCV.file_type !== 'pdf' ? (
-                <div className="flex-1 overflow-y-auto p-6 h-full">
-                  <pre className="text-xs text-zinc-300 font-mono whitespace-pre-wrap leading-relaxed">
-                    {viewingCV.extracted_text}
-                  </pre>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-40 text-zinc-500">
-                  <ScrollText className="w-8 h-8 mb-2 opacity-40" />
-                  <p className="text-sm">Loading file...</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* CV PDF Viewer Modal — reuses the same component as the analysis page */}
+      <PDFViewerModal
+        isOpen={viewingCvId !== null}
+        onClose={() => { setViewingCvId(null); setViewingCvMeta(null); }}
+        fileUrl={viewingCvId !== null ? `/hq-portal/cvs/${viewingCvId}/file` : undefined}
+        subtitle={viewingCvMeta ? `${viewingCvMeta.user} · ${viewingCvMeta.filename}` : undefined}
+      />
     </div>
   );
 }

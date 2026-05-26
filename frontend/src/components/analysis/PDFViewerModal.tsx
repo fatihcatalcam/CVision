@@ -10,16 +10,27 @@ interface Snippet {
 interface PDFViewerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  cvId: string | number;
-  activeSnippets: Snippet[];
+  /** Hashid-encoded CV id — used for the default /cvs/:id/download + highlight flow */
+  cvId?: string | number;
+  /** Direct URL override — used by admin to bypass ownership check (e.g. /hq-portal/cvs/:id/file) */
+  fileUrl?: string;
+  /** Optional subtitle shown under the modal title */
+  subtitle?: string;
+  activeSnippets?: Snippet[];
 }
 
-export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFViewerModalProps) {
+export function PDFViewerModal({
+  isOpen,
+  onClose,
+  cvId,
+  fileUrl,
+  subtitle,
+  activeSnippets = [],
+}: PDFViewerModalProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch PDF - if snippets exist, request the highlighted version
   useEffect(() => {
     if (!isOpen) return;
 
@@ -28,7 +39,6 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
       setLoading(true);
       setError(null);
 
-      // Clean up any previous URL
       if (pdfUrl) {
         window.URL.revokeObjectURL(pdfUrl);
         setPdfUrl(null);
@@ -36,18 +46,22 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
 
       try {
         let res;
-        const snippetTexts = activeSnippets.map(s => s.text);
 
-        if (snippetTexts.length > 0) {
-          // POST to get highlighted PDF
-          res = await api.post(
-            `/cvs/${cvId}/preview`,
-            { snippets: snippetTexts },
-            { responseType: 'blob' }
-          );
+        if (fileUrl) {
+          // Admin path: fetch from the provided URL directly
+          res = await api.get(fileUrl, { responseType: 'blob' });
         } else {
-          // GET original PDF
-          res = await api.get(`/cvs/${cvId}/download`, { responseType: 'blob' });
+          // Regular user path: use cvId with optional highlights
+          const snippetTexts = activeSnippets.map(s => s.text);
+          if (snippetTexts.length > 0) {
+            res = await api.post(
+              `/cvs/${cvId}/preview`,
+              { snippets: snippetTexts },
+              { responseType: 'blob' }
+            );
+          } else {
+            res = await api.get(`/cvs/${cvId}/download`, { responseType: 'blob' });
+          }
         }
 
         if (cancelled) return;
@@ -61,21 +75,15 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
         if (!cancelled) setLoading(false);
       }
     };
+
     fetchPdf();
+    return () => { cancelled = true; };
+  }, [isOpen, cvId, fileUrl, activeSnippets]);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [isOpen, cvId, activeSnippets]);
-
-  // Revoke URL on unmount
   useEffect(() => {
-    return () => {
-      if (pdfUrl) window.URL.revokeObjectURL(pdfUrl);
-    };
+    return () => { if (pdfUrl) window.URL.revokeObjectURL(pdfUrl); };
   }, [pdfUrl]);
 
-  // Close on Escape key
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') onClose();
   }, [onClose]);
@@ -103,7 +111,7 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
 
       {/* Modal Container */}
       <div className="relative z-10 w-[95vw] h-[92vh] max-w-[1400px] bg-white border border-[#EAEAEA] rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden animate-in zoom-in-95 fade-in duration-300">
-        
+
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAEAEA] bg-[#F7F6F3] shrink-0">
           <div className="flex items-center gap-3">
@@ -114,7 +122,9 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
             </div>
             <div>
               <h2 className="text-[#111111] font-bold text-lg">Original CV Document</h2>
-              <p className="text-[#666666] text-xs">Press ESC or click outside to close</p>
+              <p className="text-[#666666] text-xs">
+                {subtitle ?? 'Press ESC or click outside to close'}
+              </p>
             </div>
           </div>
 
@@ -136,7 +146,7 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
           </div>
         </div>
 
-        {/* Modal Body - Full PDF */}
+        {/* Modal Body */}
         <div className="flex-1 relative bg-[#F7F6F3]">
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -156,7 +166,7 @@ export function PDFViewerModal({ isOpen, onClose, cvId, activeSnippets }: PDFVie
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                   </svg>
                 </div>
-                <p className="text-red-300 text-sm font-medium">{error}</p>
+                <p className="text-red-400 text-sm font-medium">{error}</p>
               </div>
             </div>
           )}
