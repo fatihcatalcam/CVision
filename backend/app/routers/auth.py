@@ -347,7 +347,7 @@ def reset_password(request: Request, body: ResetPasswordRequest, db: Session = D
 # ---- Google OAuth ----
 
 class GoogleAuthRequest(BaseModel):
-    credential: str = Field(..., min_length=20, max_length=2048)
+    access_token: str = Field(..., min_length=20, max_length=2048)
     full_name: str | None = Field(None, min_length=2, max_length=150)
 
 
@@ -356,26 +356,29 @@ class GoogleAuthRequest(BaseModel):
 def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends(get_db)):
     """
     Frontend-first Google OAuth flow.
-    1. Frontend sends Google ID token (credential).
-    2. Backend verifies it, then finds/creates the user.
+    1. Frontend sends Google access token obtained via useGoogleLogin popup.
+    2. Backend verifies it by calling Google's userinfo endpoint.
     3. If new user and no full_name provided, returns {status: needs_name}.
     4. Second call with full_name creates the account.
     """
-    from google.oauth2 import id_token
-    from google.auth.transport import requests as grequests
-    from google.auth.exceptions import GoogleAuthError
+    import requests as _requests
 
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=503, detail="Google login henüz yapılandırılmamış.")
 
     try:
-        idinfo = id_token.verify_oauth2_token(
-            body.credential,
-            grequests.Request(),
-            settings.GOOGLE_CLIENT_ID,
+        resp = _requests.get(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            headers={"Authorization": f"Bearer {body.access_token}"},
+            timeout=5,
         )
-    except (ValueError, GoogleAuthError):
+    except Exception:
         raise HTTPException(status_code=400, detail="Geçersiz Google kimlik bilgisi.")
+
+    if resp.status_code != 200:
+        raise HTTPException(status_code=400, detail="Geçersiz Google kimlik bilgisi.")
+
+    idinfo = resp.json()
 
     email: str = idinfo.get("email", "")
     google_id: str = idinfo.get("sub", "")
