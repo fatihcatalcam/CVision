@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
 
+    # ---- Google OAuth ----
+    GOOGLE_CLIENT_ID: str = ""
+
     # ---- App URLs ----
     BACKEND_URL: str = "http://167.86.89.146:8001"
     FRONTEND_URL: str = "http://167.86.89.146"
