@@ -61,6 +61,12 @@ export function GoogleAuthButton() {
         err.response?.data?.detail ||
         'Hesap oluşturulamadı.'
       );
+      // If token expired or invalid, go back to Google button so user can re-authenticate
+      if (err.response?.status === 400) {
+        setStep('button');
+        setPendingCredential('');
+        setFullName('');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -73,10 +79,11 @@ export function GoogleAuthButton() {
           Google hesabınızla devam etmek için adınızı girin.
         </p>
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
+          <label htmlFor="google-fullname" className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
             Ad Soyad
           </label>
           <input
+            id="google-fullname"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -97,7 +104,7 @@ export function GoogleAuthButton() {
         </button>
         <button
           type="button"
-          onClick={() => { setStep('button'); setPendingCredential(''); }}
+          onClick={() => { setStep('button'); setPendingCredential(''); setFullName(''); }}
           className="w-full text-xs text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
         >
           ← Geri dön
@@ -109,7 +116,7 @@ export function GoogleAuthButton() {
   return (
     <div className={isLoading ? 'opacity-60 pointer-events-none' : ''}>
       <GoogleLogin
-        onSuccess={(cr) => handleGoogleSuccess(cr.credential!)}
+        onSuccess={(cr) => { if (cr.credential) handleGoogleSuccess(cr.credential); }}
         onError={() => toast.error('Google ile giriş başarısız.')}
         theme="outline"
         size="large"
