@@ -114,7 +114,7 @@ export function GoogleAuthButton() {
   }
 
   return (
-    <div className={isLoading ? 'opacity-60 pointer-events-none' : ''}>
+    <div className={`flex justify-center${isLoading ? ' opacity-60 pointer-events-none' : ''}`}>
       <GoogleLogin
         onSuccess={(cr) => { if (cr.credential) handleGoogleSuccess(cr.credential); }}
         onError={() => toast.error('Google ile giriş başarısız.')}
