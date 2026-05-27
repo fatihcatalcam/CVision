@@ -5,6 +5,7 @@ import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { Loader2, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
+import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 
 const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
 
@@ -113,6 +114,16 @@ export function LoginPage() {
               )}
             </button>
           </form>
+
+          {/* Google OAuth */}
+          <div className="mt-6">
+            <div className="relative flex items-center gap-3 mb-4">
+              <div className="flex-1 h-px bg-[#EAEAEA] dark:bg-white/[0.07]" />
+              <span className="text-xs text-[#A09D9A] dark:text-[#6a6764] font-medium">veya</span>
+              <div className="flex-1 h-px bg-[#EAEAEA] dark:bg-white/[0.07]" />
+            </div>
+            <GoogleAuthButton />
+          </div>
 
           <p className="mt-8 text-center text-sm text-[#787774] dark:text-[#908d89]">
             Don't have an account?{' '}
