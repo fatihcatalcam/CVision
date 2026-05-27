@@ -24,6 +24,7 @@ from app.models.user import User
 from app.auth.hashing import hash_password, verify_password
 from app.auth.jwt_handler import create_access_token
 from app.limiter import limiter
+from app.config import settings
 
 logger = logging.getLogger("cvision.routers.auth")
 
@@ -346,12 +347,13 @@ def reset_password(request: Request, body: ResetPasswordRequest, db: Session = D
 # ---- Google OAuth ----
 
 class GoogleAuthRequest(BaseModel):
-    credential: str
-    full_name: str | None = None
+    credential: str = Field(..., min_length=20, max_length=2048)
+    full_name: str | None = Field(None, min_length=2, max_length=150)
 
 
 @router.post("/google", summary="Sign in or register with Google")
-def google_auth(body: GoogleAuthRequest, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends(get_db)):
     """
     Frontend-first Google OAuth flow.
     1. Frontend sends Google ID token (credential).
@@ -361,7 +363,7 @@ def google_auth(body: GoogleAuthRequest, db: Session = Depends(get_db)):
     """
     from google.oauth2 import id_token
     from google.auth.transport import requests as grequests
-    from app.config import settings
+    from google.auth.exceptions import GoogleAuthError
 
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=503, detail="Google login henüz yapılandırılmamış.")
@@ -372,11 +374,13 @@ def google_auth(body: GoogleAuthRequest, db: Session = Depends(get_db)):
             grequests.Request(),
             settings.GOOGLE_CLIENT_ID,
         )
-    except ValueError:
+    except (ValueError, GoogleAuthError):
         raise HTTPException(status_code=400, detail="Geçersiz Google kimlik bilgisi.")
 
     email: str = idinfo.get("email", "")
     google_id: str = idinfo.get("sub", "")
+    if not google_id:
+        raise HTTPException(status_code=400, detail="Geçersiz Google kimlik bilgisi.")
     suggested_name: str = idinfo.get("name", "")
 
     if not email or not idinfo.get("email_verified"):
