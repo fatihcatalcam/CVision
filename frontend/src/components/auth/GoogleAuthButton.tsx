@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -18,10 +18,8 @@ const GoogleIcon = () => (
   </svg>
 );
 
-type Step = 'button' | 'name';
-
 export function GoogleAuthButton() {
-  const [step, setStep] = useState<Step>('button');
+  const [showModal, setShowModal] = useState(false);
   const [pendingToken, setPendingToken] = useState('');
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +34,7 @@ export function GoogleAuthButton() {
       if (res.data.status === 'needs_name') {
         setPendingToken(accessToken);
         setFullName(res.data.suggested_name ?? '');
-        setStep('name');
+        setShowModal(true);
       } else {
         login(res.data.access_token, res.data.user);
         toast.success('Hoş geldiniz!');
@@ -78,7 +76,7 @@ export function GoogleAuthButton() {
         'Hesap oluşturulamadı.'
       );
       if (err.response?.status === 400) {
-        setStep('button');
+        setShowModal(false);
         setPendingToken('');
         setFullName('');
       }
@@ -87,62 +85,99 @@ export function GoogleAuthButton() {
     }
   };
 
-  if (step === 'name') {
-    return (
-      <form onSubmit={handleNameSubmit} className="space-y-3">
-        <p className="text-sm text-[#787774] dark:text-[#908d89]">
-          Google hesabınızla devam etmek için adınızı girin.
-        </p>
-        <div className="space-y-1.5">
-          <label htmlFor="google-fullname" className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
-            Ad Soyad
-          </label>
-          <input
-            id="google-fullname"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Adınız Soyadınız"
-            required
-            minLength={2}
-            maxLength={150}
-            className={inputCls}
-            autoFocus
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isLoading || fullName.trim().length < 2}
-          className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Devam Et →'}
-        </button>
-        <button
-          type="button"
-          onClick={() => { setStep('button'); setPendingToken(''); setFullName(''); }}
-          className="w-full text-xs text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
-        >
-          ← Geri dön
-        </button>
-      </form>
-    );
-  }
+  const handleCancel = () => {
+    setShowModal(false);
+    setPendingToken('');
+    setFullName('');
+  };
 
   return (
-    <button
-      type="button"
-      onClick={() => googleLogin()}
-      disabled={isLoading}
-      className="w-full h-12 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] hover:bg-[#f5f5f5] dark:hover:bg-[#252523] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-sm font-medium"
-    >
-      {isLoading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
-      ) : (
-        <>
-          <GoogleIcon />
-          Google ile devam edin
-        </>
+    <>
+      {/* Google button */}
+      <button
+        type="button"
+        onClick={() => googleLogin()}
+        disabled={isLoading}
+        className="w-full h-12 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] hover:bg-[#f5f5f5] dark:hover:bg-[#252523] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-sm font-medium"
+      >
+        {isLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          <>
+            <GoogleIcon />
+            Google ile devam edin
+          </>
+        )}
+      </button>
+
+      {/* Name collection modal */}
+      {showModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) handleCancel(); }}
+        >
+          <div className="w-full max-w-md bg-white dark:bg-[#141413] rounded-2xl shadow-2xl border border-[#EAEAEA] dark:border-white/[0.07] p-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-[#111111] dark:text-[#e8e7e4]">
+                  Hesabınızı tamamlayın
+                </h2>
+                <p className="mt-1 text-sm text-[#787774] dark:text-[#908d89]">
+                  Adınızı girin ve Google hesabınızla devam edin.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="p-1.5 rounded-lg text-[#A09D9A] hover:text-[#111111] dark:hover:text-[#e8e7e4] hover:bg-[#F5F5F5] dark:hover:bg-white/[0.06] transition-colors -mt-1 -mr-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleNameSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="google-fullname"
+                  className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider"
+                >
+                  Ad Soyad
+                </label>
+                <input
+                  id="google-fullname"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Adınız Soyadınız"
+                  required
+                  minLength={2}
+                  maxLength={150}
+                  className={inputCls}
+                  autoFocus
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading || fullName.trim().length < 2}
+                className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Devam Et →'}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="w-full text-xs text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
+              >
+                ← Geri dön
+              </button>
+            </form>
+          </div>
+        </div>
       )}
-    </button>
+    </>
   );
 }
