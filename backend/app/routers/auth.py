@@ -341,3 +341,76 @@ def reset_password(request: Request, body: ResetPasswordRequest, db: Session = D
     db.commit()
 
     return {"message": "Password updated successfully. Please log in with your new password."}
+
+
+# ---- Google OAuth ----
+
+class GoogleAuthRequest(BaseModel):
+    credential: str
+    full_name: str | None = None
+
+
+@router.post("/google", summary="Sign in or register with Google")
+def google_auth(body: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """
+    Frontend-first Google OAuth flow.
+    1. Frontend sends Google ID token (credential).
+    2. Backend verifies it, then finds/creates the user.
+    3. If new user and no full_name provided, returns {status: needs_name}.
+    4. Second call with full_name creates the account.
+    """
+    from google.oauth2 import id_token
+    from google.auth.transport import requests as grequests
+    from app.config import settings
+
+    if not settings.GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google login henüz yapılandırılmamış.")
+
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            body.credential,
+            grequests.Request(),
+            settings.GOOGLE_CLIENT_ID,
+        )
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Geçersiz Google kimlik bilgisi.")
+
+    email: str = idinfo.get("email", "")
+    google_id: str = idinfo.get("sub", "")
+    suggested_name: str = idinfo.get("name", "")
+
+    if not email or not idinfo.get("email_verified"):
+        raise HTTPException(status_code=400, detail="Google tarafından doğrulanmış bir email gereklidir.")
+
+    user = db.query(User).filter(User.email == email).first()
+
+    if user:
+        if not user.google_id:
+            # Existing email/password account
+            raise HTTPException(
+                status_code=409,
+                detail="Bu email şifreyle kayıtlı. Lütfen şifrenizle giriş yapın.",
+            )
+        # Existing Google user — issue JWT
+        token = create_access_token(data={"sub": str(user.id)})
+        return TokenResponse(access_token=token, user=UserResponse.model_validate(user))
+
+    # Brand-new user
+    if not body.full_name or not body.full_name.strip():
+        # Step 1 of 2: ask the frontend to show the name form
+        return {"status": "needs_name", "suggested_name": suggested_name}
+
+    # Step 2 of 2: create account
+    new_user = User(
+        full_name=body.full_name.strip(),
+        email=email,
+        password_hash=None,
+        google_id=google_id,
+        role="user",
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    token = create_access_token(data={"sub": str(new_user.id)})
+    return TokenResponse(access_token=token, user=UserResponse.model_validate(new_user))
