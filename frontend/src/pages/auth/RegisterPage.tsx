@@ -1,23 +1,32 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { Loader2, Eye, EyeOff, ArrowRight, Check, X } from 'lucide-react';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
+import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 
 const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
 
 function PasswordStrength({ password }: { password: string }) {
+  const { t } = useTranslation();
   const checks = [
-    { label: 'At least 8 characters', pass: password.length >= 8 },
-    { label: 'Uppercase letter', pass: /[A-Z]/.test(password) },
-    { label: 'Lowercase letter', pass: /[a-z]/.test(password) },
-    { label: 'Number', pass: /\d/.test(password) },
+    { label: t('auth.register.reqLength'), pass: password.length >= 8 },
+    { label: t('auth.register.reqUpper'), pass: /[A-Z]/.test(password) },
+    { label: t('auth.register.reqLower'), pass: /[a-z]/.test(password) },
+    { label: t('auth.register.reqNumber'), pass: /\d/.test(password) },
   ];
   const score = checks.filter(c => c.pass).length;
   const colors = ['', 'bg-red-500', 'bg-amber-500', 'bg-yellow-400', 'bg-emerald-500'];
-  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const labels = [
+    '',
+    t('auth.register.strengthWeakPwd'),
+    t('auth.register.strengthFairPwd'),
+    t('auth.register.strengthGoodPwd'),
+    t('auth.register.strengthStrongPwd'),
+  ];
 
   if (!password) return null;
 
@@ -39,13 +48,14 @@ function PasswordStrength({ password }: { password: string }) {
         ))}
       </div>
       {score > 0 && (
-        <p className={`text-[10px] font-bold ${colors[score].replace('bg-', 'text-')}`}>{labels[score]} password</p>
+        <p className={`text-[10px] font-bold ${colors[score].replace('bg-', 'text-')}`}>{labels[score]}</p>
       )}
     </div>
   );
 }
 
 export function RegisterPage() {
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,10 +69,10 @@ export function RegisterPage() {
     setIsLoading(true);
     try {
       await api.post('/auth/register', { full_name: fullName, email, password });
-      toast.success('Account created! Please sign in.');
+      toast.success(t('auth.register.successToast'));
       navigate('/login');
     } catch (error: any) {
-      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || 'Registration failed');
+      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.register.errorToast'));
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +80,8 @@ export function RegisterPage() {
 
   return (
     <div className="min-h-screen flex bg-white dark:bg-[#111110] relative">
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+        <LanguageSwitcher />
         <ThemeToggle />
       </div>
 
@@ -79,11 +90,11 @@ export function RegisterPage() {
         <span className="font-mono font-medium tracking-tight text-base text-[#111111] dark:text-[#e8e7e4]">CVision</span>
         <div>
           <blockquote className="font-sans text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
-            "Your next role starts with a stronger CV."
+            "{t('auth.taglineRegister')}"
           </blockquote>
-          <p className="text-sm text-[#787774] dark:text-[#908d89]">Used by career professionals across 14 industries.</p>
+          <p className="text-sm text-[#787774] dark:text-[#908d89]">{t('auth.usedBy')}</p>
         </div>
-        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">© 2025 CVision</p>
+        <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">{t('common.copyright')}</p>
       </div>
 
       {/* Right form panel */}
@@ -93,17 +104,17 @@ export function RegisterPage() {
             onClick={() => navigate('/')}
             className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
           >
-            ← Ana sayfaya dön
+            {t('auth.backToHome')}
           </button>
-          <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Create account</h1>
-          <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Fill in your details to get started.</p>
+          <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">{t('auth.register.title')}</h1>
+          <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">{t('auth.register.subtitle')}</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Full Name</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.fullName')}</label>
               <input
                 type="text"
-                placeholder="John Doe"
+                placeholder={t('auth.register.fullNamePlaceholder')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
@@ -113,10 +124,10 @@ export function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Email Address</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.email')}</label>
               <input
                 type="email"
-                placeholder="you@example.com"
+                placeholder={t('auth.register.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -125,11 +136,11 @@ export function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">Password</label>
+              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.password')}</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Min. 8 characters"
+                  placeholder={t('auth.register.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -155,7 +166,7 @@ export function RegisterPage() {
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>Create Free Account <ArrowRight className="w-4 h-4" /></>
+                <>{t('auth.register.submitButton')} <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
@@ -164,16 +175,16 @@ export function RegisterPage() {
           <div className="mt-6">
             <div className="relative flex items-center gap-3 mb-4">
               <div className="flex-1 h-px bg-[#EAEAEA] dark:bg-white/[0.07]" />
-              <span className="text-xs text-[#A09D9A] dark:text-[#6a6764] font-medium">veya</span>
+              <span className="text-xs text-[#A09D9A] dark:text-[#6a6764] font-medium">{t('common.or')}</span>
               <div className="flex-1 h-px bg-[#EAEAEA] dark:bg-white/[0.07]" />
             </div>
             <GoogleAuthButton />
           </div>
 
           <p className="mt-8 text-center text-sm text-[#787774] dark:text-[#908d89]">
-            Already have an account?{' '}
+            {t('auth.register.hasAccount')}{' '}
             <Link to="/login" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] font-semibold transition-colors">
-              Sign in
+              {t('auth.register.signIn')}
             </Link>
           </p>
         </div>

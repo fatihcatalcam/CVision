@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import {
   ArrowLeft, FileText, ChevronRight, Search, Filter,
@@ -22,28 +23,30 @@ interface HistoryItem {
   analysis_id: number | null;
 }
 
-const STATUS_META: Record<string, { label: string; icon: React.ReactNode; badgeClass: string }> = {
-  completed: {
-    label: 'Completed',
-    icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-    badgeClass: 'badge badge-success',
-  },
-  processing: {
-    label: 'Processing',
-    icon: <Loader2 className="w-3.5 h-3.5 animate-spin" />,
-    badgeClass: 'badge badge-warning',
-  },
-  pending: {
-    label: 'Pending',
-    icon: <Clock className="w-3.5 h-3.5" />,
-    badgeClass: 'badge badge-warning',
-  },
-  failed: {
-    label: 'Failed',
-    icon: <XCircle className="w-3.5 h-3.5" />,
-    badgeClass: 'badge badge-danger',
-  },
-};
+function getStatusMeta(t: (key: string) => string): Record<string, { label: string; icon: React.ReactNode; badgeClass: string }> {
+  return {
+    completed: {
+      label: t('history.filterCompleted'),
+      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      badgeClass: 'badge badge-success',
+    },
+    processing: {
+      label: t('history.filterProcessing'),
+      icon: <Loader2 className="w-3.5 h-3.5 animate-spin" />,
+      badgeClass: 'badge badge-warning',
+    },
+    pending: {
+      label: t('history.filterPending'),
+      icon: <Clock className="w-3.5 h-3.5" />,
+      badgeClass: 'badge badge-warning',
+    },
+    failed: {
+      label: t('history.filterFailed'),
+      icon: <XCircle className="w-3.5 h-3.5" />,
+      badgeClass: 'badge badge-danger',
+    },
+  };
+}
 
 function ScoreBadge({ score }: { score: number }) {
   const color =
@@ -75,8 +78,10 @@ function MiniBar({ value }: { value: number }) {
 }
 
 export function HistoryPage() {
+  const { t, i18n } = useTranslation();
   useAuth();
   const navigate = useNavigate();
+  const STATUS_META = getStatusMeta(t);
 
   const [items, setItems] = useState<HistoryItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -96,7 +101,7 @@ export function HistoryPage() {
         setItems(res.data.items);
         setTotal(res.data.total);
       } catch {
-        toast.error('Failed to load history');
+        toast.error(t('history.errorLoad'));
       } finally {
         setIsLoading(false);
       }
@@ -111,9 +116,9 @@ export function HistoryPage() {
       setItems(prev => prev.filter(i => i.cv_id !== cvId));
       setTotal(prev => prev - 1);
       setConfirmDelete(null);
-      toast.success('CV deleted');
+      toast.success(t('history.successDelete'));
     } catch {
-      toast.error('Failed to delete CV');
+      toast.error(t('history.errorDelete'));
     } finally {
       setDeletingId(null);
     }
@@ -142,19 +147,19 @@ export function HistoryPage() {
           onClick={() => navigate('/dashboard')}
           className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-5"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+          <ArrowLeft className="w-4 h-4" /> {t('history.backToDashboard')}
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis History</h1>
-            <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{total} CV{total !== 1 ? 's' : ''} uploaded total</p>
+            <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('history.title')}</h1>
+            <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{t('history.totalUploaded', { count: total })}</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-semibold hover:bg-[#122a52] transition-colors self-start sm:self-auto"
           >
-            <FileText className="w-4 h-4" /> New Analysis
+            <FileText className="w-4 h-4" /> {t('history.newAnalysis')}
           </button>
         </div>
       </div>
@@ -163,10 +168,10 @@ export function HistoryPage() {
       {!isLoading && items.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total CVs', value: total, icon: FileText, iconColor: 'text-[#1B3A6B]', iconBg: 'bg-[#EEF2F8]' },
-            { label: 'Avg Score', value: avgScore > 0 ? `${Math.round(avgScore)}%` : 'N/A', icon: BarChart3, iconColor: 'text-[#956400]', iconBg: 'bg-[#956400]/10' },
-            { label: 'Best Score', value: bestScore > 0 ? `${Math.round(bestScore)}%` : 'N/A', icon: TrendingUp, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
-            { label: 'Completed', value: items.filter(i => i.status === 'completed').length, icon: CheckCircle2, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
+            { label: t('history.statTotalCvs'), value: total, icon: FileText, iconColor: 'text-[#1B3A6B]', iconBg: 'bg-[#EEF2F8]' },
+            { label: t('history.statAvgScore'), value: avgScore > 0 ? `${Math.round(avgScore)}%` : 'N/A', icon: BarChart3, iconColor: 'text-[#956400]', iconBg: 'bg-[#956400]/10' },
+            { label: t('history.statBestScore'), value: bestScore > 0 ? `${Math.round(bestScore)}%` : 'N/A', icon: TrendingUp, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
+            { label: t('history.statCompleted'), value: items.filter(i => i.status === 'completed').length, icon: CheckCircle2, iconColor: 'text-[#346538]', iconBg: 'bg-[#346538]/10' },
           ].map(s => (
             <Card key={s.label} className="flex items-center gap-3 p-4 hover:border-[#EAEAEA] transition-all">
               <div className={`p-2 rounded-[var(--radius-md)] ${s.iconBg} flex-shrink-0`}>
@@ -187,7 +192,7 @@ export function HistoryPage() {
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A09D9A] pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by filename or domain..."
+            placeholder={t('history.searchPlaceholder')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-10 pl-10 pr-4 text-sm focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all"
@@ -200,11 +205,11 @@ export function HistoryPage() {
             onChange={e => setFilterStatus(e.target.value)}
             className="appearance-none bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] text-sm px-3 py-2 pl-9 pr-8 rounded-[var(--radius-md)] h-10 cursor-pointer focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] transition-all"
           >
-            <option value="all">All Status</option>
-            <option value="completed">Completed</option>
-            <option value="processing">Processing</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
+            <option value="all">{t('history.filterAll')}</option>
+            <option value="completed">{t('history.filterCompleted')}</option>
+            <option value="processing">{t('history.filterProcessing')}</option>
+            <option value="pending">{t('history.filterPending')}</option>
+            <option value="failed">{t('history.filterFailed')}</option>
           </select>
         </div>
       </div>
@@ -222,19 +227,19 @@ export function HistoryPage() {
             <AlertCircle className="w-8 h-8 text-[#787774] dark:text-[#908d89]" />
           </div>
           <h3 className="text-lg font-bold text-[#111111] dark:text-[#e8e7e4] mb-2">
-            {items.length === 0 ? 'No analyses yet' : 'No results found'}
+            {items.length === 0 ? t('history.emptyHeading') : t('history.emptyFilterHeading')}
           </h3>
           <p className="text-[#787774] text-sm mb-6">
             {items.length === 0
-              ? 'Upload your first CV to get started.'
-              : 'Try adjusting your search or filter.'}
+              ? t('history.emptyBody')
+              : t('history.emptyFilterBody')}
           </p>
           {items.length === 0 && (
             <button
               onClick={() => navigate('/dashboard')}
               className="px-6 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-semibold hover:bg-[#122a52] transition-colors"
             >
-              Upload CV
+              {t('history.uploadCv')}
             </button>
           )}
         </Card>
@@ -243,13 +248,13 @@ export function HistoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-[#F7F6F3] dark:bg-white/[0.03] border-b border-[#EAEAEA] dark:border-white/[0.07]">
-                <th className="px-5 py-3 text-left label-sm">File</th>
-                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">Domain</th>
-                <th className="px-5 py-3 text-left label-sm hidden md:table-cell">ATS / Keywords</th>
-                <th className="px-5 py-3 text-left label-sm">Score</th>
-                <th className="px-5 py-3 text-left label-sm">Status</th>
-                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">Date</th>
-                <th className="px-5 py-3 text-right label-sm">Actions</th>
+                <th className="px-5 py-3 text-left label-sm">{t('history.colFile')}</th>
+                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">{t('history.colDomain')}</th>
+                <th className="px-5 py-3 text-left label-sm hidden md:table-cell">{t('history.colScores')}</th>
+                <th className="px-5 py-3 text-left label-sm">{t('history.colScore')}</th>
+                <th className="px-5 py-3 text-left label-sm">{t('history.colStatus')}</th>
+                <th className="px-5 py-3 text-left label-sm hidden sm:table-cell">{t('history.colDate')}</th>
+                <th className="px-5 py-3 text-right label-sm">{t('history.colActions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -287,11 +292,11 @@ export function HistoryPage() {
                       {item.overall_score !== null ? (
                         <div className="space-y-1.5 min-w-[120px]">
                           <div className="flex items-center gap-2 text-[10px] text-[#787774]">
-                            <span className="w-14">ATS</span>
+                            <span className="w-14">{t('scoreHero.ats')}</span>
                             <MiniBar value={item.ats_score ?? 0} />
                           </div>
                           <div className="flex items-center gap-2 text-[10px] text-[#787774]">
-                            <span className="w-14">Keywords</span>
+                            <span className="w-14">{t('scoreHero.keywords')}</span>
                             <MiniBar value={item.keyword_score ?? 0} />
                           </div>
                         </div>
@@ -305,7 +310,7 @@ export function HistoryPage() {
                       {item.overall_score !== null ? (
                         <ScoreBadge score={item.overall_score} />
                       ) : item.status === 'failed' ? (
-                        <span className="text-xs text-[#9F2F2D]">Failed</span>
+                        <span className="text-xs text-[#9F2F2D]">{t('history.filterFailed')}</span>
                       ) : (
                         <span className="text-xs text-[#787774]">—</span>
                       )}
@@ -321,7 +326,10 @@ export function HistoryPage() {
                     {/* Date */}
                     <td className="px-5 py-3 hidden sm:table-cell">
                       <span className="text-xs text-[#787774]">
-                        {new Date(item.uploaded_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        {new Date(item.uploaded_at).toLocaleDateString(
+                          i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB',
+                          { day: '2-digit', month: 'short', year: 'numeric' }
+                        )}
                       </span>
                     </td>
 
@@ -335,13 +343,13 @@ export function HistoryPage() {
                               disabled={isDeleting}
                               className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#9F2F2D]/10 text-[#9F2F2D] border border-[#9F2F2D]/20 text-xs font-bold hover:bg-[#9F2F2D]/20 transition-colors disabled:opacity-50"
                             >
-                              {isDeleting ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Confirm'}
+                              {isDeleting ? <Loader2 className="w-3 h-3 animate-spin" /> : t('common.confirm')}
                             </button>
                             <button
                               onClick={() => setConfirmDelete(null)}
                               className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
                             >
-                              Cancel
+                              {t('common.cancel')}
                             </button>
                           </>
                         ) : (
@@ -349,7 +357,7 @@ export function HistoryPage() {
                             <button
                               onClick={() => setConfirmDelete(item.cv_id)}
                               className="p-2 rounded-[var(--radius-sm)] text-[#A09D9A] hover:text-[#9F2F2D] hover:bg-[#9F2F2D]/10 transition-all"
-                              title="Delete"
+                              title={t('common.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -358,7 +366,7 @@ export function HistoryPage() {
                                 onClick={() => navigate(`/analysis/${item.cv_id}`)}
                                 className="flex items-center gap-1.5 px-3 py-2 rounded-[var(--radius-sm)] bg-[#EEF2F8] border border-[#1B3A6B]/20 text-[#1B3A6B] text-xs font-semibold hover:bg-[#D6E4F7] transition-all"
                               >
-                                View Report <ChevronRight className="w-3.5 h-3.5" />
+                                {t('history.viewReport')} <ChevronRight className="w-3.5 h-3.5" />
                               </button>
                             )}
                           </>

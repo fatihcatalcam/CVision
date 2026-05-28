@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
+import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import {
@@ -47,6 +49,8 @@ function PasswordStrengthBar({ password }: { password: string }) {
 const NOTIF_KEY = 'cvision_notify_analysis';
 
 export function SettingsPage() {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB';
   const { user, refreshUser, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -92,9 +96,9 @@ export function SettingsPage() {
     try {
       await api.patch('/auth/me', { full_name: fullName.trim() });
       await refreshUser();
-      toast.success('Profile updated successfully');
+      toast.success(t('settings.profile.successToast'));
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || 'Failed to update profile');
+      toast.error(err.response?.data?.detail || t('settings.profile.errorToast'));
     } finally {
       setIsSavingProfile(false);
     }
@@ -102,16 +106,16 @@ export function SettingsPage() {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!passwordsMatch) { toast.error('Passwords do not match'); return; }
-    if (!passwordValid) { toast.error('New password does not meet requirements'); return; }
-    if (currentPassword === newPassword) { toast.error('New password must be different'); return; }
+    if (!passwordsMatch) { toast.error(t('settings.password.errorNoMatch')); return; }
+    if (!passwordValid) { toast.error(t('settings.password.errorRequirements')); return; }
+    if (currentPassword === newPassword) { toast.error(t('settings.password.errorSame')); return; }
     setIsSavingPassword(true);
     try {
       await api.post('/auth/me/password', { current_password: currentPassword, new_password: newPassword });
-      toast.success('Password changed successfully');
+      toast.success(t('settings.password.successToast'));
       setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.response?.data?.detail || 'Failed to change password');
+      toast.error(err.response?.data?.message || err.response?.data?.detail || t('settings.password.errorToast'));
     } finally {
       setIsSavingPassword(false);
     }
@@ -121,11 +125,11 @@ export function SettingsPage() {
     setCancellingSubscription(true);
     try {
       const res = await api.post('/payment/stripe/cancel');
-      toast.success(res.data.message || 'Subscription cancelled.');
+      toast.success(res.data.message || t('settings.subscription.cancelSuccessToast'));
       await refreshUser();
       setShowCancelConfirm(false);
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || 'Failed to cancel subscription');
+      toast.error(err.response?.data?.detail || t('settings.subscription.cancelErrorToast'));
     } finally {
       setCancellingSubscription(false);
     }
@@ -142,9 +146,9 @@ export function SettingsPage() {
       a.download = `cvision-data-${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      toast.success('Data exported successfully');
+      toast.success(t('settings.data.exportSuccessToast'));
     } catch (err: any) {
-      toast.error('Failed to export data');
+      toast.error(t('settings.data.exportErrorToast'));
     } finally {
       setIsExporting(false);
     }
@@ -152,7 +156,7 @@ export function SettingsPage() {
 
   const handleDeleteAccount = async () => {
     if (deleteEmail !== user?.email) {
-      toast.error('Email does not match');
+      toast.error(t('settings.data.emailMismatchToast'));
       return;
     }
     setIsDeletingAccount(true);
@@ -160,9 +164,9 @@ export function SettingsPage() {
       await api.delete('/auth/me');
       logout();
       navigate('/');
-      toast.success('Account deleted');
+      toast.success(t('settings.data.deleteSuccessToast'));
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || 'Failed to delete account');
+      toast.error(err.response?.data?.detail || t('settings.data.deleteErrorToast'));
     } finally {
       setIsDeletingAccount(false);
     }
@@ -174,7 +178,7 @@ export function SettingsPage() {
   const initials = (user?.full_name ?? 'U')[0].toUpperCase();
 
   const subEndDate = user?.subscription_end_at
-    ? new Date(user.subscription_end_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(user.subscription_end_at).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })
     : null;
 
   const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
@@ -187,12 +191,18 @@ export function SettingsPage() {
         onClick={() => navigate('/dashboard')}
         className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+        <ArrowLeft className="w-4 h-4" /> {t('settings.backToDashboard')}
       </button>
 
-      <div className="mb-8">
-        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Account Settings</h1>
-        <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">Manage your profile, security, and subscription</p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('settings.title')}</h1>
+          <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{t('settings.subtitle')}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -211,16 +221,16 @@ export function SettingsPage() {
             </div>
             {user?.plan_type === 'premium' ? (
               <span className="badge badge-info">
-                <Crown className="w-3.5 h-3.5 inline-block mr-1" /> Pro Member
+                <Crown className="w-3.5 h-3.5 inline-block mr-1" /> {t('settings.proBadge')}
               </span>
             ) : (
               <div className="w-full">
-                <span className="badge badge-neutral mb-3 inline-block">Free Plan</span>
+                <span className="badge badge-neutral mb-3 inline-block">{t('settings.freeBadge')}</span>
                 <button
                   onClick={() => navigate('/pricing')}
                   className="w-full py-2 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-xs font-bold hover:bg-[#122a52] transition-colors flex items-center justify-center gap-1.5"
                 >
-                  <Sparkles className="w-3 h-3" /> Upgrade to Pro
+                  <Sparkles className="w-3 h-3" /> {t('settings.upgradeToPro')}
                 </button>
               </div>
             )}
@@ -228,32 +238,32 @@ export function SettingsPage() {
 
           {/* Usage */}
           <Card className="p-4 space-y-3">
-            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">Usage</p>
+            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.usageSection')}</p>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-[#787774] dark:text-[#908d89]">Analyses used</span>
+                <span className="text-[#787774] dark:text-[#908d89]">{t('settings.analysesUsed')}</span>
                 <span className="text-[#111111] dark:text-[#e8e7e4] font-bold stat-number">{used} / {quota}</span>
               </div>
               <div className="w-full h-1.5 bg-[#EAEAEA] dark:bg-white/[0.07] rounded-full">
                 <div className="h-full bg-[#1B3A6B] dark:bg-[#4a7dd1] rounded-full transition-all" style={{ width: `${usagePercent}%` }} />
               </div>
-              <p className="text-[10px] text-[#787774] dark:text-[#908d89]">{Math.max(0, quota - used)} remaining this week</p>
+              <p className="text-[10px] text-[#787774] dark:text-[#908d89]">{Math.max(0, quota - used)} {t('settings.remainingThisWeek')}</p>
             </div>
             <div className="pt-2 border-t border-[#EAEAEA] dark:border-white/[0.07] space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" /> Member since
+                  <Calendar className="w-3.5 h-3.5" /> {t('settings.memberSince')}
                 </span>
                 <span className="text-[#111111] dark:text-[#e8e7e4] text-xs">
-                  {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '-'}
+                  {user?.created_at ? new Date(user.created_at).toLocaleDateString(dateLocale, { month: 'short', year: 'numeric' }) : '-'}
                 </span>
               </div>
               {user?.role === 'admin' && (
                 <div className="flex justify-between text-sm">
                   <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
-                    <Shield className="w-3.5 h-3.5" /> Role
+                    <Shield className="w-3.5 h-3.5" /> {t('settings.roleLabel')}
                   </span>
-                  <span className="text-[#956400] text-xs font-bold">Administrator</span>
+                  <span className="text-[#956400] text-xs font-bold">{t('settings.roleAdmin')}</span>
                 </div>
               )}
             </div>
@@ -261,12 +271,12 @@ export function SettingsPage() {
 
           {/* Account actions */}
           <Card className="p-4 space-y-2">
-            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-3">Account</p>
+            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-3">{t('settings.accountSection')}</p>
             <button
               onClick={() => { logout(); navigate('/'); }}
               className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] dark:border-white/[0.07] text-[#787774] dark:text-[#908d89] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
             >
-              Sign Out
+              {t('settings.signOut')}
             </button>
           </Card>
         </div>
@@ -276,26 +286,26 @@ export function SettingsPage() {
 
           {/* 1 — Profile */}
           <div className="surface p-6">
-            <SectionHeader icon={User} title="Profile Information" desc="Update your display name" />
+            <SectionHeader icon={User} title={t('settings.profile.title')} desc={t('settings.profile.subtitle')} />
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Full Name</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.profile.fullName')}</label>
                 <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                   minLength={2} maxLength={150} className={inputCls} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Email Address</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.profile.email')}</label>
                 <div className="relative">
                   <input type="email" value={user?.email ?? ''} disabled
                     className="w-full bg-[#F7F6F3] dark:bg-white/[0.03] border border-[#EAEAEA] dark:border-white/[0.07] text-[#A09D9A] dark:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 cursor-not-allowed pr-28" />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#787774] dark:text-[#908d89] bg-[#EAEAEA] dark:bg-white/[0.07] px-2 py-0.5 rounded border border-[#D5D3D0] dark:border-white/[0.05]">
-                    Cannot change
+                    {t('settings.profile.cannotChange')}
                   </span>
                 </div>
               </div>
               <div className="flex justify-end">
                 <button onClick={handleSaveProfile} disabled={!profileChanged || isSavingProfile} className={saveBtnCls}>
-                  {isSavingProfile ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</> : <><Check className="w-4 h-4" /> Save Changes</>}
+                  {isSavingProfile ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('common.saving')}</> : <><Check className="w-4 h-4" /> {t('settings.profile.saveButton')}</>}
                 </button>
               </div>
             </div>
@@ -303,13 +313,13 @@ export function SettingsPage() {
 
           {/* 2 — Password */}
           <div className="surface p-6">
-            <SectionHeader icon={Lock} title="Change Password" desc="Use a strong password with uppercase, lowercase, and numbers" />
+            <SectionHeader icon={Lock} title={t('settings.password.title')} desc={t('settings.password.subtitle')} />
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Current Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.current')}</label>
                 <div className="relative">
                   <input type={showCurrent ? 'text' : 'password'} value={currentPassword}
-                    onChange={e => setCurrentPassword(e.target.value)} placeholder="Enter current password" required
+                    onChange={e => setCurrentPassword(e.target.value)} placeholder={t('settings.password.currentPlaceholder')} required
                     className={`${inputCls} pr-12`} />
                   <button type="button" onClick={() => setShowCurrent(!showCurrent)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
@@ -318,10 +328,10 @@ export function SettingsPage() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">New Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.new')}</label>
                 <div className="relative">
                   <input type={showNew ? 'text' : 'password'} value={newPassword}
-                    onChange={e => setNewPassword(e.target.value)} placeholder="Min. 8 characters" required minLength={8}
+                    onChange={e => setNewPassword(e.target.value)} placeholder={t('settings.password.newPlaceholder')} required minLength={8}
                     className={`${inputCls} pr-12`} />
                   <button type="button" onClick={() => setShowNew(!showNew)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
@@ -331,10 +341,10 @@ export function SettingsPage() {
                 <PasswordStrengthBar password={newPassword} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">Confirm New Password</label>
+                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.confirm')}</label>
                 <div className="relative">
                   <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                    placeholder="Repeat new password" required
+                    placeholder={t('settings.password.confirmPlaceholder')} required
                     className={`${inputCls} pr-12 ${confirmPassword && !passwordsMatch ? 'border-[#9F2F2D]/50 focus:border-[#9F2F2D] focus:ring-[#9F2F2D]/15' : confirmPassword && passwordsMatch ? 'border-[#346538]/40 focus:border-[#346538] focus:ring-[#346538]/15' : ''}`} />
                   {confirmPassword && (
                     <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
@@ -342,11 +352,11 @@ export function SettingsPage() {
                     </div>
                   )}
                 </div>
-                {confirmPassword && !passwordsMatch && <p className="text-xs text-[#9F2F2D]">Passwords do not match</p>}
+                {confirmPassword && !passwordsMatch && <p className="text-xs text-[#9F2F2D]">{t('settings.password.noMatch')}</p>}
               </div>
               <div className="flex justify-end pt-2">
                 <button type="submit" disabled={isSavingPassword || !currentPassword || !passwordValid || !passwordsMatch} className={saveBtnCls}>
-                  {isSavingPassword ? <><Loader2 className="w-4 h-4 animate-spin" /> Changing...</> : <><Lock className="w-4 h-4" /> Change Password</>}
+                  {isSavingPassword ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('settings.password.changingButton')}</> : <><Lock className="w-4 h-4" /> {t('settings.password.changeButton')}</>}
                 </button>
               </div>
             </form>
@@ -354,11 +364,11 @@ export function SettingsPage() {
 
           {/* 3 — Appearance */}
           <div className="surface p-6">
-            <SectionHeader icon={Sun} title="Appearance" desc="Customize how CVision looks for you" />
+            <SectionHeader icon={Sun} title={t('settings.appearance.title')} desc={t('settings.appearance.subtitle')} />
             <div className="flex items-center justify-between py-3 border-b border-[#EAEAEA] dark:border-white/[0.07] last:border-0">
               <div>
-                <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">Theme</p>
-                <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">Switch between light and dark mode</p>
+                <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.appearance.theme')}</p>
+                <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.appearance.themeDesc')}</p>
               </div>
               <ThemeToggle />
             </div>
@@ -366,12 +376,12 @@ export function SettingsPage() {
 
           {/* 4 — Notifications */}
           <div className="surface p-6">
-            <SectionHeader icon={Bell} title="Notifications" desc="Control what emails and alerts you receive" />
+            <SectionHeader icon={Bell} title={t('settings.notifications.title')} desc={t('settings.notifications.subtitle')} />
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">Analysis complete</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">Get notified when your CV analysis is ready</p>
+                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.notifications.analysisComplete')}</p>
+                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.notifications.analysisCompleteDesc')}</p>
                 </div>
                 <button
                   onClick={() => setNotifyAnalysis(!notifyAnalysis)}
@@ -382,17 +392,17 @@ export function SettingsPage() {
               </div>
               <div className="flex items-center justify-between opacity-50">
                 <div>
-                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">Weekly digest</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">Summary of your CV performance each week</p>
+                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.notifications.weeklyDigest')}</p>
+                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.notifications.weeklyDigestDesc')}</p>
                 </div>
-                <span className="text-[10px] text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] px-2 py-0.5 rounded-full">Coming soon</span>
+                <span className="text-[10px] text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] px-2 py-0.5 rounded-full">{t('settings.notifications.comingSoon')}</span>
               </div>
             </div>
           </div>
 
           {/* 5 — Subscription */}
           <div className="surface p-6">
-            <SectionHeader icon={CreditCard} title="Subscription" desc="Manage your plan and billing" />
+            <SectionHeader icon={CreditCard} title={t('settings.subscription.title')} desc={t('settings.subscription.subtitle')} />
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 rounded-xl bg-[#F7F6F3] dark:bg-white/[0.04] border border-[#EAEAEA] dark:border-white/[0.07]">
                 <div className="flex items-center gap-3">
@@ -401,19 +411,19 @@ export function SettingsPage() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
-                      {user?.plan_type === 'premium' ? 'Pro Plan' : 'Free Plan'}
+                      {user?.plan_type === 'premium' ? t('settings.subscription.proPlan') : t('settings.subscription.freePlan')}
                     </p>
                     <p className="text-xs text-[#787774] dark:text-[#908d89]">
                       {user?.plan_type === 'premium'
-                        ? subEndDate ? `Renews ${subEndDate}` : '$4.99 / month'
-                        : '3 analyses per week'}
+                        ? subEndDate ? t('settings.subscription.renews', { date: subEndDate }) : t('settings.subscription.price')
+                        : t('settings.subscription.freeLimit')}
                     </p>
                   </div>
                 </div>
                 {user?.plan_type === 'free' && (
                   <button onClick={() => navigate('/pricing')}
                     className="flex items-center gap-1 text-xs font-bold text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline">
-                    Upgrade <ChevronRight className="w-3 h-3" />
+                    {t('settings.subscription.upgradeButton')} <ChevronRight className="w-3 h-3" />
                   </button>
                 )}
               </div>
@@ -423,23 +433,23 @@ export function SettingsPage() {
                   {!showCancelConfirm ? (
                     <button onClick={() => setShowCancelConfirm(true)}
                       className="text-xs text-[#787774] dark:text-[#908d89] hover:text-[#9F2F2D] dark:hover:text-[#d4524f] transition-colors underline underline-offset-2">
-                      Cancel subscription
+                      {t('settings.subscription.cancelButton')}
                     </button>
                   ) : (
                     <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
-                      <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4] mb-1">Cancel subscription?</p>
+                      <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4] mb-1">{t('settings.subscription.cancelConfirmTitle')}</p>
                       <p className="text-xs text-[#787774] dark:text-[#908d89] mb-4">
-                        You'll keep Pro access until {subEndDate || 'the end of your billing period'}. After that, your account will revert to the Free plan.
+                        {t('settings.subscription.cancelConfirmBody', { date: subEndDate || '...' })}
                       </p>
                       <div className="flex gap-2">
                         <button onClick={handleCancelSubscription} disabled={cancellingSubscription}
                           className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#9F2F2D]/10 text-[#9F2F2D] dark:text-[#d4524f] text-xs font-bold hover:bg-[#9F2F2D]/15 transition-colors disabled:opacity-50">
                           {cancellingSubscription ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
-                          Yes, cancel
+                          {t('settings.subscription.cancelYes')}
                         </button>
                         <button onClick={() => setShowCancelConfirm(false)}
                           className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
-                          Keep Pro
+                          {t('settings.subscription.keepPro')}
                         </button>
                       </div>
                     </div>
@@ -451,18 +461,18 @@ export function SettingsPage() {
 
           {/* 6 — Data & Privacy */}
           <div className="surface p-6">
-            <SectionHeader icon={Download} title="Data & Privacy" desc="Export your data or permanently delete your account" />
+            <SectionHeader icon={Download} title={t('settings.data.title')} desc={t('settings.data.subtitle')} />
             <div className="space-y-4">
               {/* Export */}
               <div className="flex items-center justify-between py-3 border-b border-[#EAEAEA] dark:border-white/[0.07]">
                 <div>
-                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">Export your data</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">Download all your analyses as a JSON file</p>
+                  <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.data.exportTitle')}</p>
+                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.data.exportDesc')}</p>
                 </div>
                 <button onClick={handleExportData} disabled={isExporting}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:border-[#1B3A6B]/30 hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] hover:bg-[#EEF2F8] dark:hover:bg-[#1B3A6B]/10 transition-all disabled:opacity-50">
                   {isExporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-                  Export
+                  {t('settings.data.exportButton')}
                 </button>
               </div>
 
@@ -470,13 +480,13 @@ export function SettingsPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">Delete account</p>
-                    <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">Permanently remove your account and all data</p>
+                    <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.data.deleteTitle')}</p>
+                    <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.data.deleteDesc')}</p>
                   </div>
                   {!showDeleteConfirm && (
                     <button onClick={() => setShowDeleteConfirm(true)}
                       className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#9F2F2D]/20 text-xs font-medium text-[#9F2F2D] dark:text-[#d4524f] hover:bg-[#9F2F2D]/5 transition-all">
-                      <Trash2 className="w-3.5 h-3.5" /> Delete
+                      <Trash2 className="w-3.5 h-3.5" /> {t('settings.data.deleteButton')}
                     </button>
                   )}
                 </div>
@@ -486,10 +496,11 @@ export function SettingsPage() {
                     <div className="flex items-start gap-2 mb-3">
                       <AlertTriangle className="w-4 h-4 text-[#9F2F2D] dark:text-[#d4524f] flex-shrink-0 mt-0.5" />
                       <p className="text-xs text-[#787774] dark:text-[#908d89]">
-                        This will permanently delete your account, all uploaded CVs, and analysis history. This action <span className="font-bold text-[#9F2F2D] dark:text-[#d4524f]">cannot be undone</span>.
+                        {t('settings.data.deleteWarning').replace(' **cannot be undone**', '')}
+                        <span className="font-bold text-[#9F2F2D] dark:text-[#d4524f]"> {t('common.confirm').toLowerCase()}</span>.
                       </p>
                     </div>
-                    <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-2">Type your email to confirm</p>
+                    <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-2">{t('settings.data.deleteEmailConfirm')}</p>
                     <input
                       type="email"
                       value={deleteEmail}
@@ -502,11 +513,11 @@ export function SettingsPage() {
                         disabled={isDeletingAccount || deleteEmail !== user?.email}
                         className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#9F2F2D] text-white text-xs font-bold hover:bg-[#7a2422] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                         {isDeletingAccount ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
-                        Delete my account
+                        {t('settings.data.deleteConfirmButton')}
                       </button>
                       <button onClick={() => { setShowDeleteConfirm(false); setDeleteEmail(''); }}
                         className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
-                        Cancel
+                        {t('common.cancel')}
                       </button>
                     </div>
                   </div>

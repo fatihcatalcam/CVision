@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -19,6 +20,7 @@ const GoogleIcon = () => (
 );
 
 export function GoogleAuthButton() {
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [pendingToken, setPendingToken] = useState('');
   const [fullName, setFullName] = useState('');
@@ -37,14 +39,14 @@ export function GoogleAuthButton() {
         setShowModal(true);
       } else {
         login(res.data.access_token, res.data.user);
-        toast.success('Hoş geldiniz!');
+        toast.success(t('auth.login.successToast'));
         navigate('/dashboard');
       }
     } catch (err: any) {
       toast.error(
         err.response?.data?.message ||
         err.response?.data?.detail ||
-        'Google ile giriş başarısız.'
+        t('auth.login.errorToast')
       );
     } finally {
       setIsLoading(false);
@@ -53,7 +55,7 @@ export function GoogleAuthButton() {
 
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => handleGoogleSuccess(tokenResponse.access_token),
-    onError: () => toast.error('Google ile giriş başarısız.'),
+    onError: () => toast.error(t('auth.login.errorToast')),
     onNonOAuthError: () => { /* user closed popup — no-op */ },
     scope: 'openid email profile',
   });
@@ -67,13 +69,13 @@ export function GoogleAuthButton() {
         full_name: fullName.trim(),
       });
       login(res.data.access_token, res.data.user);
-      toast.success('Hesabınız oluşturuldu!');
+      toast.success(t('auth.register.successToast'));
       navigate('/dashboard');
     } catch (err: any) {
       toast.error(
         err.response?.data?.message ||
         err.response?.data?.detail ||
-        'Hesap oluşturulamadı.'
+        t('auth.register.errorToast')
       );
       if (err.response?.status === 400) {
         setShowModal(false);
@@ -105,7 +107,7 @@ export function GoogleAuthButton() {
         ) : (
           <>
             <GoogleIcon />
-            Google ile devam edin
+            {t('auth.google.continueWith')}
           </>
         )}
       </button>
@@ -121,10 +123,10 @@ export function GoogleAuthButton() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold text-[#111111] dark:text-[#e8e7e4]">
-                  Hesabınızı tamamlayın
+                  {t('auth.google.nameModal.title')}
                 </h2>
                 <p className="mt-1 text-sm text-[#787774] dark:text-[#908d89]">
-                  Adınızı girin ve Google hesabınızla devam edin.
+                  {t('auth.google.nameModal.subtitle')}
                 </p>
               </div>
               <button
@@ -143,14 +145,14 @@ export function GoogleAuthButton() {
                   htmlFor="google-fullname"
                   className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider"
                 >
-                  Ad Soyad
+                  {t('auth.register.fullName')}
                 </label>
                 <input
                   id="google-fullname"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Adınız Soyadınız"
+                  placeholder={t('auth.google.nameModal.placeholder')}
                   required
                   minLength={2}
                   maxLength={150}
@@ -164,7 +166,7 @@ export function GoogleAuthButton() {
                 disabled={isLoading || fullName.trim().length < 2}
                 className="w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Devam Et →'}
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.google.nameModal.submit')}
               </button>
 
               <button
@@ -172,7 +174,7 @@ export function GoogleAuthButton() {
                 onClick={handleCancel}
                 className="w-full text-xs text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
               >
-                ← Geri dön
+                {t('auth.google.nameModal.back')}
               </button>
             </form>
           </div>

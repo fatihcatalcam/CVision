@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
+import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 
 export function PrivacyPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -17,10 +20,13 @@ export function PrivacyPage() {
             className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Geri dön
+            {t('common.back')}
           </button>
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <LanguageSwitcher />
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -141,9 +147,9 @@ export function PrivacyPage() {
         <div className="max-w-3xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
           <div className="flex items-center gap-5 text-xs text-[#787774] dark:text-[#908d89]">
-            <a href="/privacy" className="text-[#1B3A6B] dark:text-[#4a7dd1] font-medium">Gizlilik</a>
-            <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">Kullanım Şartları</a>
-            <span>© 2025 CVision</span>
+            <a href="/privacy" className="text-[#1B3A6B] dark:text-[#4a7dd1] font-medium">{t('common.privacy')}</a>
+            <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
+            <span>{t('common.copyright')}</span>
           </div>
         </div>
       </footer>

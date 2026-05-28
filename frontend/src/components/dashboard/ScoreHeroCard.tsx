@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 function scoreColor(score: number): string {
   if (score >= 80) return 'text-[#346538] dark:text-[#4ade80]';
@@ -30,13 +31,14 @@ export function ScoreHeroCard({
   totalAnalyses,
   averageScore,
 }: ScoreHeroCardProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const rounded = Math.round(latestScore);
 
   const subMetrics = [
-    { label: 'ATS', value: atsScore },
-    { label: 'Keywords', value: keywordScore },
-    { label: 'Completeness', value: completenessScore },
+    { label: t('scoreHero.ats'), value: atsScore },
+    { label: t('scoreHero.keywords'), value: keywordScore },
+    { label: t('scoreHero.completeness'), value: completenessScore },
   ].filter((m): m is { label: string; value: number } => m.value !== null);
 
   return (
@@ -44,7 +46,7 @@ export function ScoreHeroCard({
 
       {/* ── Top section ── */}
       <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium uppercase tracking-wider">
-        Son Analiz{latestRoleTitle ? ` · ${latestRoleTitle}` : ''}
+        {t('scoreHero.subtitle')}{latestRoleTitle ? ` · ${latestRoleTitle}` : ''}
       </p>
 
       {/* Big score + delta */}
@@ -100,7 +102,7 @@ export function ScoreHeroCard({
         <div className="flex gap-6">
           <div>
             <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
-              Toplam Analiz
+              {t('scoreHero.totalAnalyses')}
             </p>
             <p className="text-base font-black text-[#111111] dark:text-[#e8e7e4] mt-0.5 stat-number">
               {totalAnalyses}
@@ -109,7 +111,7 @@ export function ScoreHeroCard({
           {averageScore != null && (
             <div>
               <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
-                Ortalama Skor
+                {t('scoreHero.averageScore')}
               </p>
               <p className={`text-base font-black mt-0.5 stat-number ${scoreColor(averageScore)}`}>
                 {Math.round(averageScore)}%
@@ -123,7 +125,7 @@ export function ScoreHeroCard({
           onClick={() => navigate(`/analysis/${latestCvId}`)}
           className="flex items-center gap-1 text-sm font-medium text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline"
         >
-          Analizi Gör <ChevronRight className="w-4 h-4" />
+          {t('scoreHero.viewAnalysis')} <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>

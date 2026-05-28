@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
+import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import api from '../../services/api';
 import { Shield, Settings, LogOut, Plus, Sparkles } from 'lucide-react';
 import { ScoreHeroCard } from '../../components/dashboard/ScoreHeroCard';
@@ -40,13 +42,6 @@ interface HistoryItem {
   analysis_id: number | null;
 }
 
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Günaydın';
-  if (h < 17) return 'İyi günler';
-  return 'İyi akşamlar';
-}
-
 function Avatar({ name }: { name: string }) {
   const initials = name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase();
   const bgColors = ['bg-[#1B3A6B]', 'bg-[#1F6C9F]', 'bg-[#346538]', 'bg-[#956400]'];
@@ -72,11 +67,11 @@ function formatCountdown(resetAt: string | null, now: number): string | null {
   return '< 1m';
 }
 
-function formatResetDate(resetAt: string | null): string | null {
+function formatResetDate(resetAt: string | null, locale: string = 'en-GB'): string | null {
   if (!resetAt) return null;
   const d = new Date(resetAt);
   if (isNaN(d.getTime()) || d.getTime() <= Date.now()) return null;
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  return d.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
 function DashboardSkeleton() {
@@ -93,6 +88,8 @@ function DashboardSkeleton() {
 }
 
 export function DashboardPage() {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB';
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +122,13 @@ export function DashboardPage() {
     fetchAll();
   }, []);
 
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return t('dashboard.greeting.morning');
+    if (h < 17) return t('dashboard.greeting.afternoon');
+    return t('dashboard.greeting.evening');
+  }
+
   const quota = user?.plan_type === 'premium' ? 50 : 3;
   const quotaWindowExpired = user?.quota_reset_at
     ? new Date(user.quota_reset_at).getTime() <= now
@@ -132,7 +136,7 @@ export function DashboardPage() {
   const used = quotaWindowExpired ? 0 : (user?.analysis_count ?? 0);
   const remaining = Math.max(0, quota - used);
   const countdown = formatCountdown(user?.quota_reset_at ?? null, now);
-  const resetDate = formatResetDate(user?.quota_reset_at ?? null);
+  const resetDate = formatResetDate(user?.quota_reset_at ?? null, dateLocale);
   const hasAnalyses = !!(summary && summary.total_analyses > 0);
 
   return (
@@ -153,7 +157,7 @@ export function DashboardPage() {
           </div>
           {user?.plan_type === 'premium' && (
             <span className="ml-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-2.5 h-2.5" /> Pro
+              <Sparkles className="w-2.5 h-2.5" /> {t('dashboard.proBadge')}
             </span>
           )}
         </div>
@@ -164,30 +168,31 @@ export function DashboardPage() {
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
           >
             <Plus className="w-4 h-4" />
-            <span>Yeni Analiz</span>
+            <span>{t('dashboard.newAnalysis')}</span>
           </button>
           {user?.role === 'admin' && (
             <button
               onClick={() => navigate('/hq-portal')}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/[0.08] border border-amber-500/20 text-amber-400 text-xs font-bold hover:bg-amber-500/15 transition-all"
             >
-              <Shield className="w-3.5 h-3.5" /> Admin
+              <Shield className="w-3.5 h-3.5" /> {t('dashboard.admin')}
             </button>
           )}
+          <LanguageSwitcher />
           <ThemeToggle />
           <button
             onClick={() => navigate('/settings')}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium"
           >
             <Settings className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Settings</span>
+            <span className="hidden sm:inline">{t('dashboard.settings')}</span>
           </button>
           <button
             onClick={logout}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Sign Out</span>
+            <span className="hidden sm:inline">{t('dashboard.signOut')}</span>
           </button>
         </div>
       </div>
@@ -247,7 +252,7 @@ export function DashboardPage() {
       <button
         onClick={() => setShowUploadModal(true)}
         className="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.25)] active:scale-95 transition-all"
-        aria-label="Yeni Analiz"
+        aria-label={t('dashboard.newAnalysis')}
       >
         <Plus className="w-6 h-6" />
       </button>
@@ -260,9 +265,9 @@ export function DashboardPage() {
           CVision
         </span>
         <div className="flex items-center gap-5 text-xs text-[#787774] dark:text-[#908d89]">
-          <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">Gizlilik</a>
-          <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">Kullanım Şartları</a>
-          <span>© 2025 CVision</span>
+          <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
+          <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
+          <span>{t('common.copyright')}</span>
         </div>
       </div>
     </footer>

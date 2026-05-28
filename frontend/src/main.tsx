@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import './i18n'
 import './index.css'
 import App from './App.tsx'
 

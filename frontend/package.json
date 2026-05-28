@@ -14,10 +14,13 @@
     "@tailwindcss/vite": "^4.2.2",
     "@vercel/analytics": "^2.0.1",
     "axios": "^1.14.0",
+    "i18next": "^26.3.0",
+    "i18next-browser-languagedetector": "^8.2.1",
     "lucide-react": "^1.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hot-toast": "^2.6.0",
+    "react-i18next": "^17.0.8",
     "react-router-dom": "^7.13.2",
     "recharts": "^3.8.1",
     "tailwindcss": "^4.2.2"

@@ -1,24 +1,26 @@
 import { useState, useRef } from 'react';
 import type { DragEvent, ChangeEvent } from 'react';
 import { UploadCloud, FileText, X, ChevronDown, CheckCircle2, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
-const DOMAINS = [
-  { value: 'Software Engineering', label: 'Software Engineering', emoji: '💻' },
-  { value: 'Data & Analytics', label: 'Data & Analytics', emoji: '📊' },
-  { value: 'Industrial Engineering', label: 'Industrial Engineering', emoji: '🏭' },
-  { value: 'Mechanical Engineering', label: 'Mechanical Engineering', emoji: '⚙️' },
-  { value: 'Electrical Engineering', label: 'Electrical Engineering', emoji: '⚡' },
-  { value: 'Civil Engineering', label: 'Civil Engineering', emoji: '🏗️' },
-  { value: 'Business & Management', label: 'Business & Management', emoji: '📈' },
-  { value: 'Marketing & Communications', label: 'Marketing & Communications', emoji: '📣' },
-  { value: 'Finance & Accounting', label: 'Finance & Accounting', emoji: '💰' },
-  { value: 'Healthcare & Biomedical', label: 'Healthcare & Biomedical', emoji: '🏥' },
-  { value: 'Environmental & Energy', label: 'Environmental & Energy', emoji: '🌱' },
-  { value: 'Cybersecurity', label: 'Cybersecurity', emoji: '🔒' },
-  { value: 'UX / UI Design', label: 'UX / UI Design', emoji: '🎨' },
-  { value: 'Other', label: 'Other (AI Auto-Detect)', emoji: '✨' },
+// Domain values are always sent to the backend in English — do not change these
+const DOMAIN_VALUES = [
+  { value: 'Software Engineering', key: 'softwareEng', emoji: '💻' },
+  { value: 'Data & Analytics', key: 'dataAnalytics', emoji: '📊' },
+  { value: 'Industrial Engineering', key: 'industrialEng', emoji: '🏭' },
+  { value: 'Mechanical Engineering', key: 'mechanicalEng', emoji: '⚙️' },
+  { value: 'Electrical Engineering', key: 'electricalEng', emoji: '⚡' },
+  { value: 'Civil Engineering', key: 'civilEng', emoji: '🏗️' },
+  { value: 'Business & Management', key: 'business', emoji: '📈' },
+  { value: 'Marketing & Communications', key: 'marketing', emoji: '📣' },
+  { value: 'Finance & Accounting', key: 'finance', emoji: '💰' },
+  { value: 'Healthcare & Biomedical', key: 'healthcare', emoji: '🏥' },
+  { value: 'Environmental & Energy', key: 'environmental', emoji: '🌱' },
+  { value: 'Cybersecurity', key: 'cybersecurity', emoji: '🔒' },
+  { value: 'UX / UI Design', key: 'uxui', emoji: '🎨' },
+  { value: 'Other', key: 'other', emoji: '✨' },
 ];
 
 interface CVUploaderProps {
@@ -28,6 +30,7 @@ interface CVUploaderProps {
 }
 
 export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProps) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -36,11 +39,11 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
 
   const validateFile = (f: File): boolean => {
     if (f.type !== 'application/pdf') {
-      toast.error('Only PDF files are supported.');
+      toast.error(t('uploader.errorPdfOnly'));
       return false;
     }
     if (f.size > 5 * 1024 * 1024) {
-      toast.error('File is too large. Maximum 5MB.');
+      toast.error(t('uploader.errorTooLarge'));
       return false;
     }
     return true;
@@ -69,16 +72,16 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
     formData.append('target_domain', selectedDomain);
     try {
       const response = await api.post('/cvs/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      toast.success('CV uploaded! AI is analyzing...');
+      toast.success(t('uploader.successUpload'));
       onUploadSuccess(response.data.id);
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || error.response?.data?.message || 'Upload failed. Please try again.');
+      toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
     } finally {
       setIsUploading(false);
     }
   };
 
-  const selectedDomainObj = DOMAINS.find(d => d.value === selectedDomain);
+  const selectedDomainObj = DOMAIN_VALUES.find(d => d.value === selectedDomain);
 
   return (
     <div className={embedded ? 'w-full' : 'w-full surface rounded-2xl p-6 border border-[#EAEAEA] dark:border-white/[0.07]'}>
@@ -89,28 +92,28 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${file ? 'bg-[#346538] text-white' : 'bg-[#EEF2F8] text-[#1B3A6B] border border-[#1B3A6B]/20'}`}>
             {file ? <CheckCircle2 className="w-3.5 h-3.5" /> : '1'}
           </div>
-          <span className="text-xs font-semibold text-[#787774]">Upload File</span>
+          <span className="text-xs font-semibold text-[#787774]">{t('uploader.step1')}</span>
         </div>
         <div className={`flex-1 h-px mx-3 transition-colors ${file ? 'bg-[#346538]/30' : 'bg-[#EAEAEA]'}`} />
         <div className="flex items-center gap-2">
           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${selectedDomain ? 'bg-[#EEF2F8] text-[#1B3A6B] border border-[#1B3A6B]/20' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774]'}`}>
             2
           </div>
-          <span className="text-xs font-semibold text-[#787774]">Select Domain</span>
+          <span className="text-xs font-semibold text-[#787774]">{t('uploader.step2')}</span>
         </div>
         <div className={`flex-1 h-px mx-3 transition-colors ${isUploading ? 'bg-[#1B3A6B]/30' : 'bg-[#EAEAEA]'}`} />
         <div className="flex items-center gap-2">
           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-colors ${isUploading ? 'bg-[#1B3A6B] text-white' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774]'}`}>
             3
           </div>
-          <span className="text-xs font-semibold text-[#787774]">Analyze</span>
+          <span className="text-xs font-semibold text-[#787774]">{t('uploader.step3')}</span>
         </div>
       </div>
 
       {/* Domain selector */}
       <div className="mb-5">
         <label className="block text-xs font-bold text-[#787774] uppercase tracking-widest mb-2">
-          Target Industry Domain
+          {t('uploader.domainLabel')}
         </label>
         <div className="relative">
           <select
@@ -118,8 +121,10 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
             onChange={(e) => setSelectedDomain(e.target.value)}
             className="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] text-[#111111] dark:text-[#e8e7e4] font-medium cursor-pointer transition-all hover:border-[#1B3A6B]/40 focus:outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20"
           >
-            {DOMAINS.map((d) => (
-              <option key={d.value} value={d.value}>{d.emoji} {d.label}</option>
+            {DOMAIN_VALUES.map((d) => (
+              <option key={d.value} value={d.value}>
+                {d.emoji} {t(`uploader.domains.${d.key}`)}
+              </option>
             ))}
           </select>
           <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787774] pointer-events-none" />
@@ -146,14 +151,15 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
           </div>
 
           <h3 className="text-base font-bold text-[#111111] dark:text-[#e8e7e4] mb-1">
-            {isDragging ? 'Drop to upload' : 'Upload your CV'}
+            {isDragging ? t('uploader.dropActive') : t('uploader.dropHeading')}
           </h3>
           <p className="text-sm text-[#787774] dark:text-[#908d89] mb-5">
-            Drag & drop or <span className="text-[#1B3A6B] dark:text-[#4a7dd1] font-semibold">browse files</span>
+            {t('uploader.dropSubtext')}{' '}
+            <span className="text-[#1B3A6B] dark:text-[#4a7dd1] font-semibold">{t('uploader.dropBrowse')}</span>
           </p>
 
           <div className="flex gap-2">
-            {['PDF', 'Max 5MB'].map(label => (
+            {[t('uploader.pdfLabel'), t('uploader.maxSize')].map(label => (
               <span key={label} className="px-2.5 py-1 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] text-[#787774] text-[10px] font-semibold uppercase tracking-wider">
                 {label}
               </span>
@@ -188,8 +194,10 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
           <div className="flex items-center gap-2 px-3 py-2 bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 rounded-xl border border-[#1B3A6B]/15 dark:border-[#1B3A6B]/30">
             <span className="text-lg">{selectedDomainObj?.emoji}</span>
             <div>
-              <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase font-bold tracking-wider">Target Domain</p>
-              <p className="text-sm text-[#1B3A6B] dark:text-[#4a7dd1] font-semibold">{selectedDomainObj?.label}</p>
+              <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase font-bold tracking-wider">{t('uploader.targetDomain')}</p>
+              <p className="text-sm text-[#1B3A6B] dark:text-[#4a7dd1] font-semibold">
+                {selectedDomainObj ? t(`uploader.domains.${selectedDomainObj.key}`) : selectedDomain}
+              </p>
             </div>
           </div>
 
@@ -202,12 +210,12 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
             {isUploading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Uploading & Preparing AI...
+                {t('uploader.uploadingButton')}
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                Run AI Analysis Engine
+                {t('uploader.analyzeButton')}
               </>
             )}
           </button>

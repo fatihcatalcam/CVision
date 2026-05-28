@@ -1,5 +1,6 @@
-﻿import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
@@ -7,11 +8,12 @@ import { Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
 const submitCls = 'w-full h-12 rounded-xl font-bold text-sm bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2';
 
 function PasswordStrength({ password }: { password: string }) {
+  const { t } = useTranslation();
   const checks = [
-    { label: 'At least 8 characters', pass: password.length >= 8 },
-    { label: 'Uppercase letter', pass: /[A-Z]/.test(password) },
-    { label: 'Lowercase letter', pass: /[a-z]/.test(password) },
-    { label: 'Number', pass: /\d/.test(password) },
+    { label: t('auth.register.reqLength'), pass: password.length >= 8 },
+    { label: t('auth.register.reqUpper'), pass: /[A-Z]/.test(password) },
+    { label: t('auth.register.reqLower'), pass: /[a-z]/.test(password) },
+    { label: t('auth.register.reqNumber'), pass: /\d/.test(password) },
   ];
   const score = checks.filter(c => c.pass).length;
   const colors = ['', 'bg-red-500', 'bg-amber-500', 'bg-yellow-400', 'bg-emerald-500'];
@@ -40,6 +42,7 @@ function PasswordStrength({ password }: { password: string }) {
 type Step = 'code' | 'password';
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation();
   const [step, setStep] = useState<Step>('code');
   const [chars, setChars] = useState(['', '', '', '', '']);
   const [newPassword, setNewPassword] = useState('');
@@ -83,15 +86,15 @@ export function ResetPasswordPage() {
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = chars.join('');
-    if (code.length !== 5) { toast.error('Please enter the full 5-character code.'); return; }
+    if (code.length !== 5) { toast.error(t('auth.resetPassword.codeError')); return; }
     setIsLoading(true);
     try {
       await api.post('/auth/verify-reset-code', { email, code });
-      toast.success('Code verified! Set your new password.');
+      toast.success(t('auth.resetPassword.codeSuccessToast'));
       setStep('password');
     } catch (error: any) {
       const detail = error.response?.data?.detail;
-      toast.error(Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || 'Invalid code. Please try again.');
+      toast.error(Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || t('auth.resetPassword.codeErrorToast'));
       setChars(['', '', '', '', '']);
       inputRefs.current[0]?.focus();
     } finally {
@@ -105,11 +108,11 @@ export function ResetPasswordPage() {
     setIsLoading(true);
     try {
       await api.post('/auth/reset-password', { email, code, new_password: newPassword });
-      toast.success('Password updated! You can now sign in.');
+      toast.success(t('auth.resetPassword.updateSuccessToast'));
       navigate('/login');
     } catch (error: any) {
       const detail = error.response?.data?.detail;
-      toast.error(Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || 'Failed to update password. Please try again.');
+      toast.error(Array.isArray(detail) ? detail.map((d: any) => d.msg).join(', ') : detail || t('auth.resetPassword.updateErrorToast'));
     } finally {
       setIsLoading(false);
     }
@@ -122,17 +125,17 @@ export function ResetPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] dark:bg-[#111110] p-6">
       <div className="w-full max-w-sm">
-        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">Set new password</h1>
-        <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">Enter the code from your email, then choose a new password.</p>
+        <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">{t('auth.resetPassword.title')}</h1>
+        <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">{t('auth.resetPassword.subtitle')}</p>
 
         {step === 'code' ? (
           <>
             <div className="text-center mb-8">
               <p className="text-[#787774] dark:text-[#908d89] text-sm leading-relaxed">
-                We sent a 5-character reset code to<br />
+                {t('auth.resetPassword.codeInfo')}<br />
                 <span className="text-[#111111] dark:text-[#e8e7e4]">{maskedEmail}</span>
               </p>
-              <p className="text-amber-500/80 text-xs mt-2">âš  Code is case-sensitive</p>
+              <p className="text-amber-500/80 text-xs mt-2">{t('auth.resetPassword.codeCaseSensitive')}</p>
             </div>
 
             <form onSubmit={handleVerifyCode} className="space-y-6">
@@ -157,23 +160,23 @@ export function ResetPasswordPage() {
               </div>
 
               <button type="submit" disabled={isLoading || chars.join('').length !== 5} className={submitCls}>
-                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Verify Code'}
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.resetPassword.verifyButton')}
               </button>
             </form>
           </>
         ) : (
           <>
             <div className="text-center mb-8">
-              <p className="text-[#787774] dark:text-[#908d89] text-sm">Choose a strong password.</p>
+              <p className="text-[#787774] dark:text-[#908d89] text-sm">{t('auth.resetPassword.newPassword')}</p>
             </div>
 
             <form onSubmit={handleResetPassword} className="space-y-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">New Password</label>
+                <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.resetPassword.newPassword')}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Min. 8 characters"
+                    placeholder={t('auth.resetPassword.passwordPlaceholder')}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
@@ -192,16 +195,16 @@ export function ResetPasswordPage() {
               </div>
 
               <button type="submit" disabled={isLoading || newPassword.length < 8} className={submitCls}>
-                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Update Password'}
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('auth.resetPassword.updateButton')}
               </button>
             </form>
           </>
         )}
 
         <p className="mt-8 text-center text-xs text-[#787774] dark:text-[#908d89]">
-          Having trouble?{' '}
+          {t('auth.resetPassword.havingTrouble')}{' '}
           <Link to="/forgot-password" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">
-            Request a new code
+            {t('auth.resetPassword.requestNewCode')}
           </Link>
         </p>
       </div>

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { FileText, ChevronRight, History } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface HistoryItem {
   cv_id: string;
@@ -21,6 +22,8 @@ function scoreColor(score: number): string {
 }
 
 export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB';
   const navigate = useNavigate();
 
   if (items.length === 0) return null;
@@ -30,13 +33,13 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-[#111111] dark:text-[#e8e7e4] text-sm flex items-center gap-2">
           <History className="w-4 h-4 text-[#787774] dark:text-[#908d89]" />
-          Son Analizler
+          {t('recent.title')}
         </h2>
         <button
           onClick={() => navigate('/history')}
           className="flex items-center gap-1.5 text-xs text-[#787774] hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] transition-colors font-medium"
         >
-          Tüm geçmiş <ChevronRight className="w-3.5 h-3.5" />
+          {t('recent.viewAll')} <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
@@ -60,7 +63,7 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
               </p>
               <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">
                 {item.target_domain && <span className="mr-2">{item.target_domain}</span>}
-                {new Date(item.uploaded_at).toLocaleDateString('en-GB', {
+                {new Date(item.uploaded_at).toLocaleDateString(dateLocale, {
                   day: '2-digit',
                   month: 'short',
                 })}

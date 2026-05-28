@@ -1,4 +1,5 @@
 import { Target } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface CareerInsightCardProps {
   roleTitle: string;
@@ -6,6 +7,7 @@ interface CareerInsightCardProps {
 }
 
 export function CareerInsightCard({ roleTitle, matchScore }: CareerInsightCardProps) {
+  const { t } = useTranslation();
   const rounded = Math.round(matchScore);
   const barColor =
     rounded >= 80 ? 'bg-[#346538]' : rounded >= 60 ? 'bg-amber-500' : 'bg-[#1B3A6B]';
@@ -17,7 +19,7 @@ export function CareerInsightCard({ roleTitle, matchScore }: CareerInsightCardPr
           <Target className="w-3.5 h-3.5 text-[#1B3A6B] dark:text-[#4a7dd1]" />
         </div>
         <span className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
-          Hedef Rol Uyumu
+          {t('careerInsight.label')}
         </span>
       </div>
 
