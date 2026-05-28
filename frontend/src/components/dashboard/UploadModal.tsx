@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { CVUploader } from '../cv/CVUploader';
 
@@ -10,12 +11,12 @@ interface UploadModalProps {
 export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalProps) {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-8 px-4 bg-black/60 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-2xl surface shadow-2xl rounded-2xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-2xl surface shadow-2xl rounded-2xl animate-in fade-in zoom-in-95 duration-200 my-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAEAEA] dark:border-white/[0.07]">
           <h2 className="text-base font-bold text-[#111111] dark:text-[#e8e7e4]">Yeni CV Analizi</h2>
@@ -26,7 +27,7 @@ export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalPro
             <X className="w-4 h-4" />
           </button>
         </div>
-        {/* CVUploader fills the card with its own internal padding */}
+        {/* Content */}
         <div className="p-6">
           <CVUploader
             embedded
@@ -37,6 +38,7 @@ export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalPro
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
