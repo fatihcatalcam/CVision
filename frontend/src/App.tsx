@@ -15,6 +15,8 @@ import { SuccessPage } from './pages/payment/SuccessPage';
 import { CancelPage } from './pages/payment/CancelPage';
 import { HistoryPage } from './pages/history/HistoryPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
+import { PrivacyPage } from './pages/legal/PrivacyPage';
+import { TermsPage } from './pages/legal/TermsPage';
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
           </Route>
 
           <Route path="/" element={<HomePage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
