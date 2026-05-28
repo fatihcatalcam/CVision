@@ -89,7 +89,7 @@ export function ScoreHeroCard({
       {/* Deep link */}
       <button
         onClick={() => navigate(`/analysis/${latestCvId}`)}
-        className="flex items-center gap-1.5 text-sm font-medium text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline self-start mt-auto"
+        className="flex items-center gap-1.5 text-sm font-medium text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline self-start mt-2"
       >
         Analizi Gör <ChevronRight className="w-4 h-4" />
       </button>

@@ -199,7 +199,7 @@ export function DashboardPage() {
       ) : (
         <>
           {/* 2-column grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mb-8 items-start">
             <ScoreHeroCard
               latestScore={summary!.latest_score!}
               latestCvId={summary!.latest_cv_id!}
