@@ -23,9 +23,11 @@ const DOMAINS = [
 
 interface CVUploaderProps {
   onUploadSuccess: (cvId: string) => void;
+  /** When true, suppresses the outer card wrapper so the parent controls padding/bg */
+  embedded?: boolean;
 }
 
-export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
+export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -79,7 +81,7 @@ export function CVUploader({ onUploadSuccess }: CVUploaderProps) {
   const selectedDomainObj = DOMAINS.find(d => d.value === selectedDomain);
 
   return (
-    <div className="w-full surface rounded-2xl p-6 border border-[#EAEAEA] dark:border-white/[0.07]">
+    <div className={embedded ? 'w-full' : 'w-full surface rounded-2xl p-6 border border-[#EAEAEA] dark:border-white/[0.07]'}>
 
       {/* Step indicator */}
       <div className="flex items-center gap-0 mb-6">

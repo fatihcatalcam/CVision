@@ -160,9 +160,10 @@ export function DashboardPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
           >
-            <Plus className="w-3.5 h-3.5" /> Yeni Analiz
+            <Plus className="w-4 h-4" />
+            <span>Yeni Analiz</span>
           </button>
           {user?.role === 'admin' && (
             <button
@@ -238,6 +239,15 @@ export function DashboardPage() {
         onClose={() => setShowUploadModal(false)}
         onUploadSuccess={(cvId) => navigate(`/analysis/${cvId}`)}
       />
+
+      {/* ── Mobile FAB ── */}
+      <button
+        onClick={() => setShowUploadModal(true)}
+        className="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.25)] active:scale-95 transition-all"
+        aria-label="Yeni Analiz"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 }
