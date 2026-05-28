@@ -136,7 +136,8 @@ export function DashboardPage() {
   const hasAnalyses = !!(summary && summary.total_analyses > 0);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up">
+    <div className="min-h-screen flex flex-col">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up flex-1">
 
       {/* ── Header ── */}
       <div className="flex justify-between items-center mb-10">
@@ -250,6 +251,22 @@ export function DashboardPage() {
       >
         <Plus className="w-6 h-6" />
       </button>
+    </div>
+
+    {/* ── Footer ── */}
+    <footer className="border-t border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] mt-auto">
+      <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4] tracking-tight">
+          CVision
+        </span>
+        <div className="flex items-center gap-5 text-xs text-[#787774] dark:text-[#908d89]">
+          <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">Gizlilik</a>
+          <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">Kullanım Şartları</a>
+          <span>© 2025 CVision</span>
+        </div>
+      </div>
+    </footer>
+
     </div>
   );
 }
