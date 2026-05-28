@@ -76,6 +76,7 @@ def get_dashboard_summary(
     # ---- Top career recommendation ----
     top_rec = (
         db.query(CareerRecommendation)
+        .options(joinedload(CareerRecommendation.role_profile))
         .filter(CareerRecommendation.analysis_id == latest.id)
         .order_by(CareerRecommendation.match_score.desc())
         .first()
