@@ -19,13 +19,17 @@ interface PDFViewerModalProps {
   activeSnippets?: Snippet[];
 }
 
+// Stable empty array so the useEffect dependency never triggers on re-renders
+// when no snippets are passed (avoids infinite re-fetch loop).
+const EMPTY_SNIPPETS: Snippet[] = [];
+
 export function PDFViewerModal({
   isOpen,
   onClose,
   cvId,
   fileUrl,
   subtitle,
-  activeSnippets = [],
+  activeSnippets = EMPTY_SNIPPETS,
 }: PDFViewerModalProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

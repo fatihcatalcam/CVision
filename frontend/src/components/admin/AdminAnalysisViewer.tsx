@@ -82,7 +82,7 @@ export function AdminAnalysisViewer({ analysisId, isOpen, onClose }: AdminAnalys
             <p className="text-red-400 font-medium">Failed to load data.</p>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+          <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-8 custom-scrollbar">
             
             {/* Top Stats */}
             <div className="flex items-start gap-8">
