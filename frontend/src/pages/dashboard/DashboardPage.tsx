@@ -199,7 +199,7 @@ export function DashboardPage() {
       ) : (
         <>
           {/* 2-column grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mb-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mb-8">
             <ScoreHeroCard
               latestScore={summary!.latest_score!}
               latestCvId={summary!.latest_cv_id!}
@@ -208,6 +208,8 @@ export function DashboardPage() {
               atsScore={summary!.latest_ats_score}
               keywordScore={summary!.latest_keyword_score}
               completenessScore={summary!.latest_completeness_score}
+              totalAnalyses={summary!.total_analyses}
+              averageScore={summary!.average_score}
             />
             <div className="flex flex-col gap-4">
               {summary!.latest_role_title && summary!.latest_role_match !== null && (

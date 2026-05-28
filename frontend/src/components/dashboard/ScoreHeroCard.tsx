@@ -15,6 +15,8 @@ interface ScoreHeroCardProps {
   atsScore: number | null;
   keywordScore: number | null;
   completenessScore: number | null;
+  totalAnalyses: number;
+  averageScore: number | null;
 }
 
 export function ScoreHeroCard({
@@ -25,6 +27,8 @@ export function ScoreHeroCard({
   atsScore,
   keywordScore,
   completenessScore,
+  totalAnalyses,
+  averageScore,
 }: ScoreHeroCardProps) {
   const navigate = useNavigate();
   const rounded = Math.round(latestScore);
@@ -37,12 +41,13 @@ export function ScoreHeroCard({
 
   return (
     <div className="surface p-6 flex flex-col gap-5">
-      {/* Subtitle */}
+
+      {/* ── Top section ── */}
       <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium uppercase tracking-wider">
         Son Analiz{latestRoleTitle ? ` · ${latestRoleTitle}` : ''}
       </p>
 
-      {/* Big score + delta badge */}
+      {/* Big score + delta */}
       <div className="flex items-end gap-4">
         <span className={`text-7xl font-black leading-none tracking-tight ${scoreColor(latestScore)}`}>
           {rounded}
@@ -86,13 +91,41 @@ export function ScoreHeroCard({
         </div>
       )}
 
-      {/* Deep link */}
-      <button
-        onClick={() => navigate(`/analysis/${latestCvId}`)}
-        className="flex items-center gap-1.5 text-sm font-medium text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline self-start mt-2"
-      >
-        Analizi Gör <ChevronRight className="w-4 h-4" />
-      </button>
+      {/* ── Spacer ── */}
+      <div className="flex-1" />
+
+      {/* ── Bottom section ── */}
+      <div className="border-t border-[#EAEAEA] dark:border-white/[0.07] pt-4 flex items-end justify-between">
+        {/* Stats */}
+        <div className="flex gap-6">
+          <div>
+            <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
+              Toplam Analiz
+            </p>
+            <p className="text-base font-black text-[#111111] dark:text-[#e8e7e4] mt-0.5 stat-number">
+              {totalAnalyses}
+            </p>
+          </div>
+          {averageScore != null && (
+            <div>
+              <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
+                Ortalama Skor
+              </p>
+              <p className={`text-base font-black mt-0.5 stat-number ${scoreColor(averageScore)}`}>
+                {Math.round(averageScore)}%
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Deep link */}
+        <button
+          onClick={() => navigate(`/analysis/${latestCvId}`)}
+          className="flex items-center gap-1 text-sm font-medium text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline"
+        >
+          Analizi Gör <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }
