@@ -34,105 +34,114 @@ export function PrivacyPage() {
       <main className="flex-1 max-w-3xl mx-auto px-6 py-14 w-full">
         <div className="mb-10">
           <h1 className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4] tracking-tight mb-2">
-            Gizlilik Politikası
+            {t('legal.privacy.title')}
           </h1>
-          <p className="text-sm text-[#787774] dark:text-[#908d89]">Son güncelleme: 28 Mayıs 2025</p>
+          <p className="text-sm text-[#787774] dark:text-[#908d89]">{t('legal.privacy.lastUpdated')}</p>
         </div>
 
         <div className="prose-custom space-y-10 text-[#111111] dark:text-[#e8e7e4]">
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">1. Giriş</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s1Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              CVision ("biz", "hizmet"), yapay zeka destekli CV analiz platformudur. Bu Gizlilik Politikası, hizmetimizi kullandığınızda hangi kişisel verileri topladığımızı, bu verileri nasıl işlediğimizi ve haklarınızı açıklamaktadır. 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında veri sorumlusu sıfatıyla hareket etmekteyiz.
+              {t('legal.privacy.s1Body')}
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">2. Topladığımız Veriler</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s2Heading')}</h2>
             <div className="space-y-4 text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
               <div className="surface p-4 space-y-1">
-                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Hesap Bilgileri</p>
-                <p>Ad, soyad ve e-posta adresi — kayıt sırasında alınır, kimlik doğrulama ve iletişim amacıyla kullanılır.</p>
+                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s2AccountTitle')}</p>
+                <p>{t('legal.privacy.s2AccountBody')}</p>
               </div>
               <div className="surface p-4 space-y-1">
-                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">CV Dosyaları</p>
-                <p>Yüklediğiniz PDF dosyaları yapay zeka analizi için işlenir. Dosyalar şifrelenmiş depolama alanında saklanır ve yalnızca size ait analiz sonuçlarını üretmek için kullanılır. Üçüncü taraflarla paylaşılmaz.</p>
+                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s2CvTitle')}</p>
+                <p>{t('legal.privacy.s2CvBody')}</p>
               </div>
               <div className="surface p-4 space-y-1">
-                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Analiz Sonuçları</p>
-                <p>ATS skoru, anahtar kelime analizi, kariyer önerileri ve iyileştirme önerileri hesabınıza bağlı olarak saklanır.</p>
+                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s2AnalysisTitle')}</p>
+                <p>{t('legal.privacy.s2AnalysisBody')}</p>
               </div>
               <div className="surface p-4 space-y-1">
-                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Teknik Veriler</p>
-                <p>IP adresi, tarayıcı türü ve kullanım logları — hizmet güvenliği ve performans izleme amacıyla otomatik olarak toplanır.</p>
+                <p className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s2TechTitle')}</p>
+                <p>{t('legal.privacy.s2TechBody')}</p>
               </div>
             </div>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">3. Verilerin Kullanım Amacı</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s3Heading')}</h2>
             <ul className="list-disc list-inside space-y-2 text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              <li>CV analizi ve yapay zeka raporlarının oluşturulması</li>
-              <li>Hesap yönetimi ve kimlik doğrulama</li>
-              <li>Hizmet kalitesini artırmak için anonim kullanım istatistikleri</li>
-              <li>Güvenlik olaylarının tespiti ve önlenmesi</li>
-              <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+              <li>{t('legal.privacy.s3Item1')}</li>
+              <li>{t('legal.privacy.s3Item2')}</li>
+              <li>{t('legal.privacy.s3Item3')}</li>
+              <li>{t('legal.privacy.s3Item4')}</li>
+              <li>{t('legal.privacy.s3Item5')}</li>
             </ul>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Verilerinizi reklam amaçlı kullanmıyor, üçüncü taraf reklam ağlarıyla paylaşmıyor ve satmıyoruz.
+              {t('legal.privacy.s3NoAds')}
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">4. Veri Saklama Süresi</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s4Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Hesabınız aktif olduğu sürece verileriniz saklanır. Hesabınızı sildiğinizde kişisel verileriniz ve CV dosyalarınız 30 gün içinde kalıcı olarak silinir. Yasal yükümlülük gerektiren veriler ilgili mevzuatta öngörülen süre boyunca saklanabilir.
+              {t('legal.privacy.s4Body')}
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">5. Üçüncü Taraf Hizmetleri</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s5Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Hizmetimiz aşağıdaki üçüncü taraf altyapılarını kullanmaktadır:
+              {t('legal.privacy.s5Intro')}
             </p>
             <div className="surface p-4 space-y-2 text-sm text-[#444] dark:text-[#c8c6c3]">
-              <p><span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Anthropic Claude API</span> — CV içeriğinin yapay zeka ile analizi için. CV verileri analiz amacıyla iletilir, model eğitiminde kullanılmaz.</p>
-              <p><span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Google OAuth</span> — İsteğe bağlı Google ile giriş özelliği için. Yalnızca kimlik doğrulama kapsamında ad ve e-posta alınır.</p>
-              <p><span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">Stripe</span> — Pro plan ödemeleri için. Ödeme bilgileri yalnızca Stripe tarafından işlenir; kart numarası sunucularımızda saklanmaz.</p>
+              <p>
+                <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5ClaudeName')}</span>
+                {' — '}{t('legal.privacy.s5ClaudeDesc')}
+              </p>
+              <p>
+                <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5GoogleName')}</span>
+                {' — '}{t('legal.privacy.s5GoogleDesc')}
+              </p>
+              <p>
+                <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5StripeName')}</span>
+                {' — '}{t('legal.privacy.s5StripeDesc')}
+              </p>
             </div>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">6. KVKK Kapsamındaki Haklarınız</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s6Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              6698 sayılı KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:
+              {t('legal.privacy.s6Intro')}
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
-              <li>İşlenmişse buna ilişkin bilgi talep etme</li>
-              <li>İşlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme</li>
-              <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme</li>
-              <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li>
-              <li>Yasal koşullar çerçevesinde silinmesini veya yok edilmesini isteme</li>
-              <li>İşleme itiraz etme ve zararın giderilmesini talep etme</li>
+              <li>{t('legal.privacy.s6Item1')}</li>
+              <li>{t('legal.privacy.s6Item2')}</li>
+              <li>{t('legal.privacy.s6Item3')}</li>
+              <li>{t('legal.privacy.s6Item4')}</li>
+              <li>{t('legal.privacy.s6Item5')}</li>
+              <li>{t('legal.privacy.s6Item6')}</li>
+              <li>{t('legal.privacy.s6Item7')}</li>
             </ul>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Bu haklarınızı kullanmak için aşağıdaki iletişim adresimize başvurabilirsiniz.
+              {t('legal.privacy.s6Contact')}
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">7. Çerezler</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s7Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Oturum yönetimi için zorunlu çerezler kullanılmaktadır. Analitik veya pazarlama çerezi kullanılmamaktadır.
+              {t('legal.privacy.s7Body')}
             </p>
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">8. İletişim</h2>
+            <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('legal.privacy.s8Heading')}</h2>
             <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
-              Gizlilik politikamıza ilişkin sorularınız veya KVKK kapsamındaki talepleriniz için:{' '}
+              {t('legal.privacy.s8Body')}{' '}
               <a href="mailto:fthctlcm@outlook.com" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:underline font-medium">
                 fthctlcm@outlook.com
               </a>
