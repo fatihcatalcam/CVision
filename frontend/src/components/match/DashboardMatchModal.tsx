@@ -81,7 +81,7 @@ export function DashboardMatchModal({ cvs, defaultCvId, onClose, onMatchComplete
         </div>
 
         <div className="p-5 space-y-4">
-          {/* CV selector — only shown if multiple CVs */}
+          {/* CV selector - only shown if multiple CVs */}
           {cvs.length > 1 && (
             <div>
               <label className="text-xs font-semibold uppercase tracking-wider block mb-1.5" style={{ color: 'var(--color-muted)' }}>

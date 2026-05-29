@@ -48,7 +48,7 @@ export function ScoreHeroCard({
   return (
     <div className="surface p-6 flex flex-col gap-5">
 
-      {/* ── Top section ── */}
+      {/* Top section */}
       <div className="flex items-start justify-between">
         <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium uppercase tracking-wider">
           {t('scoreHero.subtitle')}{latestRoleTitle ? ` · ${latestRoleTitle}` : ''}
@@ -106,7 +106,7 @@ export function ScoreHeroCard({
         </div>
       )}
 
-      {/* ── Job Match section ── */}
+      {/* Job Match section */}
       <div className="rounded-xl border border-[#EAEAEA] dark:border-white/[0.07]">
         <div className="p-4 bg-[#F7F6F3] dark:bg-white/[0.03]">
           <div className="flex items-start gap-3 mb-3">
@@ -119,7 +119,7 @@ export function ScoreHeroCard({
             </div>
           </div>
           {!isPremium ? (
-            /* Free — locked button */
+            /* Free: locked button */
             <button
               onClick={() => navigate('/pricing')}
               className="w-full py-2 flex items-center justify-center gap-2 bg-[#F1F1EF] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] text-xs font-semibold rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
@@ -128,7 +128,7 @@ export function ScoreHeroCard({
               {t('match.proGateButton')}
             </button>
           ) : (
-            /* Pro — active button */
+            /* Pro: active button */
             <button
               onClick={() => navigate('/match')}
               className="w-full py-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
@@ -139,7 +139,7 @@ export function ScoreHeroCard({
         </div>
       </div>
 
-      {/* ── Bottom section ── */}
+      {/* Bottom section */}
       <div className="border-t border-[#EAEAEA] dark:border-white/[0.07] pt-4 flex items-end justify-between">
         {/* Stats */}
         <div className="flex gap-6">

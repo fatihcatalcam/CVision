@@ -10,9 +10,9 @@ interface Snippet {
 interface PDFViewerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  /** Hashid-encoded CV id — used for the default /cvs/:id/download + highlight flow */
+  /** Hashid-encoded CV id - used for the default /cvs/:id/download + highlight flow */
   cvId?: string | number;
-  /** Direct URL override — used by admin to bypass ownership check (e.g. /hq-portal/cvs/:id/file) */
+  /** Direct URL override - used by admin to bypass ownership check (e.g. /hq-portal/cvs/:id/file) */
   fileUrl?: string;
   /** Optional subtitle shown under the modal title */
   subtitle?: string;

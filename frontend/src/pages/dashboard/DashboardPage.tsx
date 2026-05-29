@@ -143,7 +143,7 @@ export function DashboardPage() {
     <div className="min-h-screen flex flex-col">
     <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up flex-1">
 
-      {/* ── Header ── */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-10">
         <div className="flex items-center gap-3.5">
           <Avatar name={user?.full_name || 'U'} />
@@ -190,7 +190,7 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* ── Main content ── */}
+      {/* Main content */}
       {isLoading ? (
         <DashboardSkeleton />
       ) : !hasAnalyses ? (
@@ -236,14 +236,14 @@ export function DashboardPage() {
         </>
       )}
 
-      {/* ── Upload modal ── */}
+      {/* Upload modal */}
       <UploadModal
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
         onUploadSuccess={(cvId) => navigate(`/analysis/${cvId}`)}
       />
 
-      {/* ── Mobile FAB ── */}
+      {/* Mobile FAB */}
       <button
         onClick={() => setShowUploadModal(true)}
         className="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.25)] active:scale-95 transition-all"
@@ -253,7 +253,7 @@ export function DashboardPage() {
       </button>
     </div>
 
-    {/* ── Footer ── */}
+    {/* Footer */}
     <footer className="border-t border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] mt-auto">
       <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
         <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4] tracking-tight">

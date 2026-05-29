@@ -207,7 +207,7 @@ export function SettingsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* ── Left sidebar ── */}
+        {/* Left sidebar */}
         <div className="lg:col-span-1 space-y-4">
           <Card className="flex flex-col items-center text-center gap-3 py-8">
             <div className="w-16 h-16 rounded-full bg-[#F7F6F3] dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] flex items-center justify-center mb-3">
@@ -281,10 +281,10 @@ export function SettingsPage() {
           </Card>
         </div>
 
-        {/* ── Right forms ── */}
+        {/* Right forms */}
         <div className="lg:col-span-2 space-y-5">
 
-          {/* 1 — Profile */}
+          {/* 1 - Profile */}
           <div className="surface p-6">
             <SectionHeader icon={User} title={t('settings.profile.title')} desc={t('settings.profile.subtitle')} />
             <div className="space-y-4">
@@ -311,7 +311,7 @@ export function SettingsPage() {
             </div>
           </div>
 
-          {/* 2 — Password */}
+          {/* 2 - Password */}
           <div className="surface p-6">
             <SectionHeader icon={Lock} title={t('settings.password.title')} desc={t('settings.password.subtitle')} />
             <form onSubmit={handleChangePassword} className="space-y-4">
@@ -362,7 +362,7 @@ export function SettingsPage() {
             </form>
           </div>
 
-          {/* 3 — Appearance */}
+          {/* 3 - Appearance */}
           <div className="surface p-6">
             <SectionHeader icon={Sun} title={t('settings.appearance.title')} desc={t('settings.appearance.subtitle')} />
             <div className="flex items-center justify-between py-3 border-b border-[#EAEAEA] dark:border-white/[0.07] last:border-0">
@@ -374,7 +374,7 @@ export function SettingsPage() {
             </div>
           </div>
 
-          {/* 4 — Notifications */}
+          {/* 4 - Notifications */}
           <div className="surface p-6">
             <SectionHeader icon={Bell} title={t('settings.notifications.title')} desc={t('settings.notifications.subtitle')} />
             <div className="space-y-4">
@@ -400,7 +400,7 @@ export function SettingsPage() {
             </div>
           </div>
 
-          {/* 5 — Subscription */}
+          {/* 5 - Subscription */}
           <div className="surface p-6">
             <SectionHeader icon={CreditCard} title={t('settings.subscription.title')} desc={t('settings.subscription.subtitle')} />
             <div className="space-y-4">
@@ -459,7 +459,7 @@ export function SettingsPage() {
             </div>
           </div>
 
-          {/* 6 — Data & Privacy */}
+          {/* 6 - Data & Privacy */}
           <div className="surface p-6">
             <SectionHeader icon={Download} title={t('settings.data.title')} desc={t('settings.data.subtitle')} />
             <div className="space-y-4">

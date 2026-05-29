@@ -268,7 +268,7 @@ export function AdminPage() {
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
 
-                {/* Row 1 — 6 stat cards */}
+                {/* Row 1 - 6 stat cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                   {/* Total Users */}
                   <Card className="p-5 col-span-1 flex flex-col gap-2">
@@ -359,10 +359,10 @@ export function AdminPage() {
                   </Card>
                 </div>
 
-                {/* Row 2 — Daily Activity chart + Score Distribution */}
+                {/* Row 2 - Daily Activity chart + Score Distribution */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <Card className="col-span-1 lg:col-span-2 p-6 flex flex-col">
-                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Daily Activity — Last 14 Days</h2>
+                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Daily Activity - Last 14 Days</h2>
                     <div className="flex-1 min-h-[220px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={overview?.daily_activity || []} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -404,7 +404,7 @@ export function AdminPage() {
                   </Card>
                 </div>
 
-                {/* Row 3 — Top Domains + Activity Feed */}
+                {/* Row 3 - Top Domains + Activity Feed */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <Card className="col-span-1 lg:col-span-2 p-6 flex flex-col">
                     <h2 className="text-sm font-bold text-zinc-300 mb-5">Top Domains</h2>
@@ -657,7 +657,7 @@ export function AdminPage() {
         />
       )}
 
-      {/* CV PDF Viewer Modal — reuses the same component as the analysis page */}
+      {/* CV PDF Viewer Modal - reuses the same component as the analysis page */}
       <PDFViewerModal
         isOpen={viewingCvId !== null}
         onClose={() => { setViewingCvId(null); setViewingCvMeta(null); }}

@@ -100,7 +100,7 @@ export function MatchPage() {
       const letter = await createCoverLetter(selectedCvId, matchJdId);
       setCoverLetterContent(letter.content);
     } catch {
-      // silent — user can retry
+      // silent - user can retry
     } finally {
       setIsGeneratingCoverLetter(false);
     }
@@ -112,7 +112,7 @@ export function MatchPage() {
     <div className="min-h-screen" style={{ background: 'var(--color-background)' }}>
       <div className="max-w-3xl mx-auto px-6 py-10">
 
-        {/* ── Back + Header ── */}
+        {/* Back + Header */}
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-sm mb-8 hover:opacity-70 transition-opacity"
@@ -135,7 +135,7 @@ export function MatchPage() {
 
         <div className="space-y-6">
 
-          {/* ── Step 1: CV Selector ── */}
+          {/* Step 1: CV Selector */}
           {cvs.length > 0 && (
             <section
               className="rounded-2xl p-6"
@@ -161,7 +161,7 @@ export function MatchPage() {
             </section>
           )}
 
-          {/* ── Step 2: Job Description ── */}
+          {/* Step 2: Job Description */}
           <section
             className="rounded-2xl overflow-hidden"
             style={{ background: 'var(--color-card)', border: '1px solid var(--color-card-border)' }}
@@ -236,14 +236,14 @@ export function MatchPage() {
             </div>
           </section>
 
-          {/* ── Error ── */}
+          {/* Error */}
           {error && (
             <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm" style={{ background: 'var(--color-error-bg)', color: 'var(--color-error)' }}>
               <AlertCircle className="w-4 h-4 flex-shrink-0" />{error}
             </div>
           )}
 
-          {/* ── Match button ── */}
+          {/* Match button */}
           <Button
             size="lg"
             onClick={handleMatch}
@@ -257,7 +257,7 @@ export function MatchPage() {
             </span>
           </Button>
 
-          {/* ── Results ── */}
+          {/* Results */}
           {matchResult && (
             <section
               className="rounded-2xl p-6"

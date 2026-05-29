@@ -1,6 +1,6 @@
 import api from './api';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 export interface JDResponse {
   id: string;
@@ -43,7 +43,7 @@ export interface CoverLetterResponse {
   created_at: string;
 }
 
-// ── API calls ─────────────────────────────────────────────────────────────────
+// API calls
 
 export async function fetchUrlText(url: string): Promise<FetchUrlResponse> {
   const res = await api.post<FetchUrlResponse>('/jd/fetch-url', { url });

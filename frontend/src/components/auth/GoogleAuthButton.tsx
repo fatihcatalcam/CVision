@@ -56,7 +56,7 @@ export function GoogleAuthButton() {
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => handleGoogleSuccess(tokenResponse.access_token),
     onError: () => toast.error(t('auth.login.errorToast')),
-    onNonOAuthError: () => { /* user closed popup — no-op */ },
+    onNonOAuthError: () => { /* user closed popup - no-op */ },
     scope: 'openid email profile',
   });
 

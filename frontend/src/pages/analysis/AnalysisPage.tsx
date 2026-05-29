@@ -142,7 +142,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           {beforeText ? (
             <>
               <div className="p-3 bg-[#9F2F2D]/5 border border-[#9F2F2D]/20 rounded-lg">
-                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">âœ— Before (Current)</p>
+                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">✗ Before (Current)</p>
                 <p className="text-sm text-[#111111] dark:text-[#e8e7e4] italic">"{beforeText}"</p>
               </div>
               <div className="flex justify-center">
@@ -202,7 +202,7 @@ export function AnalysisPage() {
   const [coverLetterContent, setCoverLetterContent] = useState<string | null>(null);
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
 
-  // Animated progress bar — only when doing a new analysis
+  // Animated progress bar - only when doing a new analysis
   useEffect(() => {
     if (!isNewAnalysis || data || error) return;
     const interval = setInterval(() => {
@@ -222,7 +222,7 @@ export function AnalysisPage() {
     let active = true;
 
     const init = async () => {
-      // 1. Try to get results immediately — handles navigating back to an existing analysis
+      // 1. Try to get results immediately - handles navigating back to an existing analysis
       try {
         const { data: result } = await api.get(`/analysis/${id}/results`);
         if (active) { setData(result); setProgress(100); }
@@ -236,7 +236,7 @@ export function AnalysisPage() {
         // 404 = analysis not done yet → show loading screen and poll
       }
 
-      // 2. Analysis not ready — show loading screen and poll
+      // 2. Analysis not ready - show loading screen and poll
       setIsNewAnalysis(true);
       const startTime = Date.now();
       const timeout = 60000;
@@ -265,7 +265,7 @@ export function AnalysisPage() {
             return;
           }
           if (status.status === 'pending')    setLoadingMsg('Waiting in queue...');
-          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AI… this takes 15—30 s');
+          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AI… this takes 15-30 s');
           setTimeout(check, 2000);
         } catch (err: any) {
           if (err.response?.status === 404) { if (active) setError('CV not found.'); }
@@ -279,7 +279,7 @@ export function AnalysisPage() {
     return () => { active = false; };
   }, [id]);
 
-  // ── Loading screen (only for new analyses being processed) ──
+  // Loading screen (only for new analyses being processed)
   if (!data && !error && isNewAnalysis) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
@@ -337,7 +337,7 @@ export function AnalysisPage() {
             </div>
 
             <p className="text-xs text-[#BDBDBD] dark:text-[#6a6764] leading-relaxed">
-              AI is reading your CV and generating personalized insights. This typically takes 15—30 seconds.
+              AI is reading your CV and generating personalized insights. This typically takes 15-30 seconds.
             </p>
           </div>
         </div>

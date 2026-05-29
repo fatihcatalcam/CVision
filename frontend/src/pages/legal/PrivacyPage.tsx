@@ -99,15 +99,15 @@ export function PrivacyPage() {
             <div className="surface p-4 space-y-2 text-sm text-[#444] dark:text-[#c8c6c3]">
               <p>
                 <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5ClaudeName')}</span>
-                {' — '}{t('legal.privacy.s5ClaudeDesc')}
+                {': '}{t('legal.privacy.s5ClaudeDesc')}
               </p>
               <p>
                 <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5GoogleName')}</span>
-                {' — '}{t('legal.privacy.s5GoogleDesc')}
+                {': '}{t('legal.privacy.s5GoogleDesc')}
               </p>
               <p>
                 <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5StripeName')}</span>
-                {' — '}{t('legal.privacy.s5StripeDesc')}
+                {': '}{t('legal.privacy.s5StripeDesc')}
               </p>
             </div>
           </section>

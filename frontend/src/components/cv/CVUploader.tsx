@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
-// Domain values are always sent to the backend in English — do not change these
+// Domain values are always sent to the backend in English - do not change these
 const DOMAIN_VALUES = [
   { value: 'Software Engineering', key: 'softwareEng', emoji: '💻' },
   { value: 'Data & Analytics', key: 'dataAnalytics', emoji: '📊' },
