@@ -503,6 +503,7 @@ const en = {
     noCvSelected: 'Please select a CV.',
     matchError: 'Matching failed. Please try again.',
     resultsPlaceholder: 'Select a CV and job description, then click Match.',
+    viewDetails: 'View Details',
   },
 } as const;
 

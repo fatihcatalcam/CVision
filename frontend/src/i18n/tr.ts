@@ -503,6 +503,7 @@ const tr = {
     noCvSelected: 'Lütfen bir CV seçin.',
     matchError: 'Eşleştirme yapılamadı. Tekrar deneyin.',
     resultsPlaceholder: 'Bir CV ve iş ilanı seçip eşleştir butonuna basın.',
+    viewDetails: 'Detayları Gör',
   },
 } as const;
 

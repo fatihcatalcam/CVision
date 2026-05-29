@@ -96,6 +96,7 @@ export function DashboardPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [recentItems, setRecentItems] = useState<HistoryItem[]>([]);
+  const [cvs, setCvs] = useState<Array<{ id: string; original_filename: string }>>([]);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -106,12 +107,14 @@ export function DashboardPage() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [summaryRes, histRes] = await Promise.all([
+        const [summaryRes, histRes, cvsRes] = await Promise.all([
           api.get('/dashboard/summary'),
           api.get('/dashboard/history?limit=5&skip=0'),
+          api.get('/cvs/'),
         ]);
         setSummary(summaryRes.data);
         setRecentItems(histRes.data.items);
+        setCvs(cvsRes.data.cvs || []);
         await refreshUser();
       } catch (error) {
         console.error('Dashboard fetch failed', error);
@@ -163,13 +166,6 @@ export function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
-          >
-            <Plus className="w-4 h-4" />
-            <span>{t('dashboard.newAnalysis')}</span>
-          </button>
           {user?.role === 'admin' && (
             <button
               onClick={() => navigate('/hq-portal')}
@@ -216,6 +212,9 @@ export function DashboardPage() {
               completenessScore={summary!.latest_completeness_score}
               totalAnalyses={summary!.total_analyses}
               averageScore={summary!.average_score}
+              onNewAnalysis={() => setShowUploadModal(true)}
+              isPremium={user?.plan_type === 'premium'}
+              cvs={cvs}
             />
             <div className="flex flex-col gap-4">
               {summary!.latest_role_title && summary!.latest_role_match !== null && (
