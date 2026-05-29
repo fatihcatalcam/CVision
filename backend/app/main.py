@@ -28,6 +28,7 @@ from app.models import (  # noqa: F401
     User, CV, AnalysisResult, Suggestion,
     Skill, ExtractedSkill, RoleProfile,
     CareerRecommendation, AdminLog,
+    JobDescription, CVJDMatch, CoverLetter,
 )
 
 # Import routers
@@ -136,6 +137,38 @@ async def lifespan(app: FastAPI):
         # Added for Google OAuth
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255)",
         "ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL",
+        # JD Matching + Cover Letter tables
+        """CREATE TABLE IF NOT EXISTS job_descriptions (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id),
+            title VARCHAR(255),
+            company VARCHAR(255),
+            url VARCHAR(500),
+            raw_text TEXT NOT NULL,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        )""",
+        "CREATE INDEX IF NOT EXISTS ix_job_descriptions_user_id ON job_descriptions(user_id)",
+        """CREATE TABLE IF NOT EXISTS cv_jd_matches (
+            id SERIAL PRIMARY KEY,
+            cv_id INTEGER NOT NULL REFERENCES cvs(id),
+            jd_id INTEGER NOT NULL REFERENCES job_descriptions(id),
+            match_score INTEGER NOT NULL,
+            summary TEXT,
+            matched_keywords JSON,
+            missing_keywords JSON,
+            gap_analysis JSON,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        )""",
+        "CREATE INDEX IF NOT EXISTS ix_cv_jd_matches_cv_id ON cv_jd_matches(cv_id)",
+        "CREATE INDEX IF NOT EXISTS ix_cv_jd_matches_jd_id ON cv_jd_matches(jd_id)",
+        """CREATE TABLE IF NOT EXISTS cover_letters (
+            id SERIAL PRIMARY KEY,
+            cv_id INTEGER NOT NULL REFERENCES cvs(id),
+            jd_id INTEGER NOT NULL REFERENCES job_descriptions(id),
+            content TEXT NOT NULL,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        )""",
+        "CREATE INDEX IF NOT EXISTS ix_cover_letters_cv_id ON cover_letters(cv_id)",
     ]
     from sqlalchemy import text as _text
     _applied, _skipped = 0, 0
