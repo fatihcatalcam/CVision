@@ -22,6 +22,7 @@ class JobDescription(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
+    owner: Mapped["User"] = relationship("User", back_populates="job_descriptions")
     matches: Mapped[list["CVJDMatch"]] = relationship(
         "CVJDMatch", back_populates="job_description", cascade="all, delete-orphan"
     )

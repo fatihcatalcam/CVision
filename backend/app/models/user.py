@@ -39,6 +39,9 @@ class User(Base):
 
     # Relationships
     cvs: Mapped[list["CV"]] = relationship("CV", back_populates="owner", cascade="all, delete-orphan")
+    job_descriptions: Mapped[list["JobDescription"]] = relationship(
+        "JobDescription", back_populates="owner", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}', role='{self.role}')>"
