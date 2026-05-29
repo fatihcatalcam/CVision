@@ -15,6 +15,9 @@ from app.models.extracted_skill import ExtractedSkill
 from app.models.role_profile import RoleProfile
 from app.models.career_recommendation import CareerRecommendation
 from app.models.admin_log import AdminLog
+from app.models.job_description import JobDescription
+from app.models.cv_jd_match import CVJDMatch
+from app.models.cover_letter import CoverLetter
 
 __all__ = [
     "User",
@@ -26,4 +29,7 @@ __all__ = [
     "RoleProfile",
     "CareerRecommendation",
     "AdminLog",
+    "JobDescription",
+    "CVJDMatch",
+    "CoverLetter",
 ]
