@@ -107,50 +107,36 @@ export function ScoreHeroCard({
       )}
 
       {/* ── Job Match section ── */}
-      <div className="relative rounded-xl overflow-hidden border border-[#EAEAEA] dark:border-white/[0.07]">
-        {!isPremium ? (
-          /* Free user — locked state */
-          <>
-            <div className="p-4 blur-sm pointer-events-none select-none opacity-40">
-              <div className="flex items-center gap-2 mb-1">
-                <Briefcase className="w-4 h-4 text-[#787774]" />
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#787774]">{t('match.sectionLabel')}</p>
-              </div>
-              <p className="text-sm text-[#787774]">{t('match.sectionDesc')}</p>
+      <div className="rounded-xl border border-[#EAEAEA] dark:border-white/[0.07]">
+        <div className="p-4 bg-[#F7F6F3] dark:bg-white/[0.03]">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="p-1.5 bg-white dark:bg-white/[0.06] rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] flex-shrink-0 mt-0.5">
+              <Briefcase className="w-4 h-4 text-[#111111] dark:text-[#e8e7e4]" />
             </div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-white/60 dark:bg-[#111110]/70 gap-2">
-              <div className="p-1.5 bg-[#F1F1EF] dark:bg-white/[0.06] rounded-full">
-                <Lock className="w-4 h-4 text-[#787774] dark:text-[#908d89]" />
-              </div>
-              <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('match.proGateTitle')}</p>
-              <button
-                onClick={() => navigate('/pricing')}
-                className="px-3 py-1.5 bg-[#111111] text-white text-xs font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
-              >
-                {t('match.proGateButton')}
-              </button>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#111111] dark:text-[#e8e7e4] mb-0.5">{t('match.sectionLabel')}</p>
+              <p className="text-xs text-[#787774] dark:text-[#908d89] leading-relaxed">{t('match.sectionDesc')}</p>
             </div>
-          </>
-        ) : (
-          /* Pro user — CTA */
-          <div className="p-4 bg-gradient-to-br from-[#F0F4FF] to-[#EDF3EC] dark:from-[#1a2035]/50 dark:to-[#1a2a1a]/50">
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-white dark:bg-white/[0.08] rounded-lg shadow-sm flex-shrink-0 mt-0.5">
-                <Briefcase className="w-5 h-5 text-[#1B3A6B] dark:text-[#4a7dd1]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4] mb-0.5">{t('match.sectionLabel')}</p>
-                <p className="text-xs text-[#787774] dark:text-[#908d89] leading-relaxed">{t('match.sectionDesc')}</p>
-              </div>
-            </div>
+          </div>
+          {!isPremium ? (
+            /* Free — locked button */
+            <button
+              onClick={() => navigate('/pricing')}
+              className="w-full py-2 flex items-center justify-center gap-2 bg-[#F1F1EF] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] text-xs font-semibold rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              {t('match.proGateButton')}
+            </button>
+          ) : (
+            /* Pro — active button */
             <button
               onClick={() => navigate('/match')}
-              className="mt-3 w-full py-2 bg-[#1B3A6B] dark:bg-[#4a7dd1] text-white text-sm font-semibold rounded-[var(--radius-md)] hover:bg-[#14305a] dark:hover:bg-[#3a6bc1] transition-colors shadow-sm"
+              className="w-full py-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
             >
               {t('match.openModal')}
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ── Bottom section ── */}

@@ -36,9 +36,9 @@ function GapCard({ gap }: { gap: GapItem }) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-3 text-left hover:bg-[#F7F7F5] dark:hover:bg-white/[0.03] transition-colors"
       >
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-[10px] font-bold uppercase flex-shrink-0" style={{ color }}>{gap.priority}</span>
-          <span className="text-sm truncate" style={{ color: 'var(--color-foreground)' }}>{gap.description}</span>
+        <div className="flex items-start gap-2 min-w-0 pr-1">
+          <span className="text-[10px] font-bold uppercase flex-shrink-0 mt-0.5" style={{ color }}>{gap.priority}</span>
+          <span className="text-sm leading-snug" style={{ color: 'var(--color-foreground)' }}>{gap.description}</span>
         </div>
         {open
           ? <ChevronUp className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-muted)' }} />
