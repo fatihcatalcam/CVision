@@ -335,6 +335,53 @@ const tr = {
       deleteErrorToast: 'Hesap silinemedi',
     },
   },
+  home: {
+    nav: {
+      howItWorks: 'Nasıl çalışır?',
+      features: 'Özellikler',
+      dashboard: 'Dashboard',
+      signIn: 'Giriş Yap',
+      getStarted: 'Başla',
+    },
+    hero: {
+      label: 'CV Analiz Platformu',
+      title: 'CV\'nin tam olarak nerede durduğunu öğren',
+      subtitle: 'CV\'ni yükle, beceri eksiklikleri, kariyer rol eşleşmeleri ve somut iyileştirmelerle birlikte puanlanmış bir rapor al.',
+      ctaDashboard: 'Dashboard\'a Git',
+      ctaAnalyze: 'CV\'mi Analiz Et',
+      ctaSignIn: 'Giriş Yap',
+    },
+    howItWorks: {
+      label: 'Nasıl çalışır?',
+      step1Title: 'CV\'ni yükle',
+      step1Desc: 'PDF dosyası yükle. 5MB\'a kadar her formatı kabul ediyoruz.',
+      step2Title: 'Alanını seç',
+      step2Desc: 'Hedeflediğin sektörü seç. Puanlama alan standartlarına göre uyarlanır.',
+      step3Title: 'Raporunu al',
+      step3Desc: 'Güçlü yönler, eksikler, beceri etiketleri ve kariyer eşleşmelerini içeren puanlanmış analiz raporunu al.',
+    },
+    features: {
+      label: 'Ne elde edersin?',
+      scoringTitle: 'Akıllı Puanlama',
+      scoringDesc: 'Biçimlendirme, içerik, anahtar kelime yoğunluğu ve alan uyumu üzerinden çok boyutlu skor. Her boyut açıklanır — tam olarak neyi geliştirmen gerektiğini bilirsin.',
+      careerTitle: 'Kariyer Eşleşmesi',
+      careerDesc: 'CV\'nin bugün hangi rollere uyduğunu ve hangi becerilerin yeni rollerin kapısını açacağını gör.',
+      skillsTitle: 'Beceri Tespiti',
+      skillsDesc: 'CV metninden otomatik olarak tespit edilen, güven düzeyine göre etiketlenen beceriler.',
+    },
+    stats: {
+      cvsLabel: 'Analiz edilen CV',
+      domainsLabel: 'Sektör alanı',
+      timeLabel: 'Ortalama analiz süresi',
+    },
+    cta: {
+      title: 'CV\'ni geliştirmeye hazır mısın?',
+      subtitle: 'Ücretsiz başla. Kredi kartı gerekmez.',
+      button: 'Ücretsiz Başla',
+      ctaDashboard: 'Dashboard\'a Git',
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Gizlilik Politikası',

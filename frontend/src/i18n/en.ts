@@ -335,6 +335,53 @@ const en = {
       deleteErrorToast: 'Failed to delete account',
     },
   },
+  home: {
+    nav: {
+      howItWorks: 'How it works',
+      features: 'Features',
+      dashboard: 'Dashboard',
+      signIn: 'Sign in',
+      getStarted: 'Get started',
+    },
+    hero: {
+      label: 'CV Analysis Platform',
+      title: 'Know exactly where your CV stands',
+      subtitle: 'Upload your CV and receive a scored report with skill gaps, career role matches, and concrete improvements.',
+      ctaDashboard: 'Go to Dashboard',
+      ctaAnalyze: 'Analyze my CV',
+      ctaSignIn: 'Sign in',
+    },
+    howItWorks: {
+      label: 'How it works',
+      step1Title: 'Upload your CV',
+      step1Desc: 'Drop a PDF or plain text file. We accept any format up to 5MB.',
+      step2Title: 'Select your domain',
+      step2Desc: 'Choose the industry you are targeting. Scoring adapts to domain standards.',
+      step3Title: 'Get your report',
+      step3Desc: 'Receive a scored analysis with strengths, gaps, skill tags, and career matches.',
+    },
+    features: {
+      label: 'What you get',
+      scoringTitle: 'Intelligent scoring',
+      scoringDesc: 'A multi-dimensional score across formatting, content, keyword density, and domain fit. Each dimension is explained so you know precisely what to improve.',
+      careerTitle: 'Career matching',
+      careerDesc: 'See which roles your CV fits today, and which skills would unlock new ones.',
+      skillsTitle: 'Skill extraction',
+      skillsDesc: 'Skills automatically detected, tagged by confidence, pulled directly from your CV text.',
+    },
+    stats: {
+      cvsLabel: 'CVs analyzed',
+      domainsLabel: 'Industry domains',
+      timeLabel: 'Average analysis time',
+    },
+    cta: {
+      title: 'Ready to improve your CV?',
+      subtitle: 'Free to start. No credit card required.',
+      button: 'Get started free',
+      ctaDashboard: 'Go to Dashboard',
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Privacy Policy',
