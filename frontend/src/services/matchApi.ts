@@ -79,3 +79,8 @@ export async function createCoverLetter(cvId: string, jdId: string): Promise<Cov
   const res = await api.post<CoverLetterResponse>('/cover-letter/', { cv_id: cvId, jd_id: jdId });
   return res.data;
 }
+
+export async function getCoverLetter(letterId: string): Promise<CoverLetterResponse> {
+  const res = await api.get<CoverLetterResponse>(`/cover-letter/${letterId}`);
+  return res.data;
+}
