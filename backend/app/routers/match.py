@@ -8,6 +8,7 @@ Endpoints:
 
 import logging
 from datetime import datetime
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -34,8 +35,8 @@ def _require_pro(user: User) -> None:
 # ── Schemas ──────────────────────────────────────────────────────────────────
 
 class GapItemResponse(BaseModel):
-    category: str
-    priority: str
+    category: Literal["skills", "experience", "education", "keywords", "other"]
+    priority: Literal["high", "medium", "low"]
     description: str
     suggestion: str
 
