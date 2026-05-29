@@ -96,7 +96,6 @@ export function DashboardPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [recentItems, setRecentItems] = useState<HistoryItem[]>([]);
-  const [cvs, setCvs] = useState<Array<{ id: string; original_filename: string }>>([]);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -107,14 +106,12 @@ export function DashboardPage() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [summaryRes, histRes, cvsRes] = await Promise.all([
+        const [summaryRes, histRes] = await Promise.all([
           api.get('/dashboard/summary'),
           api.get('/dashboard/history?limit=5&skip=0'),
-          api.get('/cvs/'),
         ]);
         setSummary(summaryRes.data);
         setRecentItems(histRes.data.items);
-        setCvs(cvsRes.data.cvs || []);
         await refreshUser();
       } catch (error) {
         console.error('Dashboard fetch failed', error);
@@ -214,7 +211,6 @@ export function DashboardPage() {
               averageScore={summary!.average_score}
               onNewAnalysis={() => setShowUploadModal(true)}
               isPremium={user?.plan_type === 'premium'}
-              cvs={cvs}
             />
             <div className="flex flex-col gap-4">
               {summary!.latest_role_title && summary!.latest_role_match !== null && (
