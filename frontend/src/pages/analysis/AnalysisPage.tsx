@@ -4,6 +4,8 @@ import {
   ArrowLeft, Zap, FileText,
   Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { Card } from '../../components/ui/Card';
 import { ScoreRing } from '../../components/analysis/ScoreRing';
@@ -11,6 +13,10 @@ import { SkillTags } from '../../components/analysis/SkillTags';
 import { SuggestionList } from '../../components/analysis/SuggestionList';
 import { RoleMatcher } from '../../components/analysis/RoleMatcher';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
+import { JDInputModal } from '../../components/match/JDInputModal';
+import { MatchResultCard } from '../../components/match/MatchResultCard';
+import { CoverLetterModal } from '../../components/match/CoverLetterModal';
+import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -180,6 +186,8 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
 export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { user } = useAuth();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [isNewAnalysis, setIsNewAnalysis] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
@@ -188,6 +196,11 @@ export function AnalysisPage() {
   const [activeSuggestion, setActiveSuggestion] = useState<any | null>(null);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'classic'>('ai');
+  const [showJDModal, setShowJDModal] = useState(false);
+  const [matchResult, setMatchResult] = useState<MatchResponse | null>(null);
+  const [matchJdId, setMatchJdId] = useState<string | null>(null);
+  const [coverLetterContent, setCoverLetterContent] = useState<string | null>(null);
+  const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
 
   // Animated progress bar — only when doing a new analysis
   useEffect(() => {
@@ -361,6 +374,19 @@ export function AnalysisPage() {
       </div>
     );
   }
+
+  const handleGenerateCoverLetter = async () => {
+    if (!data?.cv_id || !matchJdId) return;
+    setIsGeneratingCoverLetter(true);
+    try {
+      const letter = await createCoverLetter(data.cv_id, matchJdId);
+      setCoverLetterContent(letter.content);
+    } catch (err) {
+      console.error('Cover letter generation failed', err);
+    } finally {
+      setIsGeneratingCoverLetter(false);
+    }
+  };
 
   const modalSnippets = (activeSuggestion?.snippets ?? []).map((s: string) => ({
     text: s,
@@ -564,9 +590,76 @@ export function AnalysisPage() {
             </Card>
           </div>
 
+          {/* JD Match Section */}
+          <div className="surface p-6 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] relative overflow-hidden">
+            {user?.plan_type !== 'premium' ? (
+              <>
+                <div className="blur-sm pointer-events-none select-none opacity-40">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-2">{t('match.sectionLabel')}</p>
+                  <p className="text-sm text-[#787774]">{t('match.sectionDesc')}</p>
+                </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-white/60 dark:bg-[#111110]/70">
+                  <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] rounded-full">
+                    <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
+                  </div>
+                  <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
+                  <button
+                    onClick={() => navigate('/pricing')}
+                    className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
+                  >
+                    {t('match.proGateButton')}
+                  </button>
+                </div>
+              </>
+            ) : matchResult ? (
+              <>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-4">{t('match.sectionLabel')}</p>
+                <MatchResultCard
+                  match={matchResult}
+                  onGenerateCoverLetter={handleGenerateCoverLetter}
+                  isGeneratingCoverLetter={isGeneratingCoverLetter}
+                />
+                <button
+                  onClick={() => setShowJDModal(true)}
+                  className="mt-4 text-sm underline text-[#787774] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
+                >
+                  {t('match.tryAnotherJD')}
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-2">{t('match.sectionLabel')}</p>
+                <p className="text-sm text-[#787774] mb-4">{t('match.sectionDesc')}</p>
+                <button
+                  onClick={() => setShowJDModal(true)}
+                  className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
+                >
+                  {t('match.openModal')}
+                </button>
+              </>
+            )}
+          </div>
+
         </div>
       </div>
 
+      {showJDModal && data?.cv_id && (
+        <JDInputModal
+          cvId={data.cv_id}
+          onClose={() => setShowJDModal(false)}
+          onMatchComplete={(match, jdId) => {
+            setMatchResult(match);
+            setMatchJdId(jdId);
+            setShowJDModal(false);
+          }}
+        />
+      )}
+      {coverLetterContent && (
+        <CoverLetterModal
+          content={coverLetterContent}
+          onClose={() => setCoverLetterContent(null)}
+        />
+      )}
       <PDFViewerModal
         isOpen={isPdfModalOpen}
         onClose={() => setIsPdfModalOpen(false)}
