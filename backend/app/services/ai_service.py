@@ -672,3 +672,67 @@ def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
     except Exception as e:
         logger.error(f"JD match JSON fallback failed: {e}")
         return {}
+
+
+# ============================================================
+# Cover Letter Generation
+# ============================================================
+
+COVER_LETTER_SYSTEM = """You are an expert cover letter writer for job applications.
+Given a CV and a job description, write a concise, professional cover letter.
+
+RULES:
+1. 3-4 paragraphs maximum. No fluff. No generic openers like "I am writing to apply for...".
+2. Paragraph 1: Hook — one strong sentence connecting the candidate's biggest strength to the role's core need.
+3. Paragraph 2: 2-3 specific achievements from the CV directly relevant to the JD requirements.
+4. Paragraph 3: Why this company/role specifically (use details from the JD, not generic praise).
+5. Paragraph 4 (optional): One-sentence close with availability and CTA.
+6. NEVER fabricate metrics, titles, or companies not present in the CV.
+7. Keep total length under 300 words.
+8. Return PLAIN TEXT only — no markdown, no headers, no bullet points.
+9. Write in the SAME language as the CV (Turkish or English)."""
+
+
+def ai_generate_cover_letter(cv_text: str, jd_text: str) -> str | None:
+    """
+    Generate a cover letter from a CV and job description.
+
+    Returns plain text cover letter, or None on failure.
+    """
+    if not is_ai_enabled():
+        return None
+
+    client = _get_client()
+    if not client:
+        return None
+
+    lang = detect_language(cv_text)
+    lang_name = "Turkish" if lang == "tr" else "English"
+    cv_preview = _smart_truncate(cv_text, max_chars=3000)
+    jd_preview = jd_text[:2000]
+
+    user_prompt = (
+        f"Write a cover letter in {lang_name}.\n\n"
+        f"CV:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
+        f"JOB DESCRIPTION:\n\"\"\"\n{jd_preview}\n\"\"\"\n\n"
+        f"Output the cover letter text ONLY. No labels, no headers."
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": COVER_LETTER_SYSTEM},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.6,
+            max_tokens=800,
+        )
+        text = (response.choices[0].message.content or "").strip()
+        if not text:
+            logger.warning("Cover letter generation produced empty output.")
+            return None
+        return text
+    except Exception as e:
+        logger.error(f"Cover letter generation failed: {e}")
+        return None
