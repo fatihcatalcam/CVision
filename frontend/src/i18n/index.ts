@@ -24,4 +24,9 @@ i18n
     },
   });
 
+// Keep <html lang="..."> in sync with selected language
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng.startsWith('tr') ? 'tr' : 'en';
+});
+
 export default i18n;
