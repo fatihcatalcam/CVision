@@ -17,6 +17,7 @@ import { HistoryPage } from './pages/history/HistoryPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
 import { PrivacyPage } from './pages/legal/PrivacyPage';
 import { TermsPage } from './pages/legal/TermsPage';
+import { MatchPage } from './pages/match/MatchPage';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/payment/success" element={<SuccessPage />} />
             <Route path="/payment/cancel" element={<CancelPage />} />
+            <Route path="/match" element={<MatchPage />} />
           </Route>
 
           <Route path="/" element={<HomePage />} />
