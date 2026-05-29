@@ -60,6 +60,23 @@ class CVAnalysis(BaseModel):
     ai_suggestions: list[Suggestion] = Field(description="4-6 actionable suggestions.")
 
 
+class GapItem(BaseModel):
+    """A single gap between the CV and the job description."""
+    category: Literal["skills", "experience", "education", "keywords", "other"]
+    priority: Literal["high", "medium", "low"]
+    description: str = Field(description="What is missing and why it matters for this role.")
+    suggestion: str = Field(description="Concrete action the candidate can take to address this gap.")
+
+
+class JDMatchOutput(BaseModel):
+    """Structured output schema for CV vs JD matching."""
+    match_score: int = Field(ge=0, le=100, description="Realistic recruiter match score 0-100.")
+    summary: str = Field(description="2-3 sentence honest assessment of fit.")
+    matched_keywords: list[str] = Field(description="Keywords/skills present in both CV and JD.")
+    missing_keywords: list[str] = Field(description="Important keywords in JD missing from CV.")
+    gap_analysis: list[GapItem] = Field(description="3-6 gaps ordered high→medium→low priority.")
+
+
 # ============================================================
 # Domain-specific personas
 # Keys are normalized: lowercase, spaces/punctuation -> underscore.
@@ -570,3 +587,88 @@ def ai_rewrite_bullet(
     except Exception as e:
         logger.error(f"Bullet rewrite failed: {e}")
         return None
+
+
+# ============================================================
+# JD Matching
+# ============================================================
+
+JD_MATCH_SYSTEM = """You are a senior technical recruiter with 15+ years of experience.
+Given a candidate's CV and a job description, evaluate how well the CV matches the role.
+
+RULES:
+1. match_score is a realistic assessment (0-100). 100 = perfect fit. Be honest, not optimistic.
+2. matched_keywords: list exact skills/tools/qualifications present in BOTH documents.
+3. missing_keywords: list important skills/tools from the JD that are ABSENT from the CV.
+4. gap_analysis: 3-6 items ordered high→medium→low priority. Each gap must:
+   - Reference specific text from the JD (quote the requirement)
+   - State clearly what is missing from the CV
+   - Give a concrete suggestion (what the candidate can do)
+5. NEVER fabricate information. Only use what is in the provided documents.
+6. Write summary, descriptions, and suggestions in the SAME language as the CV.
+7. Populate the structured-output schema. No prose outside the schema."""
+
+
+def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
+    """
+    Use GPT to match a CV against a job description.
+
+    Returns dict with: match_score, summary, matched_keywords,
+    missing_keywords, gap_analysis.
+    Returns empty dict on failure.
+    """
+    if not is_ai_enabled():
+        return {}
+
+    client = _get_client()
+    if not client:
+        return {}
+
+    lang = detect_language(cv_text)
+    lang_name = "Turkish" if lang == "tr" else "English"
+    cv_preview = _smart_truncate(cv_text, max_chars=3000)
+    jd_preview = jd_text[:2000]
+
+    user_prompt = (
+        f"CV LANGUAGE: {lang_name} — write summary, descriptions and suggestions in {lang_name}.\n\n"
+        f"CV TEXT:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
+        f"JOB DESCRIPTION:\n\"\"\"\n{jd_preview}\n\"\"\""
+    )
+
+    try:
+        response = client.beta.chat.completions.parse(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": JD_MATCH_SYSTEM},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.3,
+            max_tokens=1200,
+            response_format=JDMatchOutput,
+        )
+        parsed = response.choices[0].message.parsed
+        if parsed is not None:
+            return parsed.model_dump()
+        logger.warning("JD match: structured parse returned None, falling back.")
+    except AttributeError:
+        logger.warning("JD match: SDK too old for Structured Outputs, using JSON mode.")
+    except Exception as e:
+        logger.error(f"JD match structured call failed: {e}")
+
+    # JSON mode fallback
+    try:
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": JD_MATCH_SYSTEM},
+                {"role": "user", "content": user_prompt + "\n\nReturn ONLY valid JSON matching the schema."},
+            ],
+            temperature=0.3,
+            max_tokens=1200,
+            response_format={"type": "json_object"},
+        )
+        import json as _json
+        return _json.loads(response.choices[0].message.content)
+    except Exception as e:
+        logger.error(f"JD match JSON fallback failed: {e}")
+        return {}
