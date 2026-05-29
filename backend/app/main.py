@@ -32,7 +32,7 @@ from app.models import (  # noqa: F401
 )
 
 # Import routers
-from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment
+from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment, jd
 
 # Import seed data
 from app.seed.skills_data import SKILLS_DATA
@@ -287,6 +287,7 @@ app.include_router(recommendations.router)
 app.include_router(dashboard.router)
 app.include_router(admin.router)
 app.include_router(payment.router)
+app.include_router(jd.router)
 
 
 # ---- Health Check ----
