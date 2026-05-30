@@ -258,6 +258,56 @@ def make_user(db_session):
 
 
 @pytest.fixture
+def make_cv(db_session):
+    """
+    Factory that inserts a CV row owned by `owner` and returns it.
+
+    `file_path` deliberately points at a non-existent path so delete_cv exercises
+    its "file already gone" branch without touching the real filesystem. Each row
+    gets a unique `stored_filename` (DB unique constraint) via uuid.
+
+    Usage:
+        cv = make_cv(user)                       # completed pdf, default domain
+        cv = make_cv(user, status="pending")
+    """
+    import uuid as _uuid
+    from app.models.cv import CV
+
+    def _make(
+        owner,
+        *,
+        original_filename: str = "resume.pdf",
+        file_type: str = "pdf",
+        file_size: int = 1024,
+        status: str = "completed",
+        target_domain: str = "Software Engineering",
+        extracted_text: str | None = None,
+        file_content: bytes | None = None,
+        **extra,
+    ) -> "CV":
+        stored = f"{_uuid.uuid4().hex}.{file_type}"
+        cv = CV(
+            user_id=owner.id,
+            original_filename=original_filename,
+            stored_filename=stored,
+            file_path=f"/nonexistent/{stored}",
+            file_type=file_type,
+            file_size=file_size,
+            status=status,
+            target_domain=target_domain,
+            extracted_text=extracted_text,
+            file_content=file_content,
+            **extra,
+        )
+        db_session.add(cv)
+        db_session.commit()
+        db_session.refresh(cv)
+        return cv
+
+    return _make
+
+
+@pytest.fixture
 def auth_headers():
     """
     Build an Authorization header for a given user, using the SAME token factory
