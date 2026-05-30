@@ -194,6 +194,42 @@ body {
     animation: fadeSlideUp 500ms var(--ease-out) both;
   }
 
+  /* Staggered hero entrance: each direct child fades up in sequence */
+  .stagger-hero > * {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeSlideUp 600ms var(--ease-out) both;
+  }
+  .stagger-hero > *:nth-child(1) { animation-delay: 80ms; }
+  .stagger-hero > *:nth-child(2) { animation-delay: 160ms; }
+  .stagger-hero > *:nth-child(3) { animation-delay: 260ms; }
+  .stagger-hero > *:nth-child(4) { animation-delay: 380ms; }
+
+  /* Scroll reveal: starts hidden, transitions in when .is-visible is added */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Subtle hover lift for cards / interactive surfaces */
+  .hover-lift {
+    transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+    will-change: transform;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -8px rgba(17, 17, 17, 0.12);
+  }
+  .dark .hover-lift:hover {
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  }
+
   .shimmer {
     background: linear-gradient(90deg, #F0EFED 25%, #E8E7E4 50%, #F0EFED 75%);
     background-size: 200% 100%;
@@ -225,6 +261,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .stagger-grid > *,
   .stagger-list > *,
+  .stagger-hero > *,
   .animate-in {
     animation-name: fadePlain;
     animation-duration: 200ms;
@@ -232,6 +269,20 @@ body {
   @keyframes fadePlain {
     from { opacity: 0; }
     to   { opacity: 1; }
+  }
+  /* Reveal + hover-lift: drop transform, keep gentle opacity fade only */
+  .reveal {
+    transform: none;
+    transition: opacity 200ms var(--ease-out);
+  }
+  .reveal.is-visible {
+    transform: none;
+  }
+  .hover-lift {
+    transition: box-shadow 200ms var(--ease-out);
+  }
+  .hover-lift:hover {
+    transform: none;
   }
 }
 

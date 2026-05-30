@@ -77,7 +77,7 @@ export function PricingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
 
           {/* Free */}
-          <div className="surface p-8">
+          <div className="surface hover-lift p-8">
             <p className="label-sm mb-6">Free</p>
             <div className="mb-6">
               <span className="stat-number text-4xl font-semibold text-[#111111]">$0</span>
@@ -99,7 +99,7 @@ export function PricingPage() {
           </div>
 
           {/* Pro */}
-          <div className="bg-[#111111] rounded-[var(--radius-xl)] p-8">
+          <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8">
             <p className="label-sm mb-6 text-[#787774]">Pro</p>
             <div className="mb-6">
               <span className="stat-number text-4xl font-semibold text-white">₺149</span>

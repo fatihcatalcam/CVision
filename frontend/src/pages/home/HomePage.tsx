@@ -5,6 +5,7 @@ import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { ArrowRight, Brain, BarChart3, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { Reveal } from '../../components/ui/Reveal';
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -40,8 +41,8 @@ export function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-20 animate-in">
-        <div className="max-w-3xl">
+      <section className="max-w-5xl mx-auto px-6 pt-24 pb-20">
+        <div className="max-w-3xl stagger-hero">
           <p className="label-sm mb-6">{t('home.hero.label')}</p>
           <h1 className="display-xl mb-6">
             {t('home.hero.title')}
@@ -73,9 +74,10 @@ export function HomePage() {
       <div className="divider max-w-5xl mx-auto px-6" />
 
       {/* How it works */}
-      <section id="how-it-works" className="max-w-5xl mx-auto px-6 py-20">
+      <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
+        <div id="how-it-works">
         <p className="label-sm mb-12">{t('home.howItWorks.label')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 stagger-grid">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {([
             { n: '01', titleKey: 'home.howItWorks.step1Title', descKey: 'home.howItWorks.step1Desc' },
             { n: '02', titleKey: 'home.howItWorks.step2Title', descKey: 'home.howItWorks.step2Desc' },
@@ -88,15 +90,17 @@ export function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+        </div>
+      </Reveal>
 
       <div className="divider max-w-5xl mx-auto px-6" />
 
       {/* Features bento */}
-      <section id="features" className="max-w-5xl mx-auto px-6 py-20">
+      <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
+        <div id="features">
         <p className="label-sm mb-12">{t('home.features.label')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-grid">
-          <div className="surface p-8 md:row-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="surface hover-lift p-8 md:row-span-2">
             <div className="w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center mb-6" style={{ background: 'var(--color-accent)' }}>
               <Brain className="w-4 h-4" style={{ color: 'var(--color-primary)' }} strokeWidth={1.5} />
             </div>
@@ -105,14 +109,14 @@ export function HomePage() {
               {t('home.features.scoringDesc')}
             </p>
           </div>
-          <div className="surface p-6">
+          <div className="surface hover-lift p-6">
             <div className="w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center mb-4" style={{ background: 'var(--color-success-bg)' }}>
               <BarChart3 className="w-4 h-4" style={{ color: 'var(--color-success)' }} strokeWidth={1.5} />
             </div>
             <h3 className="font-semibold mb-2" style={{ color: 'var(--color-foreground)' }}>{t('home.features.careerTitle')}</h3>
             <p className="text-sm" style={{ color: 'var(--color-muted)' }}>{t('home.features.careerDesc')}</p>
           </div>
-          <div className="surface p-6">
+          <div className="surface hover-lift p-6">
             <div className="w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center mb-4" style={{ background: 'var(--color-warning-bg)' }}>
               <FileText className="w-4 h-4" style={{ color: 'var(--color-warning)' }} strokeWidth={1.5} />
             </div>
@@ -120,12 +124,13 @@ export function HomePage() {
             <p className="text-sm" style={{ color: 'var(--color-muted)' }}>{t('home.features.skillsDesc')}</p>
           </div>
         </div>
-      </section>
+        </div>
+      </Reveal>
 
       <div className="divider max-w-5xl mx-auto px-6" />
 
       {/* Stats */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      <Reveal as="section" className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid grid-cols-3 divide-x" style={{ borderColor: 'var(--color-card-border)' }}>
           {([
             { value: '10K+',  labelKey: 'home.stats.cvsLabel' },
@@ -138,12 +143,12 @@ export function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       <div className="divider max-w-5xl mx-auto px-6" />
 
       {/* CTA */}
-      <section className="max-w-5xl mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
           <h2 className="font-sans text-3xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>
             {t('home.cta.title')}
@@ -161,7 +166,7 @@ export function HomePage() {
             <ArrowRight className="w-4 h-4" />
           </Button>
         ))}
-      </section>
+      </Reveal>
 
       {/* Footer */}
       <footer className="border-t" style={{ borderColor: 'var(--color-card-border)', background: 'var(--color-card)' }}>

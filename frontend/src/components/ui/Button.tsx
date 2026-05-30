@@ -13,8 +13,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<ButtonVariant, string> = {
-  primary:   'bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98]',
-  secondary: 'bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] active:scale-[0.98]',
+  primary:   'bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] hover:shadow-md active:scale-[0.98]',
+  secondary: 'bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] hover:shadow-sm active:scale-[0.98]',
   ghost:     'bg-transparent text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] hover:text-[#111111] dark:hover:text-[#e8e7e4] active:scale-[0.98]',
   danger:    'bg-[#FDEBEC] dark:bg-[#3a1212] text-[#9F2F2D] dark:text-[#d4524f] hover:bg-[#f5d8d9] dark:hover:bg-[#4a1818] active:scale-[0.98]',
 };
