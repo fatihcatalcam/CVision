@@ -237,7 +237,7 @@ export function HistoryPage() {
           {items.length === 0 && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-6 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] text-white text-sm font-semibold hover:bg-[#122a52] transition-colors"
+              className="px-6 py-2.5 rounded-[var(--radius-md)] bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-semibold hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
             >
               {t('history.uploadCv')}
             </button>
@@ -356,7 +356,7 @@ export function HistoryPage() {
                           <>
                             <button
                               onClick={() => setConfirmDelete(item.cv_id)}
-                              className="p-2 rounded-[var(--radius-sm)] text-[#A09D9A] hover:text-[#9F2F2D] hover:bg-[#9F2F2D]/10 transition-all"
+                              className="w-8 h-8 inline-flex items-center justify-center rounded-[var(--radius-sm)] text-[#A09D9A] hover:text-[#9F2F2D] hover:bg-[#9F2F2D]/10 transition-all"
                               title={t('common.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
@@ -364,7 +364,7 @@ export function HistoryPage() {
                             {canView && (
                               <button
                                 onClick={() => navigate(`/analysis/${item.cv_id}`)}
-                                className="flex items-center gap-1.5 px-3 py-2 rounded-[var(--radius-sm)] bg-[#EEF2F8] border border-[#1B3A6B]/20 text-[#1B3A6B] text-xs font-semibold hover:bg-[#D6E4F7] transition-all"
+                                className="flex items-center gap-1.5 h-8 px-3 rounded-[var(--radius-sm)] bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 border border-[#1B3A6B]/20 text-[#1B3A6B] dark:text-[#4a7dd1] text-xs font-semibold hover:bg-[#D6E4F7] dark:hover:bg-[#1B3A6B]/30 transition-all"
                               >
                                 {t('history.viewReport')} <ChevronRight className="w-3.5 h-3.5" />
                               </button>

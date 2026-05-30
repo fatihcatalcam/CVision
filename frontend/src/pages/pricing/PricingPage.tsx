@@ -80,13 +80,13 @@ export function PricingPage() {
           <div className="surface hover-lift p-8">
             <p className="label-sm mb-6">Free</p>
             <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-[#111111]">$0</span>
-              <span className="text-sm text-[#787774] ml-1">/ month</span>
+              <span className="stat-number text-4xl font-semibold text-[#111111] dark:text-[#e8e7e4]">$0</span>
+              <span className="text-sm text-[#787774] dark:text-[#908d89] ml-1">/ month</span>
             </div>
 
             <ul className="space-y-3 mb-8">
               {FREE_FEATURES.map((feature) => (
-                <li key={feature} className="flex items-start gap-2 text-sm text-[#787774]">
+                <li key={feature} className="flex items-start gap-2 text-sm text-[#787774] dark:text-[#908d89]">
                   <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
                   {feature}
                 </li>
@@ -99,7 +99,7 @@ export function PricingPage() {
           </div>
 
           {/* Pro */}
-          <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8">
+          <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8 border border-transparent dark:border-white/[0.08]">
             <p className="label-sm mb-6 text-[#787774]">Pro</p>
             <div className="mb-6">
               <span className="stat-number text-4xl font-semibold text-white">₺149</span>

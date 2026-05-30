@@ -2,10 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, TrendingUp, TrendingDown, Minus, Plus, Lock, Briefcase } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+// Aligned with semantic design tokens (success / warning / danger) for cross-component consistency
 function scoreColor(score: number): string {
-  if (score >= 80) return 'text-[#346538] dark:text-[#4ade80]';
-  if (score >= 60) return 'text-amber-600 dark:text-amber-400';
-  return 'text-red-600 dark:text-red-400';
+  if (score >= 80) return 'text-[#346538] dark:text-[#5a9b5e]';
+  if (score >= 60) return 'text-[#956400] dark:text-[#c4890a]';
+  return 'text-[#9F2F2D] dark:text-[#d4524f]';
 }
 
 interface ScoreHeroCardProps {
@@ -46,7 +47,7 @@ export function ScoreHeroCard({
   ].filter((m): m is { label: string; value: number } => m.value !== null);
 
   return (
-    <div className="surface p-6 flex flex-col gap-5">
+    <div className="surface p-6 flex flex-col gap-6">
 
       {/* Top section */}
       <div className="flex items-start justify-between">
@@ -64,9 +65,9 @@ export function ScoreHeroCard({
 
       {/* Big score + delta */}
       <div className="flex items-end gap-4">
-        <span className={`text-7xl font-black leading-none tracking-tight ${scoreColor(latestScore)}`}>
+        <span className={`text-7xl font-bold leading-none tracking-tight ${scoreColor(latestScore)}`}>
           {rounded}
-          <span className="text-3xl font-bold text-[#787774] dark:text-[#908d89]">%</span>
+          <span className="text-3xl font-semibold text-[#787774] dark:text-[#908d89]">%</span>
         </span>
 
         {scoreDelta !== null && (
@@ -147,7 +148,7 @@ export function ScoreHeroCard({
             <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
               {t('scoreHero.totalAnalyses')}
             </p>
-            <p className="text-base font-black text-[#111111] dark:text-[#e8e7e4] mt-0.5 stat-number">
+            <p className="text-base font-bold text-[#111111] dark:text-[#e8e7e4] mt-0.5 stat-number">
               {totalAnalyses}
             </p>
           </div>
@@ -156,7 +157,7 @@ export function ScoreHeroCard({
               <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
                 {t('scoreHero.averageScore')}
               </p>
-              <p className={`text-base font-black mt-0.5 stat-number ${scoreColor(averageScore)}`}>
+              <p className={`text-base font-bold mt-0.5 stat-number ${scoreColor(averageScore)}`}>
                 {Math.round(averageScore)}%
               </p>
             </div>
