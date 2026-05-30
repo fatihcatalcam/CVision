@@ -46,6 +46,9 @@ cv_env/
 !backend/uploads/.gitkeep
 !backend/alembic/README
 !backend/runtime.txt
+!backend/requirements.txt
+!backend/requirements.local.txt
+!backend/requirements.dev.txt
 crash_log.txt
 import_err.txt
 err.txt

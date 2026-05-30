@@ -213,10 +213,12 @@ class CVService:
             logger.info(f"Background task successfully completed for CV {cv_id}")
             
         except Exception as e:
-            import traceback
-            with open("crash_log.txt", "w") as f:
-                f.write(traceback.format_exc())
-            logger.error(f"Background task failed for CV {cv_id}: {str(e)}")
+            # logger.exception captures the full traceback at ERROR level and
+            # routes it through the standard logging pipeline (console + any
+            # configured handlers). Replaces the old crash_log.txt file write,
+            # which overwrote itself on every crash and raced across concurrent
+            # background tasks.
+            logger.exception(f"Background task failed for CV {cv_id}: {e}")
             # Fallback handling
             db.rollback()
             cv = db.query(CV).filter(CV.id == cv_id).first()
