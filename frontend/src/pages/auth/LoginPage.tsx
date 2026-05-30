@@ -44,7 +44,7 @@ export function LoginPage() {
       </div>
 
       {/* Left decorative panel */}
-      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] dark:bg-[#1a1a18] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA] dark:border-white/[0.07]">
+      <div className="hidden lg:flex flex-col justify-between bg-[#F7F6F3] dark:bg-[#1a1a18] p-12 w-[420px] shrink-0 border-r border-[#EAEAEA] dark:border-white/[0.07] animate-in">
         <span className="font-mono font-medium tracking-tight text-base text-[#111111] dark:text-[#e8e7e4]">CVision</span>
         <div>
           <blockquote className="font-sans text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
@@ -57,7 +57,7 @@ export function LoginPage() {
 
       {/* Right form panel */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-sm stagger-list">
           <button
             onClick={() => navigate('/')}
             className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
