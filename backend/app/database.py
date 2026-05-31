@@ -18,6 +18,12 @@ if settings.DATABASE_URL.startswith("sqlite"):
 else:
     engine = create_engine(
         settings.DATABASE_URL,
+        # Supabase closes idle connections; without these the pool hands out
+        # dead connections after inactivity and the first query fails. pre_ping
+        # validates a connection (SELECT 1) before use and transparently
+        # reconnects; recycle proactively drops connections older than 5 min.
+        pool_pre_ping=True,
+        pool_recycle=300,
         echo=settings.DEBUG,
     )
 
