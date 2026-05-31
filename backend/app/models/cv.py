@@ -31,6 +31,17 @@ class CV(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
+    # ---- Job recovery (Track 2) ----
+    # Set to now() when the background task transitions the CV to "processing";
+    # used by the startup sweep to detect interrupted runs.
+    processing_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Times the startup sweep has re-queued this CV. Capped by MAX_JOB_RETRIES.
+    retry_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
+
     # Relationships
     owner: Mapped["User"] = relationship("User", back_populates="cvs")
     analysis_result: Mapped["AnalysisResult | None"] = relationship(
