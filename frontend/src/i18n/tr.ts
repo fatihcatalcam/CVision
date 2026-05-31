@@ -111,6 +111,7 @@ const tr = {
       morning: 'Günaydın',
       afternoon: 'İyi günler',
       evening: 'İyi akşamlar',
+      night: 'İyi geceler',
     },
     proBadge: 'Pro',
     newAnalysis: 'Yeni Analiz',

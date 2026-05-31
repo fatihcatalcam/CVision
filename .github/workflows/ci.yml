@@ -1,0 +1,87 @@
+name: CI
+
+# Runs the safety net on every push and PR to main.
+# - backend: pytest against a throwaway Postgres service container (never Supabase)
+# - frontend: type-check + production build + Vitest smoke tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A newer push to the same branch/PR cancels the older in-flight run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend tests (pytest)
+    runs-on: ubuntu-latest
+
+    # Ephemeral Postgres for the test suite. conftest creates the schema from the
+    # ORM models and seeds reference data; per-test transactions roll back.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cvision_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # conftest reads TEST_DATABASE_URL and forces the whole app onto it.
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cvision_test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.dev.txt
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.dev.txt
+
+      - name: Run pytest
+        working-directory: backend
+        run: pytest
+
+  frontend:
+    name: Frontend build + tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Type-check and build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Run Vitest
+        working-directory: frontend
+        run: npm test

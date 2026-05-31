@@ -124,6 +124,8 @@ export function DashboardPage() {
 
   function getGreeting() {
     const h = new Date().getHours();
+    // Late night (22:00–04:59) must not say "Good morning".
+    if (h < 5 || h >= 22) return t('dashboard.greeting.night');
     if (h < 12) return t('dashboard.greeting.morning');
     if (h < 17) return t('dashboard.greeting.afternoon');
     return t('dashboard.greeting.evening');
