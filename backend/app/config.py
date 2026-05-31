@@ -29,6 +29,12 @@ class Settings(BaseSettings):
     FREE_WEEKLY_LIMIT: int = 3
     PREMIUM_WEEKLY_LIMIT: int = 50
 
+    # ---- Job recovery (Track 2) ----
+    # A pending/processing CV older than this is considered stuck and swept.
+    STUCK_JOB_TIMEOUT_MINUTES: int = 10
+    # Max times the startup sweep re-queues a stuck job before marking it failed.
+    MAX_JOB_RETRIES: int = 3
+
     @property
     def cors_origins_list(self) -> list[str]:
         if not self.CORS_ORIGINS:
@@ -59,6 +65,11 @@ class Settings(BaseSettings):
 
     # ---- Google OAuth ----
     GOOGLE_CLIENT_ID: str = ""
+
+    # ---- Observability (Track 2) ----
+    # Empty DSN disables Sentry entirely (see app/observability.py).
+    SENTRY_DSN: str = ""
+    SENTRY_TRACES_SAMPLE_RATE: float = 0.0
 
     # ---- App URLs ----
     BACKEND_URL: str = "http://167.86.89.146:8001"
