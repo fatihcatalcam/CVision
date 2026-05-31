@@ -10,7 +10,7 @@ const en = {
     close: 'Close',
     or: 'or',
     loading: 'Loading...',
-    copyright: '© 2025 CVision',
+    copyright: '© 2026 CVision',
     privacy: 'Privacy',
     terms: 'Terms of Service',
   },

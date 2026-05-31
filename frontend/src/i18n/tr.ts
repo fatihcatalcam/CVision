@@ -10,7 +10,7 @@ const tr = {
     close: 'Kapat',
     or: 'veya',
     loading: 'Yükleniyor...',
-    copyright: '© 2025 CVision',
+    copyright: '© 2026 CVision',
     privacy: 'Gizlilik',
     terms: 'Kullanım Şartları',
   },
