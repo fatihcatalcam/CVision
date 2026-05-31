@@ -5,6 +5,7 @@ Handles file storage, text extraction, and database operations.
 
 import logging
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import UploadFile
@@ -195,8 +196,9 @@ class CVService:
                 
             logger.info(f"Background task starting for CV {cv_id} (User {cv.user_id})")
                 
-            # Update status
+            # Update status + record when processing began (drives recovery sweep)
             cv.status = "processing"
+            cv.processing_started_at = datetime.now(timezone.utc)
             db.commit()
             
             # 1. Parse Text
