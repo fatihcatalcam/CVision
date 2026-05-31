@@ -17,12 +17,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from app.config import settings
 from app.database import Base
 
-# Import all models to register them with Base.metadata
-from app.models import (  # noqa: F401
-    User, CV, AnalysisResult, Suggestion,
-    Skill, ExtractedSkill, RoleProfile,
-    CareerRecommendation, AdminLog,
-)
+# Import the model registry so Base.metadata sees ALL tables (including
+# job_descriptions, cv_jd_matches, cover_letters) for autogenerate.
+import app.models  # noqa: F401
 
 # Alembic Config object
 config = context.config
