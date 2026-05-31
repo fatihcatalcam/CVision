@@ -24,6 +24,9 @@ from slowapi.errors import RateLimitExceeded
 from app.config import settings
 from app.limiter import limiter
 from app.database import engine, SessionLocal, Base
+from app.db_migrations import run_migrations
+from app.services.job_recovery import recover_stuck_jobs
+from app.observability import init_sentry
 
 # Import all models so Base.metadata knows about them
 from app.models import (  # noqa: F401
@@ -46,6 +49,9 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger("cvision")
+
+# Initialize error tracking early (no-op unless SENTRY_DSN is set).
+init_sentry()
 
 
 def seed_skills(db: Session) -> None:
@@ -113,77 +119,10 @@ async def lifespan(app: FastAPI):
     """
     logger.info("Starting CVision backend...")
 
-    # Ensure tables exist (safe no-op if they already do)
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database tables ensured.")
-
-    # Apply any schema columns that Alembic migrations may not have run.
-    # Each patch runs in its own transaction so a single failure cannot
-    # roll back the others (PostgreSQL aborts the whole tx on any error).
-    _schema_patches = [
-        # Added to store CV bytes in DB so files survive Render restarts
-        "ALTER TABLE cvs ADD COLUMN IF NOT EXISTS file_content BYTEA",
-        # Added for subscription management
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_end_at TIMESTAMPTZ",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(100)",
-        # Added for password reset flow
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code VARCHAR(10)",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code_expires_at TIMESTAMP",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_code_attempts INTEGER DEFAULT 0",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_changed_at TIMESTAMP",
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_history VARCHAR(1000)",
-        # Added for domain-aware role profiles
-        "ALTER TABLE role_profiles ADD COLUMN IF NOT EXISTS domain VARCHAR(100)",
-        # Added for AI suggestion snippets (table is "suggestions", not "ai_suggestions")
-        "ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS snippets JSON",
-        # Added for Google OAuth
-        "ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255)",
-        "ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL",
-        # JD Matching + Cover Letter tables
-        """CREATE TABLE IF NOT EXISTS job_descriptions (
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER NOT NULL REFERENCES users(id),
-            title VARCHAR(255),
-            company VARCHAR(255),
-            url VARCHAR(500),
-            raw_text TEXT NOT NULL,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        )""",
-        "CREATE INDEX IF NOT EXISTS ix_job_descriptions_user_id ON job_descriptions(user_id)",
-        """CREATE TABLE IF NOT EXISTS cv_jd_matches (
-            id SERIAL PRIMARY KEY,
-            cv_id INTEGER NOT NULL REFERENCES cvs(id),
-            jd_id INTEGER NOT NULL REFERENCES job_descriptions(id),
-            match_score INTEGER NOT NULL,
-            summary TEXT,
-            matched_keywords JSON,
-            missing_keywords JSON,
-            gap_analysis JSON,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        )""",
-        "CREATE INDEX IF NOT EXISTS ix_cv_jd_matches_cv_id ON cv_jd_matches(cv_id)",
-        "CREATE INDEX IF NOT EXISTS ix_cv_jd_matches_jd_id ON cv_jd_matches(jd_id)",
-        """CREATE TABLE IF NOT EXISTS cover_letters (
-            id SERIAL PRIMARY KEY,
-            cv_id INTEGER NOT NULL REFERENCES cvs(id),
-            jd_id INTEGER NOT NULL REFERENCES job_descriptions(id),
-            content TEXT NOT NULL,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        )""",
-        "CREATE INDEX IF NOT EXISTS ix_cover_letters_cv_id ON cover_letters(cv_id)",
-    ]
-    from sqlalchemy import text as _text
-    _applied, _skipped = 0, 0
-    for _sql in _schema_patches:
-        try:
-            with engine.connect() as _conn:
-                _conn.execute(_text(_sql))
-                _conn.commit()
-            _applied += 1
-        except Exception as _e:
-            logger.debug(f"Schema patch skipped: {_e}")
-            _skipped += 1
-    logger.info(f"Schema patches complete: {_applied} applied, {_skipped} skipped.")
+    # Bring the schema to head via Alembic (single source of truth). Handles
+    # fresh DBs, legacy pre-Alembic prod (auto-baseline), and migrated DBs.
+    action = run_migrations(engine)
+    logger.info(f"Migrations applied ({action}).")
 
     # Seed initial data
     db = SessionLocal()
@@ -192,6 +131,17 @@ async def lifespan(app: FastAPI):
         seed_role_profiles(db)
     finally:
         db.close()
+
+    # Recover CV jobs left stuck by a previous restart/crash.
+    sweep_db = SessionLocal()
+    try:
+        recover_stuck_jobs(
+            sweep_db,
+            timeout_minutes=settings.STUCK_JOB_TIMEOUT_MINUTES,
+            max_retries=settings.MAX_JOB_RETRIES,
+        )
+    finally:
+        sweep_db.close()
 
     # Ensure upload directory exists
     settings.upload_path
