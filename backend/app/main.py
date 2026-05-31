@@ -23,7 +23,7 @@ from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
 from app.limiter import limiter
-from app.database import engine, SessionLocal, Base
+from app.database import engine, SessionLocal
 from app.db_migrations import run_migrations
 from app.services.job_recovery import recover_stuck_jobs
 from app.observability import init_sentry
