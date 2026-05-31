@@ -34,11 +34,18 @@ _STATEMENTS = [
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_history VARCHAR(1000)",
     # users: Google OAuth
     "ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255)",
+    "CREATE INDEX IF NOT EXISTS ix_users_google_id ON users(google_id)",
     "ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL",
+    # cvs: target domain selected at upload (drives domain-aware analysis)
+    "ALTER TABLE cvs ADD COLUMN IF NOT EXISTS target_domain VARCHAR(100)",
     # role_profiles: domain
     "ALTER TABLE role_profiles ADD COLUMN IF NOT EXISTS domain VARCHAR(100)",
     # suggestions: snippets
     "ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS snippets JSON",
+    # analysis_results: AI-enhanced output fields (populated after GPT call)
+    "ALTER TABLE analysis_results ADD COLUMN IF NOT EXISTS ai_summary TEXT",
+    "ALTER TABLE analysis_results ADD COLUMN IF NOT EXISTS ai_suggestions JSON",
+    "ALTER TABLE analysis_results ADD COLUMN IF NOT EXISTS ai_enhanced INTEGER NOT NULL DEFAULT 0",
     # JD matching + cover letters
     """CREATE TABLE IF NOT EXISTS job_descriptions (
         id SERIAL PRIMARY KEY,
@@ -71,6 +78,7 @@ _STATEMENTS = [
         created_at TIMESTAMPTZ DEFAULT NOW()
     )""",
     "CREATE INDEX IF NOT EXISTS ix_cover_letters_cv_id ON cover_letters(cv_id)",
+    "CREATE INDEX IF NOT EXISTS ix_cover_letters_jd_id ON cover_letters(jd_id)",
 ]
 
 
