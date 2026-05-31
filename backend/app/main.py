@@ -11,11 +11,13 @@ Registers all routers, configures CORS, and provides:
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import text
+from app.dependencies import get_db
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -294,10 +296,24 @@ app.include_router(cover_letter.router)
 
 # ---- Health Check ----
 @app.get("/health", tags=["System"])
-def health_check():
-    """Simple liveness check endpoint."""
+def health_check(db: Session = Depends(get_db)):
+    """Readiness check: verifies the app can reach the database."""
+    try:
+        db.execute(text("SELECT 1"))
+    except Exception:
+        logger.exception("Health check DB probe failed")
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy",
+                "app": settings.APP_NAME,
+                "version": "1.0.0",
+                "database": "down",
+            },
+        )
     return {
         "status": "healthy",
         "app": settings.APP_NAME,
         "version": "1.0.0",
+        "database": "up",
     }
