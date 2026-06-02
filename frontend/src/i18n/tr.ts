@@ -347,7 +347,7 @@ const tr = {
     },
     hero: {
       label: 'CV Analiz Platformu',
-      title: 'CV\'nin gerçekten ne kadar güçlü?',
+      title: 'CV\'n gerçekten ne kadar güçlü?',
       subtitle: 'CV\'ni yükle, yapay zeka saniyeler içinde ATS skoru, kariyer uyumunu ve neyi geliştirmen gerektiğini söylesin.',
       ctaDashboard: 'Dashboard\'a Git',
       ctaAnalyze: 'CV\'mi Analiz Et',
