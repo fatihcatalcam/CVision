@@ -1,0 +1,19 @@
+User-agent: *
+
+# Public pages - index these
+Allow: /$
+Allow: /pricing
+Allow: /privacy
+Allow: /terms
+
+# Private/user pages - do not index
+Disallow: /dashboard
+Disallow: /analysis/
+Disallow: /history
+Disallow: /settings
+Disallow: /hq-portal
+Disallow: /payment/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password

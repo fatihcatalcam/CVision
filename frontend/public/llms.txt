@@ -1,0 +1,68 @@
+# CVision
+
+## About
+CVision is an AI-powered CV and resume analysis tool. Upload a CV and get an instant ATS compatibility score, keyword analysis, section-by-section feedback, AI-generated rewrite suggestions, and matching career paths. It also matches a CV against a specific job description and generates tailored cover letters. CVision is a fully online, self-serve web app. Available worldwide in English and Turkish. Founded by Fatih Çatalçam.
+
+## Services and Pricing
+- Free plan — $0/month: 3 CV analyses per week, ATS compatibility score, basic keyword analysis, career path suggestions.
+- Pro plan — $4.99/month (USD, via Stripe) or ₺149/month (TRY, via iyzico): 50 CV analyses per week, everything in Free, full AI suggestion pack (all unlocked), AI bullet-point rewriting, full AI summary and analysis report, priority support.
+- Job-description (JD) matching: included — compare a CV against a specific job posting and see a match score plus gap analysis.
+- AI cover letter generation: included with Pro — generate a tailored cover letter from a CV and a job description.
+
+## Locations
+- Online only — no physical location.
+- Operated from Turkey, serving customers globally.
+
+## Contact
+- Website: https://www.cvisionapp.com
+- Support email: support@cvisionapp.com
+- Hours: Online 24/7, self-serve. Support responses during business hours.
+
+## Service Area
+Worldwide — available in every country. Interface languages: English, Turkish.
+
+## Key Facts
+- AI-powered analysis using large language models (OpenAI GPT).
+- Supports PDF and TXT resume uploads.
+- ATS compatibility scoring plus sub-scores for keywords, completeness, and experience.
+- Job-description matching with keyword gap analysis.
+- AI cover letter generation.
+- Bilingual: full English and Turkish support.
+- Sign in with email or Google.
+- Secure payments via Stripe (international) and iyzico (Turkey).
+- Free tier with no credit card required; cancel anytime.
+
+## What Makes Us Different
+CVision goes past a simple score. It tells you exactly what to fix and rewrites your bullet points with AI, so you can act on the feedback in seconds instead of guessing. It also closes the loop most resume checkers skip: match your CV against a real job description, see the missing keywords, and generate a tailored cover letter — all in one place. Start free, no credit card, upgrade only when you need more analyses.
+
+## Frequently Asked Questions
+
+Q: What does CVision do?
+A: It analyzes your CV with AI, gives an ATS compatibility score, points out weaknesses, suggests specific improvements, and recommends matching career paths.
+
+Q: How much does it cost?
+A: The Free plan is $0 and includes 3 analyses per week. The Pro plan is $4.99/month (or ₺149/month in Turkey) and includes 50 analyses per week plus all AI features.
+
+Q: Is there a free version?
+A: Yes. The Free plan requires no credit card and gives you 3 CV analyses per week with the ATS score and career suggestions.
+
+Q: What file formats can I upload?
+A: PDF and TXT files.
+
+Q: How long does an analysis take?
+A: Seconds. You upload your CV and the score and feedback are generated automatically.
+
+Q: What languages are supported?
+A: English and Turkish, both fully supported across the app.
+
+Q: Can I match my CV to a specific job?
+A: Yes. Paste or link a job description and CVision returns a match score, the keywords you're missing, and a gap analysis. It can also generate a tailored cover letter.
+
+Q: Can I cancel my Pro subscription?
+A: Yes, you can cancel anytime. Pro is billed monthly.
+
+Q: Is my data secure?
+A: Payments are processed securely through Stripe and iyzico. You can sign in with email or Google.
+
+Q: Who is CVision for?
+A: Job seekers, students, and professionals who want a stronger, ATS-friendly CV and clear, actionable feedback — anywhere in the world.

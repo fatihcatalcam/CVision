@@ -49,6 +49,8 @@ cv_env/
 !backend/requirements.txt
 !backend/requirements.local.txt
 !backend/requirements.dev.txt
+!frontend/public/robots.txt
+!frontend/public/llms.txt
 crash_log.txt
 import_err.txt
 err.txt
