@@ -38,6 +38,126 @@
         } catch (e) {}
       })();
     </script>
+
+    <!-- JSON-LD: Organization + WebSite + WebApplication (the product & pricing) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.cvisionapp.com/#organization",
+          "name": "CVision",
+          "url": "https://www.cvisionapp.com",
+          "logo": "https://www.cvisionapp.com/logo.png",
+          "description": "AI-powered CV and resume analysis tool that scores resumes for ATS compatibility and gives personalized, AI-generated improvement suggestions and career matches.",
+          "email": "fthctlcm@outlook.com",
+          "founder": { "@type": "Person", "name": "Fatih Çatalçam" },
+          "areaServed": { "@type": "Place", "name": "Worldwide" }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.cvisionapp.com/#website",
+          "name": "CVision",
+          "url": "https://www.cvisionapp.com",
+          "inLanguage": ["tr", "en"],
+          "publisher": { "@id": "https://www.cvisionapp.com/#organization" }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.cvisionapp.com/#webapp",
+          "name": "CVision",
+          "url": "https://www.cvisionapp.com",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "inLanguage": ["tr", "en"],
+          "description": "Upload a CV to get an instant ATS compatibility score, keyword analysis, AI rewrite suggestions, matching career paths, job-description matching, and AI-generated cover letters.",
+          "publisher": { "@id": "https://www.cvisionapp.com/#organization" },
+          "featureList": [
+            "ATS compatibility score",
+            "Keyword and completeness analysis",
+            "AI bullet-point rewriting",
+            "Full AI summary and suggestions",
+            "Job-description matching with gap analysis",
+            "AI cover letter generation"
+          ],
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "Free",
+              "price": "0",
+              "priceCurrency": "USD",
+              "description": "3 CV analyses per week, ATS compatibility score, basic keyword analysis, career path suggestions."
+            },
+            {
+              "@type": "Offer",
+              "name": "Pro",
+              "price": "4.99",
+              "priceCurrency": "USD",
+              "description": "50 CV analyses per week, full AI suggestion pack, AI bullet-point rewriting, full AI summary report, priority support."
+            },
+            {
+              "@type": "Offer",
+              "name": "Pro (Turkey)",
+              "price": "149",
+              "priceCurrency": "TRY",
+              "description": "50 CV analyses per week with all premium AI features, billed in Turkish Lira via iyzico."
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD: FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does CVision do?",
+          "acceptedAnswer": { "@type": "Answer", "text": "CVision analyzes your CV with AI, gives an ATS compatibility score, points out weaknesses, suggests specific improvements, and recommends matching career paths." }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does CVision cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Free plan is $0 and includes 3 analyses per week. The Pro plan is $4.99/month (or 149 TRY/month in Turkey) and includes 50 analyses per week plus all AI features." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a free version?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Free plan needs no credit card and gives you 3 CV analyses per week with the ATS score and career suggestions." }
+        },
+        {
+          "@type": "Question",
+          "name": "What file formats can I upload?",
+          "acceptedAnswer": { "@type": "Answer", "text": "PDF and TXT resume files." }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does an analysis take?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Seconds. You upload your CV and the score and feedback are generated automatically." }
+        },
+        {
+          "@type": "Question",
+          "name": "What languages are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "English and Turkish, both fully supported across the app." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I match my CV to a specific job posting?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Provide a job description and CVision returns a match score, the keywords you are missing, and a gap analysis. It can also generate a tailored cover letter." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I cancel my Pro subscription?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, you can cancel anytime. Pro is billed monthly." }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
