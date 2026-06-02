@@ -22,6 +22,7 @@ export function HomePage() {
           <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: 'var(--color-muted)' }}>
             <a href="#how-it-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
+            <a href="#faq" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
           </nav>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
@@ -142,6 +143,27 @@ export function HomePage() {
               <span className="text-sm" style={{ color: 'var(--color-muted)' }}>{t(labelKey)}</span>
             </div>
           ))}
+        </div>
+      </Reveal>
+
+      <div className="divider max-w-5xl mx-auto px-6" />
+
+      {/* FAQ */}
+      <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
+        <div id="faq">
+          <p className="label-sm mb-12">{t('home.faq.label')}</p>
+          <div className="max-w-3xl space-y-8">
+            {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const).map((i) => (
+              <div key={i}>
+                <h3 className="text-base font-semibold mb-2" style={{ color: 'var(--color-foreground)' }}>
+                  {t(`home.faq.q${i}`)}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
+                  {t(`home.faq.a${i}`)}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </Reveal>
 
