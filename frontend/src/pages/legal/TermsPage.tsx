@@ -3,10 +3,16 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
+import { useSeo } from '../../hooks/useSeo';
 
 export function TermsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  useSeo({
+    title: `${t('legal.terms.title')} — CVision`,
+    canonical: 'https://www.cvisionapp.com/terms',
+  });
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-background)' }}>

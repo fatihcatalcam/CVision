@@ -17,6 +17,7 @@ import { HistoryPage } from './pages/history/HistoryPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
 import { PrivacyPage } from './pages/legal/PrivacyPage';
 import { TermsPage } from './pages/legal/TermsPage';
+import { AboutPage } from './pages/about/AboutPage';
 import { MatchPage } from './pages/match/MatchPage';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           </Route>
 
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

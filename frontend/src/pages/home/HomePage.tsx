@@ -6,11 +6,18 @@ import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { ArrowRight, Brain, BarChart3, FileText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Reveal } from '../../components/ui/Reveal';
+import { useSeo } from '../../hooks/useSeo';
 
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
+
+  useSeo({
+    title: 'CVision — AI CV Analizi & ATS Resume Checker',
+    description: "Yapay zeka destekli CV analizi ve ATS resume checker. CV'ni yükle; anında ATS skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
+    canonical: 'https://www.cvisionapp.com/',
+  });
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-background)' }}>
@@ -23,6 +30,7 @@ export function HomePage() {
             <a href="#how-it-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
             <a href="#faq" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
+            <a href="/about" onClick={(e) => { e.preventDefault(); navigate('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
           </nav>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
@@ -195,6 +203,7 @@ export function HomePage() {
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="font-mono font-medium tracking-tight text-sm" style={{ color: 'var(--color-foreground)' }}>CVision</span>
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--color-muted)' }}>
+            <a href="/about" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
             <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
             <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>

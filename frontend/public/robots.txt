@@ -1,12 +1,18 @@
+# CVision — https://www.cvisionapp.com
+# AI crawlers (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot, Google-Extended,
+# etc.) are governed by the rules below via User-agent: * — they are welcome on
+# all public pages and only blocked from private, auth-gated routes.
+
 User-agent: *
 
-# Public pages - index these
+# Public pages — index these
 Allow: /$
+Allow: /about
 Allow: /pricing
 Allow: /privacy
 Allow: /terms
 
-# Private/user pages - do not index
+# Private / user pages — do not index
 Disallow: /dashboard
 Disallow: /analysis/
 Disallow: /history
@@ -17,3 +23,5 @@ Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
+
+Sitemap: https://www.cvisionapp.com/sitemap.xml
