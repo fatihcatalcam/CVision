@@ -10,7 +10,7 @@ export function PrivacyPage() {
   const navigate = useNavigate();
 
   useSeo({
-    title: `${t('legal.privacy.title')} — CVision`,
+    title: `${t('legal.privacy.title')} - CVision`,
     canonical: 'https://www.cvisionapp.com/privacy',
   });
 

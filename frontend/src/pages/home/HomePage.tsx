@@ -14,7 +14,7 @@ export function HomePage() {
   const { isAuthenticated, isLoading } = useAuth();
 
   useSeo({
-    title: 'CVision — AI CV Analizi & ATS Resume Checker',
+    title: 'CVision - AI CV Analizi & ATS Resume Checker',
     description: "Yapay zeka destekli CV analizi ve ATS resume checker. CV'ni yükle; anında ATS skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
     canonical: 'https://www.cvisionapp.com/',
   });

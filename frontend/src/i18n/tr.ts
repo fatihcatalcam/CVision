@@ -409,7 +409,7 @@ const tr = {
   },
 
   about: {
-    metaTitle: 'CVision Hakkında — Yapay Zeka CV Analizi ve ATS Testi',
+    metaTitle: 'CVision Hakkında - Yapay Zeka CV Analizi ve ATS Testi',
     metaDescription: 'CVision, yapay zeka destekli bir CV analiz aracı ve ATS uyumluluk test aracıdır. Ne yaptığını, kimler için olduğunu ve otomatik eleme sistemlerini geçmene nasıl yardımcı olduğunu öğren.',
     back: '← Ana sayfaya dön',
     title: 'CVision Hakkında',

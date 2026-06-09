@@ -10,7 +10,7 @@ export function TermsPage() {
   const navigate = useNavigate();
 
   useSeo({
-    title: `${t('legal.terms.title')} — CVision`,
+    title: `${t('legal.terms.title')} - CVision`,
     canonical: 'https://www.cvisionapp.com/terms',
   });
 

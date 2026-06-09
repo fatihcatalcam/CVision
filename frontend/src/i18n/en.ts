@@ -409,7 +409,7 @@ const en = {
   },
 
   about: {
-    metaTitle: 'About CVision — AI Resume Analyzer & ATS Checker',
+    metaTitle: 'About CVision - AI Resume Analyzer & ATS Checker',
     metaDescription: 'CVision is an AI-powered resume analyzer and ATS checker. Learn what it does, who it is for, and how it helps you pass automated resume screening.',
     back: '← Back to home',
     title: 'About CVision',
