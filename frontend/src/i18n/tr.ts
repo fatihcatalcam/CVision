@@ -317,6 +317,17 @@ const tr = {
       cancelErrorToast: 'Abonelik iptal edilemedi',
     },
 
+    success: {
+      badge: 'PRO ÜYELİK AKTİF',
+      title: 'Ödeme Başarılı!',
+      body: 'CVision Pro üyeliğiniz aktif edildi. Artık tüm premium özelliklerden yararlanabilirsiniz.',
+      f1: '50 CV analizi / hafta',
+      f2: 'Tam AI öneri paketi (tümü açık)',
+      f3: 'AI bullet point yeniden yazma',
+      f4: 'Tam AI özet & analiz raporu',
+      cta: "Dashboard'a Git",
+    },
+
     pricing: {
       trialBanner: '7 günlük ücretsiz deneme — kredi kartı istenmez, istediğin zaman iptal et.',
       trialBadge: '7 GÜN ÜCRETSİZ',

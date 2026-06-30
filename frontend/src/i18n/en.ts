@@ -317,6 +317,17 @@ const en = {
       cancelErrorToast: 'Failed to cancel subscription',
     },
 
+    success: {
+      badge: 'PRO MEMBERSHIP ACTIVE',
+      title: 'Payment Successful!',
+      body: 'Your CVision Pro membership has been activated. You can now enjoy all premium features.',
+      f1: '50 CV analyses / week',
+      f2: 'Full AI suggestion pack (all unlocked)',
+      f3: 'AI bullet point rewriting',
+      f4: 'Full AI summary & analysis report',
+      cta: 'Go to Dashboard',
+    },
+
     pricing: {
       trialBanner: '7-day free trial — no credit card required, cancel anytime.',
       trialBadge: '7 DAYS FREE',
