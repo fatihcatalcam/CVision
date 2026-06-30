@@ -16,7 +16,7 @@ export function useTryToUsd(): { isTurkey: boolean; usdPrice: string | null } {
         const rate: number = data?.rates?.USD;
         if (rate) setUsdPrice((TRY_PRICE * rate).toFixed(2));
       })
-      .catch(() => setUsdPrice('5.99'));
+      .catch(() => setUsdPrice('4.50'));
   }, [isTurkey]);
 
   return { isTurkey, usdPrice };
