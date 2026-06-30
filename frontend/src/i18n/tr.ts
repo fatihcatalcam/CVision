@@ -317,6 +317,19 @@ const tr = {
       cancelErrorToast: 'Abonelik iptal edilemedi',
     },
 
+    pricing: {
+      trialBanner: '7 günlük ücretsiz deneme — kredi kartı istenmez, istediğin zaman iptal et.',
+      trialBadge: '7 GÜN ÜCRETSİZ',
+      ctaButton: '7 günlük ücretsiz denemeyi başlat',
+      noCard: 'Kredi kartı gerekmez · İstediğin zaman iptal et',
+      currentPlan: 'Mevcut Plan',
+      previousPlan: 'Önceki Plan',
+      youreOnPro: 'Pro planındasın',
+      header: 'Sade ve şeffaf fiyatlandırma',
+      subheader: '7 gün ücretsiz, ardından ₺199,99/ay. İstediğin zaman iptal et.',
+      freePerMonth: '/ ay',
+    },
+
     data: {
       title: 'Veri & Gizlilik',
       subtitle: 'Verilerini dışa aktar veya hesabını kalıcı olarak sil',

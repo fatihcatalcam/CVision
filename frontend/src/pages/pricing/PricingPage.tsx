@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import {
@@ -23,6 +24,7 @@ const PRO_FEATURES = [
 ];
 
 export function PricingPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -57,15 +59,15 @@ export function PricingPage() {
         {/* Free trial banner */}
         <div className="flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl px-5 py-3 mb-10 text-sm font-medium">
           <Gift className="w-4 h-4 shrink-0" />
-          <span>7 günlük ücretsiz deneme — kredi kartı istenmez, istediğin zaman iptal et.</span>
+          <span>{t('settings.pricing.trialBanner')}</span>
         </div>
 
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
-            Simple, honest pricing
+            {t('settings.pricing.header')}
           </h1>
-          <p className="text-base text-[#787774] dark:text-[#908d89]">7 days free, then ₺199.99/mo. Cancel anytime.</p>
+          <p className="text-base text-[#787774] dark:text-[#908d89]">{t('settings.pricing.subheader')}</p>
         </div>
 
         {/* Plan cards */}
@@ -89,7 +91,7 @@ export function PricingPage() {
             </ul>
 
             <div className="w-full py-2.5 px-4 bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] text-sm font-medium rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] text-center">
-              {isPremium ? 'Previous Plan' : 'Current Plan'}
+              {isPremium ? t('settings.pricing.previousPlan') : t('settings.pricing.currentPlan')}
             </div>
           </div>
 
@@ -98,7 +100,7 @@ export function PricingPage() {
             <div className="flex items-center justify-between mb-6">
               <p className="label-sm text-[#787774]">Pro</p>
               <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
-                <Gift className="w-3 h-3" /> 7 GÜN ÜCRETSİZ
+                <Gift className="w-3 h-3" /> {t('settings.pricing.trialBadge')}
               </span>
             </div>
             <div className="mb-6">
@@ -117,7 +119,7 @@ export function PricingPage() {
 
             {isPremium ? (
               <div className="w-full py-2.5 px-4 bg-white/10 border border-white/20 text-white text-sm font-medium rounded-[var(--radius-md)] text-center flex items-center justify-center gap-2">
-                <Sparkles className="w-4 h-4" /> You're on Pro
+                <Sparkles className="w-4 h-4" /> {t('settings.pricing.youreOnPro')}
               </div>
             ) : (
               <div className="flex flex-col gap-3">
@@ -133,11 +135,11 @@ export function PricingPage() {
                   className="w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed bg-white text-[#111111] hover:bg-[#F7F6F3]"
                 >
                   {loadingStripe ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  Start 7-day free trial
+                  {t('settings.pricing.ctaButton')}
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#787774]">
-                  <Lock className="w-3 h-3" /> No credit card needed · Cancel anytime
+                  <Lock className="w-3 h-3" /> {t('settings.pricing.noCard')}
                 </div>
               </div>
             )}

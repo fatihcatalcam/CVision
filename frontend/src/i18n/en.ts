@@ -317,6 +317,19 @@ const en = {
       cancelErrorToast: 'Failed to cancel subscription',
     },
 
+    pricing: {
+      trialBanner: '7-day free trial — no credit card required, cancel anytime.',
+      trialBadge: '7 DAYS FREE',
+      ctaButton: 'Start 7-day free trial',
+      noCard: 'No credit card needed · Cancel anytime',
+      currentPlan: 'Current Plan',
+      previousPlan: 'Previous Plan',
+      youreOnPro: "You're on Pro",
+      header: 'Simple, honest pricing',
+      subheader: '7 days free, then ₺199.99/mo. Cancel anytime.',
+      freePerMonth: '/ month',
+    },
+
     data: {
       title: 'Data & Privacy',
       subtitle: 'Export your data or permanently delete your account',
