@@ -59,9 +59,11 @@ class Settings(BaseSettings):
     IYZICO_SECRET_KEY: str = ""
     IYZICO_BASE_URL: str = "https://sandbox-api.iyzipay.com"
 
-    # ---- Stripe ----
-    STRIPE_SECRET_KEY: str = ""
-    STRIPE_WEBHOOK_SECRET: str = ""
+    # ---- LemonSqueezy ----
+    LEMONSQUEEZY_API_KEY: str = ""
+    LEMONSQUEEZY_STORE_ID: str = ""
+    LEMONSQUEEZY_VARIANT_ID: str = ""
+    LEMONSQUEEZY_WEBHOOK_SECRET: str = ""
 
     # ---- Google OAuth ----
     GOOGLE_CLIENT_ID: str = ""

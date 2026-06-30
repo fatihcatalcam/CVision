@@ -124,7 +124,7 @@ export function SettingsPage() {
   const handleCancelSubscription = async () => {
     setCancellingSubscription(true);
     try {
-      const res = await api.post('/payment/stripe/cancel');
+      const res = await api.post('/payment/lemon/cancel');
       toast.success(res.data.message || t('settings.subscription.cancelSuccessToast'));
       await refreshUser();
       setShowCancelConfirm(false);

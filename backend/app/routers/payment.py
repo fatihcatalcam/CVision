@@ -1,19 +1,22 @@
 """
-Payment router - iyzico (TR) and Stripe (International) subscription integration.
+Payment router - iyzico (TR) and LemonSqueezy (International) subscription integration.
 Endpoints:
-  POST /payment/iyzico/init          - Create iyzico Checkoutform session
-  POST /payment/iyzico/callback      - iyzico payment result callback
-  POST /payment/stripe/create-session - Create Stripe Checkout Session
-  POST /payment/stripe/webhook       - Stripe webhook handler
-  GET  /payment/status               - Current user subscription status
+  POST /payment/iyzico/init              - Create iyzico Checkoutform session
+  POST /payment/iyzico/callback          - iyzico payment result callback
+  POST /payment/lemon/create-checkout    - Create LemonSqueezy Checkout
+  POST /payment/lemon/webhook            - LemonSqueezy webhook handler
+  POST /payment/lemon/cancel             - Cancel LemonSqueezy subscription
+  GET  /payment/status                   - Current user subscription status
 """
 
+import hashlib
+import hmac
 import json
 import logging
 import time
 from datetime import datetime, timezone, timedelta
 
-import stripe
+import httpx
 import iyzipay
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -208,222 +211,169 @@ async def iyzico_callback(request: Request):
     return _redirect_html(f"{settings.FRONTEND_URL}/payment/success")
 
 
-# ─────────────────────────────── Stripe ───────────────────────────────────────
+# ─────────────────────────────── LemonSqueezy ─────────────────────────────────
 
-@router.post("/stripe/create-session")
-def stripe_create_session(
+_LEMON_API_BASE = "https://api.lemonsqueezy.com/v1"
+
+
+def _lemon_headers() -> dict:
+    return {
+        "Authorization": f"Bearer {settings.LEMONSQUEEZY_API_KEY}",
+        "Accept": "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+    }
+
+
+@router.post("/lemon/create-checkout")
+def lemon_create_checkout(
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
 ):
-    """
-    Creates a Stripe Checkout Session for a $4.99/month subscription.
-    Returns the hosted checkout URL for frontend redirect.
-    """
+    """Creates a LemonSqueezy hosted checkout and returns the URL."""
     if current_user.plan_type == "premium":
         raise HTTPException(status_code=400, detail="You already have a premium subscription.")
 
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if not stripe.api_key or stripe.api_key.startswith("sk_test_your"):
-        raise HTTPException(status_code=503, detail="Stripe is not configured.")
+    if not settings.LEMONSQUEEZY_API_KEY:
+        raise HTTPException(status_code=503, detail="Payment system not configured.")
 
-    # Ensure Stripe customer exists
-    customer_id = current_user.stripe_customer_id
-    if not customer_id:
-        try:
-            customer = stripe.Customer.create(
-                email=current_user.email,
-                name=current_user.full_name,
-                metadata={"user_id": str(current_user.id)},
+    payload = {
+        "data": {
+            "type": "checkouts",
+            "attributes": {
+                "checkout_data": {
+                    "email": current_user.email,
+                    "name": current_user.full_name,
+                    "custom": {"user_id": str(current_user.id)},
+                },
+                "product_options": {
+                    "redirect_url": f"{settings.FRONTEND_URL}/payment/success",
+                },
+            },
+            "relationships": {
+                "store": {
+                    "data": {"type": "stores", "id": str(settings.LEMONSQUEEZY_STORE_ID)}
+                },
+                "variant": {
+                    "data": {"type": "variants", "id": str(settings.LEMONSQUEEZY_VARIANT_ID)}
+                },
+            },
+        }
+    }
+
+    try:
+        with httpx.Client(timeout=30) as client:
+            resp = client.post(
+                f"{_LEMON_API_BASE}/checkouts",
+                json=payload,
+                headers=_lemon_headers(),
             )
-            user = db.query(User).filter(User.id == current_user.id).first()
-            user.stripe_customer_id = customer.id
-            db.commit()
-            customer_id = customer.id
-        except stripe.StripeError as e:
-            logger.error(f"Stripe customer create error: {e}")
-            raise HTTPException(status_code=502, detail="Stripe customer creation failed.")
-
-    try:
-        session = stripe.checkout.Session.create(
-            customer=customer_id,
-            payment_method_types=["card"],
-            line_items=[
-                {
-                    "price_data": {
-                        "currency": "usd",
-                        "product_data": {
-                            "name": "CVision Pro",
-                            "description": "50 CV analyses/week + all premium AI features",
-                        },
-                        "unit_amount": 499,  # $4.99 in cents
-                        "recurring": {"interval": "month"},
-                    },
-                    "quantity": 1,
-                }
-            ],
-            mode="subscription",
-            success_url=(
-                f"{settings.FRONTEND_URL}/payment/success"
-                "?session_id={CHECKOUT_SESSION_ID}"
-            ),
-            cancel_url=f"{settings.FRONTEND_URL}/payment/cancel",
-            metadata={"user_id": str(current_user.id)},
-        )
-    except stripe.StripeError as e:
-        logger.error(f"Stripe session create error: {e}")
-        raise HTTPException(status_code=502, detail="Stripe session creation failed.")
-
-    return {"checkoutUrl": session.url}
-
-
-@router.post("/stripe/verify-session")
-def stripe_verify_session(
-    request_body: dict,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    """
-    Verifies a completed Stripe Checkout Session by session_id and upgrades user.
-    Called from the frontend success page as a reliable fallback to webhooks.
-    """
-    session_id = request_body.get("session_id")
-    if not session_id:
-        raise HTTPException(status_code=400, detail="session_id required")
-
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    try:
-        session = stripe.checkout.Session.retrieve(session_id)
-    except stripe.StripeError as e:
-        logger.error(f"Stripe session retrieve error: {e}")
-        raise HTTPException(status_code=502, detail="Could not verify session.")
-
-    if session.get("payment_status") != "paid":
-        raise HTTPException(status_code=400, detail="Payment not completed.")
-
-    # Ensure the session belongs to the current user
-    metadata = session.get("metadata") or {}
-    session_user_id = metadata.get("user_id")
-    if str(current_user.id) != str(session_user_id):
-        raise HTTPException(status_code=403, detail="Session does not belong to this user.")
-
-    _upgrade_user(db, current_user.id)
-    logger.info(f"User {current_user.id} upgraded via session verify.")
-    return {"status": "ok", "plan_type": "premium"}
-
-
-@router.post("/stripe/webhook")
-async def stripe_webhook(request: Request):
-    """
-    Stripe sends webhook events here. Verifies signature and upgrades user on payment success.
-    """
-    payload = await request.body()
-    sig_header = request.headers.get("stripe-signature", "")
-
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        logger.error(f"Stripe webhook invalid payload: {e}")
-        raise HTTPException(status_code=400, detail="Invalid payload")
+            resp.raise_for_status()
+            data = resp.json()
+    except httpx.HTTPStatusError as e:
+        logger.error(f"LemonSqueezy checkout error: {e.response.text}")
+        raise HTTPException(status_code=502, detail="Payment session creation failed.")
     except Exception as e:
-        logger.error(f"Stripe webhook signature error: {type(e).__name__}: {e}")
+        logger.error(f"LemonSqueezy error: {e}")
+        raise HTTPException(status_code=502, detail="Payment system error.")
+
+    return {"checkoutUrl": data["data"]["attributes"]["url"]}
+
+
+@router.post("/lemon/webhook")
+async def lemon_webhook(request: Request):
+    """LemonSqueezy posts signed events here. Upgrades user on successful payment."""
+    payload = await request.body()
+    signature = request.headers.get("X-Signature", "")
+
+    if not settings.LEMONSQUEEZY_WEBHOOK_SECRET:
+        raise HTTPException(status_code=503, detail="Webhook not configured.")
+
+    expected = hmac.new(
+        settings.LEMONSQUEEZY_WEBHOOK_SECRET.encode(),
+        payload,
+        hashlib.sha256,
+    ).hexdigest()
+
+    if not hmac.compare_digest(expected, signature):
+        logger.warning("LemonSqueezy webhook signature mismatch")
         raise HTTPException(status_code=400, detail="Invalid signature")
 
     try:
-        event_type = event["type"] if isinstance(event, dict) else event.type
-        event_data = event["data"]["object"] if isinstance(event, dict) else event.data.object
+        event = json.loads(payload)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
 
-        if isinstance(event_data, dict):
-            metadata = event_data.get("metadata") or {}
-            user_id_str = metadata.get("user_id")
-            sub_id = event_data.get("subscription")
-        else:
-            metadata = getattr(event_data, "metadata", None) or {}
-            user_id_str = metadata.get("user_id") if isinstance(metadata, dict) else getattr(metadata, "user_id", None)
-            sub_id = getattr(event_data, "subscription", None)
+    event_name = event.get("meta", {}).get("event_name", "")
+    custom_data = event.get("meta", {}).get("custom_data") or {}
+    user_id_str = custom_data.get("user_id") if isinstance(custom_data, dict) else None
 
-        if event_type in ("checkout.session.completed", "invoice.payment_succeeded"):
-            # For invoice events, try fetching subscription metadata if user_id missing
-            if not user_id_str and event_type == "invoice.payment_succeeded" and sub_id:
-                try:
-                    sub = stripe.Subscription.retrieve(sub_id)
-                    sub_meta = getattr(sub, "metadata", None) or {}
-                    user_id_str = sub_meta.get("user_id") if isinstance(sub_meta, dict) else getattr(sub_meta, "user_id", None)
-                except Exception as e:
-                    logger.warning(f"Could not retrieve subscription metadata: {e}")
-
-            if user_id_str:
-                try:
-                    user_id = int(user_id_str)
-                    db = SessionLocal()
-                    try:
-                        _upgrade_user(db, user_id)
-                    finally:
-                        db.close()
-                except (ValueError, TypeError):
-                    logger.error(f"Invalid user_id in Stripe metadata: {user_id_str}")
-            else:
-                logger.warning(f"No user_id in metadata for event {event_type}")
-
-    except Exception as e:
-        logger.error(f"Stripe webhook processing error: {type(e).__name__}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Webhook processing error")
+    if event_name in ("subscription_created", "subscription_payment_success", "order_created"):
+        if not user_id_str:
+            logger.warning(f"No user_id in custom_data for event {event_name}")
+            return {"received": True}
+        try:
+            user_id = int(user_id_str)
+            sub_id = str(event.get("data", {}).get("id", ""))
+            db = SessionLocal()
+            try:
+                if sub_id:
+                    user = db.query(User).filter(User.id == user_id).first()
+                    if user:
+                        user.lemon_subscription_id = sub_id
+                        db.commit()
+                _upgrade_user(db, user_id)
+            finally:
+                db.close()
+        except (ValueError, TypeError):
+            logger.error(f"Invalid user_id in LemonSqueezy webhook: {user_id_str}")
 
     return {"received": True}
 
 
-@router.post("/stripe/cancel")
-def stripe_cancel_subscription(
+@router.post("/lemon/cancel")
+def lemon_cancel_subscription(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """
-    Cancels the active Stripe subscription at period end.
-    User keeps Pro access until subscription_end_at, then downgrades to free.
-    """
+    """Cancels the active LemonSqueezy subscription at period end."""
     if current_user.plan_type != "premium":
         raise HTTPException(status_code=400, detail="No active subscription to cancel.")
 
-    if not current_user.stripe_customer_id:
-        # Manually assigned premium (e.g. admin grant) — just downgrade immediately
+    if not current_user.lemon_subscription_id:
         user = db.query(User).filter(User.id == current_user.id).first()
         user.plan_type = "free"
         user.subscription_end_at = None
         db.commit()
         return {"status": "cancelled", "message": "Subscription cancelled."}
 
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if not stripe.api_key or stripe.api_key.startswith("sk_test_your"):
-        raise HTTPException(status_code=503, detail="Stripe is not configured.")
+    if not settings.LEMONSQUEEZY_API_KEY:
+        raise HTTPException(status_code=503, detail="Payment system not configured.")
 
     try:
-        subscriptions = stripe.Subscription.list(
-            customer=current_user.stripe_customer_id,
-            status="active",
-            limit=1,
-        )
-        if not subscriptions.data:
-            # No active Stripe sub found — downgrade directly
-            user = db.query(User).filter(User.id == current_user.id).first()
-            user.plan_type = "free"
-            user.subscription_end_at = None
-            db.commit()
-            return {"status": "cancelled", "message": "Subscription cancelled."}
-
-        sub = subscriptions.data[0]
-        stripe.Subscription.modify(sub.id, cancel_at_period_end=True)
-
-        return {
-            "status": "cancel_at_period_end",
-            "message": "Your subscription will not renew. Pro access continues until the end of the billing period.",
-            "subscription_end_at": current_user.subscription_end_at.isoformat() if current_user.subscription_end_at else None,
-        }
-    except stripe.StripeError as e:
-        logger.error(f"Stripe cancel error: {e}")
+        with httpx.Client(timeout=30) as client:
+            resp = client.patch(
+                f"{_LEMON_API_BASE}/subscriptions/{current_user.lemon_subscription_id}",
+                json={
+                    "data": {
+                        "type": "subscriptions",
+                        "id": str(current_user.lemon_subscription_id),
+                        "attributes": {"cancelled": True},
+                    }
+                },
+                headers=_lemon_headers(),
+            )
+            resp.raise_for_status()
+    except httpx.HTTPStatusError as e:
+        logger.error(f"LemonSqueezy cancel error: {e.response.text}")
         raise HTTPException(status_code=502, detail="Failed to cancel subscription.")
+    except Exception as e:
+        logger.error(f"LemonSqueezy cancel error: {e}")
+        raise HTTPException(status_code=502, detail="Cancellation failed.")
+
+    return {
+        "status": "cancel_at_period_end",
+        "message": "Your subscription will not renew. Pro access continues until the end of the billing period.",
+        "subscription_end_at": current_user.subscription_end_at.isoformat() if current_user.subscription_end_at else None,
+    }
 
 
 # ─────────────────────────────── Status ───────────────────────────────────────

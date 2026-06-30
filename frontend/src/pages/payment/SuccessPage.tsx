@@ -1,23 +1,14 @@
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CheckCircle, Sparkles, ArrowRight } from 'lucide-react';
-import api from '../../services/api';
 
 export function SuccessPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { refreshUser } = useAuth();
 
   useEffect(() => {
-    const sessionId = searchParams.get('session_id');
-    if (sessionId) {
-      api.post('/payment/stripe/verify-session', { session_id: sessionId })
-        .catch(() => {})
-        .finally(() => refreshUser());
-    } else {
-      refreshUser();
-    }
+    refreshUser();
   }, []);
 
   return (

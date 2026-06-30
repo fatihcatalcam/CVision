@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import {
-  ArrowLeft, Loader2, Globe, CreditCard, Shield, Lock, CheckCircle2, Sparkles,
+  ArrowLeft, Loader2, CreditCard, Shield, Lock, CheckCircle2, Sparkles, Gift,
 } from 'lucide-react';
 
 const FREE_FEATURES = [
@@ -22,20 +22,9 @@ const PRO_FEATURES = [
   'Priority support',
 ];
 
-function useIsTurkey(): boolean {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const locale = navigator.language || '';
-    return tz.includes('Istanbul') || tz.includes('Turkey') || locale.startsWith('tr');
-  } catch {
-    return false;
-  }
-}
-
 export function PricingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isTurkey = useIsTurkey();
 
   const [loadingStripe, setLoadingStripe] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +33,7 @@ export function PricingPage() {
     setError(null);
     setLoadingStripe(true);
     try {
-      const res = await api.post('/payment/stripe/create-session');
+      const res = await api.post('/payment/lemon/create-checkout');
       window.location.href = res.data.checkoutUrl;
     } catch (err: unknown) {
       setError((err as any)?.response?.data?.detail || 'Stripe payment could not be initiated.');
@@ -65,12 +54,18 @@ export function PricingPage() {
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </button>
 
+        {/* Free trial banner */}
+        <div className="flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl px-5 py-3 mb-10 text-sm font-medium">
+          <Gift className="w-4 h-4 shrink-0" />
+          <span>7 günlük ücretsiz deneme — kredi kartı istenmez, istediğin zaman iptal et.</span>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
             Simple, honest pricing
           </h1>
-          <p className="text-base text-[#787774] dark:text-[#908d89]">Start free. Upgrade when you need more.</p>
+          <p className="text-base text-[#787774] dark:text-[#908d89]">7 days free, then ₺199.99/mo. Cancel anytime.</p>
         </div>
 
         {/* Plan cards */}
@@ -100,11 +95,15 @@ export function PricingPage() {
 
           {/* Pro */}
           <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8 border border-transparent dark:border-white/[0.08]">
-            <p className="label-sm mb-6 text-[#787774]">Pro</p>
+            <div className="flex items-center justify-between mb-6">
+              <p className="label-sm text-[#787774]">Pro</p>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
+                <Gift className="w-3 h-3" /> 7 GÜN ÜCRETSİZ
+              </span>
+            </div>
             <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-white">₺149</span>
+              <span className="stat-number text-4xl font-semibold text-white">₺199.99</span>
               <span className="text-sm text-[#787774] ml-1">/ month</span>
-              <span className="text-[#787774] text-xs ml-2">or $4.99/mo</span>
             </div>
 
             <ul className="space-y-3 mb-8">
@@ -129,29 +128,16 @@ export function PricingPage() {
                 )}
 
                 <button
-                  disabled
-                  title="iyzico payment is coming soon"
-                  className="w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium flex items-center justify-center gap-2 opacity-40 cursor-not-allowed bg-white/10 text-[#A09D9A] border border-white/10"
-                >
-                  <CreditCard className="w-4 h-4" />
-                  {isTurkey ? 'iyzico - ₺149/mo (Coming soon)' : 'iyzico (Turkey) - Coming soon'}
-                </button>
-
-                <button
                   onClick={handleStripe}
                   disabled={loadingStripe}
-                  className={`w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                    !isTurkey
-                      ? 'bg-white text-[#111111] hover:bg-[#F7F6F3]'
-                      : 'bg-white/10 text-[#A09D9A] border border-white/10 hover:bg-white/20'
-                  }`}
+                  className="w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed bg-white text-[#111111] hover:bg-[#F7F6F3]"
                 >
-                  {loadingStripe ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
-                  {!isTurkey ? 'Pay with Stripe - $4.99/mo' : 'Stripe (International) - $4.99/mo'}
+                  {loadingStripe ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+                  Start 7-day free trial
                 </button>
 
                 <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#787774]">
-                  <Lock className="w-3 h-3" /> Secure payment · Cancel anytime
+                  <Lock className="w-3 h-3" /> No credit card needed · Cancel anytime
                 </div>
               </div>
             )}
