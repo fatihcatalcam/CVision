@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import { useTryToUsd } from '../../hooks/useTryToUsd';
 import api from '../../services/api';
 import {
   ArrowLeft, Loader2, CreditCard, Shield, Lock, CheckCircle2, Sparkles, Gift,
@@ -28,6 +29,7 @@ export function PricingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const { isTurkey, usdPrice } = useTryToUsd();
   const [loadingStripe, setLoadingStripe] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,8 +106,20 @@ export function PricingPage() {
               </span>
             </div>
             <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-white">₺199.99</span>
-              <span className="text-sm text-[#787774] ml-1">/ month</span>
+              {isTurkey ? (
+                <>
+                  <span className="stat-number text-4xl font-semibold text-white">₺199.99</span>
+                  <span className="text-sm text-[#787774] ml-1">{t('settings.pricing.freePerMonth')}</span>
+                </>
+              ) : (
+                <>
+                  <span className="stat-number text-4xl font-semibold text-white">
+                    {usdPrice ? `~$${usdPrice}` : '...'}
+                  </span>
+                  <span className="text-sm text-[#787774] ml-1">/ month</span>
+                  <p className="text-[10px] text-[#787774] mt-1">billed as ₺199.99 TRY</p>
+                </>
+              )}
             </div>
 
             <ul className="space-y-3 mb-8">
