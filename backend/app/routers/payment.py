@@ -326,6 +326,26 @@ async def lemon_webhook(request: Request):
         except (ValueError, TypeError):
             logger.error(f"Invalid user_id in LemonSqueezy webhook: {user_id_str}")
 
+    elif event_name in ("subscription_cancelled", "subscription_expired"):
+        if not user_id_str:
+            logger.warning(f"No user_id in custom_data for event {event_name}")
+            return {"received": True}
+        try:
+            user_id = int(user_id_str)
+            db = SessionLocal()
+            try:
+                user = db.query(User).filter(User.id == user_id).first()
+                if user:
+                    user.plan_type = "free"
+                    user.subscription_end_at = None
+                    user.lemon_subscription_id = None
+                    db.commit()
+                    logger.info(f"User {user_id} downgraded via {event_name}.")
+            finally:
+                db.close()
+        except (ValueError, TypeError):
+            logger.error(f"Invalid user_id in LemonSqueezy webhook: {user_id_str}")
+
     return {"received": True}
 
 
