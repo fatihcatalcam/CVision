@@ -11,7 +11,7 @@ import { useSeo } from '../../hooks/useSeo';
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   useSeo({
     title: 'CVision - AI CV Analizi & ATS Resume Checker',
@@ -35,7 +35,7 @@ export function HomePage() {
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
-            {!isLoading && (isAuthenticated ? (
+            {isAuthenticated ? (
               <Button variant="primary" size="sm" onClick={() => navigate('/dashboard')}>
                 {t('home.nav.dashboard')}
               </Button>
@@ -44,7 +44,7 @@ export function HomePage() {
                 <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>{t('home.nav.signIn')}</Button>
                 <Button variant="primary" size="sm" onClick={() => navigate('/register')}>{t('home.nav.getStarted')}</Button>
               </>
-            ))}
+            )}
           </div>
         </div>
       </header>
@@ -60,7 +60,7 @@ export function HomePage() {
             {t('home.hero.subtitle')}
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            {!isLoading && (isAuthenticated ? (
+            {isAuthenticated ? (
               <Button size="lg" onClick={() => navigate('/dashboard')}>
                 {t('home.hero.ctaDashboard')}
                 <ArrowRight className="w-4 h-4" />
@@ -75,7 +75,7 @@ export function HomePage() {
                   {t('home.hero.ctaSignIn')}
                 </Button>
               </>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -185,7 +185,7 @@ export function HomePage() {
           </h2>
           <p className="text-sm" style={{ color: 'var(--color-muted)' }}>{t('home.cta.subtitle')}</p>
         </div>
-        {!isLoading && (isAuthenticated ? (
+        {isAuthenticated ? (
           <Button size="lg" onClick={() => navigate('/dashboard')}>
             {t('home.cta.ctaDashboard')}
             <ArrowRight className="w-4 h-4" />
@@ -195,7 +195,7 @@ export function HomePage() {
             {t('home.cta.button')}
             <ArrowRight className="w-4 h-4" />
           </Button>
-        ))}
+        )}
       </Reveal>
 
       {/* Footer */}
