@@ -245,7 +245,7 @@ app.include_router(cover_letter.router)
 
 
 # ---- Health Check ----
-@app.get("/health", tags=["System"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["System"])
 def health_check(db: Session = Depends(get_db)):
     """Readiness check: verifies the app can reach the database."""
     try:
