@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useTryToUsd } from '../../hooks/useTryToUsd';
+import { useSeo } from '../../hooks/useSeo';
 import api from '../../services/api';
 import {
   ArrowLeft, Loader2, CreditCard, Shield, Lock, CheckCircle2, Sparkles, Gift,
@@ -30,6 +31,12 @@ export function PricingPage() {
   const navigate = useNavigate();
 
   const { isTurkey, usdPrice } = useTryToUsd();
+
+  useSeo({
+    title: 'CVision Fiyatlandırma — 7 Gün Ücretsiz Dene',
+    description: '7 günlük ücretsiz deneme, kredi kartı gerekmez. Aylık ₺199.99 ile tüm AI özellikleri: ATS skoru, keyword analizi, AI CV yeniden yazma ve kapak mektubu.',
+    canonical: 'https://www.cvisionapp.com/pricing',
+  });
   const [loadingStripe, setLoadingStripe] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
