@@ -14,7 +14,7 @@ Endpoints:
 import re
 import logging
 from datetime import datetime, timezone, timedelta
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Request
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
@@ -25,6 +25,7 @@ from app.auth.hashing import hash_password, verify_password
 from app.auth.jwt_handler import create_access_token
 from app.limiter import limiter
 from app.config import settings
+from app.services.email_service import send_welcome_email
 
 logger = logging.getLogger("cvision.routers.auth")
 
@@ -86,7 +87,7 @@ class PasswordChangeRequest(BaseModel):
     summary="Register a new user",
 )
 @limiter.limit("5/minute")
-def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
+def register(request: Request, background_tasks: BackgroundTasks, user_data: UserRegister, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
         raise HTTPException(
@@ -103,6 +104,8 @@ def register(request: Request, user_data: UserRegister, db: Session = Depends(ge
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    background_tasks.add_task(send_welcome_email, new_user.email, new_user.full_name)
 
     return new_user
 

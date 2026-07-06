@@ -79,3 +79,63 @@ def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
     except Exception as e:
         logger.error("Failed to send password reset email to %s: %s", to_email, e)
         return False
+
+
+def send_welcome_email(to_email: str, full_name: str) -> None:
+    if not settings.RESEND_API_KEY:
+        logger.warning("RESEND_API_KEY not set, skipping welcome email.")
+        return
+
+    first_name = full_name.strip().split()[0]
+
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; color: #111111;">
+      <p>Hi {first_name},</p>
+
+      <p>I saw you just signed up for CVision. Thank you, it genuinely means a lot.</p>
+
+      <p>My name is Fatih, I am a computer engineering student and I built CVision by myself.
+      I started it because I kept seeing people send out dozens of applications and hear nothing back.
+      Most of the time the problem is not their experience. It is that ATS systems filter them out
+      before a human ever sees the CV. I wanted to make that invisible wall visible.</p>
+
+      <p><strong>Here is what CVision can do for you:</strong></p>
+      <ul>
+        <li><strong>ATS score</strong> — see exactly how recruiters' systems read your CV</li>
+        <li><strong>Keyword analysis</strong> — find out which keywords are missing for your target role</li>
+        <li><strong>AI suggestions</strong> — specific, actionable fixes, not generic advice</li>
+        <li><strong>Job match</strong> — paste any job description and see how your CV stacks up</li>
+        <li><strong>AI cover letter</strong> — generate a tailored cover letter in seconds</li>
+      </ul>
+
+      <p>One tip to get the most out of it: use the Job Match feature. Upload your CV,
+      paste the job description you are applying for, and CVision will show you exactly
+      what is missing. That is where most people see the biggest improvement.</p>
+
+      <p>Your first analysis is completely free and fully unlocked. No credit card needed.</p>
+
+      <p>If anything is unclear, broken, or you just want to share feedback, reply directly
+      to this email. I read every message.</p>
+
+      <p>Good luck with your applications.</p>
+
+      <p>Fatih<br>
+      Founder, CVision<br>
+      <a href="https://www.cvisionapp.com">www.cvisionapp.com</a></p>
+    </body>
+    </html>
+    """
+
+    resend.api_key = settings.RESEND_API_KEY
+    try:
+        resend.Emails.send({
+            "from": settings.EMAIL_FROM,
+            "to": [to_email],
+            "subject": "Welcome to CVision, a quick note from the founder",
+            "html": html_body,
+        })
+        logger.info("Welcome email sent to %s", to_email)
+    except Exception as e:
+        logger.error("Failed to send welcome email to %s: %s", to_email, e)
