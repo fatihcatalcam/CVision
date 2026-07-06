@@ -329,6 +329,8 @@ const en = {
     },
 
     pricing: {
+      metaTitle: 'CVision Pricing — 7-Day Free Trial',
+      metaDescription: '7-day free trial, no credit card required. Then ~$4/mo. ATS score, keyword analysis, AI rewrite, and cover letter — all included.',
       trialBanner: '7-day free trial — no credit card required, cancel anytime.',
       trialBadge: '7 DAYS FREE',
       ctaButton: 'Start 7-day free trial',
@@ -361,6 +363,8 @@ const en = {
     },
   },
   home: {
+    metaTitle: 'CVision - AI Resume Analyzer & ATS Checker',
+    metaDescription: "Upload your CV for an instant ATS score, keyword-gap analysis, and AI rewrite suggestions. Match it to any job description. Free to start.",
     nav: {
       howItWorks: 'How it works',
       features: 'Features',

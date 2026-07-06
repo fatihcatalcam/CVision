@@ -329,6 +329,8 @@ const tr = {
     },
 
     pricing: {
+      metaTitle: 'CVision Fiyatlandırma — 7 Gün Ücretsiz Dene',
+      metaDescription: '7 günlük ücretsiz deneme, kredi kartı gerekmez. Ardından aylık ₺199,99. ATS skoru, keyword analizi, AI CV yeniden yazma ve kapak mektubu.',
       trialBanner: '7 günlük ücretsiz deneme — kredi kartı istenmez, istediğin zaman iptal et.',
       trialBadge: '7 GÜN ÜCRETSİZ',
       ctaButton: '7 günlük ücretsiz denemeyi başlat',
@@ -361,6 +363,8 @@ const tr = {
     },
   },
   home: {
+    metaTitle: 'CVision - AI CV Analizi & ATS Resume Checker',
+    metaDescription: "Yapay zeka destekli CV analizi ve ATS resume checker. CV'ni yükle; anında ATS skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
     nav: {
       howItWorks: 'Nasıl çalışır?',
       features: 'Özellikler',
