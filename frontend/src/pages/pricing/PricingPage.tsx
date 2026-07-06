@@ -76,7 +76,11 @@ export function PricingPage() {
           <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
             {t('settings.pricing.header')}
           </h1>
-          <p className="text-base text-[#787774] dark:text-[#908d89]">{t('settings.pricing.subheader')}</p>
+          <p className="text-base text-[#787774] dark:text-[#908d89]">
+            {isTurkey
+              ? t('settings.pricing.subheader')
+              : `7 days free, then ${usdPrice ? `$${usdPrice}` : '~$4'}/mo. Cancel anytime.`}
+          </p>
         </div>
 
         {/* Plan cards */}
@@ -121,10 +125,10 @@ export function PricingPage() {
               ) : (
                 <>
                   <span className="stat-number text-4xl font-semibold text-white">
-                    {usdPrice ? `~$${usdPrice}` : '...'}
+                    {usdPrice ? `$${usdPrice}` : '...'}
                   </span>
                   <span className="text-sm text-[#787774] ml-1">/ month</span>
-                  <p className="text-[10px] text-[#787774] mt-1">billed as ₺199.99 TRY</p>
+                  <p className="text-[11px] text-[#787774] mt-1.5 italic">charged in TRY · your bank rate applies</p>
                 </>
               )}
             </div>
