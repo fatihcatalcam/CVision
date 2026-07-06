@@ -132,9 +132,9 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           </div>
           <p className="text-sm text-[#111111] dark:text-[#e8e7e4] leading-snug">{suggestion.message}</p>
         </div>
-        {expanded
+        {hasRewrite && (expanded
           ? <ChevronUp   className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />
-          : <ChevronDown className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />}
+          : <ChevronDown className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />)}
       </button>
 
       {expanded && hasRewrite && (
