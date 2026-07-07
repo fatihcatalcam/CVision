@@ -22,12 +22,22 @@ function Flag({ flagCode, alt }: { flagCode: string; alt: string }) {
   );
 }
 
+const DROPDOWN_W = 160; // w-40
+
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
+  // Anchor the panel to whichever side keeps it inside the viewport
+  const [alignLeft, setAlignLeft] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const current = LANGUAGES.find(l => i18n.language?.startsWith(l.code)) ?? LANGUAGES[1];
+
+  const toggleOpen = () => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (rect) setAlignLeft(rect.right - DROPDOWN_W < 8);
+    setOpen(o => !o);
+  };
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -42,7 +52,7 @@ export function LanguageSwitcher() {
   return (
     <div ref={ref} className="relative">
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={toggleOpen}
         className="flex items-center justify-center gap-1.5 px-2 h-8 rounded-lg
           text-[#787774] dark:text-[#908d89]
           hover:text-[#111111] dark:hover:text-[#e8e7e4]
@@ -61,7 +71,7 @@ export function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1 w-40 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] shadow-lg py-1 z-50">
+        <div className={`absolute ${alignLeft ? 'left-0' : 'right-0'} mt-1 w-40 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] shadow-lg py-1 z-50`}>
           {LANGUAGES.map(lang => (
             <button
               key={lang.code}
