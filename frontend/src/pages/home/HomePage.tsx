@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/ui/Button';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
-import { ArrowRight, Brain, BarChart3, FileText } from 'lucide-react';
+import { ArrowRight, Brain, BarChart3, FileText, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Reveal } from '../../components/ui/Reveal';
 import { useSeo } from '../../hooks/useSeo';
@@ -12,6 +13,7 @@ export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useSeo({
     title: t('home.metaTitle'),
@@ -45,8 +47,26 @@ export function HomePage() {
                 <Button variant="primary" size="sm" onClick={() => navigate('/register')}>{t('home.nav.getStarted')}</Button>
               </>
             )}
+            <button
+              onClick={() => setMobileNavOpen(o => !o)}
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.06] transition-colors"
+              aria-label="Menu"
+              aria-expanded={mobileNavOpen}
+            >
+              {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile nav panel */}
+        {mobileNavOpen && (
+          <nav className="md:hidden border-t px-6 py-4 flex flex-col gap-4 text-sm" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-muted)', background: 'var(--color-background)' }}>
+            <a href="#how-it-works" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
+            <a href="#features" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
+            <a href="#faq" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
+            <a href="/about" onClick={(e) => { e.preventDefault(); setMobileNavOpen(false); navigate('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
+          </nav>
+        )}
       </header>
 
       {/* Hero */}
