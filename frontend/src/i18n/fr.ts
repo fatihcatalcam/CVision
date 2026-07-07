@@ -391,9 +391,13 @@ const fr = {
       signIn: 'Connexion',
       getStarted: 'Commencer',
     },
+    heroMockup: {
+      missing: 'Mots-clés manquants',
+      rewrite: "L'IA a réécrit 3 puces",
+    },
     hero: {
       label: 'Analyseur de CV par IA et vérificateur ATS',
-      title: 'Sache exactement où en est ton CV',
+      title: "Ton CV est peut-être écarté avant même qu'un humain ne le voie",
       subtitle: "CVision est un analyseur de CV par IA qui note ton CV pour la compatibilité ATS, trouve les mots-clés manquants et réécrit les puces faibles en quelques secondes. Compare-le à n'importe quelle offre d'emploi et génère une lettre de motivation sur mesure.",
       ctaDashboard: 'Aller au tableau de bord',
       ctaAnalyze: 'Analyser mon CV gratuitement',

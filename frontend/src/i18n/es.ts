@@ -391,9 +391,13 @@ const es = {
       signIn: 'Iniciar sesión',
       getStarted: 'Empezar',
     },
+    heroMockup: {
+      missing: 'Palabras clave faltantes',
+      rewrite: 'La IA reescribió 3 viñetas',
+    },
     hero: {
       label: 'Analizador de CV con IA y verificador ATS',
-      title: 'Sabe exactamente dónde está tu CV',
+      title: 'Tu CV podría ser rechazado antes de que lo vea un humano',
       subtitle: 'CVision es un analizador de CV con IA que puntúa tu CV para la compatibilidad ATS, encuentra palabras clave faltantes y reescribe puntos débiles en segundos. Compáralo con cualquier oferta de trabajo y genera una carta de presentación personalizada.',
       ctaDashboard: 'Ir al panel',
       ctaAnalyze: 'Analizar mi CV gratis',

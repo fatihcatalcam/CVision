@@ -391,9 +391,13 @@ const de = {
       signIn: 'Anmelden',
       getStarted: 'Loslegen',
     },
+    heroMockup: {
+      missing: 'Fehlende Keywords',
+      rewrite: 'KI hat 3 Stichpunkte umgeschrieben',
+    },
     hero: {
       label: 'KI Lebenslauf-Analyse & ATS-Checker',
-      title: 'Wisse genau, wo dein Lebenslauf steht',
+      title: 'Dein Lebenslauf könnte aussortiert werden, bevor ihn ein Mensch sieht',
       subtitle: 'CVision ist ein KI-Lebenslauf-Analysator, der deinen Lebenslauf auf ATS-Kompatibilität bewertet, fehlende Keywords findet und schwache Aufzählungspunkte in Sekunden umschreibt. Vergleiche ihn mit einer Stellenbeschreibung und generiere ein maßgeschneidertes Anschreiben.',
       ctaDashboard: 'Zum Dashboard',
       ctaAnalyze: 'Lebenslauf kostenlos analysieren',

@@ -390,9 +390,13 @@ const en = {
       signIn: 'Sign in',
       getStarted: 'Get started',
     },
+    heroMockup: {
+      missing: 'Missing keywords',
+      rewrite: 'AI rewrote 3 bullet points',
+    },
     hero: {
       label: 'AI Resume Analyzer & ATS Checker',
-      title: 'Know exactly where your CV stands',
+      title: 'Your CV might be rejected before a human ever sees it',
       subtitle: 'CVision is an AI resume analyzer that scores your CV for ATS compatibility, finds missing keywords, and rewrites weak bullet points in seconds. Match it to any job description and generate a tailored cover letter.',
       ctaDashboard: 'Go to Dashboard',
       ctaAnalyze: 'Analyze my CV free',

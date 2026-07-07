@@ -7,6 +7,7 @@ import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { ArrowRight, Brain, BarChart3, FileText, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Reveal } from '../../components/ui/Reveal';
+import { HeroMockup } from '../../components/home/HeroMockup';
 import { useSeo } from '../../hooks/useSeo';
 
 export function HomePage() {
@@ -70,33 +71,37 @@ export function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-20">
-        <div className="max-w-3xl stagger-hero">
-          <p className="label-sm mb-6">{t('home.hero.label')}</p>
-          <h1 className="display-xl mb-6">
-            {t('home.hero.title')}
-          </h1>
-          <p className="text-lg leading-relaxed mb-10 max-w-xl" style={{ color: 'var(--color-muted)' }}>
-            {t('home.hero.subtitle')}
-          </p>
-          <div className="flex items-center gap-3 flex-wrap">
-            {isAuthenticated ? (
-              <Button size="lg" onClick={() => navigate('/dashboard')}>
-                {t('home.hero.ctaDashboard')}
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            ) : (
-              <>
-                <Button size="lg" onClick={() => navigate('/register')}>
-                  {t('home.hero.ctaAnalyze')}
+      <section className="max-w-5xl mx-auto px-6 pt-20 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-14 lg:gap-12 items-center">
+          <div className="stagger-hero">
+            <p className="label-sm mb-6">{t('home.hero.label')}</p>
+            <h1 className="display-xl mb-6">
+              {t('home.hero.title')}
+            </h1>
+            <p className="text-lg leading-relaxed mb-10 max-w-xl" style={{ color: 'var(--color-muted)' }}>
+              {t('home.hero.subtitle')}
+            </p>
+            <div className="flex items-center gap-3 flex-wrap">
+              {isAuthenticated ? (
+                <Button size="lg" onClick={() => navigate('/dashboard')}>
+                  {t('home.hero.ctaDashboard')}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="lg" onClick={() => navigate('/login')}>
-                  {t('home.hero.ctaSignIn')}
-                </Button>
-              </>
-            )}
+              ) : (
+                <>
+                  <Button size="lg" onClick={() => navigate('/register')}>
+                    {t('home.hero.ctaAnalyze')}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="lg" onClick={() => navigate('/login')}>
+                    {t('home.hero.ctaSignIn')}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
+
+          <HeroMockup />
         </div>
       </section>
 

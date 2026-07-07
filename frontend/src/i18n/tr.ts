@@ -390,9 +390,13 @@ const tr = {
       signIn: 'Giriş Yap',
       getStarted: 'Ücretsiz Kaydol',
     },
+    heroMockup: {
+      missing: 'Eksik anahtar kelimeler',
+      rewrite: '3 madde AI ile yeniden yazıldı',
+    },
     hero: {
       label: 'Yapay Zeka CV Analizi ve ATS Testi',
-      title: 'CV\'n gerçekten ne kadar güçlü?',
+      title: 'CV\'n daha bir insan görmeden eleniyor olabilir',
       subtitle: 'CVision, CV\'ni ATS uyumluluğu için puanlayan, eksik anahtar kelimeleri bulan ve zayıf maddeleri saniyeler içinde yeniden yazan yapay zeka destekli bir CV analiz aracıdır. İlana göre eşleştir, sana özel ön yazı oluştur.',
       ctaDashboard: 'Dashboard\'a Git',
       ctaAnalyze: 'CV\'mi Ücretsiz Analiz Et',
