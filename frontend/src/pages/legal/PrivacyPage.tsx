@@ -115,6 +115,14 @@ export function PrivacyPage() {
                 <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5StripeName')}</span>
                 {': '}{t('legal.privacy.s5StripeDesc')}
               </p>
+              <p>
+                <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5EmailName')}</span>
+                {': '}{t('legal.privacy.s5EmailDesc')}
+              </p>
+              <p>
+                <span className="font-semibold text-[#111111] dark:text-[#e8e7e4]">{t('legal.privacy.s5AnalyticsName')}</span>
+                {': '}{t('legal.privacy.s5AnalyticsDesc')}
+              </p>
             </div>
           </section>
 

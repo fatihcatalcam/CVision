@@ -9,20 +9,20 @@ import {
   ArrowLeft, Loader2, CreditCard, Shield, Lock, CheckCircle2, Sparkles, Gift,
 } from 'lucide-react';
 
-const FREE_FEATURES = [
-  '3 CV analyses per week',
-  'ATS compatibility score',
-  'Basic keyword analysis',
-  'Career path suggestions',
+const FREE_FEATURE_KEYS = [
+  'settings.pricing.freeF1',
+  'settings.pricing.freeF2',
+  'settings.pricing.freeF3',
+  'settings.pricing.freeF4',
 ];
 
-const PRO_FEATURES = [
-  '50 CV analyses per week',
-  'Everything in Free',
-  'Full AI suggestion pack (all unlocked)',
-  'AI bullet point rewriting',
-  'Full AI summary & analysis report',
-  'Priority support',
+const PRO_FEATURE_KEYS = [
+  'settings.pricing.proF1',
+  'settings.pricing.proF2',
+  'settings.pricing.proF3',
+  'settings.pricing.proF4',
+  'settings.pricing.proF5',
+  'settings.pricing.proF6',
 ];
 
 export function PricingPage() {
@@ -47,7 +47,7 @@ export function PricingPage() {
       const res = await api.post('/payment/lemon/create-checkout');
       window.location.href = res.data.checkoutUrl;
     } catch (err: unknown) {
-      setError((err as any)?.response?.data?.detail || 'Stripe payment could not be initiated.');
+      setError((err as any)?.response?.data?.detail || t('settings.pricing.errorInit'));
       setLoadingStripe(false);
     }
   };
@@ -62,7 +62,7 @@ export function PricingPage() {
           onClick={() => navigate('/dashboard')}
           className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+          <ArrowLeft className="w-4 h-4" /> {t('common.backToDashboard')}
         </button>
 
         {/* Free trial banner */}
@@ -79,7 +79,7 @@ export function PricingPage() {
           <p className="text-base text-[#787774] dark:text-[#908d89]">
             {isTurkey
               ? t('settings.pricing.subheader')
-              : `7 days free, then ${usdPrice ? `$${usdPrice}` : '~$4'}/mo. Cancel anytime.`}
+              : t('settings.pricing.subheaderIntl', { price: usdPrice ? `$${usdPrice}` : '~$4' })}
           </p>
         </div>
 
@@ -88,17 +88,17 @@ export function PricingPage() {
 
           {/* Free */}
           <div className="surface hover-lift p-8">
-            <p className="label-sm mb-6">Free</p>
+            <p className="label-sm mb-6">{t('settings.pricing.planFree')}</p>
             <div className="mb-6">
               <span className="stat-number text-4xl font-semibold text-[#111111] dark:text-[#e8e7e4]">$0</span>
-              <span className="text-sm text-[#787774] dark:text-[#908d89] ml-1">/ month</span>
+              <span className="text-sm text-[#787774] dark:text-[#908d89] ml-1">{t('settings.pricing.freePerMonth')}</span>
             </div>
 
             <ul className="space-y-3 mb-8">
-              {FREE_FEATURES.map((feature) => (
-                <li key={feature} className="flex items-start gap-2 text-sm text-[#787774] dark:text-[#908d89]">
+              {FREE_FEATURE_KEYS.map((key) => (
+                <li key={key} className="flex items-start gap-2 text-sm text-[#787774] dark:text-[#908d89]">
                   <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
-                  {feature}
+                  {t(key)}
                 </li>
               ))}
             </ul>
@@ -111,7 +111,7 @@ export function PricingPage() {
           {/* Pro */}
           <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8 border border-transparent dark:border-white/[0.08]">
             <div className="flex items-center justify-between mb-6">
-              <p className="label-sm text-[#787774]">Pro</p>
+              <p className="label-sm text-[#787774]">{t('settings.pricing.planPro')}</p>
               <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
                 <Gift className="w-3 h-3" /> {t('settings.pricing.trialBadge')}
               </span>
@@ -127,17 +127,17 @@ export function PricingPage() {
                   <span className="stat-number text-4xl font-semibold text-white">
                     {usdPrice ? `$${usdPrice}` : '...'}
                   </span>
-                  <span className="text-sm text-[#787774] ml-1">/ month</span>
-                  <p className="text-[11px] text-[#787774] mt-1.5 italic">charged in TRY · your bank rate applies</p>
+                  <span className="text-sm text-[#787774] ml-1">{t('settings.pricing.freePerMonth')}</span>
+                  <p className="text-[11px] text-[#787774] mt-1.5 italic">{t('settings.pricing.chargedNote')}</p>
                 </>
               )}
             </div>
 
             <ul className="space-y-3 mb-8">
-              {PRO_FEATURES.map((feature) => (
-                <li key={feature} className="flex items-start gap-2 text-sm text-[#A09D9A]">
+              {PRO_FEATURE_KEYS.map((key) => (
+                <li key={key} className="flex items-start gap-2 text-sm text-[#A09D9A]">
                   <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
-                  {feature}
+                  {t(key)}
                 </li>
               ))}
             </ul>
@@ -173,7 +173,7 @@ export function PricingPage() {
 
         <div className="flex items-center justify-center gap-2 text-xs text-[#787774]">
           <Shield className="w-3.5 h-3.5" />
-          Secure checkout &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; 24/7 support
+          {t('settings.pricing.footerNote')}
         </div>
 
       </div>
