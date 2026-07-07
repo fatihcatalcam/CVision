@@ -3,9 +3,18 @@ import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import * as Sentry from '@sentry/react'
 import './i18n'
 import './index.css'
 import App from './App.tsx'
+
+// Error tracking — no-op unless VITE_SENTRY_DSN is set (production only)
+if (import.meta.env.VITE_SENTRY_DSN) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: import.meta.env.MODE,
+  })
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
