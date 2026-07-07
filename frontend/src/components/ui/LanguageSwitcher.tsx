@@ -7,6 +7,7 @@ const LANGUAGES = [
   { code: 'en', flagCode: 'gb', label: 'English', short: 'EN' },
   { code: 'es', flagCode: 'es', label: 'Español', short: 'ES' },
   { code: 'de', flagCode: 'de', label: 'Deutsch', short: 'DE' },
+  { code: 'fr', flagCode: 'fr', label: 'Français', short: 'FR' },
 ];
 
 function Flag({ flagCode, alt }: { flagCode: string; alt: string }) {

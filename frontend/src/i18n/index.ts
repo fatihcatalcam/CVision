@@ -5,6 +5,7 @@ import en from './en';
 import tr from './tr';
 import es from './es';
 import de from './de';
+import fr from './fr';
 
 i18n
   .use(LanguageDetector)
@@ -15,6 +16,7 @@ i18n
       tr: { translation: tr },
       es: { translation: es },
       de: { translation: de },
+      fr: { translation: fr },
     },
     fallbackLng: 'en',
     defaultNS: 'translation',
@@ -29,7 +31,7 @@ i18n
   });
 
 i18n.on('languageChanged', (lng) => {
-  const code = ['tr', 'es', 'de', 'en'].find(l => lng.startsWith(l)) ?? 'en';
+  const code = ['tr', 'es', 'de', 'fr', 'en'].find(l => lng.startsWith(l)) ?? 'en';
   document.documentElement.lang = code;
 });
 
