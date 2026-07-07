@@ -3,6 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './en';
 import tr from './tr';
+import es from './es';
+import de from './de';
 
 i18n
   .use(LanguageDetector)
@@ -11,8 +13,10 @@ i18n
     resources: {
       en: { translation: en },
       tr: { translation: tr },
+      es: { translation: es },
+      de: { translation: de },
     },
-    fallbackLng: 'tr',
+    fallbackLng: 'en',
     defaultNS: 'translation',
     detection: {
       order: ['localStorage', 'navigator'],
@@ -24,9 +28,9 @@ i18n
     },
   });
 
-// Keep <html lang="..."> in sync with selected language
 i18n.on('languageChanged', (lng) => {
-  document.documentElement.lang = lng.startsWith('tr') ? 'tr' : 'en';
+  const code = ['tr', 'es', 'de', 'en'].find(l => lng.startsWith(l)) ?? 'en';
+  document.documentElement.lang = code;
 });
 
 export default i18n;
