@@ -595,6 +595,8 @@ const en = {
     proGateTitle: 'Pro Feature',
     proGateSubtitle: 'Job matching is available on the Pro plan.',
     proGateButton: 'Upgrade to Pro',
+    lockedInsightBadge: 'Hidden Insight',
+    lockedInsightDesc: 'This premium suggestion contains advanced feedback identifying key areas to improve your CV.',
     selectCv: 'Select CV',
     jdInputLabel: 'Job Description',
     textTooShort: 'Job description is too short (minimum 50 characters).',

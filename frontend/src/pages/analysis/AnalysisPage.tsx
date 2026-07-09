@@ -62,28 +62,31 @@ const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; lab
 // â”€â”€â”€ AI Suggestion Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; index: number }) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
   if (suggestion.is_locked) {
     return (
-      <div className="border border-[#EAEAEA] rounded-xl overflow-hidden relative">
+      <div className="border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl overflow-hidden relative min-h-[168px]">
         <div className="w-full flex items-start gap-3 p-4 text-left opacity-30 blur-[2px] pointer-events-none select-none">
           <div className="mt-1.5 w-2 h-2 rounded-full bg-[#787774] flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774]">Hidden Insight</span>
+              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774]">{t('match.lockedInsightBadge')}</span>
             </div>
-            <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">This premium suggestion contains advanced feedback about your experience section, identifying key areas for improvement.</p>
+            <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">{t('match.lockedInsightDesc')}</p>
           </div>
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 dark:bg-[#111110]/70 backdrop-blur-sm">
            <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] dark:bg-white/[0.08] rounded-full">
              <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
            </div>
-           <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">Premium Feature</p>
+           <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
            <button
-             onClick={undefined}
+             onClick={() => navigate('/pricing')}
              className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
            >
-             Upgrade to unlock
+             {t('match.proGateButton')}
            </button>
         </div>
       </div>
@@ -594,7 +597,7 @@ export function AnalysisPage() {
           <div className="surface p-6 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] relative overflow-hidden">
             {user?.plan_type !== 'premium' ? (
               <>
-                <div className="blur-sm pointer-events-none select-none opacity-40">
+                <div className="blur-sm pointer-events-none select-none opacity-40 min-h-[120px]">
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-2">{t('match.sectionLabel')}</p>
                   <p className="text-sm text-[#787774]">{t('match.sectionDesc')}</p>
                 </div>

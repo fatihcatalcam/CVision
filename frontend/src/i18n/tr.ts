@@ -595,6 +595,8 @@ const tr = {
     proGateTitle: 'Pro Özelliği',
     proGateSubtitle: 'İş ilanı eşleştirme Pro kullanıcılara özeldir.',
     proGateButton: 'Pro\'ya Geç',
+    lockedInsightBadge: 'Gizli Öneri',
+    lockedInsightDesc: 'Bu premium öneri, CV\'nizi geliştirecek önemli noktaları belirleyen ileri düzey geri bildirim içerir.',
     selectCv: 'CV Seç',
     jdInputLabel: 'İş İlanı',
     textTooShort: 'İlan metni çok kısa (minimum 50 karakter).',

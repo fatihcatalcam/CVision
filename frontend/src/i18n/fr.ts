@@ -596,6 +596,8 @@ const fr = {
     proGateTitle: 'Fonctionnalité Pro',
     proGateSubtitle: "La correspondance d'emploi est disponible sur le plan Pro.",
     proGateButton: 'Passer à Pro',
+    lockedInsightBadge: 'Conseil Masqué',
+    lockedInsightDesc: "Cette suggestion premium contient des retours avancés identifiant les points clés à améliorer dans votre CV.",
     selectCv: 'Choisir un CV',
     jdInputLabel: "Offre d'emploi",
     textTooShort: "La description du poste est trop courte (minimum 50 caractères).",

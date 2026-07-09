@@ -596,6 +596,8 @@ const es = {
     proGateTitle: 'Función Pro',
     proGateSubtitle: 'La coincidencia de empleo está disponible en el plan Pro.',
     proGateButton: 'Actualizar a Pro',
+    lockedInsightBadge: 'Idea Oculta',
+    lockedInsightDesc: 'Esta sugerencia premium contiene retroalimentación avanzada que identifica áreas clave para mejorar tu CV.',
     selectCv: 'Seleccionar CV',
     jdInputLabel: 'Oferta de trabajo',
     textTooShort: 'La descripción del trabajo es demasiado corta (mínimo 50 caracteres).',

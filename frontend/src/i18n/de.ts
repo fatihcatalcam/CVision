@@ -596,6 +596,8 @@ const de = {
     proGateTitle: 'Pro-Funktion',
     proGateSubtitle: 'Job-Matching ist im Pro-Plan verfügbar.',
     proGateButton: 'Auf Pro upgraden',
+    lockedInsightBadge: 'Verborgener Hinweis',
+    lockedInsightDesc: 'Dieser Premium-Vorschlag enthält detailliertes Feedback zu den wichtigsten Verbesserungsbereichen Ihres Lebenslaufs.',
     selectCv: 'Lebenslauf auswählen',
     jdInputLabel: 'Stellenbeschreibung',
     textTooShort: 'Stellenbeschreibung zu kurz (mindestens 50 Zeichen).',
