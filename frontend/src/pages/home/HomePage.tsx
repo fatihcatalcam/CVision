@@ -89,7 +89,7 @@ export function HomePage() {
                 </Button>
               ) : (
                 <>
-                  <Button size="lg" onClick={() => navigate('/register')}>
+                  <Button size="lg" onClick={() => navigate('/try')}>
                     {t('home.hero.ctaAnalyze')}
                     <ArrowRight className="w-4 h-4" />
                   </Button>

@@ -93,6 +93,9 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=True,
+        # Tolerate unknown env vars (e.g. stale keys from a prior payment
+        # provider) instead of crashing Settings() at startup.
+        extra="ignore",
     )
 
 

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { claimPendingAnalysis } from '../../services/anonymousAnalysis';
 
 const inputCls =
   'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
@@ -39,8 +40,9 @@ export function GoogleAuthButton() {
         setShowModal(true);
       } else {
         login(res.data.access_token, res.data.user);
+        const claimedId = await claimPendingAnalysis();
         toast.success(t('auth.login.successToast'));
-        navigate('/dashboard');
+        navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
       }
     } catch (err: any) {
       toast.error(
@@ -69,8 +71,9 @@ export function GoogleAuthButton() {
         full_name: fullName.trim(),
       });
       login(res.data.access_token, res.data.user);
+      const claimedId = await claimPendingAnalysis();
       toast.success(t('auth.register.successToast'));
-      navigate('/dashboard');
+      navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
     } catch (err: any) {
       toast.error(
         err.response?.data?.message ||

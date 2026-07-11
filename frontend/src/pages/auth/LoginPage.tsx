@@ -8,6 +8,7 @@ import { Loader2, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
+import { claimPendingAnalysis } from '../../services/anonymousAnalysis';
 
 const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
 
@@ -27,8 +28,9 @@ export function LoginPage() {
     try {
       const response = await api.post('/auth/login', { email, password });
       login(response.data.access_token, response.data.user);
+      const claimedId = await claimPendingAnalysis();
       toast.success(t('auth.login.successToast'));
-      navigate('/dashboard');
+      navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
     } catch (error: any) {
       toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.login.errorToast'));
     } finally {

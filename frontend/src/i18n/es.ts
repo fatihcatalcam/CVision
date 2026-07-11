@@ -569,6 +569,21 @@ const es = {
     },
   },
 
+  try: {
+    metaTitle: 'Análisis de CV gratis — Sin registro | CVision',
+    metaDescription: 'Sube tu CV y obtén al instante una puntuación ATS y feedback con IA — sin cuenta.',
+    heading: 'Analiza tu CV en 30 segundos',
+    sub: 'Sin cuenta. Sube tu CV y ve tu puntuación ATS al instante.',
+    processingHeading: 'Analizando tu CV',
+    processingSub: 'Esto suele tardar 15–30 segundos…',
+    resultsHeading: 'La puntuación de tu CV',
+    unlockTitle: 'Esto es solo el comienzo',
+    unlockBody: 'Regístrate gratis para desbloquear tu informe completo: todas las sugerencias de IA, palabras clave que faltan y consejos de reescritura.',
+    signupButton: 'Regístrate gratis para desbloquear',
+    errorGeneric: 'Algo salió mal. Inténtalo de nuevo.',
+    rateLimited: 'Has usado tu análisis gratis de hoy. Regístrate para análisis ilimitados.',
+    tryAgain: 'Intentar de nuevo',
+  },
   match: {
     pageTitle: 'Coincidencia de empleo',
     sectionLabel: 'COINCIDENCIA DE EMPLEO',

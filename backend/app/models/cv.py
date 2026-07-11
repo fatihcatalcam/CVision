@@ -15,7 +15,7 @@ class CV(Base):
     __tablename__ = "cvs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     original_filename: Mapped[str] = mapped_column(String(255), nullable=False)
     stored_filename: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     file_path: Mapped[str] = mapped_column(String(500), nullable=False)
@@ -30,6 +30,16 @@ class CV(Base):
     uploaded_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+    # ---- Anonymous analysis (claim-on-signup) ----
+    # Set for CVs uploaded via the public /try flow before the visitor has an
+    # account. Cleared when the CV is claimed onto a real user at signup.
+    session_token: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, index=True
+    )
+    # Client IP recorded ONLY to enforce the anonymous per-IP daily limit; wiped
+    # on claim and purged by the unclaimed-cleanup sweep.
+    client_ip: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     # ---- Job recovery (Track 2) ----
     # Set to now() when the background task transitions the CV to "processing";

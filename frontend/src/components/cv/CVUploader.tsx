@@ -4,6 +4,7 @@ import { UploadCloud, FileText, X, ChevronDown, CheckCircle2, Sparkles } from 'l
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { saveAnonToken } from '../../services/anonymousAnalysis';
 
 // Domain values are always sent to the backend in English - do not change these
 const DOMAIN_VALUES = [
@@ -24,12 +25,14 @@ const DOMAIN_VALUES = [
 ];
 
 interface CVUploaderProps {
-  onUploadSuccess: (cvId: string) => void;
+  onUploadSuccess: (idOrToken: string) => void;
   /** When true, suppresses the outer card wrapper so the parent controls padding/bg */
   embedded?: boolean;
+  /** When true, uploads via the public /try flow (no auth) and returns a session token. */
+  anonymous?: boolean;
 }
 
-export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProps) {
+export function CVUploader({ onUploadSuccess, embedded = false, anonymous = false }: CVUploaderProps) {
   const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -71,9 +74,15 @@ export function CVUploader({ onUploadSuccess, embedded = false }: CVUploaderProp
     formData.append('file', file);
     formData.append('target_domain', selectedDomain);
     try {
-      const response = await api.post('/cvs/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const endpoint = anonymous ? '/public/analyze' : '/cvs/upload';
+      const response = await api.post(endpoint, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       toast.success(t('uploader.successUpload'));
-      onUploadSuccess(response.data.id);
+      if (anonymous) {
+        saveAnonToken(response.data.token);
+        onUploadSuccess(response.data.token);
+      } else {
+        onUploadSuccess(response.data.id);
+      }
     } catch (error: any) {
       toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
     } finally {

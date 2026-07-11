@@ -37,7 +37,7 @@ from app.models import (  # noqa: F401
 )
 
 # Import routers
-from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment, jd, match, cover_letter
+from app.routers import auth, cv, analysis, recommendations, dashboard, admin, payment, jd, match, cover_letter, public
 
 # Import seed data
 from app.seed.skills_data import SKILLS_DATA
@@ -143,6 +143,16 @@ async def lifespan(app: FastAPI):
     finally:
         sweep_db.close()
 
+    # Purge unclaimed anonymous CVs older than 7 days (storage hygiene).
+    cleanup_db = SessionLocal()
+    try:
+        from app.services.anonymous_service import AnonymousService
+        AnonymousService.cleanup_unclaimed(cleanup_db, older_than_days=7)
+    except Exception:
+        logger.exception("Anonymous cleanup sweep failed")
+    finally:
+        cleanup_db.close()
+
     # Ensure upload directory exists
     settings.upload_path
     logger.info(f"Upload directory ready at: {settings.UPLOAD_DIR}")
@@ -242,6 +252,7 @@ app.include_router(payment.router)
 app.include_router(jd.router)
 app.include_router(match.router)
 app.include_router(cover_letter.router)
+app.include_router(public.router)
 
 
 # ---- Health Check ----
