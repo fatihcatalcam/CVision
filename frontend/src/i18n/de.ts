@@ -584,6 +584,8 @@ const de = {
     unlockF2: 'Fehlende Keywords für deine Zielrolle',
     unlockF3: 'KI-Umschreibtipps für schwache Punkte',
     unlockTitle: 'Das ist erst der Anfang',
+    freeBadge: '100% KOSTENLOS',
+    freeNote: 'Den Rest zu sehen ist völlig kostenlos – erstelle einfach ein Konto, keine Kreditkarte nötig.',
     unlockBody: 'Registriere dich kostenlos für den vollständigen Bericht: alle KI-Vorschläge, fehlende Keywords und Umschreib-Tipps.',
     signupButton: 'Kostenlos registrieren & freischalten',
     errorGeneric: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',

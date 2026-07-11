@@ -173,13 +173,18 @@ export function TryPage() {
             <div className="relative rounded-2xl border overflow-hidden p-8 text-center" style={{ borderColor: 'var(--color-card-border)' }}>
               <div className="absolute inset-0 opacity-70" style={{ background: 'radial-gradient(ellipse at 50% 0%, var(--color-accent), transparent 70%)' }} />
               <div className="relative flex flex-col items-center">
-                <div className="p-2.5 mb-3 rounded-full bg-[#F1F1EF] dark:bg-white/[0.08]">
-                  <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
+                <div className="p-2.5 mb-3 rounded-full bg-[#EDF3EC] dark:bg-[#346538]/20">
+                  <Lock className="w-5 h-5 text-[#346538] dark:text-[#8fc79a]" />
+                </div>
+                <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-[#346538]">
+                  <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-white">{t('try.freeBadge')}</span>
                 </div>
                 <h3 className="font-sans text-xl tracking-tight mb-1" style={{ color: 'var(--color-foreground)' }}>{t('try.unlockTitle')}</h3>
                 {lockedCount > 0 && (
-                  <p className="text-sm font-medium mb-4" style={{ color: 'var(--color-muted)' }}>{t('try.moreLocked', { count: lockedCount })}</p>
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-muted)' }}>{t('try.moreLocked', { count: lockedCount })}</p>
                 )}
+                <p className="text-sm font-medium mb-5 max-w-sm" style={{ color: 'var(--color-foreground)' }}>{t('try.freeNote')}</p>
 
                 <ul className="text-left space-y-2 mb-6 mx-auto w-full max-w-xs">
                   {[t('try.unlockF1'), t('try.unlockF2'), t('try.unlockF3')].map(f => (

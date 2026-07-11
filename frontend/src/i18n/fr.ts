@@ -584,6 +584,8 @@ const fr = {
     unlockF2: 'Mots-clés manquants pour votre poste',
     unlockF3: 'Conseils de réécriture IA pour les points faibles',
     unlockTitle: "Ce n'est que le début",
+    freeBadge: '100% GRATUIT',
+    freeNote: 'Voir le reste est entièrement gratuit — créez simplement un compte, sans carte bancaire.',
     unlockBody: 'Inscrivez-vous gratuitement pour débloquer votre rapport complet : toutes les suggestions IA, les mots-clés manquants et les conseils de réécriture.',
     signupButton: "S'inscrire gratuitement pour débloquer",
     errorGeneric: "Une erreur s'est produite. Veuillez réessayer.",
