@@ -29,8 +29,7 @@ logger = logging.getLogger("cvision.routers.public")
 router = APIRouter(prefix="/public", tags=["Public"])
 
 # Anonymous visitors get one free analysis per IP per day.
-# TEMP: raised for founder testing — REVERT TO 1 before/after launch.
-ANON_DAILY_LIMIT = 1000
+ANON_DAILY_LIMIT = 1
 
 
 def _client_ip(request: Request) -> str:
