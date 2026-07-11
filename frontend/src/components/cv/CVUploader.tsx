@@ -84,7 +84,12 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
         onUploadSuccess(response.data.id);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
+      // Anonymous daily limit reached → nudge to sign up instead of "try again".
+      if (anonymous && error.response?.status === 429) {
+        toast.error(t('try.rateLimited'));
+      } else {
+        toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
+      }
     } finally {
       setIsUploading(false);
     }

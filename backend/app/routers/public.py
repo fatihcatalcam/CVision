@@ -44,8 +44,11 @@ class ClaimRequest(BaseModel):
     token: str
 
 
+# slowapi is only a burst guard here (never fires for legit 1/day users); the
+# daily business limit lives in the DB check below so it can return a friendly,
+# localizable message instead of slowapi's message-less 429.
 @router.post("/analyze", summary="Analyze a CV without an account")
-@limiter.limit("1/day")
+@limiter.limit("6/minute")
 async def public_analyze(
     request: Request,
     background_tasks: BackgroundTasks,
