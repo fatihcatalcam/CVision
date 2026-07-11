@@ -19,6 +19,7 @@ import { PrivacyPage } from './pages/legal/PrivacyPage';
 import { TermsPage } from './pages/legal/TermsPage';
 import { AboutPage } from './pages/about/AboutPage';
 import { MatchPage } from './pages/match/MatchPage';
+import { TryPage } from './pages/try/TryPage';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
 
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/try" element={<TryPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
