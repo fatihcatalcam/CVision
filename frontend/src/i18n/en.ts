@@ -568,6 +568,21 @@ const en = {
     },
   },
 
+  try: {
+    metaTitle: 'Free CV Analysis — No Sign-Up | CVision',
+    metaDescription: 'Upload your CV and get an instant ATS score and AI feedback — no account needed.',
+    heading: 'Analyze your CV in 30 seconds',
+    sub: 'No account needed. Upload your CV and see your ATS score instantly.',
+    processingHeading: 'Analyzing your CV',
+    processingSub: 'This usually takes 15–30 seconds…',
+    resultsHeading: 'Your CV score',
+    unlockTitle: 'This is just the start',
+    unlockBody: 'Sign up free to unlock your full report: every AI suggestion, keyword gaps, and rewrite tips.',
+    signupButton: 'Sign up free to unlock',
+    errorGeneric: 'Something went wrong. Please try again.',
+    rateLimited: "You've used your free analysis for today. Sign up for unlimited analyses.",
+    tryAgain: 'Try again',
+  },
   match: {
     pageTitle: 'Job Match',
     sectionLabel: 'JOB MATCH',

@@ -568,6 +568,21 @@ const tr = {
     },
   },
 
+  try: {
+    metaTitle: 'Ücretsiz CV Analizi — Kayıt Yok | CVision',
+    metaDescription: 'CV\'ni yükle, anında ATS puanı ve yapay zeka geri bildirimi al — hesap gerekmez.',
+    heading: 'CV\'ni 30 saniyede analiz et',
+    sub: 'Hesap gerekmez. CV\'ni yükle, ATS puanını anında gör.',
+    processingHeading: 'CV\'n analiz ediliyor',
+    processingSub: 'Bu genellikle 15–30 saniye sürer…',
+    resultsHeading: 'CV puanın',
+    unlockTitle: 'Bu sadece başlangıç',
+    unlockBody: 'Tam raporunu açmak için ücretsiz kaydol: tüm yapay zeka önerileri, eksik keyword\'ler ve yeniden yazım ipuçları.',
+    signupButton: 'Ücretsiz kaydol, kilidini aç',
+    errorGeneric: 'Bir şeyler ters gitti. Lütfen tekrar dene.',
+    rateLimited: 'Bugünlük ücretsiz analiz hakkını kullandın. Sınırsız analiz için kaydol.',
+    tryAgain: 'Tekrar dene',
+  },
   match: {
     pageTitle: 'İş İlanı Eşleştirme',
     sectionLabel: 'İŞ İLANI EŞLEŞTİRME',

@@ -569,6 +569,21 @@ const de = {
     },
   },
 
+  try: {
+    metaTitle: 'Kostenlose CV-Analyse — Ohne Anmeldung | CVision',
+    metaDescription: 'Lade deinen Lebenslauf hoch und erhalte sofort einen ATS-Score und KI-Feedback — ohne Konto.',
+    heading: 'Analysiere deinen Lebenslauf in 30 Sekunden',
+    sub: 'Kein Konto nötig. Lade deinen Lebenslauf hoch und sieh sofort deinen ATS-Score.',
+    processingHeading: 'Dein Lebenslauf wird analysiert',
+    processingSub: 'Das dauert meist 15–30 Sekunden…',
+    resultsHeading: 'Dein Lebenslauf-Score',
+    unlockTitle: 'Das ist erst der Anfang',
+    unlockBody: 'Registriere dich kostenlos für den vollständigen Bericht: alle KI-Vorschläge, fehlende Keywords und Umschreib-Tipps.',
+    signupButton: 'Kostenlos registrieren & freischalten',
+    errorGeneric: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    rateLimited: 'Du hast deine kostenlose Analyse für heute verbraucht. Registriere dich für unbegrenzte Analysen.',
+    tryAgain: 'Erneut versuchen',
+  },
   match: {
     pageTitle: 'Job-Matching',
     sectionLabel: 'JOB-MATCHING',

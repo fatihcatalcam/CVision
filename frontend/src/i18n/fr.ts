@@ -569,6 +569,21 @@ const fr = {
     },
   },
 
+  try: {
+    metaTitle: 'Analyse de CV gratuite — Sans inscription | CVision',
+    metaDescription: 'Téléchargez votre CV et obtenez instantanément un score ATS et des retours IA — sans compte.',
+    heading: 'Analysez votre CV en 30 secondes',
+    sub: 'Aucun compte requis. Téléchargez votre CV et voyez votre score ATS instantanément.',
+    processingHeading: 'Analyse de votre CV',
+    processingSub: 'Cela prend généralement 15–30 secondes…',
+    resultsHeading: 'Le score de votre CV',
+    unlockTitle: "Ce n'est que le début",
+    unlockBody: 'Inscrivez-vous gratuitement pour débloquer votre rapport complet : toutes les suggestions IA, les mots-clés manquants et les conseils de réécriture.',
+    signupButton: "S'inscrire gratuitement pour débloquer",
+    errorGeneric: "Une erreur s'est produite. Veuillez réessayer.",
+    rateLimited: "Vous avez utilisé votre analyse gratuite du jour. Inscrivez-vous pour des analyses illimitées.",
+    tryAgain: 'Réessayer',
+  },
   match: {
     pageTitle: "Correspondance d'emploi",
     sectionLabel: "CORRESPONDANCE D'EMPLOI",
