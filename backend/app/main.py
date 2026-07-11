@@ -143,6 +143,16 @@ async def lifespan(app: FastAPI):
     finally:
         sweep_db.close()
 
+    # Purge unclaimed anonymous CVs older than 7 days (storage hygiene).
+    cleanup_db = SessionLocal()
+    try:
+        from app.services.anonymous_service import AnonymousService
+        AnonymousService.cleanup_unclaimed(cleanup_db, older_than_days=7)
+    except Exception:
+        logger.exception("Anonymous cleanup sweep failed")
+    finally:
+        cleanup_db.close()
+
     # Ensure upload directory exists
     settings.upload_path
     logger.info(f"Upload directory ready at: {settings.UPLOAD_DIR}")
