@@ -108,9 +108,11 @@ def get_analysis_results(
     return _build_analysis_response(analysis, current_user, is_first_analysis=is_first_analysis)
 
 
-def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False) -> AnalysisResponse:
+def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False, force_locked: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
-    is_free = (current_user.plan_type == "free" if current_user else False) and not is_first_analysis
+    is_free = force_locked or (
+        (current_user.plan_type == "free" if current_user else False) and not is_first_analysis
+    )
 
     # Parse AI suggestions from JSON if present
     raw_ai_suggestions = analysis.ai_suggestions or []
