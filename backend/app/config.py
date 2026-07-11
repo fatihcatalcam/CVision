@@ -74,8 +74,8 @@ class Settings(BaseSettings):
     SENTRY_TRACES_SAMPLE_RATE: float = 0.0
 
     # ---- App URLs ----
-    BACKEND_URL: str = "http://167.86.89.146:8001"
-    FRONTEND_URL: str = "http://167.86.89.146"
+    BACKEND_URL: str = "https://cvision-p4ny.onrender.com"
+    FRONTEND_URL: str = "https://www.cvisionapp.com"
 
     # Computed property for max file size in bytes
     @property
