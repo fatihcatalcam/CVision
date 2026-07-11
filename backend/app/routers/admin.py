@@ -110,10 +110,13 @@ def get_overview(db: Session = Depends(get_db)):
         ))
     recent_analyses_list = db.query(AnalysisResult).order_by(AnalysisResult.created_at.desc()).limit(5).all()
     for a in recent_analyses_list:
+        # Anonymous /try analyses have an ownerless CV (cv.owner is None).
+        owner_name = a.cv.owner.full_name if (a.cv and a.cv.owner) else "Anonymous visitor"
+        filename = a.cv.original_filename if a.cv else "Unknown"
         activities.append(RecentActivity(
             id=f"a_{a.id}", type="analysis",
             title="New CV Analyzed",
-            description=f"{a.cv.owner.full_name} analyzed '{a.cv.original_filename}'. Score: {a.overall_score}%",
+            description=f"{owner_name} analyzed '{filename}'. Score: {a.overall_score}%",
             timestamp=a.created_at
         ))
     activities.sort(key=lambda x: x.timestamp, reverse=True)
@@ -316,12 +319,15 @@ def get_recent_activity(db: Session = Depends(get_db)):
     # Get last 10 analyses
     recent_analyses = db.query(AnalysisResult).order_by(AnalysisResult.created_at.desc()).limit(10).all()
     for a in recent_analyses:
+        # Anonymous /try analyses have an ownerless CV (cv.owner is None).
+        owner_name = a.cv.owner.full_name if (a.cv and a.cv.owner) else "Anonymous visitor"
+        filename = a.cv.original_filename if a.cv else "Unknown"
         activities.append(
             RecentActivity(
                 id=f"a_{a.id}",
                 type="analysis",
                 title="New CV Analyzed",
-                description=f"{a.cv.owner.full_name} analyzed '{a.cv.original_filename}'. Score: {a.overall_score}%",
+                description=f"{owner_name} analyzed '{filename}'. Score: {a.overall_score}%",
                 timestamp=a.created_at
             )
         )
@@ -355,12 +361,14 @@ def list_all_analyses(
         elif a.cv and a.cv.target_domain:
             role = a.cv.target_domain
 
+        # Anonymous /try analyses have an ownerless CV (cv.owner is None).
+        has_owner = bool(a.cv and a.cv.owner)
         items.append(
             AdminAnalysisListItem(
                 id=a.id,
                 cv_id=a.cv.id if a.cv else 0,
-                user_email=a.cv.owner.email if a.cv else "Unknown",
-                user_name=a.cv.owner.full_name if a.cv else "Unknown",
+                user_email=a.cv.owner.email if has_owner else "Anonymous",
+                user_name=a.cv.owner.full_name if has_owner else "Anonymous",
                 cv_filename=a.cv.original_filename if a.cv else "Unknown",
                 role_profile=role,
                 score=a.overall_score,

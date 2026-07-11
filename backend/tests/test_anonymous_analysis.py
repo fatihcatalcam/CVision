@@ -220,6 +220,44 @@ def test_claim_requires_auth(client, db_session):
     assert resp.status_code == 401
 
 
+def test_admin_endpoints_survive_ownerless_analyses(client, db_session, make_user, auth_headers):
+    """
+    Anonymous /try analyses create ownerless CVs (user_id=None). The admin
+    dashboard and content endpoints must not crash on `cv.owner is None`;
+    they should render the analysis labelled as anonymous.
+    """
+    admin = make_user(email="admin-anon@test.com", role="admin")
+
+    # Exactly what the public /try flow leaves behind: an ownerless CV + analysis.
+    cv = CV(
+        user_id=None, original_filename="anon-visitor.pdf",
+        stored_filename="anon-visitor-stored.pdf",
+        file_path="/nonexistent/anon-visitor-stored.pdf", file_type="pdf",
+        file_size=10, status="completed", session_token="tok_admin_anon",
+        client_ip="203.0.113.55", extracted_text="cv text",
+    )
+    db_session.add(cv)
+    db_session.commit()
+    db_session.refresh(cv)
+    _make_analysis_with_ai(db_session, cv)
+
+    # Dashboard overview must not 500 on the ownerless analysis in the activity feed.
+    overview = client.get("/hq-portal/overview", headers=auth_headers(admin))
+    assert overview.status_code == 200
+    assert overview.json()["total_analyses"] >= 1
+
+    # Content list must render the anonymous analysis, labelled as anonymous.
+    analyses = client.get("/hq-portal/analyses", headers=auth_headers(admin))
+    assert analyses.status_code == 200
+    anon = next(i for i in analyses.json()["items"] if i["cv_filename"] == "anon-visitor.pdf")
+    assert anon["user_name"] == "Anonymous"
+    assert anon["user_email"] == "Anonymous"
+
+    # The dedicated recent-activity endpoint shares the same code path.
+    activity = client.get("/hq-portal/recent-activity", headers=auth_headers(admin))
+    assert activity.status_code == 200
+
+
 def test_claimed_cv_is_fully_unlocked(client, db_session, make_user, auth_headers):
     """After claim, the owner's /analysis results are unlocked (first analysis)."""
     cv = CV(
