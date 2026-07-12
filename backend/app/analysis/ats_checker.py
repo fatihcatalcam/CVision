@@ -63,8 +63,12 @@ ATS_CHECKS = [
     },
 ]
 
-# Common action verbs used in CVs
+# Common action verbs used in CVs. Matched against the normalized
+# (lowercase, diacritic-folded) text, in all five UI languages.
+# Non-English entries are stems with \w* so conjugations match
+# ("geliştirdim" → "gelistir\w*", "entwickelte" → "entwickel\w*").
 ACTION_VERBS = [
+    # en
     "developed", "managed", "designed", "implemented", "created",
     "built", "led", "improved", "increased", "reduced",
     "analyzed", "organized", "coordinated", "delivered", "launched",
@@ -72,6 +76,24 @@ ACTION_VERBS = [
     "achieved", "collaborated", "established", "executed", "generated",
     "integrated", "monitored", "planned", "presented", "researched",
     "streamlined", "tested", "contributed", "facilitated", "mentored",
+    # tr (normalized stems)
+    r"gelistir\w*", r"yonet\w*", r"tasarla\w*", r"olustur\w*", r"uygula\w*",
+    r"iyilestir\w*", r"artir\w*", r"azalt\w*", r"saglad\w*", r"yurut\w*",
+    r"gerceklestir\w*", r"kurdum", r"liderlik", r"mentorluk", r"katkida",
+    r"planlad\w*", r"analiz\w*", r"koordin\w*", r"surdur\w*", r"teslim\s+et\w*",
+    # es
+    r"desarroll\w*", r"gestion\w*", r"disen\w*", r"implement\w*", r"lider\w*",
+    r"mejor\w*", r"optimiz\w*", r"coordin\w*", r"dirig\w*", r"logr\w*",
+    r"cre[eo]\b", r"creacion",
+    # de
+    r"entwickel\w*", r"entwickl\w*", r"implementier\w*", r"konzipier\w*",
+    r"geleitet", r"leitung", r"aufgebaut", r"aufbau", r"verbesser\w*",
+    r"optimier\w*", r"erstellt", r"betreu\w*", r"koordinier\w*",
+    r"analysier\w*", r"durchgefuhrt", r"verantwort\w*",
+    # fr
+    r"developp\w*", r"concu", r"conception", r"gere\w*", r"gestion",
+    r"ameliore\w*", r"realise\w*", r"encadr\w*", r"pilot\w*", r"cree\b",
+    r"mis\s+en\s+place", r"optimise\w*",
 ]
 
 
@@ -120,7 +142,8 @@ class ATSChecker(BaseAnalyzer):
         elif check_name == "no_excessive_caps":
             return self._check_caps(text)
         elif check_name == "has_action_verbs":
-            return self._check_action_verbs(text_lower)
+            # Normalized text so tr/es/de/fr verb stems match too.
+            return self._check_action_verbs(context.text_normalized)
         elif check_name == "has_education":
             return context.detected_sections.get("education", False)
         elif check_name == "has_experience":
@@ -161,10 +184,10 @@ class ATSChecker(BaseAnalyzer):
         return ratio < 0.15
 
     @staticmethod
-    def _check_action_verbs(text_lower: str) -> bool:
-        """Check for at least 3 action verbs in the text."""
+    def _check_action_verbs(text_normalized: str) -> bool:
+        """Check for at least 3 action verbs (any supported language)."""
         found = sum(
             1 for verb in ACTION_VERBS
-            if re.search(rf"\b{verb}\b", text_lower)
+            if re.search(rf"\b{verb}\b", text_normalized)
         )
         return found >= 3

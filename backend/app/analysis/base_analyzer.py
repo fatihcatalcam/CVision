@@ -8,6 +8,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
+from app.analysis.text_utils import normalize_text
+
 
 @dataclass
 class AnalysisContext:
@@ -18,6 +20,10 @@ class AnalysisContext:
     # Input
     extracted_text: str = ""
     text_lower: str = ""  # Pre-computed lowercase version
+    # Lowercase + diacritics folded to ASCII (see text_utils.normalize_text).
+    # Language-sensitive matching (sections, action verbs, experience) uses
+    # this so tr/es/de/fr CVs are scored on equal footing with English.
+    text_normalized: str = ""
 
     # Section detection results
     detected_sections: dict[str, bool] = field(default_factory=dict)
@@ -56,6 +62,8 @@ class AnalysisContext:
     def __post_init__(self):
         if self.extracted_text and not self.text_lower:
             self.text_lower = self.extracted_text.lower()
+        if self.extracted_text and not self.text_normalized:
+            self.text_normalized = normalize_text(self.extracted_text)
 
 
 class BaseAnalyzer(ABC):
