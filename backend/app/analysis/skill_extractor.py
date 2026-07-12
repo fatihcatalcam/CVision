@@ -25,9 +25,17 @@ class SkillExtractor(BaseAnalyzer):
         # Pre-compile regex patterns for each skill
         self._patterns: list[tuple[dict, re.Pattern]] = []
         for skill in skills_list:
-            # Escape special regex chars in skill name, then add word boundaries
+            # Escape special regex chars in skill name. Plain \b word boundaries
+            # break on names with non-word edge chars: \bC\+\+\b can never match
+            # "C++, ..." (no boundary between '+' and ' '), and \bC\b falsely
+            # matches the 'C' inside "C++". Use custom lookarounds instead:
+            # the char before must not be a word char, '+', '#' or '.', and the
+            # char after must not be a word char, '+' or '#' (trailing '.' is
+            # allowed so "...in C." still matches).
             escaped = re.escape(skill["name"])
-            pattern = re.compile(rf"\b{escaped}\b", re.IGNORECASE)
+            pattern = re.compile(
+                rf"(?<![\w+#.]){escaped}(?![\w+#])", re.IGNORECASE
+            )
             self._patterns.append((skill, pattern))
 
     @property
