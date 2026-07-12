@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Lock, Loader2, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Lock, ArrowRight, Sparkles, Check } from 'lucide-react';
 import api from '../../services/api';
 import { useSeo } from '../../hooks/useSeo';
 import { CVUploader } from '../../components/cv/CVUploader';
+import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 
@@ -36,6 +37,7 @@ export function TryPage() {
   const [phase, setPhase] = useState<Phase>('upload');
   const [result, setResult] = useState<AnonResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [progress, setProgress] = useState(0);
   const activeRef = useRef(true);
 
   useSeo({
@@ -46,7 +48,23 @@ export function TryPage() {
 
   useEffect(() => () => { activeRef.current = false; }, []);
 
+  // Animated progress while the anonymous analysis runs (mirrors AnalysisPage).
+  useEffect(() => {
+    if (phase !== 'processing') return;
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 30) return prev + 2;
+        if (prev < 60) return prev + 1;
+        if (prev < 90) return prev + 0.5;
+        if (prev < 95) return prev + 0.1;
+        return prev;
+      });
+    }, 200);
+    return () => clearInterval(interval);
+  }, [phase]);
+
   const handleUploaded = (sessionToken: string) => {
+    setProgress(0);
     setPhase('processing');
     const startTime = Date.now();
     const timeout = 60000;
@@ -64,6 +82,7 @@ export function TryPage() {
         if (status.status === 'completed') {
           const { data } = await api.get(`/public/analysis/${sessionToken}/results`);
           if (!activeRef.current) return;
+          setProgress(100);
           setResult(data);
           setPhase('done');
           return;
@@ -98,10 +117,19 @@ export function TryPage() {
         )}
 
         {phase === 'processing' && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <Loader2 className="w-10 h-10 animate-spin mb-6" style={{ color: 'var(--color-muted)' }} />
-            <h2 className="font-sans text-2xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>{t('try.processingHeading')}</h2>
-            <p className="text-sm" style={{ color: 'var(--color-muted)' }}>{t('try.processingSub')}</p>
+          <div className="flex flex-col items-center justify-center py-16">
+            <AnalyzingScreen
+              progress={progress}
+              heading={t('try.processingHeading')}
+              message={t('try.processingSub')}
+              steps={[
+                { label: t('try.step1'), threshold: 20 },
+                { label: t('try.step2'), threshold: 45 },
+                { label: t('try.step3'), threshold: 70 },
+                { label: t('try.step4'), threshold: 90 },
+              ]}
+              footer={t('try.processingFooter')}
+            />
           </div>
         )}
 
