@@ -77,6 +77,11 @@ class Settings(BaseSettings):
     BACKEND_URL: str = "https://cvision-p4ny.onrender.com"
     FRONTEND_URL: str = "https://www.cvisionapp.com"
 
+    # Comma-separated IPs exempt from the anonymous /try daily limit
+    # (founder/team testing, demos). The per-IP daily cap still applies to
+    # everyone else.
+    ANON_EXEMPT_IPS: str = ""
+
     # Computed property for max file size in bytes
     @property
     def max_file_size_bytes(self) -> int:

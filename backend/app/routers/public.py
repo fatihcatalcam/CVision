@@ -14,6 +14,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request,
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.dependencies import get_db, get_current_user
 from app.models.user import User
 from app.limiter import limiter
@@ -40,6 +41,12 @@ def _client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+def _is_exempt_ip(ip: str) -> bool:
+    """IPs in ANON_EXEMPT_IPS skip the daily limit (founder/team testing)."""
+    exempt = {x.strip() for x in settings.ANON_EXEMPT_IPS.split(",") if x.strip()}
+    return ip in exempt
+
+
 class ClaimRequest(BaseModel):
     token: str
 
@@ -59,7 +66,7 @@ async def public_analyze(
     """Anonymous upload → gated analysis. One free run per IP per day (DB-enforced)."""
     ip = _client_ip(request)
 
-    if AnonymousService.count_recent_anon_by_ip(db, ip, hours=24) >= ANON_DAILY_LIMIT:
+    if not _is_exempt_ip(ip) and AnonymousService.count_recent_anon_by_ip(db, ip, hours=24) >= ANON_DAILY_LIMIT:
         raise HTTPException(
             status_code=429,
             detail="You've used your free analysis for today. Sign up for unlimited analyses.",

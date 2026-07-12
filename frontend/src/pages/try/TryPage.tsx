@@ -15,7 +15,7 @@ interface AnonResult {
   scores: { overall_score: number; ats_score: number; keyword_score: number; completeness_score: number };
   ai_summary: string | null;
   is_summary_locked: boolean;
-  ai_suggestions: { message: string | null; is_locked: boolean }[];
+  ai_suggestions: { message: string | null; is_locked: boolean; teaser?: string | null }[];
 }
 
 const RING_R = 42;
@@ -214,14 +214,17 @@ export function TryPage() {
                 )}
                 <p className="text-sm font-medium mb-5 max-w-sm" style={{ color: 'var(--color-foreground)' }}>{t('try.freeNote')}</p>
 
-                <ul className="text-left space-y-2 mb-6 mx-auto w-full max-w-xs">
-                  {[t('try.unlockF1'), t('try.unlockF2'), t('try.unlockF3')].map(f => (
-                    <li key={f} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-foreground)' }}>
-                      <Check className="w-4 h-4 mt-0.5 shrink-0 text-[#346538]" strokeWidth={2.5} />
-                      {f}
-                    </li>
+                {/* Blurred previews of the real locked suggestions — show, don't tell */}
+                <div className="w-full space-y-2.5 mb-6">
+                  {result.ai_suggestions.filter(s => s.is_locked).map((s, i) => (
+                    <div key={i} className="flex items-start gap-2.5 rounded-xl border p-3.5 text-left" style={{ borderColor: 'var(--color-card-border)', background: 'var(--color-card)' }}>
+                      <Lock className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#A09D9A]" />
+                      <span className="text-sm leading-relaxed select-none pointer-events-none" style={{ color: 'var(--color-foreground)', filter: 'blur(3.5px)' }}>
+                        {s.teaser || t('try.lockedItem')}
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
 
                 <button onClick={() => navigate('/register')} className="px-6 py-3 rounded-xl text-sm font-semibold bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all flex items-center gap-2">
                   {t('try.signupButton')} <ArrowRight className="w-4 h-4" />

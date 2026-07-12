@@ -589,6 +589,7 @@ const en = {
     unlockF3: 'AI rewrite tips for weak bullet points',
     unlockTitle: 'This is just the start',
     freeBadge: '100% FREE',
+    lockedItem: 'Personalized suggestion',
     freeNote: 'Seeing the rest is completely free — just create an account, no credit card needed.',
     unlockBody: 'Sign up free to unlock your full report: every AI suggestion, keyword gaps, and rewrite tips.',
     signupButton: 'Sign up free to unlock',

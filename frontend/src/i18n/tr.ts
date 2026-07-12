@@ -589,6 +589,7 @@ const tr = {
     unlockF3: 'Zayıf maddeler için AI yeniden yazım ipuçları',
     unlockTitle: 'Bu sadece başlangıç',
     freeBadge: '%100 ÜCRETSİZ',
+    lockedItem: 'Kişiselleştirilmiş öneri',
     freeNote: 'Kalan önerileri görmek tamamen ücretsiz — sadece bir hesap oluştur, kredi kartı gerekmez.',
     unlockBody: 'Tam raporunu açmak için ücretsiz kaydol: tüm yapay zeka önerileri, eksik keyword\'ler ve yeniden yazım ipuçları.',
     signupButton: 'Ücretsiz kaydol, kilidini aç',

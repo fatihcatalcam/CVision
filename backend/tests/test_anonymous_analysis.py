@@ -83,6 +83,9 @@ def test_force_locked_locks_all_but_first_suggestion(db_session, make_user, make
     assert resp.ai_suggestions[0].message == "First tip"
     assert resp.ai_suggestions[1].is_locked is True
     assert resp.ai_suggestions[1].message is None
+    # Locked suggestions expose only a short teaser, never the full message.
+    assert resp.ai_suggestions[1].teaser is not None
+    assert resp.ai_suggestions[1].teaser.startswith("Second tip")
     assert resp.is_summary_locked is True
     assert resp.ai_summary.endswith("...")
 
@@ -218,6 +221,20 @@ def test_public_claim_endpoint(client, db_session, make_user, auth_headers):
 def test_claim_requires_auth(client, db_session):
     resp = client.post("/public/claim", json={"token": "whatever"})
     assert resp.status_code == 401
+
+
+def test_exempt_ips_bypass_daily_limit(monkeypatch):
+    """IPs listed in ANON_EXEMPT_IPS skip the per-IP daily cap; others don't."""
+    from app.routers import public
+
+    monkeypatch.setattr(public.settings, "ANON_EXEMPT_IPS", " 203.0.113.99 , 8.8.8.8 ")
+    assert public._is_exempt_ip("203.0.113.99") is True
+    assert public._is_exempt_ip("8.8.8.8") is True
+    assert public._is_exempt_ip("1.2.3.4") is False
+
+    # Empty setting exempts nobody.
+    monkeypatch.setattr(public.settings, "ANON_EXEMPT_IPS", "")
+    assert public._is_exempt_ip("203.0.113.99") is False
 
 
 def test_admin_endpoints_survive_ownerless_analyses(client, db_session, make_user, auth_headers):

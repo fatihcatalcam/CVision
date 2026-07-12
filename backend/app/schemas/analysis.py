@@ -27,6 +27,9 @@ class AISuggestion(BaseModel):
     message: str | None = None
     rewrite_hint: str | None = None
     is_locked: bool = False
+    # A few words of a locked suggestion, shown blurred as a teaser. The full
+    # message/rewrite are never sent for locked suggestions (no value leak).
+    teaser: str | None = None
 
 
 class AnalysisResponse(BaseModel):

@@ -108,6 +108,17 @@ def get_analysis_results(
     return _build_analysis_response(analysis, current_user, is_first_analysis=is_first_analysis)
 
 
+def _suggestion_teaser(message: str | None, max_words: int = 6, max_chars: int = 55) -> str | None:
+    """First few words of a locked suggestion — enough to entice, not to give
+    away the advice. Used for the blurred preview on gated results."""
+    if not message:
+        return None
+    snippet = " ".join(message.split()[:max_words])
+    if len(snippet) > max_chars:
+        snippet = snippet[:max_chars].rstrip()
+    return snippet + "…"
+
+
 def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False, force_locked: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
     is_free = force_locked or (
@@ -123,14 +134,17 @@ def _build_analysis_response(analysis, current_user: User | None = None, is_firs
             continue
             
         if is_free and i > 0:
-            # Lock everything after the 1st suggestion
+            # Lock everything after the 1st suggestion. Send only a short teaser
+            # (first few words) so the UI can show a blurred preview — the full
+            # message and rewrite hint never leave the server.
             ai_suggestions.append(
                 AISuggestion(
                     category=s.get("category", "general"),
                     priority=s.get("priority", "medium"),
                     message=None,
                     rewrite_hint=None,
-                    is_locked=True
+                    is_locked=True,
+                    teaser=_suggestion_teaser(s.get("message")),
                 )
             )
         else:
