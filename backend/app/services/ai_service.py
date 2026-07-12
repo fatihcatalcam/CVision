@@ -5,7 +5,7 @@ Provides:
 - AI-powered CV summary and executive narrative
 - Smart, personalized suggestion generation
 - "Fix My CV" rewrite for individual bullet points
-- Language-aware (Turkish/English CV detection & bilingual hints)
+- Language-aware (detects all 5 UI languages: en/tr/es/de/fr, diacritic-robust)
 - Domain-aware personas (13 domains covering all seeded role profiles)
 - Anti-hallucination guardrails (never fabricates metrics; uses bracket placeholders)
 - Structured Outputs via Pydantic for zero JSON-parse errors
@@ -278,20 +278,71 @@ def is_ai_enabled() -> bool:
     return bool(settings.OPENAI_API_KEY and settings.OPENAI_ENABLED)
 
 
+# Distinctive CV vocabulary per language, in normalized (diacritic-folded)
+# form so PDF extractors that mangle "eğitim" into "egitim" don't break
+# detection. Ambiguous cross-language words (universite, profil, references,
+# experience==fr experience) are deliberately left out or kept en-only.
+_LANG_KEYWORDS: dict[str, list[str]] = {
+    "tr": [
+        "deneyim", "egitim", "beceri", "yetenek", "hakkimda", "iletisim",
+        "mezun", "staj", "bolum", "lisans", "ozet", "sertifika",
+        "referanslar", "amac", "hedef", "calisma", "gorev", "sorumluluk",
+        "yazilim", "muhendis", "kidemli", "gelistir",
+    ],
+    "es": [
+        "experiencia", "educacion", "formacion", "habilidades",
+        "conocimientos", "universidad", "practicas", "resumen", "objetivo",
+        "proyectos", "idiomas", "referencias", "laboral", "empleo",
+        "trabajo", "logros", "desarroll",
+    ],
+    "de": [
+        "erfahrung", "ausbildung", "kenntnisse", "fahigkeiten",
+        "hochschule", "universitat", "praktikum", "projekte", "sprachen",
+        "referenzen", "beruf", "studium", "abschluss", "zusammenfassung",
+        "entwickelt", "zeugnis",
+    ],
+    "fr": [
+        "formation", "competences", "stage", "langues", "professionnelle",
+        "diplome", "objectif", "projets", "emploi", "parcours",
+        "developpe", "realise", "a propos", "maitrise",
+    ],
+    "en": [
+        "experience", "education", "skills", "summary", "university",
+        "projects", "languages", "employment", "degree", "professional",
+        "achievements", "developed", "work history",
+    ],
+}
+
+LANGUAGE_NAMES: dict[str, str] = {
+    "en": "English", "tr": "Turkish", "es": "Spanish",
+    "de": "German", "fr": "French",
+}
+
+
 def detect_language(text: str) -> str:
     """
-    Heuristically detect if CV is primarily Turkish or English.
-    Returns 'tr' or 'en'.
+    Heuristically detect the CV's primary language across the five
+    supported UI languages. Returns 'en', 'tr', 'es', 'de' or 'fr'
+    (defaults to 'en' when the signal is weak).
     """
-    turkish_keywords = [
-        "deneyim", "eğitim", "beceriler", "hakkımda", "iletişim",
-        "üniversite", "mezuniyet", "staj", "bölüm", "lisans",
-        "yüksek lisans", "özet", "projeler", "sertifika", "referanslar",
-        "amaç", "hedef", "çalışma", "görev", "sorumluluk",
-    ]
-    text_lower = text.lower()
-    tr_count = sum(1 for kw in turkish_keywords if kw in text_lower)
-    return "tr" if tr_count >= 3 else "en"
+    from app.analysis.text_utils import normalize_text
+
+    text_norm = normalize_text(text)
+    counts = {
+        lang: sum(1 for kw in kws if kw in text_norm)
+        for lang, kws in _LANG_KEYWORDS.items()
+    }
+    best_lang = max(counts, key=lambda k: counts[k])
+    # A non-English language must have a clear signal (>=3 hits) AND beat
+    # English (tech CVs are full of English loanwords either way).
+    if best_lang != "en" and counts[best_lang] >= 3 and counts[best_lang] >= counts["en"]:
+        return best_lang
+    return "en"
+
+
+def language_name(lang: str) -> str:
+    """Human-readable language name for prompt directives."""
+    return LANGUAGE_NAMES.get(lang, "English")
 
 
 def _smart_truncate(cv_text: str, max_chars: int = 4000) -> str:
@@ -311,11 +362,16 @@ def _smart_truncate(cv_text: str, max_chars: int = 4000) -> str:
 
     # Order matters: longer/more-specific markers first so that "work experience"
     # wins over a bare "experience" mid-summary. Falls through to short markers.
+    # Covers all 5 UI languages (accented and PDF-mangled unaccented variants).
     anchor_markers = [
         "professional experience", "work experience", "career history",
         "iş tecrübesi", "profesyonel deneyim", "iş deneyim", "iş geçmişi",
-        "çalışma geçmişi",
-        "employment", "experience", "deneyim",
+        "çalışma geçmişi", "is tecrubesi", "is deneyim", "is gecmisi",
+        "experiencia laboral", "experiencia profesional",
+        "expérience professionnelle", "experience professionnelle",
+        "parcours professionnel",
+        "berufserfahrung", "arbeitserfahrung", "berufspraxis",
+        "employment", "experience", "deneyim", "experiencia", "erfahrung",
     ]
     for marker in anchor_markers:
         idx = lower.find(marker)
@@ -346,6 +402,8 @@ def _build_user_prompt(
     role_profiles: list[dict] | None,
     rule_based_suggestions: list[dict],
     lang_name: str,
+    extracted_skills: list[str] | None = None,
+    missing_sections: list[str] | None = None,
 ) -> str:
     """Dynamic user prompt: CV body + scores + matched roles + existing issues."""
     cv_preview = _smart_truncate(cv_text, max_chars=4000)
@@ -379,14 +437,37 @@ def _build_user_prompt(
         ensure_ascii=False,
     )
 
+    # Ground the model in what the deterministic engine actually found, so
+    # suggestions reference verified facts instead of re-deriving (or
+    # hallucinating) them from the truncated CV text.
+    findings_lines: list[str] = []
+    if extracted_skills:
+        findings_lines.append(
+            f"Verified skills detected in the CV: {', '.join(extracted_skills[:15])}"
+        )
+    if missing_sections:
+        findings_lines.append(
+            f"Sections NOT detected in the CV (suggesting these is high-value): "
+            f"{', '.join(missing_sections)}"
+        )
+    findings_context = (
+        "ENGINE FINDINGS (verified facts — use them):\n" + "\n".join(findings_lines) + "\n\n"
+        if findings_lines else ""
+    )
+
     return (
         f"Analyze this CV and produce the structured output.\n\n"
         f"CV LANGUAGE: {lang_name} (write all natural-language fields in {lang_name})\n\n"
         f"CV TEXT:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
         f"SCORING DATA:\n{score_context}\n"
         f"{role_context}\n\n"
+        f"{findings_context}"
         f"EXISTING RULE-BASED ISSUES (do NOT duplicate; either build on them with "
-        f"deeper specificity, or surface different issues these miss):\n{existing_issues}"
+        f"deeper specificity, or surface different issues these miss):\n{existing_issues}\n\n"
+        f"REMINDER: Write ALL natural-language output in {lang_name}. The examples "
+        f"in your instructions are FORMAT templates only — never copy their "
+        f"language or their software-specific content; adapt to this CV's "
+        f"language and domain."
     )
 
 
@@ -396,6 +477,8 @@ def ai_enhance_analysis(
     scores: dict,
     target_domain: str | None = None,
     role_profiles: list[dict] | None = None,
+    extracted_skills: list[str] | None = None,
+    missing_sections: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Use GPT to produce AI-enhanced CV analysis output.
@@ -413,7 +496,7 @@ def ai_enhance_analysis(
         return {}
 
     lang = detect_language(cv_text)
-    lang_name = "Turkish" if lang == "tr" else "English"
+    lang_name = language_name(lang)
 
     system_prompt = _build_system_prompt(target_domain)
     user_prompt = _build_user_prompt(
@@ -423,6 +506,8 @@ def ai_enhance_analysis(
         role_profiles=role_profiles,
         rule_based_suggestions=rule_based_suggestions,
         lang_name=lang_name,
+        extracted_skills=extracted_skills,
+        missing_sections=missing_sections,
     )
 
     logger.info(
@@ -550,7 +635,7 @@ def ai_rewrite_bullet(
         return None
 
     lang = detect_language(bullet_text + " " + cv_context)
-    lang_name = "Turkish" if lang == "tr" else "English"
+    lang_name = language_name(lang)
     role_hint = f" for a {target_role} position" if target_role else ""
 
     user_prompt = (
@@ -625,7 +710,7 @@ def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
         return {}
 
     lang = detect_language(cv_text)
-    lang_name = "Turkish" if lang == "tr" else "English"
+    lang_name = language_name(lang)
     cv_preview = _smart_truncate(cv_text, max_chars=3000)
     jd_preview = jd_text[:2000]
 
@@ -690,7 +775,7 @@ RULES:
 6. NEVER fabricate metrics, titles, or companies not present in the CV.
 7. Keep total length under 300 words.
 8. Return PLAIN TEXT only — no markdown, no headers, no bullet points.
-9. Write in the SAME language as the CV (Turkish or English)."""
+9. Write in the SAME language as the CV (the target language is stated in the user message)."""
 
 
 def ai_generate_cover_letter(cv_text: str, jd_text: str) -> str | None:
@@ -707,7 +792,7 @@ def ai_generate_cover_letter(cv_text: str, jd_text: str) -> str | None:
         return None
 
     lang = detect_language(cv_text)
-    lang_name = "Turkish" if lang == "tr" else "English"
+    lang_name = language_name(lang)
     cv_preview = _smart_truncate(cv_text, max_chars=3000)
     jd_preview = jd_text[:2000]
 

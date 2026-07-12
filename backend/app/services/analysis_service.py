@@ -196,6 +196,14 @@ class AnalysisService:
                     scores=scores_dict,
                     target_domain=cv.target_domain,
                     role_profiles=top_profiles,
+                    # Ground GPT in the engine's verified findings.
+                    extracted_skills=[
+                        s["skill_name"] for s in context.extracted_skills
+                    ],
+                    missing_sections=[
+                        name for name, found in context.detected_sections.items()
+                        if not found
+                    ],
                 )
                 
                 if ai_result:
