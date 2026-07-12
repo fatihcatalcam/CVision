@@ -1,5 +1,5 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
+﻿/* Google Fonts are loaded via <link rel="preconnect"> + <link rel="stylesheet">
+   in index.html so they are not a render-blocking @import on the critical path. */
 @import "tailwindcss";
 
 @theme {
@@ -10,7 +10,9 @@
   --color-primary: #1B3A6B;
   --color-primary-hover: #152D53;
   --color-primary-foreground: #FFFFFF;
-  --color-muted: #787774;
+  /* #787774 was 4.36:1 on the #FBFBFA background — just under the WCAG AA 4.5:1
+     floor for body text. Darkened to ~5:1 while staying a muted warm gray. */
+  --color-muted: #6B6A65;
   --color-muted-foreground: #A09D9A;
   --color-success: #346538;
   --color-success-bg: #EDF3EC;

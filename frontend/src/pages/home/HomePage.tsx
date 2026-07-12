@@ -70,6 +70,8 @@ export function HomePage() {
         )}
       </header>
 
+      <main>
+
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 pt-20 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-14 lg:gap-12 items-center">
@@ -110,7 +112,7 @@ export function HomePage() {
       {/* How it works */}
       <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
         <div id="how-it-works">
-        <p className="label-sm mb-12">{t('home.howItWorks.label')}</p>
+        <h2 className="label-sm mb-12">{t('home.howItWorks.label')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {([
             { n: '01', titleKey: 'home.howItWorks.step1Title', descKey: 'home.howItWorks.step1Desc' },
@@ -132,7 +134,7 @@ export function HomePage() {
       {/* Features bento */}
       <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
         <div id="features">
-        <p className="label-sm mb-12">{t('home.features.label')}</p>
+        <h2 className="label-sm mb-12">{t('home.features.label')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="surface hover-lift p-8 md:row-span-2">
             <div className="w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center mb-6" style={{ background: 'var(--color-accent)' }}>
@@ -184,7 +186,7 @@ export function HomePage() {
       {/* FAQ */}
       <Reveal as="section" className="max-w-5xl mx-auto px-6 py-20">
         <div id="faq">
-          <p className="label-sm mb-12">{t('home.faq.label')}</p>
+          <h2 className="label-sm mb-12">{t('home.faq.label')}</h2>
           <div className="max-w-3xl space-y-8">
             {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const).map((i) => (
               <div key={i}>
@@ -222,6 +224,8 @@ export function HomePage() {
           </Button>
         )}
       </Reveal>
+
+      </main>
 
       {/* Footer */}
       <footer className="border-t" style={{ borderColor: 'var(--color-card-border)', background: 'var(--color-card)' }}>
