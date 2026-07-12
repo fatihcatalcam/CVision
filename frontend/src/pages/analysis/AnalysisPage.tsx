@@ -54,10 +54,10 @@ interface AnalysisData {
 
 // â”€â”€â”€ Priority styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; label: string }> = {
-  high:   { dot: 'bg-[#9F2F2D]', bg: 'bg-[#9F2F2D]/10', text: 'text-[#9F2F2D]', label: 'High Priority' },
-  medium: { dot: 'bg-[#956400]', bg: 'bg-[#956400]/10', text: 'text-[#956400]', label: 'Medium' },
-  low:    { dot: 'bg-[#346538]', bg: 'bg-[#346538]/10', text: 'text-[#346538]', label: 'Low' },
+const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; labelKey: string }> = {
+  high:   { dot: 'bg-[#9F2F2D]', bg: 'bg-[#9F2F2D]/10', text: 'text-[#9F2F2D]', labelKey: 'analysis.priorityHigh' },
+  medium: { dot: 'bg-[#956400]', bg: 'bg-[#956400]/10', text: 'text-[#956400]', labelKey: 'analysis.priorityMedium' },
+  low:    { dot: 'bg-[#346538]', bg: 'bg-[#346538]/10', text: 'text-[#346538]', labelKey: 'analysis.priorityLow' },
 };
 
 // â”€â”€â”€ AI Suggestion Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -123,14 +123,14 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${meta.bg} ${meta.text}`}>
-              {meta.label}
+              {t(meta.labelKey)}
             </span>
             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#787774] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06]">
               {suggestion.category}
             </span>
             {hasRewrite && (
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#787774] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] flex items-center gap-1">
-                <Sparkles className="w-2.5 h-2.5" /> Rewrite Available
+                <Sparkles className="w-2.5 h-2.5" /> {t('analysis.rewriteAvailable')}
               </span>
             )}
           </div>
@@ -146,7 +146,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           {beforeText ? (
             <>
               <div className="p-3 bg-[#9F2F2D]/5 border border-[#9F2F2D]/20 rounded-lg">
-                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">✗ Before (Current)</p>
+                <p className="text-[10px] uppercase font-bold text-[#9F2F2D] mb-1">✗ {t('analysis.beforeCurrent')}</p>
                 <p className="text-sm text-[#111111] dark:text-[#e8e7e4] italic">"{beforeText}"</p>
               </div>
               <div className="flex justify-center">
@@ -155,11 +155,11 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
               <div className="p-3 bg-[#346538]/5 border border-[#346538]/20 rounded-lg">
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[10px] uppercase font-bold text-[#346538] flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> After (AI Rewrite)
+                    <Sparkles className="w-3 h-3" /> {t('analysis.afterRewrite')}
                   </p>
                   <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                     {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
-                    {copied ? 'Copied!' : 'Copy'}
+                    {copied ? t('analysis.copied') : t('analysis.copy')}
                   </button>
                 </div>
                 <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">"{afterText}"</p>
@@ -169,11 +169,11 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
             <div className="p-3 bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] rounded-lg">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-[10px] uppercase font-bold text-[#787774] flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> AI Suggestion
+                  <Sparkles className="w-3 h-3" /> {t('try.aiTipLabel')}
                 </p>
                 <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                   {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
-                  {copied ? 'Copied!' : 'Copy'}
+                  {copied ? t('analysis.copied') : t('analysis.copy')}
                 </button>
               </div>
               <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">{hint}</p>
@@ -194,7 +194,7 @@ export function AnalysisPage() {
   const { user } = useAuth();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [isNewAnalysis, setIsNewAnalysis] = useState(false);
-  const [loadingMsg, setLoadingMsg] = useState('Initializing AI Pipeline...');
+  const [loadingMsg, setLoadingMsg] = useState(() => t('analysis.loadingInit'));
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [activeSuggestion, setActiveSuggestion] = useState<any | null>(null);
@@ -234,7 +234,7 @@ export function AnalysisPage() {
       } catch (err: any) {
         if (err.response?.status !== 404) {
           // Real error (e.g. 400 bad ID, 403 forbidden)
-          if (active) setError(err.response?.data?.detail || 'Failed to load analysis.');
+          if (active) setError(err.response?.data?.detail || t('analysis.errorLoad'));
           return;
         }
         // 404 = analysis not done yet → show loading screen and poll
@@ -248,31 +248,31 @@ export function AnalysisPage() {
       const check = async () => {
         if (!active) return;
         if (Date.now() - startTime > timeout) {
-          if (active) setError('Analysis timed out after 60 seconds.');
+          if (active) setError(t('analysis.errorTimeout'));
           return;
         }
         try {
           const { data: status } = await api.get(`/analysis/${id}/status`);
           if (status.status === 'failed') {
-            if (active) setError(status.error_message || 'Analysis failed.');
+            if (active) setError(status.error_message || t('analysis.errorFailed'));
             return;
           }
           if (status.status === 'completed') {
-            setLoadingMsg('Generating AI recommendations...');
+            setLoadingMsg(t('analysis.loadingFinalizing'));
             setProgress(99);
             try {
               const { data: result } = await api.get(`/analysis/${id}/results`);
               if (active) { setData(result); setProgress(100); }
             } catch {
-              if (active) setError('Failed to retrieve results.');
+              if (active) setError(t('analysis.errorResults'));
             }
             return;
           }
-          if (status.status === 'pending')    setLoadingMsg('Waiting in queue...');
-          if (status.status === 'processing') setLoadingMsg('Analyzing CV with AI… this takes 15-30 s');
+          if (status.status === 'pending')    setLoadingMsg(t('analysis.loadingQueue'));
+          if (status.status === 'processing') setLoadingMsg(t('try.processingSub'));
           setTimeout(check, 2000);
         } catch (err: any) {
-          if (err.response?.status === 404) { if (active) setError('CV not found.'); }
+          if (err.response?.status === 404) { if (active) setError(t('analysis.errorNotFound')); }
           else setTimeout(check, 3000);
         }
       };
@@ -289,15 +289,15 @@ export function AnalysisPage() {
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
         <AnalyzingScreen
           progress={progress}
-          heading="Analyzing Your CV"
+          heading={t('try.processingHeading')}
           message={loadingMsg}
           steps={[
-            { label: 'Parsing document structure', threshold: 20 },
-            { label: 'Extracting skills & experience', threshold: 45 },
-            { label: 'Running AI analysis engine', threshold: 70 },
-            { label: 'Generating personalized feedback', threshold: 90 },
+            { label: t('try.step1'), threshold: 20 },
+            { label: t('try.step2'), threshold: 45 },
+            { label: t('try.step3'), threshold: 70 },
+            { label: t('try.step4'), threshold: 90 },
           ]}
-          footer="AI is reading your CV and generating personalized insights. This typically takes 15-30 seconds."
+          footer={t('try.processingFooter')}
         />
       </div>
     );
@@ -311,13 +311,13 @@ export function AnalysisPage() {
           <div className="w-16 h-16 mx-auto bg-[#9F2F2D]/10 text-[#9F2F2D] rounded-2xl flex items-center justify-center mb-5">
             <Zap className="w-8 h-8" />
           </div>
-          <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">Analysis Failed</h2>
+          <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">{t('analysis.errorTitle')}</h2>
           <p className="text-[#787774] text-sm mb-6 leading-relaxed">{error}</p>
           <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#111111] dark:text-[#e8e7e4] hover:bg-[#EAEAEA] transition-colors text-sm font-medium mx-auto"
           >
-            <ArrowLeft className="w-4 h-4" /> Return to Dashboard
+            <ArrowLeft className="w-4 h-4" /> {t('common.backToDashboard')}
           </button>
         </Card>
       </div>
@@ -363,28 +363,28 @@ export function AnalysisPage() {
           className="flex items-center text-sm font-medium text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:text-[#e8e7e4] dark:hover:text-[#e8e7e4] transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Dashboard
+          {t('common.backToDashboard')}
         </button>
 
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="font-sans text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Analysis Report</h1>
+              <h1 className="font-sans text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('analysis.reportTitle')}</h1>
               {data!.ai_enhanced && (
                 <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#787774] text-xs font-bold uppercase tracking-wider">
-                  <Sparkles className="w-3 h-3" /> AI Enhanced
+                  <Sparkles className="w-3 h-3" /> {t('analysis.aiEnhanced')}
                 </span>
               )}
             </div>
-            <p className="text-[#787774] text-sm">Report #{data!.id} • Processed by CVision AI</p>
+            <p className="text-[#787774] text-sm">{t('analysis.reportMeta', { id: data!.id })}</p>
           </div>
           <button
             onClick={() => setIsPdfModalOpen(true)}
             className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#111111] text-white font-semibold text-sm hover:bg-[#2a2a2a] transition-colors"
           >
             <FileText className="w-4 h-4" />
-            View Original CV
+            {t('analysis.viewOriginalCv')}
           </button>
         </div>
 
@@ -393,13 +393,13 @@ export function AnalysisPage() {
           {/* Scores */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <Card className="flex flex-col items-center justify-center py-8">
-              <ScoreRing score={Math.round(data!.scores.overall_score)} label="Overall Score" colorClass="" />
+              <ScoreRing score={Math.round(data!.scores.overall_score)} label={t('analysis.overallScore')} colorClass="" />
             </Card>
             <Card className="flex flex-col items-center justify-center py-8">
-              <ScoreRing score={Math.round(data!.scores.ats_score)} label="ATS Compatibility" colorClass="text-[#3b82f6]" />
+              <ScoreRing score={Math.round(data!.scores.ats_score)} label={t('analysis.atsCompat')} colorClass="text-[#3b82f6]" />
             </Card>
             <Card className="flex flex-col items-center justify-center py-8">
-              <ScoreRing score={Math.round(data!.scores.keyword_score)} label="Keyword Relevance" colorClass="text-[#8b5cf6]" />
+              <ScoreRing score={Math.round(data!.scores.keyword_score)} label={t('analysis.keywordRelevance')} colorClass="text-[#8b5cf6]" />
             </Card>
           </div>
 
@@ -408,7 +408,7 @@ export function AnalysisPage() {
             <Card className="surface relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-4 h-4 text-[#787774]" />
-                <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">AI Executive Summary</h3>
+                <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">{t('analysis.aiExecSummary')}</h3>
               </div>
               <p className={`text-[#111111] dark:text-[#e8e7e4] leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
                 {data!.ai_summary}
@@ -422,7 +422,7 @@ export function AnalysisPage() {
                     onClick={undefined}
                     className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
                   >
-                    Upgrade to unlock
+                    {t('analysis.upgradeToUnlock')}
                   </button>
                 </div>
               )}
@@ -434,7 +434,7 @@ export function AnalysisPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card noPadding className="overflow-hidden">
                 <div className="px-5 py-4 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">Key Strengths</h3>
+                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">{t('analysis.keyStrengths')}</h3>
                 </div>
                 <ul className="p-5 space-y-2.5">
                   {data!.strengths.map((s, i) => (
@@ -447,7 +447,7 @@ export function AnalysisPage() {
               </Card>
               <Card noPadding className="overflow-hidden">
                 <div className="px-5 py-4 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">Areas to Improve</h3>
+                  <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">{t('analysis.areasToImprove')}</h3>
                 </div>
                 <ul className="p-5 space-y-2.5">
                   {data!.weaknesses.map((w, i) => (
@@ -475,7 +475,7 @@ export function AnalysisPage() {
                   ].join(' ')}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  AI Suggestions
+                  {t('analysis.aiSuggestionsTab')}
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774] font-bold">
                     {data!.ai_suggestions.length}
                   </span>
@@ -491,7 +491,7 @@ export function AnalysisPage() {
                 ].join(' ')}
               >
                 <Zap className="w-3.5 h-3.5" />
-                Rule-Based Fixes
+                {t('analysis.ruleBasedTab')}
                 <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774] font-bold">
                   {data!.suggestions.length}
                 </span>
@@ -510,7 +510,7 @@ export function AnalysisPage() {
               <>
                 <div className="flex justify-between items-center mb-4">
                   <p className="text-sm text-[#787774]">
-                    Click an issue to select it, then press "View in CV" to see highlighted problems.
+                    {t('analysis.classicHint')}
                   </p>
                   {activeSuggestion?.snippets?.length > 0 && (
                     <button
@@ -518,7 +518,7 @@ export function AnalysisPage() {
                       className="text-xs font-semibold px-3 py-1.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] text-[#111111] dark:text-[#e8e7e4] border border-[#EAEAEA] hover:bg-[#EAEAEA] transition-colors flex items-center gap-1.5"
                     >
                       <FileText className="w-3.5 h-3.5" />
-                      View in CV ({activeSuggestion.snippets.length} highlight{activeSuggestion.snippets.length !== 1 ? 's' : ''})
+                      {t('analysis.viewInCv', { count: activeSuggestion.snippets.length })}
                     </button>
                   )}
                 </div>
@@ -535,15 +535,15 @@ export function AnalysisPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card noPadding className="overflow-hidden">
               <div className="p-6 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
-                <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">Career Profile Matches</h3>
-                <p className="text-sm text-[#787774] mt-1">Comparing extracted skills against our role database</p>
+                <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('analysis.careerMatches')}</h3>
+                <p className="text-sm text-[#787774] mt-1">{t('analysis.careerMatchesDesc')}</p>
               </div>
               <div className="p-6">
                 <RoleMatcher recommendations={data!.career_recommendations ?? []} />
               </div>
             </Card>
             <Card>
-              <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-4">Extracted Skills</h3>
+              <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-4">{t('analysis.extractedSkills')}</h3>
               <SkillTags skills={data!.extracted_skills} />
             </Card>
           </div>
