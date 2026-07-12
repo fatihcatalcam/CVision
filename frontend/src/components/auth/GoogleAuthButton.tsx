@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-export function GoogleAuthButton() {
+function GoogleAuthButtonInner() {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [pendingToken, setPendingToken] = useState('');
@@ -184,5 +184,22 @@ export function GoogleAuthButton() {
         </div>
       )}
     </>
+  );
+}
+
+// The provider injects Google's gsi/client (~95 KB). Scoping it here — instead
+// of wrapping the whole app in main.tsx — keeps that script off every non-auth
+// page (landing, /try, dashboard, …); it now loads only with the lazy auth
+// pages that render this button.
+export function GoogleAuthButton() {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  // Without a client id (e.g. local dev with an empty env) the OAuth hooks throw
+  // and, with no error boundary, blank the whole auth page. Hide the button
+  // instead — email/password sign-in still works.
+  if (!clientId) return null;
+  return (
+    <GoogleOAuthProvider clientId={clientId}>
+      <GoogleAuthButtonInner />
+    </GoogleOAuthProvider>
   );
 }

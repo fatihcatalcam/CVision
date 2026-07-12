@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
-import { GoogleOAuthProvider } from '@react-oauth/google'
 import * as Sentry from '@sentry/react'
 import './i18n'
 import './index.css'
@@ -18,7 +17,7 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''}>
+    <>
       <App />
       <Analytics />
       <Toaster
@@ -41,6 +40,6 @@ createRoot(document.getElementById('root')!).render(
           },
         }}
       />
-    </GoogleOAuthProvider>
+    </>
   </StrictMode>,
 )

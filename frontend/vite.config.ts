@@ -26,8 +26,11 @@ export default defineConfig({
           if (id.includes('react-router')) return 'router';
           if (/[\\/]react(-dom)?[\\/]|[\\/]scheduler[\\/]/.test(id)) return 'react-vendor';
           if (id.includes('i18next')) return 'i18n';
-          if (id.includes('recharts') || id.includes('d3-')) return 'charts';
           if (id.includes('@sentry')) return 'sentry';
+          // NOTE: recharts/d3 are intentionally NOT forced into a manual chunk.
+          // Only the lazy AdminPage imports them, so Rolldown keeps them inside
+          // the admin async chunk — a named manual chunk got hoisted into the
+          // initial modulepreload set and shipped ~107 KB to every landing.
         },
       },
     },
