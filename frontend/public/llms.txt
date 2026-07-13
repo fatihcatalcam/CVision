@@ -8,6 +8,7 @@
 - [Try it free (no signup)](https://www.cvisionapp.com/try) — upload a CV and get an ATS score plus one improvement suggestion without creating an account.
 - [Pricing](https://www.cvisionapp.com/pricing) — Free and Pro plans.
 - [About](https://www.cvisionapp.com/about) — the product and the founder.
+- [How ATS works](https://www.cvisionapp.com/how-ats-works) — guide to how Applicant Tracking Systems read, parse, and rank resumes, what an ATS score measures, and how to pass automated screening.
 
 ## Services and pricing
 
