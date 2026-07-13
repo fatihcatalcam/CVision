@@ -24,6 +24,7 @@ const SettingsPage = lazy(() => import('./pages/settings/SettingsPage').then(m =
 const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage').then(m => ({ default: m.PrivacyPage })));
 const TermsPage = lazy(() => import('./pages/legal/TermsPage').then(m => ({ default: m.TermsPage })));
 const AboutPage = lazy(() => import('./pages/about/AboutPage').then(m => ({ default: m.AboutPage })));
+const HowAtsWorksPage = lazy(() => import('./pages/guide/HowAtsWorksPage').then(m => ({ default: m.HowAtsWorksPage })));
 const MatchPage = lazy(() => import('./pages/match/MatchPage').then(m => ({ default: m.MatchPage })));
 const TryPage = lazy(() => import('./pages/try/TryPage').then(m => ({ default: m.TryPage })));
 
@@ -61,6 +62,7 @@ function App() {
 
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/how-ats-works" element={<HowAtsWorksPage />} />
             <Route path="/try" element={<TryPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />

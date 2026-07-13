@@ -14,9 +14,13 @@
 
     <!-- Canonical: fold duplicate hosts (apex, *.vercel.app) into the primary domain -->
     <link rel="canonical" href="https://www.cvisionapp.com/" />
-    <link rel="alternate" hreflang="tr" href="https://www.cvisionapp.com/" />
-    <link rel="alternate" hreflang="en" href="https://www.cvisionapp.com/" />
-    <link rel="alternate" hreflang="x-default" href="https://www.cvisionapp.com/" />
+    <!-- No hreflang: this SPA serves every language from the SAME URL via
+         client-side detection, so there are no per-language URLs to point at.
+         hreflang requires distinct URLs per language (e.g. /en, /tr) with
+         reciprocal return tags; declaring tr/en/x-default all on "/" was an
+         invalid, self-referential signal that Google ignores. Re-add hreflang
+         only once real per-language routes exist. -->
+
 
     <!-- Primary Meta -->
     <title>CVision - AI CV Analizi & ATS Resume Checker</title>
