@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import api from '../../services/api';
 
@@ -105,7 +106,7 @@ export function PDFViewerModal({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div
@@ -183,6 +184,7 @@ export function PDFViewerModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

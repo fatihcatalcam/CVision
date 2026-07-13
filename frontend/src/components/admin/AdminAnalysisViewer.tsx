@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Activity, Target, CheckCircle2, FileText } from 'lucide-react';
 import { Card } from '../ui/Card';
 import api from '../../services/api';
@@ -43,7 +44,7 @@ export function AdminAnalysisViewer({ analysisId, isOpen, onClose }: AdminAnalys
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-end">
       {/* Backdrop */}
       <div 
@@ -172,10 +173,11 @@ export function AdminAnalysisViewer({ analysisId, isOpen, onClose }: AdminAnalys
                 ))}
               </div>
             </section>
-            
+
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
