@@ -10,11 +10,12 @@ Allow: /$
 Allow: /try
 Allow: /how-ats-works
 Allow: /about
-Allow: /pricing
 Allow: /privacy
 Allow: /terms
 
 # Private / user pages — do not index
+# /pricing is auth-gated (behind ProtectedRoute), so keep it out of the index.
+Disallow: /pricing
 Disallow: /dashboard
 Disallow: /analysis/
 Disallow: /history
