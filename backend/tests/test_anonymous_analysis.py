@@ -33,18 +33,20 @@ def test_cv_can_be_anonymous(db_session):
     assert cv.client_ip == "203.0.113.7"
 
 
-def test_anon_migration_is_head_and_chains():
-    """The anon migration exists, chains off the lemon migration, and is head."""
+def test_anon_migration_chains_and_xray_is_head():
+    """The anon migration chains off the lemon migration; the ATS X-Ray
+    migration chains off it and is the current head."""
     from alembic.config import Config
     from alembic.script import ScriptDirectory
 
     cfg = Config("alembic.ini")
     script = ScriptDirectory.from_config(cfg)
-    head = script.get_current_head()
 
-    assert head == "f1a2b3c4d5e6"
-    rev = script.get_revision("f1a2b3c4d5e6")
-    assert rev.down_revision == "a3b4c5d6e7f8"
+    assert script.get_current_head() == "b7c8d9e0f1a2"
+    xray = script.get_revision("b7c8d9e0f1a2")
+    assert xray.down_revision == "f1a2b3c4d5e6"
+    anon = script.get_revision("f1a2b3c4d5e6")
+    assert anon.down_revision == "a3b4c5d6e7f8"
 
 
 def _make_analysis_with_ai(db_session, cv):
