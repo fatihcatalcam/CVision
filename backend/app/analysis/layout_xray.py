@@ -23,12 +23,16 @@ import fitz  # PyMuPDF
 
 logger = logging.getLogger("cvision.analysis.layout_xray")
 
-# A text block is a column candidate when narrower than this fraction of the
-# page; full-width paragraphs never count toward column detection.
-_COLUMN_MAX_WIDTH = 0.55
-# Both sides must stack at least this fraction of page height in narrow
-# blocks before we call the page multi-column.
+# Both sides of a candidate gutter must stack at least this fraction of page
+# height in text blocks before we call the page multi-column.
 _COLUMN_MIN_COVERAGE = 0.20
+# Blocks straddling the gutter (full-width headers/footers within the body)
+# are tolerated up to this fraction of page height; more means the "gutter"
+# cuts through real paragraphs, i.e. the page is single-column.
+_COLUMN_MAX_CROSSING = 0.05
+# The resulting split line must land in the central span of the page.
+_GUTTER_SPLIT_MIN = 0.15
+_GUTTER_SPLIT_MAX = 0.85
 # Images smaller than this fraction of the page area (icons, logos) are ignored.
 _IMAGE_MIN_AREA = 0.03
 # Top/bottom bands treated as header/footer.
@@ -129,33 +133,48 @@ def _finding(ftype: str, severity: str, page: int, bbox, w: float, h: float) -> 
 
 
 def _column_split(text_blocks: list, w: float, h: float) -> float | None:
-    """Return the x that splits two side-by-side columns, or None.
+    """Return the x of the vertical whitespace gutter splitting two
+    side-by-side columns, or None for single-column pages.
 
-    A block belongs to the left cluster when it lies entirely in the left
-    ~55% of the page (and is narrow), mirrored for the right cluster. The
-    page is multi-column when BOTH clusters stack enough height.
+    Gutter search instead of a fixed center split: real CV templates are
+    usually ASYMMETRIC (narrow sidebar + wide main column that starts left
+    of the page center), which a center-based heuristic misses. For each
+    candidate x (right edges of blocks in the central span), the page is
+    multi-column when enough text stacks entirely on BOTH sides while almost
+    nothing straddles the line.
     """
     mid_band = [b for b in text_blocks
                 if b[1] > _EDGE_BAND * h and b[3] < (1 - _EDGE_BAND) * h]
-    left_h = right_h = 0.0
-    left_max_x1 = 0.0
-    right_min_x0 = w
-    for b in mid_band:
-        bw = b[2] - b[0]
-        if bw <= 0 or bw > _COLUMN_MAX_WIDTH * w:
-            continue
-        center = (b[0] + b[2]) / 2
-        if center < w / 2 and b[2] <= 0.55 * w:
-            left_h += b[3] - b[1]
-            left_max_x1 = max(left_max_x1, b[2])
-        elif center >= w / 2 and b[0] >= 0.45 * w:
-            right_h += b[3] - b[1]
-            right_min_x0 = min(right_min_x0, b[0])
-    if (left_h >= _COLUMN_MIN_COVERAGE * h
-            and right_h >= _COLUMN_MIN_COVERAGE * h
-            and left_max_x1 < right_min_x0):
-        return (left_max_x1 + right_min_x0) / 2
-    return None
+    if not mid_band:
+        return None
+
+    candidates = sorted({b[2] for b in mid_band})
+
+    best: tuple[float, float] | None = None  # (score, split_x)
+    for x in candidates:
+        left_h = right_h = crossing_h = 0.0
+        right_min_x0 = w
+        for b in mid_band:
+            bh = b[3] - b[1]
+            if b[2] <= x + 1:
+                left_h += bh
+            elif b[0] >= x - 1:
+                right_h += bh
+                right_min_x0 = min(right_min_x0, b[0])
+            else:
+                crossing_h += bh
+        if (left_h >= _COLUMN_MIN_COVERAGE * h
+                and right_h >= _COLUMN_MIN_COVERAGE * h
+                and crossing_h <= _COLUMN_MAX_CROSSING * h):
+            # Split in the middle of the actual whitespace gap.
+            split = (x + right_min_x0) / 2
+            if not (_GUTTER_SPLIT_MIN * w <= split <= _GUTTER_SPLIT_MAX * w):
+                continue
+            score = min(left_h, right_h)
+            if best is None or score > best[0]:
+                best = (score, split)
+
+    return best[1] if best else None
 
 
 def _cluster_bbox(text_blocks: list, split_x: float, w: float, h: float):

@@ -69,6 +69,48 @@ def _pdf_two_column(tmp_path):
     return _save(doc, tmp_path, "two_col.pdf")
 
 
+def _pdf_asymmetric_two_column(tmp_path):
+    """Real-template shape: narrow sidebar (~30% width) + WIDE main column
+    that starts left of the page center. The old center-split detector missed
+    this (reported by the founder on a real CV)."""
+    doc = fitz.open()
+    page = doc.new_page(width=A4_W, height=A4_H)
+    sidebar = ["CONTACT", "+90 538 000 00 00", "mail@example.com", "SKILLS",
+               "Python", "C++", "Java", "Data Annotation", "LANGUAGES",
+               "Turkish Native", "English Advanced", "Italian A1", "LINKS",
+               "github.com/example", "linkedin.com/in/example", "HOBBIES",
+               "Chess", "Running", "Reading", "Music"]
+    main = ["PROJECTS",
+            "Restaurant Management System built with Java and desktop UI",
+            "Developed an application for restaurant order processing",
+            "Game Assistant Tool written in Python for automation tasks",
+            "Created a tool to assist gameplay by automating actions",
+            "EDUCATION",
+            "ISTANBUL AREL UNIVERSITY COMPUTER ENGINEERING 2023 - 2027",
+            "Universita degli Studi Niccolo Cusano Erasmus 2024 - 2025",
+            "OBJECTIVE",
+            "Motivated computer engineering student with strong English",
+            "skills and hands-on experience in data annotation projects",
+            "WORK EXPERIENCE",
+            "Data Annotation Specialist working on labeling pipelines",
+            "Annotated large datasets for machine learning workflows",
+            "CERTIFICATES",
+            "Python for Everybody course certificate from Coursera",
+            "Introduction to Machine Learning course certificate",
+            "REFERENCES",
+            "Available upon request from previous employers",
+            "closing line of the main column for coverage"]
+    y = 90
+    for line in sidebar:
+        page.insert_text((40, y), line, fontsize=10)   # x1 ends ~ 150-190
+        y += 30
+    y = 90
+    for line in main:
+        page.insert_text((230, y), line, fontsize=9)   # starts at 0.39w, wide
+        y += 30
+    return _save(doc, tmp_path, "asym_two_col.pdf")
+
+
 def _pdf_with_image(tmp_path):
     doc = fitz.open()
     page = doc.new_page(width=A4_W, height=A4_H)
@@ -128,6 +170,19 @@ def test_two_column_robot_lines_actually_interleave(tmp_path):
     assert mixed, "two-column page must produce mixed lines"
     # a mixed line contains words from both columns at the same height
     assert any("SKILLS" in l["t"] and "EXPERIENCE" in l["t"] for l in mixed)
+
+
+def test_asymmetric_two_column_flags_column_interleave(tmp_path):
+    """Founder-reported false negative: sidebar + wide main column starting
+    before the page center must still be detected as multi-column."""
+    result = analyze_layout(_pdf_asymmetric_two_column(tmp_path))
+    assert "column_interleave" in _types(result)
+
+
+def test_asymmetric_two_column_marks_mixed_lines(tmp_path):
+    result = analyze_layout(_pdf_asymmetric_two_column(tmp_path))
+    mixed = [l for l in result["robot_lines"] if l["m"]]
+    assert mixed, "sidebar rows share heights with main rows -> must be mixed"
 
 
 def test_large_image_flags_image_text_loss(tmp_path):
