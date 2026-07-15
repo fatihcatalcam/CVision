@@ -17,7 +17,13 @@ from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
 from app.models.user import User
-from app.schemas.analysis import AnalysisResponse, AnalysisScores, AISuggestion
+from app.schemas.analysis import (
+    AnalysisResponse,
+    AnalysisScores,
+    AISuggestion,
+    LayoutXrayResponse,
+    XrayFinding,
+)
 from app.schemas.suggestion import SuggestionResponse
 from app.schemas.skill import ExtractedSkillResponse
 from app.schemas.career_recommendation import CareerRecommendationResponse
@@ -119,6 +125,51 @@ def _suggestion_teaser(message: str | None, max_words: int = 6, max_chars: int =
     return snippet + "…"
 
 
+def _build_xray_response(layout_xray: dict | None, is_free: bool) -> LayoutXrayResponse | None:
+    """Gate the stored X-Ray JSON for the response. Locked results get a
+    <=200-char robot-view teaser and only the first finding - the full
+    simulation never leaves the server (mirrors _suggestion_teaser)."""
+    if not layout_xray:
+        return None
+    if not layout_xray.get("available"):
+        return LayoutXrayResponse(
+            available=False, reason=layout_xray.get("reason"),
+        )
+
+    findings = [
+        XrayFinding(type=f.get("type", ""), severity=f.get("severity", "info"),
+                    page=f.get("page", 1))
+        for f in layout_xray.get("findings", [])
+        if isinstance(f, dict)
+    ]
+    robot_lines = [
+        {"t": l.get("t", ""), "m": bool(l.get("m"))}
+        for l in layout_xray.get("robot_lines", [])
+        if isinstance(l, dict)
+    ]
+
+    if not is_free:
+        return LayoutXrayResponse(
+            available=True, findings=findings, findings_total=len(findings),
+            robot_lines=robot_lines, is_locked=False,
+        )
+
+    teaser: list[dict] = []
+    chars = 0
+    for line in robot_lines:
+        if chars >= 200:
+            break
+        remaining = 200 - chars
+        text = line["t"][:remaining]
+        teaser.append({"t": text, "m": line["m"]})
+        chars += len(text)
+
+    return LayoutXrayResponse(
+        available=True, findings=findings[:1], findings_total=len(findings),
+        robot_lines=teaser, is_locked=True,
+    )
+
+
 def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False, force_locked: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
     is_free = force_locked or (
@@ -211,6 +262,7 @@ def _build_analysis_response(analysis, current_user: User | None = None, is_firs
         is_summary_locked=is_summary_locked,
         ai_suggestions=ai_suggestions,
         ai_enhanced=bool(getattr(analysis, 'ai_enhanced', 0)),
+        layout_xray=_build_xray_response(getattr(analysis, 'layout_xray', None), is_free),
         created_at=analysis.created_at,
     )
 

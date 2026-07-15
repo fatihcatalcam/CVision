@@ -32,6 +32,25 @@ class AISuggestion(BaseModel):
     teaser: str | None = None
 
 
+class XrayFinding(BaseModel):
+    """One ATS X-Ray layout finding. `type` is a code the frontend localizes."""
+    type: str
+    severity: str
+    page: int
+
+
+class LayoutXrayResponse(BaseModel):
+    """Gated X-Ray payload. When is_locked, robot_lines is a <=200-char
+    teaser and findings contains only the first one (findings_total has
+    the real count)."""
+    available: bool
+    reason: str | None = None
+    findings: list[XrayFinding] = []
+    findings_total: int = 0
+    robot_lines: list[dict] = []
+    is_locked: bool = False
+
+
 class AnalysisResponse(BaseModel):
     """Complete analysis result returned to the user."""
     id: str
@@ -50,6 +69,7 @@ class AnalysisResponse(BaseModel):
     is_summary_locked: bool = False
     ai_suggestions: list[AISuggestion] = []
     ai_enhanced: bool = False
+    layout_xray: LayoutXrayResponse | None = None
     created_at: datetime
 
     model_config = {"from_attributes": True}
