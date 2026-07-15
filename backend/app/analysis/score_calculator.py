@@ -1,6 +1,11 @@
 """
 Score Calculator - weighted aggregation of all sub-scores into an overall score.
 Weights: completeness (25%) + skills (25%) + ATS (20%) + keywords (15%) + experience (15%)
+
+Anti-gaming (2026-07): the skills sub-score is RELEVANCE-weighted against the
+target role's expected skills, not a raw count. A CV that stuffs its skills
+section with off-target terms (SAP, Kaizen, Excel while targeting Software
+Engineering) can no longer saturate the score the way a focused candidate does.
 """
 
 import logging
@@ -18,32 +23,81 @@ SCORE_WEIGHTS = {
     "experience": 0.15,
 }
 
+# Off-target ("other") skills contribute a small, capped bonus each — enough to
+# acknowledge breadth (a backend dev who also knows Figma) without letting
+# irrelevant stuffing move the needle. Extra relevant skills beyond the base
+# curve's ceiling get the same small treatment.
+_OTHER_SKILL_BONUS = 1.0
+_OTHER_SKILL_BONUS_CAP = 8.0
+_EXTRA_RELEVANT_BONUS_CAP = 8.0
+
 
 class ScoreCalculator(BaseAnalyzer):
     """Calculates the overall CV score from weighted sub-scores."""
+
+    def __init__(self, role_profiles: list[dict] | None = None):
+        """
+        Args:
+            role_profiles: The target role profiles (already filtered to the
+                CV's target domain by the service; ALL profiles when the domain
+                is "Other"/unset). Their `expected_skills` define which extracted
+                skills count as relevant. If none are supplied, the skills score
+                degrades gracefully to a relevance-agnostic count.
+        """
+        relevant: set[str] = set()
+        for profile in role_profiles or []:
+            for skill in profile.get("expected_skills", []) or []:
+                if isinstance(skill, str):
+                    relevant.add(skill.lower())
+        self._relevant_skills = relevant
 
     @property
     def name(self) -> str:
         return "Score Calculator"
 
-    def analyze(self, context: AnalysisContext) -> None:
-        # Calculate skills score from extracted skills
-        skill_count = len(context.extracted_skills)
-        # Scoring: 0 skills=0, 3=40, 5=60, 8=75, 12+=100
-        if skill_count == 0:
-            skills_score = 0.0
-        elif skill_count <= 3:
-            skills_score = 20.0 + (skill_count / 3) * 20.0
-        elif skill_count <= 5:
-            skills_score = 40.0 + ((skill_count - 3) / 2) * 20.0
-        elif skill_count <= 8:
-            skills_score = 60.0 + ((skill_count - 5) / 3) * 15.0
-        elif skill_count <= 12:
-            skills_score = 75.0 + ((skill_count - 8) / 4) * 25.0
-        else:
-            skills_score = 100.0
+    def _skills_score(self, relevant_count: int, other_count: int) -> float:
+        """Relevance-weighted skills score.
 
-        skills_score = round(min(skills_score, 100.0), 1)
+        The base is driven by how many *relevant* skills the CV shows, on a
+        curve that lets a focused mid/senior (~10 relevant) approach the ceiling.
+        Off-target skills — and relevant skills beyond the curve — add only a
+        small, capped bonus, so breadth helps a little but stuffing cannot
+        saturate the score.
+        """
+        r = relevant_count
+        if r == 0:
+            base = 0.0
+        elif r <= 3:
+            base = (r / 3) * 35.0            # 3 relevant -> 35
+        elif r <= 6:
+            base = 35.0 + ((r - 3) / 3) * 30.0   # 6 relevant -> 65
+        elif r <= 10:
+            base = 65.0 + ((r - 6) / 4) * 27.0   # 10 relevant -> 92
+        else:
+            base = 92.0
+
+        bonus = min(other_count, _OTHER_SKILL_BONUS_CAP) * _OTHER_SKILL_BONUS
+        extra_relevant = max(r - 10, 0)
+        bonus += min(extra_relevant, _EXTRA_RELEVANT_BONUS_CAP) * _OTHER_SKILL_BONUS
+
+        return round(min(base + bonus, 100.0), 1)
+
+    def analyze(self, context: AnalysisContext) -> None:
+        # Split extracted skills into relevant (in the target role's expected
+        # skills) vs off-target. With no relevance signal at all (no profiles),
+        # fall back to counting everything as relevant so scoring still works.
+        if self._relevant_skills:
+            relevant_count = sum(
+                1 for s in context.extracted_skills
+                if s.get("skill_name", "").lower() in self._relevant_skills
+            )
+            other_count = len(context.extracted_skills) - relevant_count
+        else:
+            relevant_count = len(context.extracted_skills)
+            other_count = 0
+
+        skills_score = self._skills_score(relevant_count, other_count)
+        context.skills_score = skills_score
 
         # Weighted overall score
         overall = (

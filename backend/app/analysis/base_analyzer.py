@@ -44,6 +44,7 @@ class AnalysisContext:
 
     # Scores (0.0 to 100.0)
     completeness_score: float = 0.0
+    skills_score: float = 0.0
     ats_score: float = 0.0
     keyword_score: float = 0.0
     experience_score: float = 0.0

@@ -41,7 +41,7 @@ class AnalysisEngine:
             ATSChecker(),
             KeywordScorer(role_profiles),
             ExperienceEvaluator(),
-            ScoreCalculator(),
+            ScoreCalculator(role_profiles),
             SuggestionGenerator(),
         ]
 
