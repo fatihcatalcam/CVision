@@ -38,6 +38,10 @@ class AnalysisContext:
     # Keyword scoring
     keyword_matches: dict[str, list[str]] = field(default_factory=dict)
 
+    # ATS X-Ray layout findings. None = no layout data (TXT/legacy/xray error;
+    # layout ATS checks excluded from scoring). [] = analyzed clean PDF.
+    layout_findings: list[dict] | None = None
+
     # Experience evaluation
     total_years_experience: float = 0.0
     experience_entries: list[str] = field(default_factory=list)

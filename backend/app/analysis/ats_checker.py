@@ -63,6 +63,23 @@ ATS_CHECKS = [
     },
 ]
 
+# Layout checks (ATS X-Ray). Only counted when layout data exists
+# (context.layout_findings is not None), so TXT/legacy scores are unchanged.
+LAYOUT_CHECKS = [
+    {
+        "name": "no_column_interleave",
+        "weight": 15.0,
+        "pass_msg": "Single-column layout - reads in the correct order",
+        "fail_msg": "Multi-column layout detected - ATS parsers interleave the columns and scramble your content",
+    },
+    {
+        "name": "no_image_text_loss",
+        "weight": 10.0,
+        "pass_msg": "No significant image regions - all content is machine-readable",
+        "fail_msg": "Large image region detected - any text inside it is invisible to ATS parsers",
+    },
+]
+
 # Common action verbs used in CVs. Matched against the normalized
 # (lowercase, diacritic-folded) text, in all five UI languages.
 # Non-English entries are stems with \w* so conjugations match
@@ -107,10 +124,13 @@ class ATSChecker(BaseAnalyzer):
     def analyze(self, context: AnalysisContext) -> None:
         text = context.extracted_text
         text_lower = context.text_lower
-        total_weight = sum(c["weight"] for c in ATS_CHECKS)
+        checks = list(ATS_CHECKS)
+        if context.layout_findings is not None:
+            checks = checks + LAYOUT_CHECKS
+        total_weight = sum(c["weight"] for c in checks)
         earned_weight = 0.0
 
-        for check in ATS_CHECKS:
+        for check in checks:
             passed = self._run_check(check["name"], text, text_lower, context)
             if passed:
                 context.ats_passes.append(check["pass_msg"])
@@ -150,7 +170,17 @@ class ATSChecker(BaseAnalyzer):
             return context.detected_sections.get("experience", False)
         elif check_name == "has_skills_section":
             return context.detected_sections.get("skills", False)
+        elif check_name == "no_column_interleave":
+            return not self._has_layout_finding(context, "column_interleave")
+        elif check_name == "no_image_text_loss":
+            return not self._has_layout_finding(context, "image_text_loss")
         return False
+
+    @staticmethod
+    def _has_layout_finding(context: AnalysisContext, ftype: str) -> bool:
+        return any(
+            f.get("type") == ftype for f in (context.layout_findings or [])
+        )
 
     @staticmethod
     def _check_contact_info(text_lower: str) -> bool:

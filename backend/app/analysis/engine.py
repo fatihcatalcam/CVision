@@ -45,12 +45,15 @@ class AnalysisEngine:
             SuggestionGenerator(),
         ]
 
-    def run(self, extracted_text: str) -> AnalysisContext:
+    def run(self, extracted_text: str, layout_xray: dict | None = None) -> AnalysisContext:
         """
         Run the full analysis pipeline on extracted CV text.
 
         Args:
             extracted_text: The raw text extracted from the CV file.
+            layout_xray: Optional ATS X-Ray output (see app/analysis/layout_xray.py).
+                When available, its findings feed the layout ATS checks; when
+                None/unavailable, those checks stay out of the score entirely.
 
         Returns:
             AnalysisContext with all results populated.
@@ -58,6 +61,8 @@ class AnalysisEngine:
         logger.info("Starting analysis pipeline...")
 
         context = AnalysisContext(extracted_text=extracted_text)
+        if layout_xray and layout_xray.get("available"):
+            context.layout_findings = layout_xray.get("findings", [])
 
         for analyzer in self._analyzers:
             logger.info(f"Running: {analyzer.name}")
