@@ -4,6 +4,7 @@ and persisting results to the database.
 """
 
 import logging
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -16,6 +17,7 @@ from app.models.skill import Skill
 from app.models.role_profile import RoleProfile
 from app.analysis.engine import AnalysisEngine
 from app.analysis.base_analyzer import AnalysisContext
+from app.analysis.layout_xray import analyze_layout
 from app.services.recommendation_service import RecommendationService
 from app.services.ai_service import ai_enhance_analysis, is_ai_enabled
 
@@ -111,9 +113,16 @@ class AnalysisService:
             f"({len(skills_list)} skills, {len(role_profiles)} role profiles)"
         )
 
+        # ATS X-Ray: layout-level analysis (PDF only). analyze_layout never
+        # raises - on any failure it returns {"available": False}.
+        if cv.file_type == "pdf":
+            layout_xray = analyze_layout(Path(cv.file_path))
+        else:
+            layout_xray = {"available": False, "reason": "plain_text"}
+
         # Run the analysis engine
         engine = AnalysisEngine(skills_list, role_profiles)
-        context: AnalysisContext = engine.run(cv.extracted_text)
+        context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 
         # Persist analysis result
         analysis = AnalysisResult(
@@ -127,6 +136,7 @@ class AnalysisService:
             strengths=context.strengths,
             weaknesses=context.weaknesses,
             detected_sections=context.detected_sections,
+            layout_xray=layout_xray,
         )
         db.add(analysis)
         db.flush()  # Get the analysis ID
