@@ -13,6 +13,7 @@ import { SkillTags } from '../../components/analysis/SkillTags';
 import { SuggestionList } from '../../components/analysis/SuggestionList';
 import { RoleMatcher } from '../../components/analysis/RoleMatcher';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
+import { AtsXraySection, type LayoutXray } from '../../components/analysis/AtsXraySection';
 import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
 import { JDInputModal } from '../../components/match/JDInputModal';
 import { MatchResultCard } from '../../components/match/MatchResultCard';
@@ -50,6 +51,7 @@ interface AnalysisData {
   is_summary_locked: boolean;
   ai_suggestions: AISuggestion[];
   ai_enhanced: boolean;
+  layout_xray?: LayoutXray | null;
 }
 
 // â”€â”€â”€ Priority styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -402,6 +404,11 @@ export function AnalysisPage() {
               <ScoreRing score={Math.round(data!.scores.keyword_score)} label={t('analysis.keywordRelevance')} colorClass="text-[#8b5cf6]" />
             </Card>
           </div>
+
+          {/* ATS X-Ray: what the scanner actually sees */}
+          {data!.layout_xray && (
+            <AtsXraySection xray={data!.layout_xray} cvId={data!.cv_id} />
+          )}
 
           {/* AI Executive Summary */}
           {data!.ai_summary && (
