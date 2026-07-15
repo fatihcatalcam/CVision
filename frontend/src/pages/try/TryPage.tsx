@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Lock, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Lock, ArrowRight, Sparkles, Check, ScanSearch } from 'lucide-react';
 import api from '../../services/api';
 import { useSeo } from '../../hooks/useSeo';
 import { CVUploader } from '../../components/cv/CVUploader';
@@ -16,6 +16,14 @@ interface AnonResult {
   ai_summary: string | null;
   is_summary_locked: boolean;
   ai_suggestions: { message: string | null; is_locked: boolean; teaser?: string | null }[];
+  layout_xray?: {
+    available: boolean;
+    reason?: string | null;
+    findings: { type: string; severity: string; page: number }[];
+    findings_total: number;
+    robot_lines: { t: string; m: boolean }[];
+    is_locked: boolean;
+  } | null;
 }
 
 const RING_R = 42;
@@ -194,6 +202,57 @@ export function TryPage() {
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#346538] dark:text-[#8fc79a]">{t('try.aiTipLabel')}</span>
                 </div>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--color-foreground)' }}>{firstOpen.message}</p>
+              </div>
+            )}
+
+            {/* ATS X-Ray teaser — the scanner's view, blurred + locked */}
+            {result.layout_xray?.available && (
+              <div className="rounded-2xl border p-5 mb-4" style={{ borderColor: 'var(--color-card-border)', background: 'var(--color-card)' }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-7 h-7 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.06] flex items-center justify-center shrink-0">
+                    <ScanSearch className="w-4 h-4" style={{ color: 'var(--color-foreground)' }} strokeWidth={1.5} />
+                  </div>
+                  <span className="text-sm font-extrabold" style={{ color: 'var(--color-foreground)' }}>
+                    {result.layout_xray.findings_total > 0
+                      ? t('xray.teaser.title', { count: result.layout_xray.findings_total })
+                      : t('xray.teaser.titleClean')}
+                  </span>
+                </div>
+
+                {result.layout_xray.findings[0] && (
+                  <div className="rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] border-l-[3px] border-l-[#956400] bg-[#FBF8F2] dark:bg-white/[0.03] px-3.5 py-2.5 mb-3">
+                    <p className="text-xs font-bold" style={{ color: 'var(--color-foreground)' }}>
+                      {t(`xray.finding.${result.layout_xray.findings[0].type}.title`)}
+                    </p>
+                    <p className="text-[11px] mt-0.5" style={{ color: 'var(--color-muted)' }}>
+                      {t(`xray.finding.${result.layout_xray.findings[0].type}.desc`)}
+                    </p>
+                  </div>
+                )}
+
+                {result.layout_xray.robot_lines.length > 0 && (
+                  <div className="relative rounded-xl overflow-hidden bg-[#1c1c1a] p-3">
+                    <div className="font-mono text-[10px] leading-relaxed text-[#c8c6c3] select-none pointer-events-none" style={{ filter: 'blur(3px)' }}>
+                      {result.layout_xray.robot_lines.map((l, i) => <div key={i}>{l.t}</div>)}
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex items-center gap-1.5 bg-[#1c1c1a]/90 border border-white/10 text-[#e8e7e4] text-[11px] font-bold px-3 py-1 rounded-full">
+                        <Lock className="w-3 h-3" /> {t('xray.teaser.locked')}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => {
+                    (window as any).gtag?.('event', 'xray_teaser_cta', { findings: result.layout_xray?.findings_total ?? 0 });
+                    navigate('/register');
+                  }}
+                  className="w-full mt-3 px-6 py-3 rounded-xl text-sm font-semibold bg-[#111111] text-white hover:bg-[#2a2a2a] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  {t('xray.teaser.cta')} <ArrowRight className="w-4 h-4" />
+                </button>
+                <p className="text-center text-[10px] mt-1.5" style={{ color: 'var(--color-muted)' }}>{t('xray.teaser.note')}</p>
               </div>
             )}
 
