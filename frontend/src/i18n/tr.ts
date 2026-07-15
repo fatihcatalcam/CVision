@@ -499,6 +499,38 @@ const tr = {
     ctaButton: "CV'mi ücretsiz kontrol et",
   },
 
+  xray: {
+    label: "ATS X-Ray",
+    title: "ATS, CV'ni böyle okuyor",
+    findingsCount: "{{count}} bulgu",
+    clean: "ATS, CV'ni sorunsuz okuyor",
+    cleanNote: "Sayfa düzeninde hasar yok — içeriğin makine taramasından sağlam çıkıyor.",
+    yourCv: "SENİN CV'N",
+    atsSees: "ATS'İN GÖRDÜĞÜ",
+    plainText: "Dosyan düz metin — tarama açısından zaten güvenli.",
+    finding: {
+      column_interleave: {
+        title: "İki sütun iç içe geçiyor",
+        desc: "Yan sütunun iş geçmişinin ortasına karışıyor — ATS hangi yeteneğin hangi işe ait olduğunu göremiyor. Tek sütunlu düzen daha güvenli.",
+      },
+      image_text_loss: {
+        title: "Görsel içindeki metin kayıp",
+        desc: "CV'ndeki büyük bir görsel alan tarama sistemine tamamen görünmez. Önemli bilgiyi görsel değil metin olarak yaz.",
+      },
+      header_footer_content: {
+        title: "Üst/alt bilgide iletişim bilgisi",
+        desc: "İletişim bilgilerin sayfanın kenar bandında — bazı sistemler bu bölgeyi okumaz. Gövde metnine taşımak garantidir.",
+      },
+    },
+    teaser: {
+      title: "ATS taraması CV'nde {{count}} sorun buldu",
+      titleClean: "ATS taraması temiz görünüyor — tam görünümü aç",
+      locked: "ATS'in tam görüşü kilitli",
+      cta: "Ücretsiz kayıt ol, ATS'in gözünden gör",
+      note: "Kredi kartı gerekmez",
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Gizlilik Politikası',

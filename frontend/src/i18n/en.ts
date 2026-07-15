@@ -499,6 +499,38 @@ const en = {
     ctaButton: "Check my CV free",
   },
 
+  xray: {
+    label: "ATS X-Ray",
+    title: "How the ATS reads your CV",
+    findingsCount: "{{count}} issue found",
+    clean: "The ATS reads your CV cleanly",
+    cleanNote: "No layout damage detected — your content survives machine parsing.",
+    yourCv: "YOUR CV",
+    atsSees: "WHAT THE ATS SEES",
+    plainText: "Your file is plain text — scanner-safe by definition.",
+    finding: {
+      column_interleave: {
+        title: "Two columns get interleaved",
+        desc: "Your side column mixes into your work history — the ATS can't tell which job a skill belongs to. A single-column layout is safer.",
+      },
+      image_text_loss: {
+        title: "Text inside an image is lost",
+        desc: "A large image region on your CV is completely invisible to the scanner. Put important information in real text, not graphics.",
+      },
+      header_footer_content: {
+        title: "Contact info in the header/footer",
+        desc: "Your contact details sit in the page's edge band — some systems skip that region. Moving them into the body is the safe choice.",
+      },
+    },
+    teaser: {
+      title: "The ATS scan found {{count}} issue in your CV",
+      titleClean: "The ATS scan looks clean — unlock the full view",
+      locked: "Full ATS view is locked",
+      cta: "Sign up free to see it through the ATS's eyes",
+      note: "No credit card needed",
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Privacy Policy',

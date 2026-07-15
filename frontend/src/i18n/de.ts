@@ -500,6 +500,38 @@ const de = {
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },
 
+  xray: {
+    label: "ATS X-Ray",
+    title: "So liest das ATS deinen Lebenslauf",
+    findingsCount: "{{count}} Problem gefunden",
+    clean: "Das ATS liest deinen Lebenslauf sauber",
+    cleanNote: "Keine Layout-Schäden erkannt — dein Inhalt übersteht das maschinelle Auslesen.",
+    yourCv: "DEIN LEBENSLAUF",
+    atsSees: "WAS DAS ATS SIEHT",
+    plainText: "Deine Datei ist reiner Text — per Definition scanner-sicher.",
+    finding: {
+      column_interleave: {
+        title: "Zwei Spalten werden vermischt",
+        desc: "Deine Seitenspalte mischt sich in deinen Werdegang — das ATS kann nicht erkennen, zu welcher Stelle eine Fähigkeit gehört. Ein einspaltiges Layout ist sicherer.",
+      },
+      image_text_loss: {
+        title: "Text in einem Bild geht verloren",
+        desc: "Ein großer Bildbereich deines Lebenslaufs ist für den Scanner völlig unsichtbar. Schreibe wichtige Informationen als echten Text, nicht als Grafik.",
+      },
+      header_footer_content: {
+        title: "Kontaktdaten in Kopf-/Fußzeile",
+        desc: "Deine Kontaktdaten liegen im Randbereich der Seite — manche Systeme überspringen diese Zone. Sie in den Textkörper zu verschieben ist die sichere Wahl.",
+      },
+    },
+    teaser: {
+      title: "Der ATS-Scan fand {{count}} Problem in deinem Lebenslauf",
+      titleClean: "Der ATS-Scan sieht sauber aus — schalte die volle Ansicht frei",
+      locked: "Volle ATS-Ansicht gesperrt",
+      cta: "Kostenlos registrieren und mit den Augen des ATS sehen",
+      note: "Keine Kreditkarte nötig",
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Datenschutzrichtlinie',

@@ -500,6 +500,38 @@ const es = {
     ctaButton: "Revisar mi CV gratis",
   },
 
+  xray: {
+    label: "ATS X-Ray",
+    title: "Así lee el ATS tu currículum",
+    findingsCount: "{{count}} problema detectado",
+    clean: "El ATS lee tu currículum sin problemas",
+    cleanNote: "Sin daños de diseño — tu contenido sobrevive al análisis automático.",
+    yourCv: "TU CV",
+    atsSees: "LO QUE VE EL ATS",
+    plainText: "Tu archivo es texto plano — seguro para el escáner por definición.",
+    finding: {
+      column_interleave: {
+        title: "Las dos columnas se entremezclan",
+        desc: "Tu columna lateral se mezcla con tu historial laboral — el ATS no puede saber a qué empleo pertenece cada habilidad. Un diseño de una sola columna es más seguro.",
+      },
+      image_text_loss: {
+        title: "El texto dentro de una imagen se pierde",
+        desc: "Una gran zona de imagen de tu CV es completamente invisible para el escáner. Pon la información importante en texto real, no en gráficos.",
+      },
+      header_footer_content: {
+        title: "Datos de contacto en el encabezado/pie",
+        desc: "Tus datos de contacto están en el borde de la página — algunos sistemas omiten esa zona. Moverlos al cuerpo del documento es lo seguro.",
+      },
+    },
+    teaser: {
+      title: "El escaneo ATS encontró {{count}} problema en tu CV",
+      titleClean: "El escaneo ATS parece limpio — desbloquea la vista completa",
+      locked: "La vista completa del ATS está bloqueada",
+      cta: "Regístrate gratis y míralo con los ojos del ATS",
+      note: "Sin tarjeta de crédito",
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Política de privacidad',

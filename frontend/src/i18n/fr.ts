@@ -500,6 +500,38 @@ const fr = {
     ctaButton: "Vérifier mon CV gratuitement",
   },
 
+  xray: {
+    label: "ATS X-Ray",
+    title: "Voici comment l'ATS lit votre CV",
+    findingsCount: "{{count}} problème détecté",
+    clean: "L'ATS lit votre CV sans problème",
+    cleanNote: "Aucun dégât de mise en page — votre contenu survit à l'analyse automatique.",
+    yourCv: "VOTRE CV",
+    atsSees: "CE QUE VOIT L'ATS",
+    plainText: "Votre fichier est en texte brut — sûr pour le scanner par définition.",
+    finding: {
+      column_interleave: {
+        title: "Les deux colonnes s'entremêlent",
+        desc: "Votre colonne latérale se mélange à votre parcours — l'ATS ne sait plus à quel poste appartient chaque compétence. Une mise en page à une seule colonne est plus sûre.",
+      },
+      image_text_loss: {
+        title: "Le texte dans une image est perdu",
+        desc: "Une grande zone d'image de votre CV est totalement invisible pour le scanner. Mettez les informations importantes en vrai texte, pas en graphique.",
+      },
+      header_footer_content: {
+        title: "Coordonnées dans l'en-tête/pied de page",
+        desc: "Vos coordonnées se trouvent en bordure de page — certains systèmes ignorent cette zone. Les déplacer dans le corps du document est le choix sûr.",
+      },
+    },
+    teaser: {
+      title: "L'analyse ATS a trouvé {{count}} problème dans votre CV",
+      titleClean: "L'analyse ATS semble propre — débloquez la vue complète",
+      locked: "Vue ATS complète verrouillée",
+      cta: "Inscrivez-vous gratuitement et voyez avec les yeux de l'ATS",
+      note: "Aucune carte bancaire requise",
+    },
+  },
+
   legal: {
     privacy: {
       title: 'Politique de confidentialité',
