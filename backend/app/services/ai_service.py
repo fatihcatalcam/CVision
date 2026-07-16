@@ -497,6 +497,83 @@ def _build_user_prompt(
     )
 
 
+class SkillNormalization(BaseModel):
+    """Canonical skill names the AI recognised in a CV, in any language."""
+
+    skills: list[str] = Field(
+        description=(
+            "Skills the CV demonstrates, given ONLY as names copied EXACTLY "
+            "from the provided vocabulary. Never invent a name, never "
+            "translate one, never return a name absent from the vocabulary."
+        )
+    )
+
+
+def ai_normalize_skills(
+    cv_text: str,
+    vocabulary: list[str],
+) -> list[str] | None:
+    """Map a CV in ANY language onto canonical English skill names.
+
+    This is the fix for the language penalty: the seed dictionary is entirely
+    English, so a Turkish CV writing "iletisim" or "takim calismasi" scored
+    nothing for Communication or Teamwork, while its English twin scored both.
+    Rather than translating ~800 dictionary entries into five languages, the
+    model reads meaning and answers in our vocabulary.
+
+    The caller merges the result with the regex extractor rather than replacing
+    it, so a None return (AI off, quota gone, API down, malformed reply) simply
+    leaves the pipeline at its regex-only behaviour.
+
+    Returns:
+        Canonical skill names, or None on any failure. Never raises.
+    """
+    if not is_ai_enabled():
+        return None
+
+    client = _get_client()
+    if client is None:
+        return None
+
+    # The vocabulary is a static prefix, so it sits at the top of the system
+    # prompt where OpenAI's prompt caching can reuse it across requests.
+    system_prompt = (
+        "You extract skills from CVs.\n\n"
+        "VOCABULARY (the ONLY valid answers, copy names character-for-character):\n"
+        + ", ".join(vocabulary)
+        + "\n\nRules:\n"
+        "1. The CV may be in ANY language. Map what it demonstrates onto the "
+        "vocabulary above. A Turkish CV saying 'iletisim becerilerim guclu' "
+        "demonstrates 'Communication'. 'Takim calismasi' is 'Teamwork'.\n"
+        "2. Return a name ONLY if the CV genuinely evidences that skill. Do "
+        "not guess from job titles alone.\n"
+        "3. Never return a name that is not in the vocabulary, character for "
+        "character. Never invent, translate or pluralise names.\n"
+        "4. Prefer precision over recall: a wrong skill corrupts the score."
+    )
+
+    try:
+        response = client.beta.chat.completions.parse(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": cv_text[:12000]},
+            ],
+            response_format=SkillNormalization,
+            temperature=0,
+        )
+        parsed = response.choices[0].message.parsed
+        if parsed is None:
+            logger.warning("Skill normalization returned None; regex only.")
+            return None
+        logger.info(f"AI normalized {len(parsed.skills)} skills from CV text.")
+        return parsed.skills
+    except Exception as e:
+        # Never fail the analysis over this: the regex extractor still runs.
+        logger.warning(f"Skill normalization failed ({e}); regex only.")
+        return None
+
+
 def ai_enhance_analysis(
     cv_text: str,
     rule_based_suggestions: list[dict],
