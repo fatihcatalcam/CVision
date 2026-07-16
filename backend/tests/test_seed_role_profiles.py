@@ -4,7 +4,8 @@
 Guards the 2026-07 upsert conversion. The old implementation deleted every
 role_profile row (and every career_recommendation hanging off it) as soon as
 the seed list grew, which would have wiped the career recommendations of all
-past analyses. Roles must be updated in place so their ids stay stable.
+past analyses. Roles must keep their ids, so rows are never deleted and
+recreated.
 """
 
 import app.main as main_module
@@ -44,7 +45,15 @@ def test_growing_the_seed_adds_the_role_and_keeps_existing_ids(
     # The new role landed.
     assert NEW_ROLE["title"] in after
 
+    # domain drives career matching (c8c1b67) - a silent fallback to the
+    # "Software Engineering" default must not pass this test.
+    inserted = db_session.query(RoleProfile).filter_by(title=NEW_ROLE["title"]).one()
+    assert inserted.domain == "Media & Creative"
+    assert inserted.expected_skills == NEW_ROLE["expected_skills"]
+    assert inserted.expected_keywords == NEW_ROLE["expected_keywords"]
+
     # Every pre-existing role kept its exact id. This is the whole point: the
     # career_recommendations FK points at these ids.
     for title, role_id in before.items():
+        assert title in after, f"seeder deleted {title!r}"
         assert after[title] == role_id, f"id of {title!r} changed: {role_id} -> {after[title]}"

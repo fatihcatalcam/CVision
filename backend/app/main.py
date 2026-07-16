@@ -73,17 +73,18 @@ def seed_skills(db: Session) -> None:
 
 
 def seed_role_profiles(db: Session) -> None:
-    """Upsert role profiles by title. Never deletes.
+    """Add role profiles by title. Never updates or deletes.
 
-    Rows are updated in place rather than recreated, so role_profiles.id stays
-    stable across deploys and career_recommendations.role_profile_id keeps
-    pointing at the right role. The previous implementation deleted every row
-    (plus their career_recommendations) whenever the seed list grew.
+    Rows are inserted only when their title is missing, so role_profiles.id
+    stays stable across deploys and career_recommendations.role_profile_id
+    keeps pointing at the right role. The previous implementation deleted every
+    row (plus their career_recommendations) whenever the seed list grew.
 
-    Titles that disappear from the seed are left alone: deleting them would
-    take their career_recommendations with them. Consequence: a role's title
-    must never be renamed, or the upsert treats it as new and orphans the old
-    row.
+    Field changes to roles that already exist do NOT propagate yet - that lands
+    in the next task. Titles that disappear from the seed are left alone:
+    deleting them would take their career_recommendations with them.
+    Consequence: a role's title must never be renamed, or this treats it as a
+    new role and orphans the old row.
     """
     existing = {p.title: p for p in db.query(RoleProfile).all()}
     added = 0
@@ -120,11 +121,16 @@ async def lifespan(app: FastAPI):
     action = run_migrations(engine)
     logger.info(f"Migrations applied ({action}).")
 
-    # Seed initial data
+    # Seed initial data. Guarded: a seed failure must not take startup down.
+    # Concurrent boots can race on the unique title and one will lose with an
+    # IntegrityError; the winner's row is already there, so the loser just picks
+    # it up next boot. Serving traffic does not depend on a fresh seed.
     db = SessionLocal()
     try:
         seed_skills(db)
         seed_role_profiles(db)
+    except Exception:
+        logger.exception("Seeding failed; continuing startup")
     finally:
         db.close()
 
