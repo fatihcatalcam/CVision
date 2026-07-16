@@ -49,6 +49,17 @@ class Suggestion(BaseModel):
     )
 
 
+# The 13 seeded domains + "Other". detected_domain must be one of these so
+# downstream role-profile filtering can trust the value.
+KNOWN_DOMAINS = [
+    "Software Engineering", "Data & Analytics", "Industrial Engineering",
+    "Mechanical Engineering", "Electrical Engineering", "Civil Engineering",
+    "Business & Management", "Marketing & Communications",
+    "Finance & Accounting", "Healthcare & Biomedical",
+    "Environmental & Energy", "Cybersecurity", "UX / UI Design",
+]
+
+
 class CVAnalysis(BaseModel):
     """Structured output schema for the full CV analysis call."""
 
@@ -58,6 +69,14 @@ class CVAnalysis(BaseModel):
     strengths: list[str] = Field(description="Exactly 3 specific strengths.")
     weaknesses: list[str] = Field(description="Exactly 3 specific weaknesses.")
     ai_suggestions: list[Suggestion] = Field(description="4-6 actionable suggestions.")
+    detected_domain: str = Field(
+        description=(
+            "The professional field this CV actually belongs to, judged from its "
+            "content. Choose EXACTLY one of: "
+            + "; ".join(KNOWN_DOMAINS)
+            + "; Other. Use 'Other' only when none of the listed fields fit."
+        )
+    )
 
 
 class GapItem(BaseModel):
@@ -207,6 +226,13 @@ OUTPUT_RULES = """OUTPUT RULES:
 7. Strengths and weaknesses must each be one tight sentence under 25 words.
 8. Write executive_summary, strengths, weaknesses, and suggestion messages in
    the SAME language as the CV (detected language is provided in the user prompt).
+9. Set detected_domain to the professional field this CV actually belongs to,
+   judged from its content (NOT from the user's selection). Choose EXACTLY one:
+   Software Engineering; Data & Analytics; Industrial Engineering; Mechanical
+   Engineering; Electrical Engineering; Civil Engineering; Business & Management;
+   Marketing & Communications; Finance & Accounting; Healthcare & Biomedical;
+   Environmental & Energy; Cybersecurity; UX / UI Design; Other.
+   Use 'Other' only when none of these fields fit.
 
 EXAMPLE OF A BAD SUGGESTION (do NOT do this):
   {
@@ -562,8 +588,8 @@ def _fallback_json_mode(
                     "content": (
                         user_prompt
                         + "\n\nReturn ONLY a valid JSON object matching the schema "
-                        "(executive_summary, strengths, weaknesses, ai_suggestions). "
-                        "No markdown, no extra text."
+                        "(executive_summary, strengths, weaknesses, ai_suggestions, "
+                        "detected_domain). No markdown, no extra text."
                     ),
                 },
             ],

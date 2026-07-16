@@ -82,6 +82,7 @@ def test_enhance_happy_path_structured(mock_openai_client):
         strengths=["a", "b", "c"],
         weaknesses=["d", "e", "f"],
         ai_suggestions=[],
+        detected_domain="Software Engineering",
     )
     mock_openai_client.beta.chat.completions.parse.return_value = _wrap_parsed(parsed)
 
@@ -89,6 +90,7 @@ def test_enhance_happy_path_structured(mock_openai_client):
 
     assert result["executive_summary"] == "Strong backend engineer."
     assert result["strengths"] == ["a", "b", "c"]
+    assert result["detected_domain"] == "Software Engineering"
 
 
 def test_enhance_falls_back_to_json_mode(mock_openai_client):

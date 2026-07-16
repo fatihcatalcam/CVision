@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.models.cv import CV
 from app.models.analysis import AnalysisResult
+from app.models.career_recommendation import CareerRecommendation
 from app.models.suggestion import Suggestion
 from app.models.extracted_skill import ExtractedSkill
 from app.models.skill import Skill
@@ -19,7 +20,7 @@ from app.analysis.engine import AnalysisEngine
 from app.analysis.base_analyzer import AnalysisContext
 from app.analysis.layout_xray import analyze_layout
 from app.services.recommendation_service import RecommendationService
-from app.services.ai_service import ai_enhance_analysis, is_ai_enabled
+from app.services.ai_service import ai_enhance_analysis, is_ai_enabled, KNOWN_DOMAINS
 
 logger = logging.getLogger("cvision.services.analysis")
 
@@ -121,7 +122,7 @@ class AnalysisService:
             layout_xray = {"available": False, "reason": "plain_text"}
 
         # Run the analysis engine
-        engine = AnalysisEngine(skills_list, role_profiles)
+        engine = AnalysisEngine(skills_list, role_profiles, cv.target_domain)
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 
         # Persist analysis result
@@ -232,12 +233,38 @@ class AnalysisService:
                     # Store AI suggestions separately (they include rewrite_hint)
                     analysis.ai_suggestions = ai_result.get("ai_suggestions", [])
                     analysis.ai_enhanced = 1
-                    
+
                     db.commit()
                     logger.info(
                         f"AI enhancement complete for analysis {analysis.id}: "
                         f"{len(analysis.ai_suggestions)} AI suggestions stored"
                     )
+
+                    # The "Other (AI auto-detect)" promise: when the user gave
+                    # no real target domain, use the AI-detected field to
+                    # regenerate career recommendations within that domain
+                    # instead of matching against every profile in the system.
+                    detected = (ai_result.get("detected_domain") or "").strip()
+                    if (
+                        (not cv.target_domain or cv.target_domain == "Other")
+                        and detected in KNOWN_DOMAINS
+                    ):
+                        logger.info(
+                            f"AI detected domain '{detected}' for analysis "
+                            f"{analysis.id}; regenerating recommendations."
+                        )
+                        db.query(CareerRecommendation).filter(
+                            CareerRecommendation.analysis_id == analysis.id
+                        ).delete(synchronize_session="fetch")
+                        db.flush()
+                        RecommendationService.generate_recommendations(
+                            analysis=analysis,
+                            extracted_skills_list=context.extracted_skills,
+                            keyword_matches=context.keyword_matches,
+                            db=db,
+                            target_domain=detected,
+                        )
+                        db.commit()
                 else:
                     logger.warning(f"AI returned no data for analysis {analysis.id}, keeping rule-based output")
                     
