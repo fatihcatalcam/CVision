@@ -73,41 +73,66 @@ def seed_skills(db: Session) -> None:
 
 
 def seed_role_profiles(db: Session) -> None:
-    """Populate the role_profiles table. Re-seeds if domain info is missing."""
-    existing = db.query(RoleProfile).all()
+    """Upsert role profiles by title. Never deletes.
 
-    # Check if any existing profile is missing domain (i.e. old data)
-    needs_reseed = any(not getattr(p, "domain", None) or p.domain == "Software Engineering"
-                       for p in existing) and len(existing) < len(ROLE_PROFILES_DATA)
+    Existing roles are updated in place rather than recreated, so
+    role_profiles.id stays stable across deploys and
+    career_recommendations.role_profile_id keeps pointing at the right role.
+    The original implementation deleted every row (plus their
+    career_recommendations) whenever the seed list grew.
 
-    if existing and not needs_reseed:
-        logger.info(f"Role profiles table already has {len(existing)} entries, skipping seed.")
-        return
-
-    if existing and needs_reseed:
-        logger.info("Re-seeding role profiles with domain data...")
-        # Delete dependent career_recommendations first to avoid FK constraint
-        from app.models.career_recommendation import CareerRecommendation
-        profile_ids = [p.id for p in existing]
-        db.query(CareerRecommendation).filter(
-            CareerRecommendation.role_profile_id.in_(profile_ids)
-        ).delete(synchronize_session="fetch")
-        for p in existing:
-            db.delete(p)
-        db.flush()
+    Titles that disappear from the seed are left alone: deleting them would
+    take their career_recommendations with them. Consequence: a role's title
+    must never be renamed, or this treats it as a new role and orphans the old
+    row.
+    """
+    existing = {p.title: p for p in db.query(RoleProfile).all()}
+    added = 0
+    updated = 0
 
     for profile_data in ROLE_PROFILES_DATA:
-        profile = RoleProfile(
-            title=profile_data["title"],
-            description=profile_data["description"],
-            domain=profile_data.get("domain", "Software Engineering"),
-            expected_keywords=profile_data["expected_keywords"],
-            expected_skills=profile_data["expected_skills"],
-        )
-        db.add(profile)
+        domain = profile_data.get("domain", "Software Engineering")
+        profile = existing.get(profile_data["title"])
 
-    db.commit()
-    logger.info(f"Seeded {len(ROLE_PROFILES_DATA)} role profiles into the database.")
+        if profile is None:
+            new_profile = RoleProfile(
+                title=profile_data["title"],
+                description=profile_data["description"],
+                domain=domain,
+                expected_keywords=profile_data["expected_keywords"],
+                expected_skills=profile_data["expected_skills"],
+            )
+            db.add(new_profile)
+            # Keep `existing` authoritative: a duplicate title later in the seed
+            # list must take the update path, not INSERT a second row. Without
+            # this, one duplicated title fails the whole commit and nothing
+            # seeds at all.
+            existing[profile_data["title"]] = new_profile
+            added += 1
+            continue
+
+        # Only write when something actually changed: this runs on every boot,
+        # and the seed list is heading for ~180 entries.
+        if (
+            profile.description != profile_data["description"]
+            or profile.domain != domain
+            or profile.expected_keywords != profile_data["expected_keywords"]
+            or profile.expected_skills != profile_data["expected_skills"]
+        ):
+            profile.description = profile_data["description"]
+            profile.domain = domain
+            profile.expected_keywords = profile_data["expected_keywords"]
+            profile.expected_skills = profile_data["expected_skills"]
+            updated += 1
+
+    if added or updated:
+        db.commit()
+        logger.info(
+            f"Role profiles synced: {added} added, {updated} updated "
+            f"(total in seed: {len(ROLE_PROFILES_DATA)})."
+        )
+    else:
+        logger.info(f"Role profiles table already up to date ({len(existing)} entries).")
 
 
 @asynccontextmanager
@@ -124,11 +149,16 @@ async def lifespan(app: FastAPI):
     action = run_migrations(engine)
     logger.info(f"Migrations applied ({action}).")
 
-    # Seed initial data
+    # Seed initial data. Guarded: a seed failure must not take startup down.
+    # Concurrent boots can race on the unique title and one will lose with an
+    # IntegrityError; the winner's row is already there, so the loser just picks
+    # it up next boot. Serving traffic does not depend on a fresh seed.
     db = SessionLocal()
     try:
         seed_skills(db)
         seed_role_profiles(db)
+    except Exception:
+        logger.exception("Seeding failed; continuing startup")
     finally:
         db.close()
 
