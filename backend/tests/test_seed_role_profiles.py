@@ -159,3 +159,45 @@ def test_changed_seed_fields_are_updated_in_place(db_session, monkeypatch):
     assert role_after.expected_keywords == ["workday", "payroll", "recruiting"]
     assert role_after.description == "Updated HR description."
     assert role_after.domain == "Data & Analytics"
+
+
+def test_role_dropped_from_seed_is_left_alone(db_session, monkeypatch):
+    """Roles removed from the seed keep their row.
+
+    Deleting them would cascade to the career_recommendations of past
+    analyses. An orphan row is the cheaper mistake; the taxonomy only grows.
+    """
+    kept = [d for d in ROLE_PROFILES_DATA if d["title"] != "Accountant"]
+    assert len(kept) == len(ROLE_PROFILES_DATA) - 1, "Accountant should be in the seed"
+    monkeypatch.setattr(main_module, "ROLE_PROFILES_DATA", kept)
+
+    seed_role_profiles(db_session)
+    db_session.expire_all()
+
+    survivor = db_session.query(RoleProfile).filter_by(title="Accountant").one_or_none()
+    assert survivor is not None, "seeder must never delete roles"
+
+
+def test_seeding_twice_changes_nothing(db_session):
+    """The seeder runs on every boot; a second pass must be a no-op.
+
+    A regression that re-inserted on each boot would only surface in prod as a
+    unique-constraint crash.
+    """
+    def snapshot():
+        # expire_on_commit=False (conftest.py:121): without this the rows come
+        # back from the identity map and would look unchanged regardless.
+        db_session.expire_all()
+        return sorted(
+            (p.id, p.title, p.domain, tuple(p.expected_skills or []))
+            for p in db_session.query(RoleProfile).all()
+        )
+
+    seed_role_profiles(db_session)
+    first = snapshot()
+
+    seed_role_profiles(db_session)
+    second = snapshot()
+
+    assert first == second
+    assert len(first) == len(ROLE_PROFILES_DATA)
