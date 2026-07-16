@@ -1,11 +1,37 @@
 """
 Recommender logic - calculates career match scores based on CV analysis.
 Matches extracted skills and keywords against role profiles.
+
+Anti-noise (2026-07): generic soft skills carry half weight, the skill
+denominator reflects the real expected list, and matches below the display
+threshold are never returned. Before this, a cinema graduate with zero
+recognized skills was shown "Mobile App Developer" as a career match off a
+single stray 'app' keyword.
 """
 
 import logging
 
+from app.seed.skills_data import SKILLS_DATA
+
 logger = logging.getLogger("cvision.recommendation.recommender")
+
+# Matches below this score are noise, not career advice - never display them.
+MIN_DISPLAY_SCORE = 30.0
+
+# Generic transferable skills (soft_skill category in the seed data). They
+# appear on almost every CV, so they count at half weight when matching a
+# role - "Teamwork" must not equal "Swift".
+_SOFT_SKILLS = {
+    s["name"].lower() for s in SKILLS_DATA if s["category"] == "soft_skill"
+}
+_SOFT_WEIGHT = 0.5
+# Weighted denominator cap: expecting more than this much skill mass no
+# longer lowers a candidate's ratio (keeps long expected lists realistic).
+_SKILL_DENOMINATOR_CAP = 8.0
+
+
+def _skill_weight(name: str) -> float:
+    return _SOFT_WEIGHT if name.lower() in _SOFT_SKILLS else 1.0
 
 
 class CareerRecommender:
@@ -41,17 +67,22 @@ class CareerRecommender:
             role_id = profile["id"]
             title = profile["title"]
 
-            # 1. Skill Match Score (weight: 60%)
+            # 1. Skill Match Score (weight: 60%) - weighted by skill type:
+            # hard skills full weight, generic soft skills half, so an
+            # unrelated CV can't ride "Teamwork, Communication" into a match.
             expected_skills = profile.get("expected_skills", [])
             expected_skills_lower = [s.lower() for s in expected_skills]
 
             if expected_skills_lower:
-                # Cap the expected denominator to 6 skills realistically
-                required_skills_count = min(len(expected_skills_lower), 6)
                 matched_skills = [
                     s for s in expected_skills_lower if s in self._extracted_skills
                 ]
-                skill_score = min((len(matched_skills) / required_skills_count) * 100.0, 100.0)
+                matched_weight = sum(_skill_weight(s) for s in matched_skills)
+                expected_weight = min(
+                    sum(_skill_weight(s) for s in expected_skills_lower),
+                    _SKILL_DENOMINATOR_CAP,
+                )
+                skill_score = min((matched_weight / expected_weight) * 100.0, 100.0)
             else:
                 skill_score = 0.0
                 matched_skills = []
@@ -103,6 +134,7 @@ class CareerRecommender:
                 "explanation": explanation.strip()
             })
 
-        # Sort by score descending and return top_n
+        # Sort by score descending; never surface noise-level matches.
         results.sort(key=lambda x: x["score"], reverse=True)
+        results = [r for r in results if r["score"] >= MIN_DISPLAY_SCORE]
         return results[:top_n]

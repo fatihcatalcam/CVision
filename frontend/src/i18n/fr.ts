@@ -659,6 +659,7 @@ const fr = {
     viewInCv: 'Voir dans le CV ({{count}})',
     careerMatches: 'Profils de carrière correspondants',
     careerMatchesDesc: 'Comparaison de vos compétences avec notre base de rôles',
+    noRoleMatch: "Votre CV n'a pas montré de forte correspondance avec nos profils de rôles. Cela peut simplement signifier que votre domaine n'est pas encore bien couvert par notre base — cela ne reflète pas la qualité de votre CV.",
     extractedSkills: 'Compétences détectées',
   },
   try: {

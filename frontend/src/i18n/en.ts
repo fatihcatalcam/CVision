@@ -658,6 +658,7 @@ const en = {
     viewInCv: 'View in CV ({{count}})',
     careerMatches: 'Career Profile Matches',
     careerMatchesDesc: 'Comparing extracted skills against our role database',
+    noRoleMatch: "Your CV didn't show a strong match with any of our role profiles. This can simply mean your field isn't fully covered by our role database yet — it doesn't reflect the quality of your CV.",
     extractedSkills: 'Extracted Skills',
   },
   try: {

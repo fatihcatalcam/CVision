@@ -658,6 +658,7 @@ const tr = {
     viewInCv: 'CV\'de Gör ({{count}})',
     careerMatches: 'Kariyer Profili Eşleşmeleri',
     careerMatchesDesc: 'Çıkarılan beceriler rol veritabanımızla karşılaştırılıyor',
+    noRoleMatch: "CV'n rol profillerimizle güçlü bir eşleşme göstermedi. Bu, alanının rol veritabanımızda henüz tam kapsanmadığı anlamına gelebilir — CV'nin kalitesiyle ilgili bir yargı değildir.",
     extractedSkills: 'Çıkarılan Beceriler',
   },
   try: {

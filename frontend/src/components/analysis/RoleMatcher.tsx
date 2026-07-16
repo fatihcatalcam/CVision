@@ -1,4 +1,5 @@
-import { Briefcase } from 'lucide-react';
+import { Briefcase, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface CareerRecommendation {
   role_title: string;
@@ -11,8 +12,18 @@ interface RoleMatcherProps {
 }
 
 export function RoleMatcher({ recommendations }: RoleMatcherProps) {
+  const { t } = useTranslation();
+
   if (!recommendations || recommendations.length === 0) {
-    return <p className="text-[var(--color-muted)] text-sm mb-4">No matching roles found in the database.</p>;
+    // Honest empty state: weak matches are filtered server-side rather than
+    // shown as absurd "career advice" (e.g. Mobile App Developer for a
+    // cinema graduate off one stray keyword).
+    return (
+      <div className="flex items-start gap-2.5 p-4 rounded-xl bg-[#F7F6F3] dark:bg-[#1c1c1a] border border-[var(--color-card-border)] mb-4">
+        <Info className="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-muted)]" />
+        <p className="text-[var(--color-muted)] text-sm leading-relaxed">{t('analysis.noRoleMatch')}</p>
+      </div>
+    );
   }
 
   // Sort by match score descending

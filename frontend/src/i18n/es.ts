@@ -659,6 +659,7 @@ const es = {
     viewInCv: 'Ver en el CV ({{count}})',
     careerMatches: 'Perfiles profesionales compatibles',
     careerMatchesDesc: 'Comparando tus habilidades con nuestra base de roles',
+    noRoleMatch: "Tu CV no mostró una coincidencia fuerte con nuestros perfiles de rol. Esto puede significar simplemente que tu campo aún no está bien cubierto en nuestra base de datos — no refleja la calidad de tu CV.",
     extractedSkills: 'Habilidades detectadas',
   },
   try: {

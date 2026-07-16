@@ -659,6 +659,7 @@ const de = {
     viewInCv: 'Im CV ansehen ({{count}})',
     careerMatches: 'Passende Karriereprofile',
     careerMatchesDesc: 'Abgleich deiner Fähigkeiten mit unserer Rollendatenbank',
+    noRoleMatch: "Dein Lebenslauf zeigte keine starke Übereinstimmung mit unseren Rollenprofilen. Das kann einfach bedeuten, dass dein Fachgebiet in unserer Rollendatenbank noch nicht voll abgedeckt ist — es sagt nichts über die Qualität deines Lebenslaufs aus.",
     extractedSkills: 'Erkannte Fähigkeiten',
   },
   try: {
