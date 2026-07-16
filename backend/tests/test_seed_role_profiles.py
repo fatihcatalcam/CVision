@@ -40,6 +40,11 @@ def test_growing_the_seed_adds_the_role_and_keeps_existing_ids(
 
     seed_role_profiles(db_session)
 
+    # expire_on_commit=False (conftest.py:121) means the queries below would
+    # otherwise hand back identity-mapped objects unrefreshed, and the value
+    # asserts would read memory instead of the rows. Force a real reload.
+    db_session.expire_all()
+
     after = _titles_to_ids(db_session)
 
     # The new role landed.
@@ -91,6 +96,14 @@ def test_growing_the_seed_preserves_existing_career_recommendations(
         main_module, "ROLE_PROFILES_DATA", list(ROLE_PROFILES_DATA) + [NEW_ROLE]
     )
     seed_role_profiles(db_session)
+
+    # expire_on_commit=False (conftest.py:121) means the query below would
+    # otherwise hand back the identity-mapped `rec` unrefreshed, and the value
+    # asserts would read memory instead of the row. Force a real reload.
+    db_session.expire_all()
+
+    # Guard against passing vacuously: the growth path must actually have run.
+    assert db_session.query(RoleProfile).filter_by(title=NEW_ROLE["title"]).count() == 1
 
     surviving = db_session.query(CareerRecommendation).filter_by(id=rec_id).one_or_none()
     assert surviving is not None, "career recommendation was deleted by the seeder"
