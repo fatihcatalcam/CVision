@@ -172,6 +172,32 @@ def test_two_column_robot_lines_actually_interleave(tmp_path):
     assert any("SKILLS" in l["t"] and "EXPERIENCE" in l["t"] for l in mixed)
 
 
+def test_bulleted_single_column_has_zero_findings(tmp_path):
+    """False-positive guard: a bullet glyph column creates a narrow empty
+    strip next to the text — that must NOT read as a two-column layout."""
+    doc = fitz.open()
+    page = doc.new_page(width=A4_W, height=A4_H)
+    y = 90
+    page.insert_text((50, y), "John Smith - john@example.com", fontsize=11)
+    y += 30
+    for line in ["Developed backend services with Python and SQL databases",
+                 "Led a team of four engineers across two product areas",
+                 "Implemented CI pipelines and automated deployment flows",
+                 "Optimized query performance for the reporting subsystem",
+                 "Mentored junior developers and ran code review sessions",
+                 "Designed REST APIs consumed by web and mobile clients",
+                 "Maintained monitoring dashboards and on-call runbooks",
+                 "Reduced infrastructure cost by consolidating services",
+                 "Migrated legacy jobs to an event-driven architecture",
+                 "Wrote integration tests covering critical user flows"]:
+        page.insert_text((50, y), "•", fontsize=11)       # bullet column
+        page.insert_text((70, y), line, fontsize=11)            # text column
+        y += 28
+    path = _save(doc, tmp_path, "bullets.pdf")
+    result = analyze_layout(path)
+    assert result["findings"] == []
+
+
 def test_asymmetric_two_column_flags_column_interleave(tmp_path):
     """Founder-reported false negative: sidebar + wide main column starting
     before the page center must still be detected as multi-column."""

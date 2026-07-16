@@ -23,16 +23,20 @@ import fitz  # PyMuPDF
 
 logger = logging.getLogger("cvision.analysis.layout_xray")
 
-# Both sides of a candidate gutter must stack at least this fraction of page
-# height in text blocks before we call the page multi-column.
-_COLUMN_MIN_COVERAGE = 0.20
-# Blocks straddling the gutter (full-width headers/footers within the body)
-# are tolerated up to this fraction of page height; more means the "gutter"
-# cuts through real paragraphs, i.e. the page is single-column.
-_COLUMN_MAX_CROSSING = 0.05
-# The resulting split line must land in the central span of the page.
+# Both sides of a gutter must contain at least this many distinct text lines
+# before we call the page multi-column.
+_COLUMN_MIN_LINES = 8
+# Each side must spread at least this many points horizontally — rejects
+# bullet-glyph columns (~6pt wide) while allowing narrow single-word skill
+# sidebars (~35pt+).
+_COLUMN_MIN_SIDE_SPAN_PT = 24.0
+# A gutter is a vertical strip at least this wide (pt) that no word touches.
+_GUTTER_MIN_WIDTH = 6.0
+# The gutter must land in the central span of the page.
 _GUTTER_SPLIT_MIN = 0.15
 _GUTTER_SPLIT_MAX = 0.85
+# Occupancy histogram resolution (pt per bucket).
+_GUTTER_RESOLUTION = 2.0
 # Images smaller than this fraction of the page area (icons, logos) are ignored.
 _IMAGE_MIN_AREA = 0.03
 # Top/bottom bands treated as header/footer.
@@ -67,12 +71,13 @@ def analyze_layout(pdf_path: Path) -> dict:
                 continue
             blocks = page.get_text("blocks")
             text_blocks = [b for b in blocks if b[6] == 0 and b[4].strip()]
+            words = page.get_text("words")
 
-            split_x = _column_split(text_blocks, w, h)
+            split_x = _column_split(words, w, h)
             if split_x is not None:
                 findings.append(_finding(
                     "column_interleave", "high", page_num,
-                    _cluster_bbox(text_blocks, split_x, w, h), w, h,
+                    _cluster_bbox(words, split_x, w, h), w, h,
                 ))
 
             for rect in _image_rects(page):
@@ -89,7 +94,7 @@ def analyze_layout(pdf_path: Path) -> dict:
                     "header_footer_content", "info", page_num, edge_hit, w, h,
                 ))
 
-            robot_lines.extend(_naive_lines(page, split_x))
+            robot_lines.extend(_naive_lines(words, split_x))
 
         return {
             "available": True,
@@ -132,58 +137,75 @@ def _finding(ftype: str, severity: str, page: int, bbox, w: float, h: float) -> 
     }
 
 
-def _column_split(text_blocks: list, w: float, h: float) -> float | None:
+def _column_split(words: list, w: float, h: float) -> float | None:
     """Return the x of the vertical whitespace gutter splitting two
     side-by-side columns, or None for single-column pages.
 
-    Gutter search instead of a fixed center split: real CV templates are
-    usually ASYMMETRIC (narrow sidebar + wide main column that starts left
-    of the page center), which a center-based heuristic misses. For each
-    candidate x (right edges of blocks in the central span), the page is
-    multi-column when enough text stacks entirely on BOTH sides while almost
-    nothing straddles the line.
+    WORD-based, not block-based: PyMuPDF merges text blocks ACROSS a narrow
+    gutter on some real templates (founder's CV), which made every merged
+    block look like it straddled the split and killed detection. Word boxes
+    are atomic and never span columns.
+
+    Method: build an x-occupancy histogram of all mid-band words, find
+    vertical strips no word touches, and accept a strip as a column gutter
+    when it is wide enough, sits in the central span, and BOTH sides have
+    enough distinct text lines with real horizontal spread (bullet/label
+    glyph columns are rejected by the spread check).
     """
-    mid_band = [b for b in text_blocks
-                if b[1] > _EDGE_BAND * h and b[3] < (1 - _EDGE_BAND) * h]
-    if not mid_band:
+    mid = [t for t in words
+           if t[1] > _EDGE_BAND * h and t[3] < (1 - _EDGE_BAND) * h]
+    if not mid:
         return None
 
-    candidates = sorted({b[2] for b in mid_band})
+    res = _GUTTER_RESOLUTION
+    n = int(w / res) + 2
+    occupied = [False] * n
+    for t in mid:
+        i0 = max(int(t[0] / res), 0)
+        i1 = min(int(t[2] / res) + 1, n)
+        for i in range(i0, i1):
+            occupied[i] = True
 
-    best: tuple[float, float] | None = None  # (score, split_x)
-    for x in candidates:
-        left_h = right_h = crossing_h = 0.0
-        right_min_x0 = w
-        for b in mid_band:
-            bh = b[3] - b[1]
-            if b[2] <= x + 1:
-                left_h += bh
-            elif b[0] >= x - 1:
-                right_h += bh
-                right_min_x0 = min(right_min_x0, b[0])
-            else:
-                crossing_h += bh
-        if (left_h >= _COLUMN_MIN_COVERAGE * h
-                and right_h >= _COLUMN_MIN_COVERAGE * h
-                and crossing_h <= _COLUMN_MAX_CROSSING * h):
-            # Split in the middle of the actual whitespace gap.
-            split = (x + right_min_x0) / 2
-            if not (_GUTTER_SPLIT_MIN * w <= split <= _GUTTER_SPLIT_MAX * w):
-                continue
-            score = min(left_h, right_h)
-            if best is None or score > best[0]:
-                best = (score, split)
+    lo = int(_GUTTER_SPLIT_MIN * w / res)
+    hi = int(_GUTTER_SPLIT_MAX * w / res)
 
+    best: tuple[int, float] | None = None  # (score, split_x)
+    i = lo
+    while i <= hi:
+        if occupied[i]:
+            i += 1
+            continue
+        j = i
+        while j <= hi and not occupied[j]:
+            j += 1
+        strip_w = (j - i) * res
+        split = ((i + j) / 2) * res
+        if strip_w >= _GUTTER_MIN_WIDTH:
+            left = [t for t in mid if t[2] <= split]
+            right = [t for t in mid if t[0] >= split]
+            if left and right:
+                left_lines = {round(t[1]) for t in left}
+                right_lines = {round(t[1]) for t in right}
+                left_span = max(t[2] for t in left) - min(t[0] for t in left)
+                right_span = max(t[2] for t in right) - min(t[0] for t in right)
+                if (len(left_lines) >= _COLUMN_MIN_LINES
+                        and len(right_lines) >= _COLUMN_MIN_LINES
+                        and left_span >= _COLUMN_MIN_SIDE_SPAN_PT
+                        and right_span >= _COLUMN_MIN_SIDE_SPAN_PT):
+                    score = min(len(left_lines), len(right_lines))
+                    if best is None or score > best[0]:
+                        best = (score, split)
+        i = j
     return best[1] if best else None
 
 
-def _cluster_bbox(text_blocks: list, split_x: float, w: float, h: float):
+def _cluster_bbox(words: list, split_x: float, w: float, h: float):
     """Bounding box of the left column cluster - v2 overlay data."""
-    side = [b for b in text_blocks if (b[0] + b[2]) / 2 < split_x]
+    side = [t for t in words if (t[0] + t[2]) / 2 < split_x]
     if not side:
         return (0, 0, split_x, h)
-    return (min(b[0] for b in side), min(b[1] for b in side),
-            max(b[2] for b in side), max(b[3] for b in side))
+    return (min(t[0] for t in side), min(t[1] for t in side),
+            max(t[2] for t in side), max(t[3] for t in side))
 
 
 def _edge_contact_bbox(text_blocks: list, w: float, h: float):
@@ -196,7 +218,7 @@ def _edge_contact_bbox(text_blocks: list, w: float, h: float):
     return None
 
 
-def _naive_lines(page, split_x: float | None) -> list[dict]:
+def _naive_lines(words: list, split_x: float | None) -> list[dict]:
     """Simulate a dumb parser: read words strictly top-to-bottom then
     left-to-right across the FULL page width. On multi-column pages this
     interleaves the columns - which is exactly the damage we surface.
@@ -204,7 +226,6 @@ def _naive_lines(page, split_x: float | None) -> list[dict]:
     A line is "mixed" (m=True) when the page is multi-column and the line
     pulls words from both sides of the split.
     """
-    words = page.get_text("words")  # (x0, y0, x1, y1, word, ...)
     if not words:
         return []
     words = sorted(words, key=lambda t: (t[1], t[0]))
