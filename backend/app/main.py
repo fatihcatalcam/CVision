@@ -73,36 +73,58 @@ def seed_skills(db: Session) -> None:
 
 
 def seed_role_profiles(db: Session) -> None:
-    """Add role profiles by title. Never updates or deletes.
+    """Upsert role profiles by title. Never deletes.
 
-    Rows are inserted only when their title is missing, so role_profiles.id
-    stays stable across deploys and career_recommendations.role_profile_id
-    keeps pointing at the right role. The previous implementation deleted every
-    row (plus their career_recommendations) whenever the seed list grew.
+    Existing roles are updated in place rather than recreated, so
+    role_profiles.id stays stable across deploys and
+    career_recommendations.role_profile_id keeps pointing at the right role.
+    The original implementation deleted every row (plus their
+    career_recommendations) whenever the seed list grew.
 
-    Field changes to roles that already exist do NOT propagate yet - that lands
-    in the next task. Titles that disappear from the seed are left alone:
-    deleting them would take their career_recommendations with them.
-    Consequence: a role's title must never be renamed, or this treats it as a
-    new role and orphans the old row.
+    Titles that disappear from the seed are left alone: deleting them would
+    take their career_recommendations with them. Consequence: a role's title
+    must never be renamed, or this treats it as a new role and orphans the old
+    row.
     """
     existing = {p.title: p for p in db.query(RoleProfile).all()}
     added = 0
+    updated = 0
 
     for profile_data in ROLE_PROFILES_DATA:
-        if profile_data["title"] not in existing:
+        domain = profile_data.get("domain", "Software Engineering")
+        profile = existing.get(profile_data["title"])
+
+        if profile is None:
             db.add(RoleProfile(
                 title=profile_data["title"],
                 description=profile_data["description"],
-                domain=profile_data.get("domain", "Software Engineering"),
+                domain=domain,
                 expected_keywords=profile_data["expected_keywords"],
                 expected_skills=profile_data["expected_skills"],
             ))
             added += 1
+            continue
 
-    if added > 0:
+        # Only write when something actually changed: this runs on every boot,
+        # and the seed list is heading for ~180 entries.
+        if (
+            profile.description != profile_data["description"]
+            or profile.domain != domain
+            or profile.expected_keywords != profile_data["expected_keywords"]
+            or profile.expected_skills != profile_data["expected_skills"]
+        ):
+            profile.description = profile_data["description"]
+            profile.domain = domain
+            profile.expected_keywords = profile_data["expected_keywords"]
+            profile.expected_skills = profile_data["expected_skills"]
+            updated += 1
+
+    if added or updated:
         db.commit()
-        logger.info(f"Added {added} new role profiles (total in seed: {len(ROLE_PROFILES_DATA)}).")
+        logger.info(
+            f"Role profiles synced: {added} added, {updated} updated "
+            f"(total in seed: {len(ROLE_PROFILES_DATA)})."
+        )
     else:
         logger.info(f"Role profiles table already up to date ({len(existing)} entries).")
 

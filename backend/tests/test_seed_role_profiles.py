@@ -111,3 +111,30 @@ def test_growing_the_seed_preserves_existing_career_recommendations(
     assert surviving.match_score == 65.5
     # And it still resolves to the same role.
     assert surviving.role_profile.title == "Backend Developer"
+
+
+def test_changed_seed_fields_are_updated_in_place(db_session, monkeypatch):
+    role_before = db_session.query(RoleProfile).filter_by(
+        title="Human Resources Specialist"
+    ).one()
+    original_id = role_before.id
+
+    # Simulate a later phase giving this role real discriminating skills.
+    patched = []
+    for data in ROLE_PROFILES_DATA:
+        if data["title"] == "Human Resources Specialist":
+            data = dict(data, expected_skills=["Workday", "SuccessFactors", "Payroll"])
+        patched.append(data)
+    monkeypatch.setattr(main_module, "ROLE_PROFILES_DATA", patched)
+
+    seed_role_profiles(db_session)
+
+    # expire_on_commit=False (conftest.py:121) would otherwise hand back the
+    # unrefreshed identity-mapped object and this would assert against memory.
+    db_session.expire_all()
+
+    role_after = db_session.query(RoleProfile).filter_by(
+        title="Human Resources Specialist"
+    ).one()
+    assert role_after.id == original_id, "update must not recreate the row"
+    assert role_after.expected_skills == ["Workday", "SuccessFactors", "Payroll"]
