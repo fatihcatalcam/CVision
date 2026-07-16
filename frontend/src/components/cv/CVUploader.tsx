@@ -28,6 +28,7 @@ const DOMAIN_VALUES = [
   { value: 'Healthcare & Clinical', key: 'clinical', emoji: '🩺' },
   { value: 'Sales & Business Development', key: 'sales', emoji: '🤝' },
   { value: 'Hospitality & Tourism', key: 'hospitality', emoji: '🏨' },
+  { value: 'Retail & Customer Service', key: 'retail', emoji: '🛍️' },
   { value: 'Architecture & Design', key: 'architecture', emoji: '📐' },
   { value: 'Skilled Trades & Technical', key: 'trades', emoji: '🔧' },
   { value: 'Public Sector & NGO', key: 'publicSector', emoji: '🏛️' },

@@ -193,6 +193,7 @@ const tr = {
       clinical: 'Sağlık & Klinik',
       sales: 'Satış & İş Geliştirme',
       hospitality: 'Turizm & Otelcilik',
+      retail: 'Perakende & Müşteri Hizmetleri',
       architecture: 'Mimarlık & Tasarım',
       trades: 'Teknik & Zanaat',
       publicSector: 'Kamu & STK',

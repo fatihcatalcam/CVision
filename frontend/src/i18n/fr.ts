@@ -193,6 +193,7 @@ const fr = {
       clinical: 'Santé & Clinique',
       sales: 'Vente & Développement commercial',
       hospitality: 'Hôtellerie & Tourisme',
+      retail: 'Commerce & Service client',
       architecture: 'Architecture & Design',
       trades: 'Métiers techniques',
       publicSector: 'Secteur public & ONG',

@@ -193,6 +193,7 @@ const de = {
       clinical: 'Gesundheit & Klinik',
       sales: 'Vertrieb & Geschäftsentwicklung',
       hospitality: 'Hotellerie & Tourismus',
+      retail: 'Einzelhandel & Kundenservice',
       architecture: 'Architektur & Design',
       trades: 'Handwerk & Technik',
       publicSector: 'Öffentlicher Sektor & NGO',

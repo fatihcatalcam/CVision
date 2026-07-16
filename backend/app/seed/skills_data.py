@@ -528,4 +528,40 @@ SKILLS_DATA: list[dict[str, str]] = [
     {"name": "Composition", "category": "media"},
     {"name": "Creativity", "category": "soft_skill"},
     {"name": "Document Management", "category": "legal"},
+
+    # ---- Frontline service & retail ----
+    # The hospitality domain shipped with only management roles - hotel
+    # manager, chef, F&B manager. Waiters, commis, baristas, cashiers and shop
+    # floor staff are a far larger share of the workforce and exactly the people
+    # a free CV tool serves.
+    {"name": "POS Systems", "category": "service"},
+    {"name": "Cash Handling", "category": "service"},
+    {"name": "Customer Service", "category": "service"},
+    {"name": "Complaint Handling", "category": "service"},
+    {"name": "Table Service", "category": "service"},
+    {"name": "Order Taking", "category": "service"},
+    {"name": "Menu Knowledge", "category": "service"},
+    {"name": "Wine Service", "category": "service"},
+    {"name": "Table Setting", "category": "service"},
+    {"name": "Tray Service", "category": "service"},
+    {"name": "Barista Skills", "category": "service"},
+    {"name": "Espresso Preparation", "category": "service"},
+    {"name": "Latte Art", "category": "service"},
+    {"name": "Coffee Brewing", "category": "service"},
+    {"name": "Bartending", "category": "service"},
+    {"name": "Cocktail Preparation", "category": "service"},
+    {"name": "Mixology", "category": "service"},
+    {"name": "Room Inspection", "category": "service"},
+    {"name": "Cleaning Standards", "category": "service"},
+    {"name": "Laundry Operations", "category": "service"},
+    {"name": "Product Knowledge", "category": "retail"},
+    {"name": "Visual Merchandising", "category": "retail"},
+    {"name": "Stock Control", "category": "retail"},
+    {"name": "Loss Prevention", "category": "retail"},
+    {"name": "Inventory Management", "category": "retail"},
+    {"name": "Staff Scheduling", "category": "retail"},
+    {"name": "Ticketing System", "category": "retail"},
+    {"name": "Zendesk", "category": "retail"},
+    {"name": "Live Chat Support", "category": "retail"},
+    {"name": "Call Handling", "category": "retail"},
 ]

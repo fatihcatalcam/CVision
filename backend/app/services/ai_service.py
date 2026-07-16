@@ -65,6 +65,7 @@ KNOWN_DOMAINS = [
     "Healthcare & Clinical", "Sales & Business Development",
     "Hospitality & Tourism", "Architecture & Design",
     "Skilled Trades & Technical", "Public Sector & NGO",
+    "Retail & Customer Service",
 ]
 
 
@@ -256,6 +257,16 @@ DOMAIN_PERSONAS: dict[str, str] = {
         "programme scale and budget, donor and funder experience, monitoring and "
         "evaluation rigour, beneficiary outcomes, and compliance and reporting "
         "discipline. Impact numbers matter more than mission statements."
+    ),
+    "retail_&_customer_service": (
+        "You are a retail area manager who hires shop-floor and contact-centre "
+        "staff. You evaluate reliability and tenure first - churn is the industry's "
+        "real problem - then customer-facing volume (covers, calls, transactions), "
+        "systems used, upsell or satisfaction figures, and any responsibility held "
+        "such as keyholding, cash reconciliation or training new starters. Be "
+        "encouraging: these candidates are often early-career and their CVs are "
+        "short by circumstance, not by carelessness. Push them to quantify what "
+        "they already did rather than implying they should have done more."
     ),
 }
 

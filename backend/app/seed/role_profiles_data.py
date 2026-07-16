@@ -1260,4 +1260,122 @@ ROLE_PROFILES_DATA: list[dict] = [
             "Public Relations", "Media Relations", "Press Release", "Crisis Communication", "Media Monitoring", "Community Outreach", "Communication", "Presentation",
         ],
     },
+
+    # ===========================
+    # HOSPITALITY & TOURISM
+    # ===========================
+    {
+        "title": "Waiter",
+        "description": "Serves guests at table, takes orders and handles payment in a restaurant or hotel.",
+        "domain": "Hospitality & Tourism",
+        "expected_keywords": [
+            "waiter", "waitress", "server", "restaurant", "guest", "order", "table", "service", "menu", "shift", "tip", "pos", "hospitality", "customer",
+        ],
+        "expected_skills": [
+            "Table Service", "Order Taking", "Menu Knowledge", "POS Systems", "Wine Service", "Upselling", "Food Safety", "Customer Service",
+        ],
+    },
+    {
+        "title": "Commis Waiter",
+        "description": "Supports the service team by setting tables, running food and clearing covers.",
+        "domain": "Hospitality & Tourism",
+        "expected_keywords": [
+            "commis", "busser", "runner", "restaurant", "table", "service", "clearing", "setting", "support", "shift", "guest", "food", "hygiene", "team",
+        ],
+        "expected_skills": [
+            "Table Setting", "Tray Service", "Order Taking", "Food Safety", "Customer Service", "Teamwork", "Time Management", "Menu Knowledge",
+        ],
+    },
+    {
+        "title": "Barista",
+        "description": "Prepares espresso-based drinks and serves customers in a cafe.",
+        "domain": "Hospitality & Tourism",
+        "expected_keywords": [
+            "barista", "coffee", "espresso", "cafe", "drink", "milk", "customer", "counter", "pos", "order", "grinder", "shift", "brew", "service",
+        ],
+        "expected_skills": [
+            "Barista Skills", "Espresso Preparation", "Latte Art", "Coffee Brewing", "POS Systems", "Cash Handling", "Customer Service", "Food Safety",
+        ],
+    },
+    {
+        "title": "Bartender",
+        "description": "Mixes and serves drinks, manages the bar and its stock.",
+        "domain": "Hospitality & Tourism",
+        "expected_keywords": [
+            "bartender", "bar", "cocktail", "drink", "beverage", "mixing", "guest", "pos", "stock", "shift", "spirits", "service", "counter", "order",
+        ],
+        "expected_skills": [
+            "Bartending", "Cocktail Preparation", "Mixology", "Wine Service", "POS Systems", "Cash Handling", "Stock Control", "Customer Service",
+        ],
+    },
+    {
+        "title": "Housekeeping Attendant",
+        "description": "Cleans and prepares guest rooms to the property's standard.",
+        "domain": "Hospitality & Tourism",
+        "expected_keywords": [
+            "housekeeping", "room", "cleaning", "guest", "hotel", "linen", "laundry", "attendant", "standard", "amenity", "shift", "inspection", "hygiene", "turnover",
+        ],
+        "expected_skills": [
+            "Cleaning Standards", "Room Inspection", "Laundry Operations", "Guest Relations", "Occupational Safety", "Time Management", "Teamwork", "Customer Service",
+        ],
+    },
+
+    # ===========================
+    # RETAIL & CUSTOMER SERVICE
+    # ===========================
+    {
+        "title": "Cashier",
+        "description": "Handles payments and serves customers at the till.",
+        "domain": "Retail & Customer Service",
+        "expected_keywords": [
+            "cashier", "till", "checkout", "payment", "customer", "store", "register", "cash", "receipt", "shift", "scan", "refund", "queue", "service",
+        ],
+        "expected_skills": [
+            "POS Systems", "Cash Handling", "Customer Service", "Complaint Handling", "Product Knowledge", "Loss Prevention", "Time Management", "Teamwork",
+        ],
+    },
+    {
+        "title": "Retail Sales Associate",
+        "description": "Advises customers on the shop floor and drives store sales.",
+        "domain": "Retail & Customer Service",
+        "expected_keywords": [
+            "retail", "sales", "store", "customer", "shop", "floor", "product", "merchandising", "stock", "target", "advice", "display", "fitting", "service",
+        ],
+        "expected_skills": [
+            "Product Knowledge", "Visual Merchandising", "POS Systems", "Upselling", "Stock Control", "Customer Service", "Complaint Handling", "Communication",
+        ],
+    },
+    {
+        "title": "Store Manager",
+        "description": "Runs a retail store: team, stock, targets and profitability.",
+        "domain": "Retail & Customer Service",
+        "expected_keywords": [
+            "store", "manager", "retail", "team", "target", "stock", "sales", "shrinkage", "rota", "profit", "display", "customer", "inventory", "branch",
+        ],
+        "expected_skills": [
+            "Inventory Management", "Visual Merchandising", "Loss Prevention", "Staff Scheduling", "Sales Forecasting", "Cost Control", "Leadership", "Customer Service",
+        ],
+    },
+    {
+        "title": "Customer Service Representative",
+        "description": "Resolves customer issues across phone, email and chat.",
+        "domain": "Retail & Customer Service",
+        "expected_keywords": [
+            "customer", "service", "support", "complaint", "resolution", "ticket", "chat", "email", "call", "satisfaction", "escalation", "response", "helpdesk", "client",
+        ],
+        "expected_skills": [
+            "Complaint Handling", "Ticketing System", "Zendesk", "Live Chat Support", "CRM", "Customer Service", "Communication", "Problem Solving",
+        ],
+    },
+    {
+        "title": "Call Center Agent",
+        "description": "Handles inbound and outbound calls to volume and quality targets.",
+        "domain": "Retail & Customer Service",
+        "expected_keywords": [
+            "call", "center", "agent", "inbound", "outbound", "phone", "script", "queue", "customer", "target", "handling", "campaign", "crm", "quality",
+        ],
+        "expected_skills": [
+            "Call Handling", "Ticketing System", "CRM", "Complaint Handling", "Live Chat Support", "Customer Service", "Communication", "Time Management",
+        ],
+    },
 ]
