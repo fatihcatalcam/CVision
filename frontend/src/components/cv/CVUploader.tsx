@@ -21,6 +21,16 @@ const DOMAIN_VALUES = [
   { value: 'Environmental & Energy', key: 'environmental', emoji: '🌱' },
   { value: 'Cybersecurity', key: 'cybersecurity', emoji: '🔒' },
   { value: 'UX / UI Design', key: 'uxui', emoji: '🎨' },
+  { value: 'Media & Creative', key: 'media', emoji: '🎬' },
+  { value: 'Journalism & Broadcasting', key: 'journalism', emoji: '📰' },
+  { value: 'Legal', key: 'legal', emoji: '⚖️' },
+  { value: 'Education', key: 'education', emoji: '🎓' },
+  { value: 'Healthcare & Clinical', key: 'clinical', emoji: '🩺' },
+  { value: 'Sales & Business Development', key: 'sales', emoji: '🤝' },
+  { value: 'Hospitality & Tourism', key: 'hospitality', emoji: '🏨' },
+  { value: 'Architecture & Design', key: 'architecture', emoji: '📐' },
+  { value: 'Skilled Trades & Technical', key: 'trades', emoji: '🔧' },
+  { value: 'Public Sector & NGO', key: 'publicSector', emoji: '🏛️' },
   { value: 'Other', key: 'other', emoji: '✨' },
 ];
 
