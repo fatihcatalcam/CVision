@@ -95,13 +95,19 @@ def seed_role_profiles(db: Session) -> None:
         profile = existing.get(profile_data["title"])
 
         if profile is None:
-            db.add(RoleProfile(
+            new_profile = RoleProfile(
                 title=profile_data["title"],
                 description=profile_data["description"],
                 domain=domain,
                 expected_keywords=profile_data["expected_keywords"],
                 expected_skills=profile_data["expected_skills"],
-            ))
+            )
+            db.add(new_profile)
+            # Keep `existing` authoritative: a duplicate title later in the seed
+            # list must take the update path, not INSERT a second row. Without
+            # this, one duplicated title fails the whole commit and nothing
+            # seeds at all.
+            existing[profile_data["title"]] = new_profile
             added += 1
             continue
 

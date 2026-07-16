@@ -119,11 +119,29 @@ def test_changed_seed_fields_are_updated_in_place(db_session, monkeypatch):
     ).one()
     original_id = role_before.id
 
+    # If a later phase writes these exact skills into the seed data, the patch
+    # below becomes a no-op and this test would pass vacuously. Fail loudly
+    # instead so whoever lands that change fixes this test deliberately.
+    assert role_before.expected_skills != ["Workday", "SuccessFactors", "Payroll"], (
+        "seed data now matches the patch; pick different values for this test"
+    )
+
     # Simulate a later phase giving this role real discriminating skills.
+    # Every field the update path writes is patched, so a dropped assignment
+    # during a refactor fails here instead of silently shipping. "Data &
+    # Analytics" is a real domain from the taxonomy and deliberately differs
+    # from this role's actual "Business & Management" - patching it to its own
+    # value would never exercise the update.
     patched = []
     for data in ROLE_PROFILES_DATA:
         if data["title"] == "Human Resources Specialist":
-            data = dict(data, expected_skills=["Workday", "SuccessFactors", "Payroll"])
+            data = dict(
+                data,
+                description="Updated HR description.",
+                domain="Data & Analytics",
+                expected_keywords=["workday", "payroll", "recruiting"],
+                expected_skills=["Workday", "SuccessFactors", "Payroll"],
+            )
         patched.append(data)
     monkeypatch.setattr(main_module, "ROLE_PROFILES_DATA", patched)
 
@@ -138,3 +156,6 @@ def test_changed_seed_fields_are_updated_in_place(db_session, monkeypatch):
     ).one()
     assert role_after.id == original_id, "update must not recreate the row"
     assert role_after.expected_skills == ["Workday", "SuccessFactors", "Payroll"]
+    assert role_after.expected_keywords == ["workday", "payroll", "recruiting"]
+    assert role_after.description == "Updated HR description."
+    assert role_after.domain == "Data & Analytics"
