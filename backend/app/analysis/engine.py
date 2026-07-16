@@ -29,11 +29,14 @@ class AnalysisEngine:
         self,
         skills_list: list[dict[str, Any]],
         role_profiles: list[dict],
+        target_domain: str | None = None,
     ):
         """
         Args:
             skills_list: Skills from the database (id, name, category).
             role_profiles: Role profiles from the database.
+            target_domain: The CV's target domain; steers suggestion wording
+                (tech examples only for tech domains).
         """
         self._analyzers: list[BaseAnalyzer] = [
             SectionDetector(),
@@ -42,7 +45,7 @@ class AnalysisEngine:
             KeywordScorer(role_profiles),
             ExperienceEvaluator(),
             ScoreCalculator(role_profiles),
-            SuggestionGenerator(),
+            SuggestionGenerator(target_domain),
         ]
 
     def run(self, extracted_text: str, layout_xray: dict | None = None) -> AnalysisContext:

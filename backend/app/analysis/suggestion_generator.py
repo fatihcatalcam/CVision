@@ -13,8 +13,23 @@ from app.analysis.base_analyzer import BaseAnalyzer, AnalysisContext
 logger = logging.getLogger("cvision.analysis.suggestion_generator")
 
 
+# Domains where concrete tech examples (Python, GitHub, AWS...) are helpful.
+# Everyone else gets neutral, field-agnostic wording - a cinema graduate must
+# not be told to list Docker skills and GitHub repos.
+_TECH_DOMAINS = {"Software Engineering", "Data & Analytics", "Cybersecurity"}
+
+
 class SuggestionGenerator(BaseAnalyzer):
     """Generates actionable improvement suggestions based on analysis results."""
+
+    def __init__(self, target_domain: str | None = None):
+        """
+        Args:
+            target_domain: The CV's target domain. Tech domains get concrete
+                tech examples in suggestion texts; anything else (including
+                "Other"/None) gets neutral wording.
+        """
+        self._is_tech = target_domain in _TECH_DOMAINS
 
     @property
     def name(self) -> str:
@@ -39,13 +54,18 @@ class SuggestionGenerator(BaseAnalyzer):
             })
 
         if not sections.get("skills"):
+            skills_tail = (
+                "Include specific technologies, programming languages, and tools."
+                if self._is_tech else
+                "Include the specific tools, software, and methods used in your field."
+            )
             suggestions.append({
                 "category": "skills",
                 "priority": "high",
                 "message": (
                     "Add a dedicated Skills section listing your technical and soft skills. "
                     "Use a comma-separated or bulleted format for easy ATS parsing. "
-                    "Include specific technologies, programming languages, and tools."
+                    + skills_tail
                 ),
                 "snippets": []
             })
@@ -74,24 +94,35 @@ class SuggestionGenerator(BaseAnalyzer):
             })
 
         if not sections.get("projects"):
+            projects_tail = (
+                "Include 2-3 projects with brief descriptions, technologies used, "
+                "and links to GitHub repositories if available."
+                if self._is_tech else
+                "Include 2-3 projects or works with brief descriptions and links "
+                "to a portfolio, showreel, or published pieces if available."
+            )
             suggestions.append({
                 "category": "content",
                 "priority": "medium",
                 "message": (
                     "Consider adding a Projects section to showcase hands-on experience. "
-                    "Include 2-3 projects with brief descriptions, technologies used, "
-                    "and links to GitHub repositories if available."
+                    + projects_tail
                 ),
                 "snippets": []
             })
 
         if not sections.get("certifications"):
+            cert_examples = (
+                "(e.g., AWS, Google, Coursera, Udemy)"
+                if self._is_tech else
+                "(e.g., Coursera, Udemy, or recognized certificates in your field)"
+            )
             suggestions.append({
                 "category": "content",
                 "priority": "low",
                 "message": (
                     "Consider adding relevant certifications or online courses "
-                    "(e.g., AWS, Google, Coursera, Udemy) to strengthen your profile."
+                    f"{cert_examples} to strengthen your profile."
                 ),
                 "snippets": []
             })
@@ -155,12 +186,17 @@ class SuggestionGenerator(BaseAnalyzer):
         # ---- Skill-based suggestions ----
         skill_count = len(context.extracted_skills)
         if skill_count < 5:
+            skill_examples = (
+                "List more specific technical skills (e.g., Python, React, SQL, Docker). "
+                if self._is_tech else
+                "List more of the concrete skills, tools, and software used in your field. "
+            )
             suggestions.append({
                 "category": "skills",
                 "priority": "high",
                 "message": (
                     f"Only {skill_count} recognized skills were detected. "
-                    "List more specific technical skills (e.g., Python, React, SQL, Docker). "
+                    + skill_examples +
                     "Aim for at least 8-12 relevant skills for a competitive profile."
                 ),
                 "snippets": []
@@ -170,13 +206,18 @@ class SuggestionGenerator(BaseAnalyzer):
         if skill_count > 0:
             categories = set(s["skill_category"] for s in context.extracted_skills)
             if len(categories) < 3:
+                diversity_tail = (
+                    "programming languages, frameworks, databases, tools, and soft skills."
+                    if self._is_tech else
+                    "core field skills, tools and software, and transferable soft skills."
+                )
                 suggestions.append({
                     "category": "skills",
                     "priority": "medium",
                     "message": (
                         "Your skills are concentrated in few categories. "
                         "Diversify by adding skills from different areas: "
-                        "programming languages, frameworks, databases, tools, and soft skills."
+                        + diversity_tail
                     ),
                     "snippets": []
                 })
@@ -206,8 +247,11 @@ class SuggestionGenerator(BaseAnalyzer):
 
             msg = (
                 "Quantify your achievements in experience descriptions. "
-                "Use numbers: 'Improved API response time by 40%', "
-                "'Managed a team of 5', 'Served 1000+ daily users'."
+                + ("Use numbers: 'Improved API response time by 40%', "
+                   "'Managed a team of 5', 'Served 1000+ daily users'."
+                   if self._is_tech else
+                   "Use numbers: 'Managed a team of 5', 'Delivered 12 projects', "
+                   "'Grew the audience by 40%'.")
             )
             if non_quantified_sentences:
                 msg = "Your CV needs more specific numbers. We've highlighted sentences that use strong action verbs but lack quantifiable metrics (numbers, percentages, or scale). Describe exactly what you achieved."
