@@ -73,41 +73,37 @@ def seed_skills(db: Session) -> None:
 
 
 def seed_role_profiles(db: Session) -> None:
-    """Populate the role_profiles table. Re-seeds if domain info is missing."""
-    existing = db.query(RoleProfile).all()
+    """Upsert role profiles by title. Never deletes.
 
-    # Check if any existing profile is missing domain (i.e. old data)
-    needs_reseed = any(not getattr(p, "domain", None) or p.domain == "Software Engineering"
-                       for p in existing) and len(existing) < len(ROLE_PROFILES_DATA)
+    Rows are updated in place rather than recreated, so role_profiles.id stays
+    stable across deploys and career_recommendations.role_profile_id keeps
+    pointing at the right role. The previous implementation deleted every row
+    (plus their career_recommendations) whenever the seed list grew.
 
-    if existing and not needs_reseed:
-        logger.info(f"Role profiles table already has {len(existing)} entries, skipping seed.")
-        return
-
-    if existing and needs_reseed:
-        logger.info("Re-seeding role profiles with domain data...")
-        # Delete dependent career_recommendations first to avoid FK constraint
-        from app.models.career_recommendation import CareerRecommendation
-        profile_ids = [p.id for p in existing]
-        db.query(CareerRecommendation).filter(
-            CareerRecommendation.role_profile_id.in_(profile_ids)
-        ).delete(synchronize_session="fetch")
-        for p in existing:
-            db.delete(p)
-        db.flush()
+    Titles that disappear from the seed are left alone: deleting them would
+    take their career_recommendations with them. Consequence: a role's title
+    must never be renamed, or the upsert treats it as new and orphans the old
+    row.
+    """
+    existing = {p.title: p for p in db.query(RoleProfile).all()}
+    added = 0
 
     for profile_data in ROLE_PROFILES_DATA:
-        profile = RoleProfile(
-            title=profile_data["title"],
-            description=profile_data["description"],
-            domain=profile_data.get("domain", "Software Engineering"),
-            expected_keywords=profile_data["expected_keywords"],
-            expected_skills=profile_data["expected_skills"],
-        )
-        db.add(profile)
+        if profile_data["title"] not in existing:
+            db.add(RoleProfile(
+                title=profile_data["title"],
+                description=profile_data["description"],
+                domain=profile_data.get("domain", "Software Engineering"),
+                expected_keywords=profile_data["expected_keywords"],
+                expected_skills=profile_data["expected_skills"],
+            ))
+            added += 1
 
-    db.commit()
-    logger.info(f"Seeded {len(ROLE_PROFILES_DATA)} role profiles into the database.")
+    if added > 0:
+        db.commit()
+        logger.info(f"Added {added} new role profiles (total in seed: {len(ROLE_PROFILES_DATA)}).")
+    else:
+        logger.info(f"Role profiles table already up to date ({len(existing)} entries).")
 
 
 @asynccontextmanager
