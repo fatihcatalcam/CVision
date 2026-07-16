@@ -105,3 +105,32 @@ def test_every_role_declares_a_domain():
     """domain drives the AI's role filter and the suggestion wording."""
     missing = [p["title"] for p in ROLE_PROFILES_DATA if not p.get("domain")]
     assert not missing, f"roles without a domain: {missing}"
+
+
+def test_known_domains_cover_every_seeded_domain():
+    """A domain the AI cannot name is a domain whose roles never surface.
+
+    The AI picks detected_domain from KNOWN_DOMAINS; role filtering then keys
+    off that. A domain seeded here but absent there is dead weight - its roles
+    can never be recommended to anyone.
+    """
+    from app.services.ai_service import KNOWN_DOMAINS
+
+    seeded = {p["domain"] for p in ROLE_PROFILES_DATA}
+    unreachable = sorted(seeded - set(KNOWN_DOMAINS))
+    assert not unreachable, (
+        "domains seeded but missing from ai_service.KNOWN_DOMAINS, so the AI "
+        f"can never detect them: {unreachable}"
+    )
+
+
+def test_known_domains_are_not_invented():
+    """The reverse: a domain the AI can name but nothing seeds is a dead end."""
+    from app.services.ai_service import KNOWN_DOMAINS
+
+    seeded = {p["domain"] for p in ROLE_PROFILES_DATA}
+    empty = sorted(set(KNOWN_DOMAINS) - seeded)
+    assert not empty, (
+        "KNOWN_DOMAINS lists domains with no seeded roles; the AI would detect "
+        f"them and find nothing to recommend: {empty}"
+    )

@@ -6,7 +6,7 @@ Provides:
 - Smart, personalized suggestion generation
 - "Fix My CV" rewrite for individual bullet points
 - Language-aware (detects all 5 UI languages: en/tr/es/de/fr, diacritic-robust)
-- Domain-aware personas (13 domains covering all seeded role profiles)
+- Domain-aware personas covering every seeded role-profile domain
 - Anti-hallucination guardrails (never fabricates metrics; uses bracket placeholders)
 - Structured Outputs via Pydantic for zero JSON-parse errors
 - Prompt-caching-friendly layout (stable system prompt > 1KB) for cost savings
@@ -49,14 +49,22 @@ class Suggestion(BaseModel):
     )
 
 
-# The 13 seeded domains + "Other". detected_domain must be one of these so
-# downstream role-profile filtering can trust the value.
+# Every domain present in role_profiles_data.py, plus "Other". detected_domain
+# must be one of these so downstream role filtering can trust it. The AI picks
+# from this list, so a domain missing here is invisible: its roles can never be
+# recommended. test_known_domains_cover_every_seeded_domain keeps the two in
+# sync - they drifted silently before, which is why the taxonomy could grow
+# without the AI ever noticing.
 KNOWN_DOMAINS = [
     "Software Engineering", "Data & Analytics", "Industrial Engineering",
     "Mechanical Engineering", "Electrical Engineering", "Civil Engineering",
     "Business & Management", "Marketing & Communications",
     "Finance & Accounting", "Healthcare & Biomedical",
     "Environmental & Energy", "Cybersecurity", "UX / UI Design",
+    "Media & Creative", "Journalism & Broadcasting", "Legal", "Education",
+    "Healthcare & Clinical", "Sales & Business Development",
+    "Hospitality & Tourism", "Architecture & Design",
+    "Skilled Trades & Technical", "Public Sector & NGO",
 ]
 
 
@@ -99,7 +107,8 @@ class JDMatchOutput(BaseModel):
 # ============================================================
 # Domain-specific personas
 # Keys are normalized: lowercase, spaces/punctuation -> underscore.
-# Covers all 13 seeded domains in role_profiles_data.py.
+# Covers every seeded domain in role_profiles_data.py; a domain without an
+# entry falls back to DEFAULT_PERSONA rather than failing.
 # ============================================================
 
 DEFAULT_PERSONA = (
@@ -186,6 +195,67 @@ DOMAIN_PERSONAS: dict[str, str] = {
         "portfolio depth, end-to-end process (research -> ship -> measure), "
         "cross-functional collaboration with PM and engineering, design-systems "
         "experience, and quantified product impact of the candidate's design work."
+    ),
+    "media_&_creative": (
+        "You are a senior producer who hires for production houses and in-house "
+        "content teams. You evaluate the reel or portfolio first, then craft depth "
+        "(which tools, which formats, which delivery specs), the scale and reach of "
+        "what shipped, and whether the candidate owned a piece end to end or only "
+        "assisted. Credits and named productions matter more than adjectives."
+    ),
+    "journalism_&_broadcasting": (
+        "You are a newsroom editor who hires reporters and producers. You evaluate "
+        "published clips and bylines, beat expertise, sourcing and verification "
+        "discipline, output under deadline, and reach or impact of the work. Vague "
+        "claims about 'strong writing' count for nothing without the clips."
+    ),
+    "legal": (
+        "You are a hiring partner at a law firm or a head of legal in-house. You "
+        "evaluate practice-area depth, the substance and value of matters handled, "
+        "bar admission and qualifications, drafting and negotiation evidence, and "
+        "whether the candidate advised or merely supported."
+    ),
+    "education": (
+        "You are a school principal or head of learning and development. You "
+        "evaluate subject and grade-level expertise, curriculum and assessment "
+        "design, measurable learner outcomes, certifications, and classroom or "
+        "cohort scale. Publications matter for academic candidates."
+    ),
+    "healthcare_&_clinical": (
+        "You are a clinical recruiter at a hospital. You evaluate licensure and "
+        "registration first, then specialty and setting (ward, ICU, outpatient), "
+        "patient volume and case mix, certifications (BLS, ACLS), and evidence of "
+        "safe practice. Unverifiable clinical claims are a serious red flag."
+    ),
+    "sales_&_business_development": (
+        "You are a sales director who hires closers. You evaluate numbers above all: "
+        "quota and attainment, deal size, cycle length, territory, and named logos. "
+        "A sales CV without figures is the single biggest credibility failure in "
+        "this field."
+    ),
+    "hospitality_&_tourism": (
+        "You are a hotel or restaurant group operations director. You evaluate "
+        "property or outlet size, covers and occupancy handled, guest-satisfaction "
+        "and revenue metrics, systems experience, food-safety credentials, and team "
+        "size led."
+    ),
+    "architecture_&_design": (
+        "You are a principal at an architecture or design practice. You evaluate the "
+        "portfolio first, then project types and scale, which RIBA-equivalent stages "
+        "the candidate actually worked on, software depth, licensure, and whether "
+        "buildings or products were genuinely delivered rather than only rendered."
+    ),
+    "skilled_trades_&_technical": (
+        "You are a plant or workshop manager who hires technicians. You evaluate "
+        "certifications and tickets first, then equipment and systems worked on, "
+        "safety record, fault-finding ability, tolerances and standards met, and "
+        "downtime or reliability improvements. Certificates beat adjectives."
+    ),
+    "public_sector_&_ngo": (
+        "You are a programme director at a public body or NGO. You evaluate "
+        "programme scale and budget, donor and funder experience, monitoring and "
+        "evaluation rigour, beneficiary outcomes, and compliance and reporting "
+        "discipline. Impact numbers matter more than mission statements."
     ),
 }
 
