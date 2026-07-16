@@ -30,6 +30,7 @@ class AnalysisEngine:
         skills_list: list[dict[str, Any]],
         role_profiles: list[dict],
         target_domain: str | None = None,
+        ai_skills: list[str] | None = None,
     ):
         """
         Args:
@@ -37,10 +38,13 @@ class AnalysisEngine:
             role_profiles: Role profiles from the database.
             target_domain: The CV's target domain; steers suggestion wording
                 (tech examples only for tech domains).
+            ai_skills: Canonical skill names the AI read out of the CV in any
+                language, merged with the regex matches. None (AI unavailable)
+                leaves the pipeline at its regex-only behaviour.
         """
         self._analyzers: list[BaseAnalyzer] = [
             SectionDetector(),
-            SkillExtractor(skills_list),
+            SkillExtractor(skills_list, ai_skills),
             ATSChecker(),
             KeywordScorer(role_profiles),
             ExperienceEvaluator(),

@@ -20,7 +20,12 @@ from app.analysis.engine import AnalysisEngine
 from app.analysis.base_analyzer import AnalysisContext
 from app.analysis.layout_xray import analyze_layout
 from app.services.recommendation_service import RecommendationService
-from app.services.ai_service import ai_enhance_analysis, is_ai_enabled, KNOWN_DOMAINS
+from app.services.ai_service import (
+    ai_enhance_analysis,
+    ai_normalize_skills,
+    is_ai_enabled,
+    KNOWN_DOMAINS,
+)
 
 logger = logging.getLogger("cvision.services.analysis")
 
@@ -121,8 +126,19 @@ class AnalysisService:
         else:
             layout_xray = {"available": False, "reason": "plain_text"}
 
+        # Map the CV onto canonical English skill names before scoring. The
+        # dictionary is English-only, so without this a Turkish CV scores ~20
+        # points below its English twin - on the headline ATS score too, since
+        # ScoreCalculator reads extracted_skills. Returns None when AI is
+        # unavailable, and the engine then behaves exactly as before.
+        ai_skills = ai_normalize_skills(
+            cv.extracted_text, [s["name"] for s in skills_list]
+        )
+
         # Run the analysis engine
-        engine = AnalysisEngine(skills_list, role_profiles, cv.target_domain)
+        engine = AnalysisEngine(
+            skills_list, role_profiles, cv.target_domain, ai_skills=ai_skills
+        )
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 
         # Persist analysis result

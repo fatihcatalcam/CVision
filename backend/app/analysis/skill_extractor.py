@@ -15,13 +15,25 @@ logger = logging.getLogger("cvision.analysis.skill_extractor")
 class SkillExtractor(BaseAnalyzer):
     """Extracts skills from CV text using dictionary-based word-boundary matching."""
 
-    def __init__(self, skills_list: list[dict[str, str]]):
+    def __init__(
+        self,
+        skills_list: list[dict[str, str]],
+        ai_skills: list[str] | None = None,
+    ):
         """
         Args:
             skills_list: List of dicts with 'name', 'category', and 'id' keys
                          from the Skills database table.
+            ai_skills: Canonical skill names the AI recognised in the CV,
+                       whatever language it was written in. Merged with - never
+                       replacing - the regex matches: the regex is reliable for
+                       proper nouns (Python, AutoCAD) that survive translation,
+                       while the AI covers the rest ("iletisim" ->
+                       "Communication"). None means AI was unavailable, and the
+                       result collapses to the regex-only behaviour.
         """
         self._skills = skills_list
+        self._ai_skills = ai_skills or []
         # Pre-compile regex patterns for each skill
         self._patterns: list[tuple[dict, re.Pattern]] = []
         for skill in skills_list:
@@ -42,9 +54,50 @@ class SkillExtractor(BaseAnalyzer):
     def name(self) -> str:
         return "Skill Extractor"
 
+    def _merge_ai_skills(self, extracted: list[dict], seen: set[str]) -> int:
+        """Fold the AI's canonical skill names into the regex results.
+
+        Only names present in the skills dictionary are accepted, so the AI
+        cannot invent a skill; anything it hallucinates is dropped here rather
+        than reaching the score. Skills the regex already found are skipped,
+        keeping the regex's real mention_count.
+
+        Confidence is fixed at 0.7 - the same value a single regex mention
+        earns. The AI asserts the skill is present but gives no count, and
+        claiming more certainty than that would inflate the score.
+        """
+        if not self._ai_skills:
+            return 0
+
+        by_name = {s["name"].lower(): s for s in self._skills}
+        added = 0
+
+        for raw in self._ai_skills:
+            if not isinstance(raw, str):
+                continue
+            skill_info = by_name.get(raw.strip().lower())
+            if skill_info is None:
+                logger.debug(f"AI proposed unknown skill {raw!r}; ignored")
+                continue
+            if skill_info["name"].lower() in seen:
+                continue
+
+            extracted.append({
+                "skill_id": skill_info["id"],
+                "skill_name": skill_info["name"],
+                "skill_category": skill_info["category"],
+                "confidence_score": 0.7,
+                "mention_count": 1,
+            })
+            seen.add(skill_info["name"].lower())
+            added += 1
+
+        return added
+
     def analyze(self, context: AnalysisContext) -> None:
         text = context.extracted_text
         extracted = []
+        seen: set[str] = set()
 
         for skill_info, pattern in self._patterns:
             matches = pattern.findall(text)
@@ -66,12 +119,16 @@ class SkillExtractor(BaseAnalyzer):
                     "confidence_score": confidence,
                     "mention_count": count,
                 })
+                seen.add(skill_info["name"].lower())
+
+        ai_added = self._merge_ai_skills(extracted, seen)
 
         context.extracted_skills = extracted
 
         logger.info(
             f"Extracted {len(extracted)} skills from CV text "
-            f"(searched {len(self._skills)} skill patterns)"
+            f"(searched {len(self._skills)} skill patterns, "
+            f"{ai_added} added by AI normalization)"
         )
 
         # Log by category

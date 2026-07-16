@@ -6,7 +6,7 @@ Provides:
 - Smart, personalized suggestion generation
 - "Fix My CV" rewrite for individual bullet points
 - Language-aware (detects all 5 UI languages: en/tr/es/de/fr, diacritic-robust)
-- Domain-aware personas (13 domains covering all seeded role profiles)
+- Domain-aware personas covering every seeded role-profile domain
 - Anti-hallucination guardrails (never fabricates metrics; uses bracket placeholders)
 - Structured Outputs via Pydantic for zero JSON-parse errors
 - Prompt-caching-friendly layout (stable system prompt > 1KB) for cost savings
@@ -49,14 +49,22 @@ class Suggestion(BaseModel):
     )
 
 
-# The 13 seeded domains + "Other". detected_domain must be one of these so
-# downstream role-profile filtering can trust the value.
+# Every domain present in role_profiles_data.py, plus "Other". detected_domain
+# must be one of these so downstream role filtering can trust it. The AI picks
+# from this list, so a domain missing here is invisible: its roles can never be
+# recommended. test_known_domains_cover_every_seeded_domain keeps the two in
+# sync - they drifted silently before, which is why the taxonomy could grow
+# without the AI ever noticing.
 KNOWN_DOMAINS = [
     "Software Engineering", "Data & Analytics", "Industrial Engineering",
     "Mechanical Engineering", "Electrical Engineering", "Civil Engineering",
     "Business & Management", "Marketing & Communications",
     "Finance & Accounting", "Healthcare & Biomedical",
     "Environmental & Energy", "Cybersecurity", "UX / UI Design",
+    "Media & Creative", "Journalism & Broadcasting", "Legal", "Education",
+    "Healthcare & Clinical", "Sales & Business Development",
+    "Hospitality & Tourism", "Architecture & Design",
+    "Skilled Trades & Technical", "Public Sector & NGO",
 ]
 
 
@@ -99,7 +107,8 @@ class JDMatchOutput(BaseModel):
 # ============================================================
 # Domain-specific personas
 # Keys are normalized: lowercase, spaces/punctuation -> underscore.
-# Covers all 13 seeded domains in role_profiles_data.py.
+# Covers every seeded domain in role_profiles_data.py; a domain without an
+# entry falls back to DEFAULT_PERSONA rather than failing.
 # ============================================================
 
 DEFAULT_PERSONA = (
@@ -186,6 +195,67 @@ DOMAIN_PERSONAS: dict[str, str] = {
         "portfolio depth, end-to-end process (research -> ship -> measure), "
         "cross-functional collaboration with PM and engineering, design-systems "
         "experience, and quantified product impact of the candidate's design work."
+    ),
+    "media_&_creative": (
+        "You are a senior producer who hires for production houses and in-house "
+        "content teams. You evaluate the reel or portfolio first, then craft depth "
+        "(which tools, which formats, which delivery specs), the scale and reach of "
+        "what shipped, and whether the candidate owned a piece end to end or only "
+        "assisted. Credits and named productions matter more than adjectives."
+    ),
+    "journalism_&_broadcasting": (
+        "You are a newsroom editor who hires reporters and producers. You evaluate "
+        "published clips and bylines, beat expertise, sourcing and verification "
+        "discipline, output under deadline, and reach or impact of the work. Vague "
+        "claims about 'strong writing' count for nothing without the clips."
+    ),
+    "legal": (
+        "You are a hiring partner at a law firm or a head of legal in-house. You "
+        "evaluate practice-area depth, the substance and value of matters handled, "
+        "bar admission and qualifications, drafting and negotiation evidence, and "
+        "whether the candidate advised or merely supported."
+    ),
+    "education": (
+        "You are a school principal or head of learning and development. You "
+        "evaluate subject and grade-level expertise, curriculum and assessment "
+        "design, measurable learner outcomes, certifications, and classroom or "
+        "cohort scale. Publications matter for academic candidates."
+    ),
+    "healthcare_&_clinical": (
+        "You are a clinical recruiter at a hospital. You evaluate licensure and "
+        "registration first, then specialty and setting (ward, ICU, outpatient), "
+        "patient volume and case mix, certifications (BLS, ACLS), and evidence of "
+        "safe practice. Unverifiable clinical claims are a serious red flag."
+    ),
+    "sales_&_business_development": (
+        "You are a sales director who hires closers. You evaluate numbers above all: "
+        "quota and attainment, deal size, cycle length, territory, and named logos. "
+        "A sales CV without figures is the single biggest credibility failure in "
+        "this field."
+    ),
+    "hospitality_&_tourism": (
+        "You are a hotel or restaurant group operations director. You evaluate "
+        "property or outlet size, covers and occupancy handled, guest-satisfaction "
+        "and revenue metrics, systems experience, food-safety credentials, and team "
+        "size led."
+    ),
+    "architecture_&_design": (
+        "You are a principal at an architecture or design practice. You evaluate the "
+        "portfolio first, then project types and scale, which RIBA-equivalent stages "
+        "the candidate actually worked on, software depth, licensure, and whether "
+        "buildings or products were genuinely delivered rather than only rendered."
+    ),
+    "skilled_trades_&_technical": (
+        "You are a plant or workshop manager who hires technicians. You evaluate "
+        "certifications and tickets first, then equipment and systems worked on, "
+        "safety record, fault-finding ability, tolerances and standards met, and "
+        "downtime or reliability improvements. Certificates beat adjectives."
+    ),
+    "public_sector_&_ngo": (
+        "You are a programme director at a public body or NGO. You evaluate "
+        "programme scale and budget, donor and funder experience, monitoring and "
+        "evaluation rigour, beneficiary outcomes, and compliance and reporting "
+        "discipline. Impact numbers matter more than mission statements."
     ),
 }
 
@@ -495,6 +565,83 @@ def _build_user_prompt(
         f"language or their software-specific content; adapt to this CV's "
         f"language and domain."
     )
+
+
+class SkillNormalization(BaseModel):
+    """Canonical skill names the AI recognised in a CV, in any language."""
+
+    skills: list[str] = Field(
+        description=(
+            "Skills the CV demonstrates, given ONLY as names copied EXACTLY "
+            "from the provided vocabulary. Never invent a name, never "
+            "translate one, never return a name absent from the vocabulary."
+        )
+    )
+
+
+def ai_normalize_skills(
+    cv_text: str,
+    vocabulary: list[str],
+) -> list[str] | None:
+    """Map a CV in ANY language onto canonical English skill names.
+
+    This is the fix for the language penalty: the seed dictionary is entirely
+    English, so a Turkish CV writing "iletisim" or "takim calismasi" scored
+    nothing for Communication or Teamwork, while its English twin scored both.
+    Rather than translating ~800 dictionary entries into five languages, the
+    model reads meaning and answers in our vocabulary.
+
+    The caller merges the result with the regex extractor rather than replacing
+    it, so a None return (AI off, quota gone, API down, malformed reply) simply
+    leaves the pipeline at its regex-only behaviour.
+
+    Returns:
+        Canonical skill names, or None on any failure. Never raises.
+    """
+    if not is_ai_enabled():
+        return None
+
+    client = _get_client()
+    if client is None:
+        return None
+
+    # The vocabulary is a static prefix, so it sits at the top of the system
+    # prompt where OpenAI's prompt caching can reuse it across requests.
+    system_prompt = (
+        "You extract skills from CVs.\n\n"
+        "VOCABULARY (the ONLY valid answers, copy names character-for-character):\n"
+        + ", ".join(vocabulary)
+        + "\n\nRules:\n"
+        "1. The CV may be in ANY language. Map what it demonstrates onto the "
+        "vocabulary above. A Turkish CV saying 'iletisim becerilerim guclu' "
+        "demonstrates 'Communication'. 'Takim calismasi' is 'Teamwork'.\n"
+        "2. Return a name ONLY if the CV genuinely evidences that skill. Do "
+        "not guess from job titles alone.\n"
+        "3. Never return a name that is not in the vocabulary, character for "
+        "character. Never invent, translate or pluralise names.\n"
+        "4. Prefer precision over recall: a wrong skill corrupts the score."
+    )
+
+    try:
+        response = client.beta.chat.completions.parse(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": cv_text[:12000]},
+            ],
+            response_format=SkillNormalization,
+            temperature=0,
+        )
+        parsed = response.choices[0].message.parsed
+        if parsed is None:
+            logger.warning("Skill normalization returned None; regex only.")
+            return None
+        logger.info(f"AI normalized {len(parsed.skills)} skills from CV text.")
+        return parsed.skills
+    except Exception as e:
+        # Never fail the analysis over this: the regex extractor still runs.
+        logger.warning(f"Skill normalization failed ({e}); regex only.")
+        return None
 
 
 def ai_enhance_analysis(
