@@ -57,3 +57,44 @@ def test_growing_the_seed_adds_the_role_and_keeps_existing_ids(
     for title, role_id in before.items():
         assert title in after, f"seeder deleted {title!r}"
         assert after[title] == role_id, f"id of {title!r} changed: {role_id} -> {after[title]}"
+
+
+def test_growing_the_seed_preserves_existing_career_recommendations(
+    db_session, monkeypatch, make_user, make_cv
+):
+    from app.models.analysis import AnalysisResult
+    from app.models.career_recommendation import CareerRecommendation
+
+    # Build a past analysis with a career recommendation, exactly like the 50
+    # real analyses in production have.
+    user = make_user(email="seed-regression@test.com")
+    cv = make_cv(user)
+    analysis = AnalysisResult(cv_id=cv.id, overall_score=72.0)
+    db_session.add(analysis)
+    db_session.commit()
+    db_session.refresh(analysis)
+
+    role = db_session.query(RoleProfile).filter_by(title="Backend Developer").one()
+    rec = CareerRecommendation(
+        analysis_id=analysis.id,
+        role_profile_id=role.id,
+        match_score=65.5,
+        explanation="Strong match.",
+    )
+    db_session.add(rec)
+    db_session.commit()
+    db_session.refresh(rec)
+    rec_id, original_role_id = rec.id, role.id
+
+    # Now the taxonomy grows - the exact trigger that used to wipe the table.
+    monkeypatch.setattr(
+        main_module, "ROLE_PROFILES_DATA", list(ROLE_PROFILES_DATA) + [NEW_ROLE]
+    )
+    seed_role_profiles(db_session)
+
+    surviving = db_session.query(CareerRecommendation).filter_by(id=rec_id).one_or_none()
+    assert surviving is not None, "career recommendation was deleted by the seeder"
+    assert surviving.role_profile_id == original_role_id
+    assert surviving.match_score == 65.5
+    # And it still resolves to the same role.
+    assert surviving.role_profile.title == "Backend Developer"
