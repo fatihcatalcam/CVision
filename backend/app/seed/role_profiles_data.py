@@ -313,9 +313,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "manufacturing", "assembly", "fea", "simulation", "3d modeling",
         ],
         "expected_skills": [
-            "AutoCAD", "MATLAB", "Excel", "Problem Solving",
-            "Project Management", "Communication", "Data Analysis",
-        ],
+            "SolidWorks", "CATIA", "AutoCAD", "ANSYS", "Finite Element Analysis", "GD&T", "MATLAB", "Problem Solving",
+        ]
     },
     {
         "title": "Manufacturing Engineer",
@@ -357,9 +356,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "comfort", "efficiency", "sustainability", "insulation",
         ],
         "expected_skills": [
-            "AutoCAD", "Excel", "Project Management", "Problem Solving",
-            "Data Analysis", "MATLAB", "Communication",
-        ],
+            "HVAC Design", "Load Calculation", "Refrigeration", "ASHRAE Standards", "Ductwork Design", "Thermodynamics", "AutoCAD", "Problem Solving",
+        ]
     },
 
     # ===========================
@@ -421,9 +419,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "code", "standard", "reinforcement", "analysis", "design",
         ],
         "expected_skills": [
-            "AutoCAD", "Excel", "MATLAB", "Project Management",
-            "Problem Solving", "Data Analysis", "Communication",
-        ],
+            "SAP2000", "ETABS", "STAAD Pro", "Reinforced Concrete Design", "Steel Structure Design", "Seismic Design", "AutoCAD", "Problem Solving",
+        ]
     },
     {
         "title": "Construction Project Engineer",
@@ -435,9 +432,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "concrete", "foundation", "permit", "drawing",
         ],
         "expected_skills": [
-            "AutoCAD", "Excel", "Project Management", "Problem Solving",
-            "Communication", "Leadership", "Data Analysis",
-        ],
+            "AutoCAD", "Revit", "BIM", "Primavera", "Quantity Surveying", "Site Supervision", "Construction Scheduling", "Project Management",
+        ]
     },
     {
         "title": "Transportation Engineer",
@@ -449,9 +445,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "safety", "capacity", "survey", "gis",
         ],
         "expected_skills": [
-            "AutoCAD", "Excel", "Data Analysis", "Project Management",
-            "Problem Solving", "Communication", "MATLAB",
-        ],
+            "Traffic Modeling", "Highway Design", "VISSIM", "Transportation Planning", "Pavement Design", "GIS", "AutoCAD", "Problem Solving",
+        ]
     },
 
     # ===========================
@@ -482,10 +477,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "resource", "agile", "waterfall", "pmp", "communication",
         ],
         "expected_skills": [
-            "Project Management", "Agile", "Scrum", "Jira",
-            "Excel", "Communication", "Leadership", "Problem Solving",
-            "Presentation", "Time Management",
-        ],
+            "MS Project", "Risk Management", "Stakeholder Management", "Earned Value Management", "Resource Planning", "Jira", "Agile", "Scrum", "Leadership", "Communication",
+        ]
     },
     {
         "title": "Product Manager",
@@ -497,10 +490,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "customer", "mvp", "iteration", "feedback",
         ],
         "expected_skills": [
-            "Data Analysis", "Communication", "Presentation", "Agile",
-            "Jira", "Excel", "Problem Solving", "Leadership",
-            "Project Management",
-        ],
+            "Product Roadmap", "User Research", "A/B Testing", "Product Analytics", "Backlog Grooming", "Wireframing", "Agile", "Communication", "Presentation",
+        ]
     },
     {
         "title": "Management Consultant",
@@ -512,10 +503,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "business", "market", "competitive", "benchmarking",
         ],
         "expected_skills": [
-            "Excel", "Data Analysis", "Presentation", "Communication",
-            "Problem Solving", "Project Management", "Leadership",
-            "Critical Thinking",
-        ],
+            "Financial Modeling", "Market Research", "Business Case", "Process Mapping", "Benchmarking", "Cost-Benefit Analysis", "Excel", "Presentation", "Critical Thinking",
+        ]
     },
     {
         "title": "Human Resources Specialist",
@@ -527,9 +516,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "retention", "diversity", "compliance", "labor",
         ],
         "expected_skills": [
-            "Communication", "Excel", "Presentation", "Problem Solving",
-            "Leadership", "Project Management", "Data Analysis",
-        ],
+            "Workday", "SAP SuccessFactors", "HRIS", "Payroll", "Recruiting", "Talent Acquisition", "Onboarding", "Performance Management", "Communication",
+        ]
     },
 
     # ===========================
@@ -545,9 +533,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "conversion", "engagement", "email", "brand",
         ],
         "expected_skills": [
-            "Data Analysis", "Excel", "Communication", "Presentation",
-            "Problem Solving", "Data Visualization",
-        ],
+            "SEO", "SEM", "Google Analytics", "Google Ads", "Meta Ads", "Content Marketing", "Email Marketing", "Conversion Rate Optimization", "Social Media Marketing",
+        ]
     },
     {
         "title": "Content Strategist",
@@ -559,9 +546,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "audience", "channel", "calendar", "messaging",
         ],
         "expected_skills": [
-            "Communication", "Presentation", "Data Analysis", "Excel",
-            "Problem Solving", "Technical Writing", "Critical Thinking",
-        ],
+            "SEO", "Content Marketing", "Copywriting", "Editorial Calendar", "Content Management System", "Google Analytics", "Technical Writing", "Communication",
+        ]
     },
 
     # ===========================
@@ -610,9 +596,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "biomaterial", "imaging", "signal processing", "patient",
         ],
         "expected_skills": [
-            "MATLAB", "AutoCAD", "Python", "Data Analysis", "Statistics",
-            "Excel", "Problem Solving", "Project Management",
-        ],
+            "Medical Device Design", "ISO 13485", "Biomechanics", "Signal Processing", "Medical Imaging", "MATLAB", "Python", "Problem Solving",
+        ]
     },
     {
         "title": "Clinical Data Analyst",
@@ -642,9 +627,8 @@ ROLE_PROFILES_DATA: list[dict] = [
             "compliance", "treatment", "recycling", "carbon", "emission",
         ],
         "expected_skills": [
-            "AutoCAD", "Excel", "Data Analysis", "MATLAB", "Python",
-            "Project Management", "Problem Solving", "Statistics",
-        ],
+            "Environmental Impact Assessment", "Water Treatment", "Air Quality Monitoring", "Waste Management", "GIS", "MATLAB", "Statistics", "Problem Solving",
+        ]
     },
     {
         "title": "Energy Analyst",

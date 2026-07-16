@@ -29,9 +29,34 @@ _SOFT_WEIGHT = 0.5
 # longer lowers a candidate's ratio (keeps long expected lists realistic).
 _SKILL_DENOMINATOR_CAP = 8.0
 
+# Office tooling that says nothing about which profession a CV belongs to.
+# Distinct from _SOFT_SKILLS: these are hard, nameable tools, but they turn up
+# on a lawyer's CV as readily as an engineer's, so they are not evidence *for*
+# any particular role.
+_GENERIC_SKILLS = {
+    "excel", "git", "github", "gitlab", "jira", "confluence", "slack",
+    "vs code", "intellij", "data analysis",
+}
+
+# A role must be corroborated by at least this many discriminating skills from
+# the CV. One is a coincidence - "AutoCAD" alone does not make someone a
+# structural engineer.
+_MIN_DISCRIMINATING_EVIDENCE = 2
+
 
 def _skill_weight(name: str) -> float:
     return _SOFT_WEIGHT if name.lower() in _SOFT_SKILLS else 1.0
+
+
+def _is_discriminating(name: str) -> bool:
+    """True if this skill points at a specific profession.
+
+    Soft skills and ubiquitous office tools do not: a CV listing "Excel,
+    Communication, Leadership" carries no occupational signal, yet those
+    fillers used to pile up into a 46.7% "Human Resources Specialist" match.
+    """
+    lowered = name.lower()
+    return lowered not in _SOFT_SKILLS and lowered not in _GENERIC_SKILLS
 
 
 class CareerRecommender:
@@ -127,6 +152,20 @@ class CareerRecommender:
                     f"Low match ({match_score}%). This role requires a different skill set. "
                     f"Key missing focus areas include {missing_str}."
                 )
+
+            # Evidence gate: the CV must corroborate this role with real
+            # discriminating skills before we are willing to name it. Without
+            # this, office filler (Excel + Communication + Leadership) sums to
+            # a display-range score against roles whose expected_skills are
+            # themselves mostly filler.
+            evidence = [s for s in matched_skills if _is_discriminating(s)]
+            if len(evidence) < _MIN_DISCRIMINATING_EVIDENCE:
+                logger.debug(
+                    f"Role '{title}' dropped: {len(evidence)} discriminating "
+                    f"skill(s), need {_MIN_DISCRIMINATING_EVIDENCE} "
+                    f"(score would have been {match_score}%)"
+                )
+                continue
 
             results.append({
                 "role_id": role_id,
