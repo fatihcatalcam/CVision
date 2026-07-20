@@ -5,12 +5,22 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts: preconnect + early <link> so they are discovered in parallel with
-         the app CSS (was a render-blocking @import inside index.css). display=swap
-         keeps text visible while the webfont loads. -->
+    <!-- Fonts: preconnect + non-render-blocking load. The plain <link
+         rel="stylesheet"> version blocked first paint on mobile until the font
+         CSS arrived (LCP 5.7s). preload+swap lets the page paint immediately in
+         the fallback font; display=swap then swaps the webfont in with no layout
+         shift once it loads. <noscript> keeps it working without JS. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    </noscript>
 
     <!-- Canonical: fold duplicate hosts (apex, *.vercel.app) into the primary domain -->
     <link rel="canonical" href="https://www.cvisionapp.com/" />
