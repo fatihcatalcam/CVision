@@ -70,13 +70,16 @@ class AnalysisService:
         ]
 
     @staticmethod
-    def run_analysis(cv: CV, db: Session) -> AnalysisResult:
+    def run_analysis(cv: CV, db: Session, ui_language: str | None = None) -> AnalysisResult:
         """
         Run the full analysis pipeline on a CV and persist results.
 
         Args:
             cv: The CV model instance (must have extracted_text).
             db: Database session.
+            ui_language: The language the user is viewing the site in
+                (en/tr/de/fr/es); localizes the rule-based suggestions. None
+                falls back to English.
 
         Returns:
             The created AnalysisResult record.
@@ -137,7 +140,8 @@ class AnalysisService:
 
         # Run the analysis engine
         engine = AnalysisEngine(
-            skills_list, role_profiles, cv.target_domain, ai_skills=ai_skills
+            skills_list, role_profiles, cv.target_domain,
+            ai_skills=ai_skills, language=ui_language,
         )
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 

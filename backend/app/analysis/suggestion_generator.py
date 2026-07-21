@@ -2,6 +2,10 @@
 Suggestion Generator - produces rule-based, actionable improvement suggestions.
 Generates at least 3 suggestions per analysis (FR10).
 Each suggestion has a category, priority, and message.
+
+Messages are localized (see suggestion_texts.py): the generator picks the
+message table for the requested UI language and never concatenates fragments,
+so grammar stays correct across languages.
 """
 
 import logging
@@ -9,6 +13,7 @@ import re
 from typing import Any
 
 from app.analysis.base_analyzer import BaseAnalyzer, AnalysisContext
+from app.analysis.suggestion_texts import texts_for
 
 logger = logging.getLogger("cvision.analysis.suggestion_generator")
 
@@ -22,20 +27,28 @@ _TECH_DOMAINS = {"Software Engineering", "Data & Analytics", "Cybersecurity"}
 class SuggestionGenerator(BaseAnalyzer):
     """Generates actionable improvement suggestions based on analysis results."""
 
-    def __init__(self, target_domain: str | None = None):
+    def __init__(self, target_domain: str | None = None, language: str | None = None):
         """
         Args:
             target_domain: The CV's target domain. Tech domains get concrete
                 tech examples in suggestion texts; anything else (including
                 "Other"/None) gets neutral wording.
+            language: UI language for the messages (en/tr/de/fr/es). Unknown or
+                None falls back to English, so existing callers are unaffected.
         """
         self._is_tech = target_domain in _TECH_DOMAINS
+        self._t = texts_for(language)
 
     @property
     def name(self) -> str:
         return "Suggestion Generator"
 
+    def _key(self, base: str) -> str:
+        """Pick the tech or general variant of a message key."""
+        return f"{base}_tech" if self._is_tech else f"{base}_general"
+
     def analyze(self, context: AnalysisContext) -> None:
+        t = self._t
         suggestions: list[dict[str, Any]] = []
 
         # ---- Section-based suggestions ----
@@ -45,28 +58,15 @@ class SuggestionGenerator(BaseAnalyzer):
             suggestions.append({
                 "category": "content",
                 "priority": "high",
-                "message": (
-                    "Add a Professional Summary or Objective section at the top of your CV. "
-                    "A 2-3 sentence summary helps recruiters quickly understand your profile "
-                    "and is one of the first things ATS systems scan."
-                ),
+                "message": t["summary_missing"],
                 "snippets": []
             })
 
         if not sections.get("skills"):
-            skills_tail = (
-                "Include specific technologies, programming languages, and tools."
-                if self._is_tech else
-                "Include the specific tools, software, and methods used in your field."
-            )
             suggestions.append({
                 "category": "skills",
                 "priority": "high",
-                "message": (
-                    "Add a dedicated Skills section listing your technical and soft skills. "
-                    "Use a comma-separated or bulleted format for easy ATS parsing. "
-                    + skills_tail
-                ),
+                "message": t[self._key("skills_missing")],
                 "snippets": []
             })
 
@@ -74,11 +74,7 @@ class SuggestionGenerator(BaseAnalyzer):
             suggestions.append({
                 "category": "experience",
                 "priority": "high",
-                "message": (
-                    "Add a Work Experience or Internship section. Even if you're a student, "
-                    "include internships, part-time jobs, volunteer work, or freelance projects. "
-                    "Use the format: Job Title | Company | Date Range."
-                ),
+                "message": t["experience_missing"],
                 "snippets": []
             })
 
@@ -86,119 +82,62 @@ class SuggestionGenerator(BaseAnalyzer):
             suggestions.append({
                 "category": "content",
                 "priority": "high",
-                "message": (
-                    "Add an Education section with your degree, university name, "
-                    "and graduation date. Include your GPA if it's strong (e.g., 3.5+)."
-                ),
+                "message": t["education_missing"],
                 "snippets": []
             })
 
         if not sections.get("projects"):
-            projects_tail = (
-                "Include 2-3 projects with brief descriptions, technologies used, "
-                "and links to GitHub repositories if available."
-                if self._is_tech else
-                "Include 2-3 projects or works with brief descriptions and links "
-                "to a portfolio, showreel, or published pieces if available."
-            )
             suggestions.append({
                 "category": "content",
                 "priority": "medium",
-                "message": (
-                    "Consider adding a Projects section to showcase hands-on experience. "
-                    + projects_tail
-                ),
+                "message": t[self._key("projects_missing")],
                 "snippets": []
             })
 
         if not sections.get("certifications"):
-            cert_examples = (
-                "(e.g., AWS, Google, Coursera, Udemy)"
-                if self._is_tech else
-                "(e.g., Coursera, Udemy, or recognized certificates in your field)"
-            )
             suggestions.append({
                 "category": "content",
                 "priority": "low",
-                "message": (
-                    "Consider adding relevant certifications or online courses "
-                    f"{cert_examples} to strengthen your profile."
-                ),
+                "message": t[self._key("certifications")],
                 "snippets": []
             })
 
         # ---- ATS-based suggestions ----
         for issue in context.ats_issues:
-            if "email" in issue.lower():
+            lowered = issue.lower()
+            if "email" in lowered:
                 suggestions.append({
-                    "category": "ats",
-                    "priority": "high",
-                    "message": (
-                        "Include your email address at the top of your CV. "
-                        "This is essential for recruiter contact and ATS processing."
-                    ),
-                    "snippets": []
+                    "category": "ats", "priority": "high",
+                    "message": t["ats_email"], "snippets": []
                 })
-            elif "contact" in issue.lower():
+            elif "contact" in lowered:
                 suggestions.append({
-                    "category": "ats",
-                    "priority": "high",
-                    "message": (
-                        "Add contact information (email, phone, LinkedIn) "
-                        "at the top of your CV for recruiter accessibility."
-                    ),
-                    "snippets": []
+                    "category": "ats", "priority": "high",
+                    "message": t["ats_contact"], "snippets": []
                 })
-            elif "action verbs" in issue.lower():
+            elif "action verbs" in lowered:
                 suggestions.append({
-                    "category": "formatting",
-                    "priority": "medium",
-                    "message": (
-                        "Use strong action verbs to describe your achievements: "
-                        "'Developed', 'Implemented', 'Designed', 'Managed', 'Optimized'. "
-                        "Avoid passive phrases like 'responsible for' or 'was part of'."
-                    ),
-                    "snippets": []
+                    "category": "formatting", "priority": "medium",
+                    "message": t["ats_action_verbs"], "snippets": []
                 })
-            elif "short" in issue.lower() or "length" in issue.lower():
+            elif "short" in lowered or "length" in lowered:
                 suggestions.append({
-                    "category": "content",
-                    "priority": "medium",
-                    "message": (
-                        "Your CV appears too brief. Aim for at least one full page. "
-                        "Expand on your experiences with specific achievements, "
-                        "use bullet points, and quantify results where possible."
-                    ),
-                    "snippets": []
+                    "category": "content", "priority": "medium",
+                    "message": t["ats_length_short"], "snippets": []
                 })
-            elif "caps" in issue.lower():
+            elif "caps" in lowered:
                 suggestions.append({
-                    "category": "formatting",
-                    "priority": "low",
-                    "message": (
-                        "Reduce the use of ALL CAPS formatting. Use bold text or "
-                        "larger font sizes for headers instead - ATS systems may "
-                        "misinterpret excessive capitalization."
-                    ),
-                    "snippets": []
+                    "category": "formatting", "priority": "low",
+                    "message": t["ats_caps"], "snippets": []
                 })
 
         # ---- Skill-based suggestions ----
         skill_count = len(context.extracted_skills)
         if skill_count < 5:
-            skill_examples = (
-                "List more specific technical skills (e.g., Python, React, SQL, Docker). "
-                if self._is_tech else
-                "List more of the concrete skills, tools, and software used in your field. "
-            )
             suggestions.append({
                 "category": "skills",
                 "priority": "high",
-                "message": (
-                    f"Only {skill_count} recognized skills were detected. "
-                    + skill_examples +
-                    "Aim for at least 8-12 relevant skills for a competitive profile."
-                ),
+                "message": t[self._key("skills_few")].format(count=skill_count),
                 "snippets": []
             })
 
@@ -206,114 +145,72 @@ class SuggestionGenerator(BaseAnalyzer):
         if skill_count > 0:
             categories = set(s["skill_category"] for s in context.extracted_skills)
             if len(categories) < 3:
-                diversity_tail = (
-                    "programming languages, frameworks, databases, tools, and soft skills."
-                    if self._is_tech else
-                    "core field skills, tools and software, and transferable soft skills."
-                )
                 suggestions.append({
                     "category": "skills",
                     "priority": "medium",
-                    "message": (
-                        "Your skills are concentrated in few categories. "
-                        "Diversify by adding skills from different areas: "
-                        + diversity_tail
-                    ),
+                    "message": t[self._key("skills_diversity")],
                     "snippets": []
                 })
 
         # ---- Experience-based suggestions ----
-        if context.experience_score < 40 or True: # Always run quantification check
-            # Look for exact sentences to highlight
-            text = context.extracted_text
-            sentences = re.split(r'(?<=[.!?])\s+|\n+|-|•|\*', text)
-            
-            non_quantified_sentences = []
-            action_verbs = r"^(?:Developed|Implemented|Designed|Built|Managed|Led|Created|Improved|Optimized|Oversaw|Delivered|Collaborated|Maintained|Automated|Integrated|Architected)\b"
-            
-            for s in sentences:
-                s = s.strip()
-                if not s: continue
-                # Does it start with an action verb?
-                if re.match(action_verbs, s, re.IGNORECASE):
-                    # Does it lack numbers?
-                    if not re.search(r'\d', s):
-                        # Add snippet!
-                        if len(s) > 15: # Avoid too short snippets
-                            non_quantified_sentences.append(s)
-            
-            # Limit to top 3 to avoid overwhelming UI
-            non_quantified_sentences = non_quantified_sentences[:3]
+        # Always run the quantification check.
+        # Highlight sentences that use strong action verbs but carry no numbers.
+        text = context.extracted_text
+        sentences = re.split(r'(?<=[.!?])\s+|\n+|-|•|\*', text)
 
-            msg = (
-                "Quantify your achievements in experience descriptions. "
-                + ("Use numbers: 'Improved API response time by 40%', "
-                   "'Managed a team of 5', 'Served 1000+ daily users'."
-                   if self._is_tech else
-                   "Use numbers: 'Managed a team of 5', 'Delivered 12 projects', "
-                   "'Grew the audience by 40%'.")
-            )
-            if non_quantified_sentences:
-                msg = "Your CV needs more specific numbers. We've highlighted sentences that use strong action verbs but lack quantifiable metrics (numbers, percentages, or scale). Describe exactly what you achieved."
+        non_quantified_sentences = []
+        action_verbs = r"^(?:Developed|Implemented|Designed|Built|Managed|Led|Created|Improved|Optimized|Oversaw|Delivered|Collaborated|Maintained|Automated|Integrated|Architected)\b"
 
-            suggestions.append({
-                "category": "experience",
-                "priority": "high" if non_quantified_sentences else "medium",
-                "message": msg,
-                "snippets": non_quantified_sentences
-            })
+        for s in sentences:
+            s = s.strip()
+            if not s:
+                continue
+            if re.match(action_verbs, s, re.IGNORECASE):
+                if not re.search(r'\d', s):
+                    if len(s) > 15:  # Avoid too short snippets
+                        non_quantified_sentences.append(s)
+
+        # Limit to top 3 to avoid overwhelming UI
+        non_quantified_sentences = non_quantified_sentences[:3]
+
+        if non_quantified_sentences:
+            msg = t["quantify_highlighted"]
+        else:
+            msg = t[self._key("quantify_default")]
+
+        suggestions.append({
+            "category": "experience",
+            "priority": "high" if non_quantified_sentences else "medium",
+            "message": msg,
+            "snippets": non_quantified_sentences
+        })
 
         # ---- Keyword suggestions ----
         if context.keyword_score < 40:
             suggestions.append({
                 "category": "content",
                 "priority": "medium",
-                "message": (
-                    "Your CV lacks industry-standard keywords. Review job descriptions "
-                    "for your target role and incorporate relevant terms naturally. "
-                    "Keywords help both ATS systems and human reviewers."
-                ),
+                "message": t["keywords_missing"],
                 "snippets": []
             })
 
         # ---- Ensure minimum 3 suggestions ----
         if len(suggestions) < 3:
             default_suggestions = [
-                {
-                    "category": "formatting",
-                    "priority": "low",
-                    "message": (
-                        "Use consistent formatting throughout: same font, "
-                        "aligned dates, uniform bullet points, and clear section headers."
-                    ),
-                    "snippets": []
-                },
-                {
-                    "category": "content",
-                    "priority": "low",
-                    "message": (
-                        "Tailor your CV for each application. Adjust keywords and "
-                        "highlight the most relevant experience for the specific role."
-                    ),
-                    "snippets": []
-                },
-                {
-                    "category": "formatting",
-                    "priority": "low",
-                    "message": (
-                        "Keep your CV to 1-2 pages. Remove outdated or irrelevant "
-                        "information and focus on your most impactful experiences."
-                    ),
-                    "snippets": []
-                },
+                {"category": "formatting", "priority": "low",
+                 "message": t["default_formatting"], "snippets": []},
+                {"category": "content", "priority": "low",
+                 "message": t["default_tailor"], "snippets": []},
+                {"category": "formatting", "priority": "low",
+                 "message": t["default_length"], "snippets": []},
             ]
             for default in default_suggestions:
                 if len(suggestions) >= 3:
                     break
-                # Avoid duplicates by category + rough message similarity
+                # Avoid duplicates by category + priority
                 if not any(s["category"] == default["category"] and
-                          s["priority"] == default["priority"]
-                          for s in suggestions):
+                           s["priority"] == default["priority"]
+                           for s in suggestions):
                     suggestions.append(default)
 
         context.suggestions = suggestions

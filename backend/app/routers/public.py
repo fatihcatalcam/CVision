@@ -61,6 +61,7 @@ async def public_analyze(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     target_domain: str = Form("Other"),
+    ui_language: str = Form("en"),
     db: Session = Depends(get_db),
 ):
     """Anonymous upload → gated analysis. One free run per IP per day (DB-enforced)."""
@@ -78,7 +79,7 @@ async def public_analyze(
         # File validation failures surface as 400 via the global ValueError handler.
         raise HTTPException(status_code=400, detail=str(e))
 
-    background_tasks.add_task(CVService.process_analysis_background, cv.id)
+    background_tasks.add_task(CVService.process_analysis_background, cv.id, ui_language)
 
     return {"token": cv.session_token, "cv_id": encode_id(cv.id)}
 

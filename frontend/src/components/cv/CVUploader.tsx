@@ -44,7 +44,7 @@ interface CVUploaderProps {
 }
 
 export function CVUploader({ onUploadSuccess, embedded = false, anonymous = false }: CVUploaderProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -84,6 +84,10 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
     const formData = new FormData();
     formData.append('file', file);
     formData.append('target_domain', selectedDomain);
+    // Localizes the rule-based suggestions to the language the user is viewing
+    // the site in. i18n.language can carry a region (e.g. "en-US"); the backend
+    // only knows the base code, and unknown values fall back to English there.
+    formData.append('ui_language', i18n.language.split('-')[0]);
     try {
       const endpoint = anonymous ? '/public/analyze' : '/cvs/upload';
       const response = await api.post(endpoint, formData, { headers: { 'Content-Type': 'multipart/form-data' } });

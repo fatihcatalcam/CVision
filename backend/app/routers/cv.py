@@ -42,6 +42,7 @@ async def upload_cv(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="CV file (PDF only, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
+    ui_language: str = Form("en", description="UI language for localized suggestions (en/tr/de/fr/es)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -59,7 +60,7 @@ async def upload_cv(
     cv = await CVService.upload_cv(file, target_domain, current_user, db)
     
     # Delegate parsing and analysis to background task
-    background_tasks.add_task(CVService.process_analysis_background, cv.id)
+    background_tasks.add_task(CVService.process_analysis_background, cv.id, ui_language)
 
     return CVResponse(
         id=cv.id,

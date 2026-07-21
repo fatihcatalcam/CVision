@@ -177,9 +177,14 @@ class CVService:
         return cv
 
     @staticmethod
-    def process_analysis_background(cv_id: int):
+    def process_analysis_background(cv_id: int, ui_language: str | None = None):
         """
         Background task to handle parsing and analysis automatically.
+
+        ui_language localizes the rule-based suggestions to the language the
+        user is viewing the site in. It defaults to None (English) so callers
+        without a UI context - notably the stuck-job recovery sweep - degrade
+        gracefully rather than failing.
         """
         from app.database import SessionLocal
         from app.services.analysis_service import AnalysisService
@@ -207,7 +212,7 @@ class CVService:
             
             # 2. Run Engine
             logger.info("Text processing completed, launching analysis engine...")
-            AnalysisService.run_analysis(cv, db)
+            AnalysisService.run_analysis(cv, db, ui_language=ui_language)
             
             # 3. Mark as completed after analysis
             cv.status = "completed"

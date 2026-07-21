@@ -11,7 +11,7 @@ def test_processing_started_at_is_set(monkeypatch):
     monkeypatch.setattr(CVService, "extract_text", staticmethod(lambda path, ftype: "text"))
     monkeypatch.setattr(
         "app.services.analysis_service.AnalysisService.run_analysis",
-        staticmethod(lambda cv, db: None),
+        staticmethod(lambda cv, db, ui_language=None: None),
     )
 
     setup = SessionLocal()

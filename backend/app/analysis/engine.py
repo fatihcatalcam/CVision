@@ -31,6 +31,7 @@ class AnalysisEngine:
         role_profiles: list[dict],
         target_domain: str | None = None,
         ai_skills: list[str] | None = None,
+        language: str | None = None,
     ):
         """
         Args:
@@ -41,6 +42,8 @@ class AnalysisEngine:
             ai_skills: Canonical skill names the AI read out of the CV in any
                 language, merged with the regex matches. None (AI unavailable)
                 leaves the pipeline at its regex-only behaviour.
+            language: UI language for the rule-based suggestion messages
+                (en/tr/de/fr/es). Unknown or None falls back to English.
         """
         self._analyzers: list[BaseAnalyzer] = [
             SectionDetector(),
@@ -49,7 +52,7 @@ class AnalysisEngine:
             KeywordScorer(role_profiles),
             ExperienceEvaluator(),
             ScoreCalculator(role_profiles),
-            SuggestionGenerator(target_domain),
+            SuggestionGenerator(target_domain, language),
         ]
 
     def run(self, extracted_text: str, layout_xray: dict | None = None) -> AnalysisContext:
