@@ -105,6 +105,20 @@ export function ResetPasswordPage() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = chars.join('');
+
+    // Name the exact failing password rules in the user's language before the
+    // request, instead of surfacing the backend's English message. Mirrors the
+    // backend rules in app/schemas/user.py and RegisterPage.
+    const missing: string[] = [];
+    if (newPassword.length < 8) missing.push(t('auth.register.reqLength'));
+    if (!/[A-Z]/.test(newPassword)) missing.push(t('auth.register.reqUpper'));
+    if (!/[a-z]/.test(newPassword)) missing.push(t('auth.register.reqLower'));
+    if (!/\d/.test(newPassword)) missing.push(t('auth.register.reqNumber'));
+    if (missing.length > 0) {
+      toast.error(`${t('auth.register.passwordMissing')} ${missing.join(', ')}`);
+      return;
+    }
+
     setIsLoading(true);
     try {
       await api.post('/auth/reset-password', { email, code, new_password: newPassword });

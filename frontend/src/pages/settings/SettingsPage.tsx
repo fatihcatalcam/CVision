@@ -107,7 +107,17 @@ export function SettingsPage() {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passwordsMatch) { toast.error(t('settings.password.errorNoMatch')); return; }
-    if (!passwordValid) { toast.error(t('settings.password.errorRequirements')); return; }
+    if (!passwordValid) {
+      // Name the exact failing rules rather than a generic "doesn't meet
+      // requirements". Mirrors RegisterPage / ResetPasswordPage.
+      const missing: string[] = [];
+      if (newPassword.length < 8) missing.push(t('auth.register.reqLength'));
+      if (!/[A-Z]/.test(newPassword)) missing.push(t('auth.register.reqUpper'));
+      if (!/[a-z]/.test(newPassword)) missing.push(t('auth.register.reqLower'));
+      if (!/\d/.test(newPassword)) missing.push(t('auth.register.reqNumber'));
+      toast.error(`${t('auth.register.passwordMissing')} ${missing.join(', ')}`);
+      return;
+    }
     if (currentPassword === newPassword) { toast.error(t('settings.password.errorSame')); return; }
     setIsSavingPassword(true);
     try {
