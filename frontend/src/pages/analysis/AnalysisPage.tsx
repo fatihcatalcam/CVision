@@ -255,6 +255,10 @@ export function AnalysisPage() {
         }
         try {
           const { data: status } = await api.get(`/analysis/${id}/status`);
+          if (status.status === 'failed_no_text') {
+            if (active) setError(t('analysis.errorImagePdf'));
+            return;
+          }
           if (status.status === 'failed') {
             if (active) setError(status.error_message || t('analysis.errorFailed'));
             return;

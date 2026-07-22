@@ -86,6 +86,7 @@ export function TryPage() {
       }
       try {
         const { data: status } = await api.get(`/public/analysis/${sessionToken}/status`);
+        if (status.status === 'failed_no_text') { setErrorMsg(t('try.errorImagePdf')); setPhase('error'); return; }
         if (status.status === 'failed') { setErrorMsg(t('try.errorGeneric')); setPhase('error'); return; }
         if (status.status === 'completed') {
           const { data } = await api.get(`/public/analysis/${sessionToken}/results`);

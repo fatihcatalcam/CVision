@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.models.cv import CV
 from app.models.user import User
+from app.parsing.base_parser import EmptyTextError
 from app.parsing.parser_factory import (
     get_parser,
     get_extension_from_filename,
@@ -219,6 +220,18 @@ class CVService:
             db.commit()
             logger.info(f"Background task successfully completed for CV {cv_id}")
             
+        except EmptyTextError as e:
+            # Expected, common failure: the CV is an image (Canva/Photoshop
+            # export or a scan) with no text layer, so no ATS can read it. Mark
+            # it distinctly so the frontend can explain that instead of showing
+            # a generic "analysis failed".
+            logger.info(f"CV {cv_id} has no extractable text (image-based): {e}")
+            db.rollback()
+            cv = db.query(CV).filter(CV.id == cv_id).first()
+            if cv:
+                cv.status = "failed_no_text"
+                db.commit()
+
         except Exception as e:
             # logger.exception captures the full traceback at ERROR level and
             # routes it through the standard logging pipeline (console + any

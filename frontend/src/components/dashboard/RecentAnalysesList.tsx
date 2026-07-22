@@ -76,7 +76,7 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
               </span>
             ) : (
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                item.status === 'failed'
+                item.status.startsWith('failed')
                   ? 'text-red-600 bg-red-50 dark:bg-red-500/10'
                   : 'text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05]'
               }`}>

@@ -309,7 +309,7 @@ export function HistoryPage() {
                     <td className="px-5 py-3">
                       {item.overall_score !== null ? (
                         <ScoreBadge score={item.overall_score} />
-                      ) : item.status === 'failed' ? (
+                      ) : item.status.startsWith('failed') ? (
                         <span className="text-xs text-[#9F2F2D]">{t('history.filterFailed')}</span>
                       ) : (
                         <span className="text-xs text-[#787774]">-</span>

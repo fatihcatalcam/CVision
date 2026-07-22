@@ -7,6 +7,17 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 
+class EmptyTextError(ValueError):
+    """No usable text could be extracted from a CV file.
+
+    Raised when a PDF is image-based (designed in Canva/Photoshop and exported
+    as a flattened image, or scanned) so it carries no text layer, or is empty.
+    A ValueError subclass so existing broad handlers still catch it, but distinct
+    enough that the pipeline can map it to a specific, actionable user message
+    ("your CV is an image, no ATS can read it") instead of a generic failure.
+    """
+
+
 class BaseParser(ABC):
     """
     Abstract base class for CV file parsers.
@@ -42,13 +53,13 @@ class BaseParser(ABC):
         cleaned = text.strip()
 
         if not cleaned:
-            raise ValueError(
+            raise EmptyTextError(
                 f"No text could be extracted from '{original_filename}'. "
                 "The file may be empty or contain only images."
             )
 
         if len(cleaned) < self.MIN_TEXT_LENGTH:
-            raise ValueError(
+            raise EmptyTextError(
                 f"Extracted text from '{original_filename}' is too short "
                 f"({len(cleaned)} chars). The file may be a scanned image "
                 "or contain very little text content."
