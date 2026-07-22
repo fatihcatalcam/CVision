@@ -57,6 +57,7 @@ const fr = {
       reqUpper: 'Lettre majuscule',
       reqLower: 'Lettre minuscule',
       reqNumber: 'Chiffre',
+      passwordMissing: 'Il manque encore à votre mot de passe :',
       submitButton: 'Créer un compte gratuit',
       hasAccount: 'Déjà un compte ?',
       signIn: 'Se connecter',

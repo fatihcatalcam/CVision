@@ -57,6 +57,7 @@ const en = {
       reqUpper: 'Uppercase letter',
       reqLower: 'Lowercase letter',
       reqNumber: 'Number',
+      passwordMissing: 'Your password still needs:',
       submitButton: 'Create Free Account',
       hasAccount: 'Already have an account?',
       signIn: 'Sign in',

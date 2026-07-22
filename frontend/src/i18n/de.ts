@@ -57,6 +57,7 @@ const de = {
       reqUpper: 'Großbuchstabe',
       reqLower: 'Kleinbuchstabe',
       reqNumber: 'Zahl',
+      passwordMissing: 'Deinem Passwort fehlt noch:',
       submitButton: 'Kostenloses Konto erstellen',
       hasAccount: 'Bereits ein Konto?',
       signIn: 'Anmelden',

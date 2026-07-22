@@ -57,6 +57,7 @@ const tr = {
       reqUpper: 'Büyük harf',
       reqLower: 'Küçük harf',
       reqNumber: 'Rakam',
+      passwordMissing: 'Şifrende hâlâ şunlar eksik:',
       submitButton: 'Ücretsiz Hesap Oluştur',
       hasAccount: 'Zaten hesabın var mı?',
       signIn: 'Giriş yap',

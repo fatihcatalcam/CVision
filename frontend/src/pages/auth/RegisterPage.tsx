@@ -69,6 +69,22 @@ export function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Tell the user exactly which password rules fail, in their language,
+    // before hitting the server. The backend returns English Pydantic errors
+    // (and a bare min_length message), so relying on its text showed either
+    // English or a generic "registration failed" - users retried blindly and
+    // left. These mirror the backend rules in app/schemas/user.py.
+    const missing: string[] = [];
+    if (password.length < 8) missing.push(t('auth.register.reqLength'));
+    if (!/[A-Z]/.test(password)) missing.push(t('auth.register.reqUpper'));
+    if (!/[a-z]/.test(password)) missing.push(t('auth.register.reqLower'));
+    if (!/\d/.test(password)) missing.push(t('auth.register.reqNumber'));
+    if (missing.length > 0) {
+      toast.error(`${t('auth.register.passwordMissing')} ${missing.join(', ')}`);
+      return;
+    }
+
     setIsLoading(true);
 
     try {

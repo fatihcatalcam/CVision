@@ -57,6 +57,7 @@ const es = {
       reqUpper: 'Letra mayúscula',
       reqLower: 'Letra minúscula',
       reqNumber: 'Número',
+      passwordMissing: 'A tu contraseña le falta todavía:',
       submitButton: 'Crear cuenta gratis',
       hasAccount: '¿Ya tienes cuenta?',
       signIn: 'Iniciar sesión',
