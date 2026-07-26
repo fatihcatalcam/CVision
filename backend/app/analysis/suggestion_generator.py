@@ -23,6 +23,26 @@ logger = logging.getLogger("cvision.analysis.suggestion_generator")
 # not be told to list Docker skills and GitHub repos.
 _TECH_DOMAINS = {"Software Engineering", "Data & Analytics", "Cybersecurity"}
 
+# Signals that a CV already quantifies its achievements. Language-agnostic on
+# purpose: the old check keyed off English action verbs, so every Turkish CV
+# fell through to a generic "quantify your achievements" even when it was full
+# of metrics. Percentages are the strongest signal; a bare 4-digit number is
+# excluded so date ranges (2022-2024) don't read as metrics.
+_PERCENT_RE = re.compile(r'\d+\s*%|%\s*\d+')
+_METRIC_RE = re.compile(r'\d+\s*%|%\s*\d+|\d[\d.,]*\+|\b\d{1,3}\b')
+
+
+def _is_well_quantified(text: str) -> bool:
+    """True if the CV already carries enough concrete metrics.
+
+    Two or more percentages, or six or more metric tokens overall, is treated
+    as "this candidate quantifies" - so we don't nag them to do what they've
+    already done. Tuned against real quantified CVs vs. sparse ones.
+    """
+    if len(_PERCENT_RE.findall(text)) >= 2:
+        return True
+    return len(_METRIC_RE.findall(text)) >= 6
+
 
 class SuggestionGenerator(BaseAnalyzer):
     """Generates actionable improvement suggestions based on analysis results."""
@@ -153,37 +173,40 @@ class SuggestionGenerator(BaseAnalyzer):
                 })
 
         # ---- Experience-based suggestions ----
-        # Always run the quantification check.
-        # Highlight sentences that use strong action verbs but carry no numbers.
+        # Only nudge quantification when the CV actually lacks it. A CV already
+        # full of metrics (%40, 1000+, 5 kişi) must not be told to quantify -
+        # that was the single most over-shown suggestion, especially on Turkish
+        # CVs where the English action-verb highlight never matched.
         text = context.extracted_text
-        sentences = re.split(r'(?<=[.!?])\s+|\n+|-|•|\*', text)
+        if not _is_well_quantified(text):
+            # Highlight action-verb lines that carry no numbers. This path is
+            # English-only; a Turkish CV that lacks metrics still gets the
+            # generic wording, which is appropriate when it genuinely lacks them.
+            sentences = re.split(r'(?<=[.!?])\s+|\n+|-|•|\*', text)
+            action_verbs = r"^(?:Developed|Implemented|Designed|Built|Managed|Led|Created|Improved|Optimized|Oversaw|Delivered|Collaborated|Maintained|Automated|Integrated|Architected)\b"
 
-        non_quantified_sentences = []
-        action_verbs = r"^(?:Developed|Implemented|Designed|Built|Managed|Led|Created|Improved|Optimized|Oversaw|Delivered|Collaborated|Maintained|Automated|Integrated|Architected)\b"
-
-        for s in sentences:
-            s = s.strip()
-            if not s:
-                continue
-            if re.match(action_verbs, s, re.IGNORECASE):
-                if not re.search(r'\d', s):
+            non_quantified_sentences = []
+            for s in sentences:
+                s = s.strip()
+                if not s:
+                    continue
+                if re.match(action_verbs, s, re.IGNORECASE) and not re.search(r'\d', s):
                     if len(s) > 15:  # Avoid too short snippets
                         non_quantified_sentences.append(s)
 
-        # Limit to top 3 to avoid overwhelming UI
-        non_quantified_sentences = non_quantified_sentences[:3]
+            non_quantified_sentences = non_quantified_sentences[:3]  # cap for UI
 
-        if non_quantified_sentences:
-            msg = t["quantify_highlighted"]
-        else:
-            msg = t[self._key("quantify_default")]
+            if non_quantified_sentences:
+                msg = t["quantify_highlighted"]
+            else:
+                msg = t[self._key("quantify_default")]
 
-        suggestions.append({
-            "category": "experience",
-            "priority": "high" if non_quantified_sentences else "medium",
-            "message": msg,
-            "snippets": non_quantified_sentences
-        })
+            suggestions.append({
+                "category": "experience",
+                "priority": "high" if non_quantified_sentences else "medium",
+                "message": msg,
+                "snippets": non_quantified_sentences
+            })
 
         # ---- Keyword suggestions ----
         if context.keyword_score < 40:
