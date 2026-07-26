@@ -14,6 +14,7 @@ from typing import Any
 
 from app.analysis.base_analyzer import BaseAnalyzer, AnalysisContext
 from app.analysis.suggestion_texts import texts_for
+from app.analysis.text_utils import normalize_text
 
 logger = logging.getLogger("cvision.analysis.suggestion_generator")
 
@@ -30,6 +31,41 @@ _TECH_DOMAINS = {"Software Engineering", "Data & Analytics", "Cybersecurity"}
 # excluded so date ranges (2022-2024) don't read as metrics.
 _PERCENT_RE = re.compile(r'\d+\s*%|%\s*\d+')
 _METRIC_RE = re.compile(r'\d+\s*%|%\s*\d+|\d[\d.,]*\+|\b\d{1,3}\b')
+
+
+# Action-verb patterns for the "quantify" highlight, per UI language. Matched
+# against diacritic-folded, lowercased text (normalize_text) so a CV written
+# with or without accents both hit - patterns are therefore written in plain
+# ASCII. English, German, French and Spanish CVs conventionally start a bullet
+# with the action verb, so those anchor at the start (^). Turkish is verb-final
+# (SOV) - the verb ends the line - so it is searched anywhere. Spanish/Turkish
+# use stems + \w* to absorb conjugation; German/French use whole past
+# participles. Tuned against real bullets per language (see tests).
+_ACTION_VERB_PATTERNS: dict[str, re.Pattern] = {
+    "en": re.compile(
+        r"^(?:developed|implemented|designed|built|managed|led|created|improved|"
+        r"optimized|oversaw|delivered|collaborated|maintained|automated|"
+        r"integrated|architected)\b"),
+    "de": re.compile(
+        r"^(?:entwickelt|implementiert|konzipiert|entworfen|erstellt|geleitet|"
+        r"verwaltet|optimiert|verbessert|automatisiert|integriert|eingefuhrt|"
+        r"durchgefuhrt|aufgebaut|betreut|koordiniert|gesteigert|reduziert|"
+        r"gefuhrt)\b"),
+    "fr": re.compile(
+        r"^(?:developpe|implemente|concu|cree|gere|dirige|optimise|ameliore|"
+        r"automatise|integre|realise|coordonne|augmente|reduit|maintenu|lance|"
+        r"mene)\b"),
+    "es": re.compile(
+        r"^(?:desarroll|implement|disen|cre|gestion|dirig|optimic|mejor|"
+        r"automatic|integr|realic|coordin|aument|reduj|lider|mantuv|lanz|"
+        r"constru)\w*"),
+    "tr": re.compile(
+        r"(?:gelistir|tasarla|olustur|yonet|kur|artir|azalt|sagla|uygula|"
+        r"iyilestir|hazirla|yurut|gerceklestir|tamamla|baslat|uret|planla|"
+        r"analiz\s*et|optimiz|koordine|entegre|liderlik|kazan)\w*"),
+}
+# Verb-final languages are searched anywhere in the line, not anchored at start.
+_VERB_FINAL_LANGS = {"tr"}
 
 
 def _is_well_quantified(text: str) -> bool:
@@ -58,6 +94,7 @@ class SuggestionGenerator(BaseAnalyzer):
         """
         self._is_tech = target_domain in _TECH_DOMAINS
         self._t = texts_for(language)
+        self._lang = (language or "en").split("-")[0].lower()
 
     @property
     def name(self) -> str:
@@ -179,18 +216,23 @@ class SuggestionGenerator(BaseAnalyzer):
         # CVs where the English action-verb highlight never matched.
         text = context.extracted_text
         if not _is_well_quantified(text):
-            # Highlight action-verb lines that carry no numbers. This path is
-            # English-only; a Turkish CV that lacks metrics still gets the
-            # generic wording, which is appropriate when it genuinely lacks them.
+            # Highlight action-verb lines that carry no numbers, in the user's
+            # language. Verb-final languages (Turkish) are searched anywhere in
+            # the line; verb-initial ones are anchored at the start.
             sentences = re.split(r'(?<=[.!?])\s+|\n+|-|•|\*', text)
-            action_verbs = r"^(?:Developed|Implemented|Designed|Built|Managed|Led|Created|Improved|Optimized|Oversaw|Delivered|Collaborated|Maintained|Automated|Integrated|Architected)\b"
+            verb_re = _ACTION_VERB_PATTERNS.get(self._lang, _ACTION_VERB_PATTERNS["en"])
+            search_anywhere = self._lang in _VERB_FINAL_LANGS
 
             non_quantified_sentences = []
             for s in sentences:
                 s = s.strip()
                 if not s:
                     continue
-                if re.match(action_verbs, s, re.IGNORECASE) and not re.search(r'\d', s):
+                # Match on folded text (accent/case-insensitive) but keep the
+                # original line as the snippet the user sees.
+                folded = normalize_text(s)
+                found = verb_re.search(folded) if search_anywhere else verb_re.match(folded)
+                if found and not re.search(r'\d', s):
                     if len(s) > 15:  # Avoid too short snippets
                         non_quantified_sentences.append(s)
 

@@ -80,3 +80,46 @@ Backend Developer
     assert len(sugg) == 1
     # English action-verb lines without numbers are highlighted specifically.
     assert sugg[0]["snippets"], "unquantified action-verb lines should be highlighted"
+
+
+# The specific-highlight path must work in every UI language, not just English.
+# Turkish is verb-final (the verb ends the line), the others are verb-initial.
+_UNQUANTIFIED_BY_LANG = {
+    "tr": """
+DENEYIM
+Backend Gelistirici
+- Sirket genelinde kullanilan bir odeme servisi gelistirdim
+- Yeni veritabanina gecisi yonettim
+- Kullanici arayuzunu tasarladim
+""",
+    "de": """
+BERUFSERFAHRUNG
+Backend-Entwickler
+- Entwickelt einen unternehmensweit genutzten Zahlungsdienst
+- Geleitet die Migration zu einer neuen Datenbank
+- Optimiert die Antwortzeiten der Schnittstelle
+""",
+    "fr": """
+EXPERIENCE
+Developpeur Backend
+- Developpe un service de paiement utilise dans toute l'entreprise
+- Gere la migration vers une nouvelle base de donnees
+- Dirige la rotation d'astreinte de l'equipe
+""",
+    "es": """
+EXPERIENCIA
+Desarrollador Backend
+- Desarrolle un servicio de pagos usado en toda la empresa
+- Gestione la migracion a una nueva base de datos
+- Dirigi la rotacion de guardias del equipo
+""",
+}
+
+
+def test_every_language_highlights_specific_unquantified_lines():
+    for lang, text in _UNQUANTIFIED_BY_LANG.items():
+        sugg = _quantify_suggestions(text, language=lang)
+        assert len(sugg) == 1, f"{lang}: expected one quantify suggestion"
+        assert sugg[0]["snippets"], (
+            f"{lang}: unquantified action lines should be highlighted, not generic"
+        )
