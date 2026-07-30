@@ -396,6 +396,7 @@ const es = {
     metaDescription: 'Sube tu CV para obtener una puntuación ATS instantánea, análisis de palabras clave y sugerencias de reescritura con IA. Empieza gratis.',
     nav: {
       howItWorks: 'Cómo funciona',
+      backToTop: 'Volver arriba',
       features: 'Características',
       faq: 'Preguntas frecuentes',
       about: 'Acerca de',

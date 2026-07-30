@@ -396,6 +396,7 @@ const de = {
     metaDescription: 'Lade deinen Lebenslauf hoch für einen sofortigen ATS-Score, Keyword-Lückenanalyse und KI-Umschreibvorschläge. Kostenlos starten.',
     nav: {
       howItWorks: 'So funktioniert es',
+      backToTop: 'Nach oben',
       features: 'Funktionen',
       faq: 'FAQ',
       about: 'Über uns',

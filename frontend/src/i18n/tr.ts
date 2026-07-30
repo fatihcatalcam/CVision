@@ -395,6 +395,7 @@ const tr = {
     metaDescription: "Yapay zeka destekli CV analizi ve ATS resume checker. CV'ni yükle; anında ATS skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
     nav: {
       howItWorks: 'Nasıl çalışır?',
+      backToTop: 'Başa dön',
       features: 'Özellikler',
       faq: 'SSS',
       about: 'Hakkında',

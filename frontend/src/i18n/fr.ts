@@ -396,6 +396,7 @@ const fr = {
     metaDescription: 'Télécharge ton CV pour un score ATS instantané, une analyse des mots-clés manquants et des suggestions de réécriture par IA. Commence gratuitement.',
     nav: {
       howItWorks: 'Comment ça marche',
+      backToTop: 'Retour en haut',
       features: 'Fonctionnalités',
       faq: 'FAQ',
       about: 'À propos',

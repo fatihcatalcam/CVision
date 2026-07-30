@@ -28,7 +28,17 @@ export function HomePage() {
       {/* Nav */}
       <header className="sticky top-0 z-50 backdrop-blur-sm border-b" style={{ background: 'color-mix(in srgb, var(--color-background) 95%, transparent)', borderColor: 'var(--color-card-border)' }}>
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="font-mono font-medium tracking-tight text-base" style={{ color: 'var(--color-foreground)' }}>CVision</span>
+          {/* Clarity: 4 dead clicks on the wordmark - people expect a logo to
+              be clickable. We are already home, so take them back to the top. */}
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label={t('home.nav.backToTop')}
+            className="font-mono font-medium tracking-tight text-base cursor-pointer bg-transparent border-0 p-0"
+            style={{ color: 'var(--color-foreground)' }}
+          >
+            CVision
+          </button>
           <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: 'var(--color-muted)' }}>
             <a href="#how-it-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
@@ -103,7 +113,18 @@ export function HomePage() {
             </div>
           </div>
 
-          <HeroMockup />
+          {/* Clarity: visitors click the product preview - it is the clearest
+              picture of what they get. Make it a route into the product instead
+              of a dead end. The visual stays aria-hidden; this button carries
+              the accessible name. */}
+          <button
+            type="button"
+            onClick={() => navigate(isAuthenticated ? '/dashboard' : '/try')}
+            aria-label={isAuthenticated ? t('home.hero.ctaDashboard') : t('home.hero.ctaAnalyze')}
+            className="block w-full text-left cursor-pointer bg-transparent border-0 p-0"
+          >
+            <HeroMockup />
+          </button>
         </div>
       </section>
 

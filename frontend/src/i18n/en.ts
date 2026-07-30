@@ -395,6 +395,7 @@ const en = {
     metaDescription: "Upload your CV for an instant ATS score, keyword-gap analysis, and AI rewrite suggestions. Match it to any job description. Free to start.",
     nav: {
       howItWorks: 'How it works',
+      backToTop: 'Back to top',
       features: 'Features',
       faq: 'FAQ',
       about: 'About',
