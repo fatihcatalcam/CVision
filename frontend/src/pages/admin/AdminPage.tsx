@@ -495,7 +495,12 @@ export function AdminPage() {
                       <tbody>
                         {filteredAnalyses.length === 0 ? (
                           <tr><td colSpan={6} className="px-6 py-8 text-center text-zinc-500">No content found</td></tr>
-                        ) : filteredAnalyses.map((a) => (
+                        ) : filteredAnalyses.map((a) => {
+                          // Captured as a const so the null check narrows inside
+                          // the onClick closures too (property narrowing does not
+                          // survive into nested functions).
+                          const analysisId = a.id;
+                          return (
                           <tr key={a.cv_id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
                             <td className="px-6 py-4">
                               <p className="text-white font-medium text-sm">{a.user_name}</p>
@@ -532,9 +537,9 @@ export function AdminPage() {
                             </td>
                             <td className="px-6 py-4 text-zinc-500 text-sm">{new Date(a.created_at).toLocaleDateString()}</td>
                             <td className="px-6 py-4 text-right">
-                              {deleteConfirm === `a-${a.id}` ? (
+                              {analysisId !== null && deleteConfirm === `a-${analysisId}` ? (
                                 <div className="flex items-center justify-end gap-2">
-                                  <button onClick={() => handleDeleteAnalysis(a.id)} disabled={actionLoading === `del-analysis-${a.id}`} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors">
+                                  <button onClick={() => handleDeleteAnalysis(analysisId)} disabled={actionLoading === `del-analysis-${analysisId}`} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors">
                                     {actionLoading ? <Loader2 className="w-3 h-3 animate-spin"/> : 'Confirm'}
                                   </button>
                                   <button onClick={() => setDeleteConfirm(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">Cancel</button>
@@ -546,12 +551,12 @@ export function AdminPage() {
                                     <ScrollText className="w-4 h-4" />
                                   </button>
                                   {/* No analysis record on a failed upload: nothing to open or delete. */}
-                                  {a.id !== null && (
+                                  {analysisId !== null && (
                                     <>
-                                      <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
+                                      <button onClick={() => setViewingAnalysis(analysisId)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
                                         <Eye className="w-4 h-4" />
                                       </button>
-                                      <button onClick={() => setDeleteConfirm(`a-${a.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
+                                      <button onClick={() => setDeleteConfirm(`a-${analysisId}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
                                         <Trash2 className="w-4 h-4" />
                                       </button>
                                     </>
@@ -560,7 +565,8 @@ export function AdminPage() {
                               )}
                             </td>
                           </tr>
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
