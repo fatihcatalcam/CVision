@@ -681,6 +681,18 @@ const fr = {
     metaDescription: 'Téléchargez votre CV et obtenez instantanément un score ATS et des retours IA — sans compte.',
     heading: 'Analysez votre CV en 30 secondes',
     sub: 'Aucun compte requis. Téléchargez votre CV et voyez votre score ATS instantanément.',
+    // Copy that gives this page something to rank on, and that the
+    // prerender script emits into the static HTML for crawlers.
+    seo: {
+      h2a: 'Qu\'est-ce qu\'une analyse de CV et pourquoi est-ce utile ?',
+      p1: 'La plupart des grands employeurs filtrent les candidatures avec un logiciel avant qu\'un humain ne les voie. Ce logiciel est un ATS (Applicant Tracking System). Votre CV y passe d\'abord : le texte est extrait, découpé en rubriques et comparé aux exigences du poste. Un CV qui vous paraît soigné peut sembler très différent à ce stade.',
+      p2: 'Une analyse de CV gratuite montre exactement ce qui s\'y passe. Téléversez votre CV et obtenez en quelques secondes votre score de compatibilité ATS, les mots-clés qui manquent et les problèmes de mise en forme à corriger.',
+      h2b: 'Pourquoi les CV sont-ils écartés ?',
+      p3: 'Les causes les plus fréquentes sont techniques : dans les modèles à deux colonnes les lignes s\'entremêlent, les tableaux se disloquent, les coordonnées placées dans la marge ne sont pas lues, ou le CV a été exporté depuis un outil de design sous forme d\'image, si bien que le système n\'en lit pas un seul mot.',
+      p4: 'Rien de tout cela n\'est visible quand vous regardez votre propre CV : vous voyez le PDF que vous avez conçu, le système voit du texte brut. L\'ATS X-Ray de CVision place les deux côte à côte : le CV que vous voyez et la version que le logiciel lit réellement.',
+      h2c: 'Que recevez-vous ?',
+      p5: 'Un score de compatibilité ATS, les mots-clés manquants pour votre domaine cible, une vérification rubrique par rubrique, des suggestions pour chiffrer vos réalisations et des exemples de réécriture assistés par IA. Aucun compte n\'est requis pour la première analyse.',
+    },
     processingHeading: 'Analyse de votre CV',
     processingSub: 'Cela prend généralement 15–30 secondes…',
     step1: 'Analyse de la structure du document',

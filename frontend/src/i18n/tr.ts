@@ -680,6 +680,18 @@ const tr = {
     metaDescription: 'CV\'ni yükle, anında ATS puanı ve yapay zeka geri bildirimi al — hesap gerekmez.',
     heading: 'CV\'ni 30 saniyede analiz et',
     sub: 'Hesap gerekmez. CV\'ni yükle, ATS puanını anında gör.',
+    // Copy that gives this page something to rank on, and that the
+    // prerender script emits into the static HTML for crawlers.
+    seo: {
+      h2a: 'CV analizi nedir, neden gerekli?',
+      p1: 'Büyük şirketlerin çoğu gelen başvuruları önce bir yazılımla eler. Bu yazılıma ATS (Applicant Tracking System / Başvuru Takip Sistemi) denir. CV\'niz bir insana ulaşmadan önce bu sistemden geçer: metniniz çıkarılır, bölümlere ayrılır ve ilanın gereksinimleriyle karşılaştırılır. Tasarım olarak güzel görünen bir CV, bu aşamada bambaşka görünebilir.',
+      p2: 'Ücretsiz CV analizi tam olarak bu aşamada ne olduğunu gösterir. CV\'nizi yüklediğinizde ATS uyumluluk puanınızı, eksik anahtar kelimeleri ve düzeltilmesi gereken biçim sorunlarını saniyeler içinde görürsünüz.',
+      h2b: 'CV\'ler neden eleniyor?',
+      p3: 'En sık görülen sebepler teknik: iki sütunlu şablonlarda satırlar birbirine girer, tablolar dağılır, sayfa kenarındaki bantta kalan iletişim bilgileri okunmaz, ya da CV bir tasarım aracından resim olarak dışa aktarıldığı için sistem tek kelime bile okuyamaz.',
+      p4: 'Bunların hiçbiri CV\'nize bakınca görünmez, çünkü siz tasarladığınız PDF\'i görürsünüz; sistem ise düz metni. CVision\'ın ATS X-Ray özelliği bu iki görüntüyü yan yana koyar: sizin gördüğünüz CV ve yazılımın gerçekten okuduğu hâli.',
+      h2c: 'Analizde ne alırsınız?',
+      p5: 'ATS uyumluluk puanı, hedeflediğiniz alana göre eksik anahtar kelimeler, bölüm bazlı eksik tespiti, başarılarınızı sayısallaştırma önerileri ve yapay zekâ destekli yeniden yazım örnekleri. İlk tarama için hesap açmanıza gerek yok.',
+    },
     processingHeading: 'CV\'n analiz ediliyor',
     processingSub: 'Bu genellikle 15–30 saniye sürer…',
     step1: 'Belge yapısı analiz ediliyor',

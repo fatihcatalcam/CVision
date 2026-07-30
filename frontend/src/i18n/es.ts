@@ -681,6 +681,18 @@ const es = {
     metaDescription: 'Sube tu CV y obtén al instante una puntuación ATS y feedback con IA — sin cuenta.',
     heading: 'Analiza tu CV en 30 segundos',
     sub: 'Sin cuenta. Sube tu CV y ve tu puntuación ATS al instante.',
+    // Copy that gives this page something to rank on, and that the
+    // prerender script emits into the static HTML for crawlers.
+    seo: {
+      h2a: '¿Qué es un análisis de CV y por qué importa?',
+      p1: 'La mayoría de las grandes empresas filtran las candidaturas con software antes de que las vea una persona. Ese software es un ATS (Applicant Tracking System). Tu CV pasa primero por él: se extrae el texto, se divide en secciones y se compara con los requisitos del puesto. Un CV que a ti te parece cuidado puede verse muy distinto en esa fase.',
+      p2: 'Un análisis de CV gratuito te muestra exactamente lo que ocurre ahí. Sube tu CV y obtén en segundos tu puntuación de compatibilidad ATS, las palabras clave que faltan y los problemas de formato que conviene corregir.',
+      h2b: '¿Por qué se descartan los CV?',
+      p3: 'Los motivos más frecuentes son técnicos: en las plantillas a dos columnas las líneas se entremezclan, las tablas se descomponen, los datos de contacto situados en el margen de la página no se leen, o el CV se exportó desde una herramienta de diseño como imagen, así que el sistema no lee ni una sola palabra.',
+      p4: 'Nada de esto se ve cuando miras tu propio CV, porque tú ves el PDF que diseñaste y el sistema ve texto plano. El ATS X-Ray de CVision pone ambos lado a lado: el CV que ves tú y la versión que el software lee de verdad.',
+      h2c: '¿Qué obtienes?',
+      p5: 'Una puntuación de compatibilidad ATS, las palabras clave que faltan para tu área objetivo, una revisión sección por sección, sugerencias para cuantificar tus logros y ejemplos de reescritura asistidos por IA. No necesitas cuenta para el primer análisis.',
+    },
     processingHeading: 'Analizando tu CV',
     processingSub: 'Esto suele tardar 15–30 segundos…',
     step1: 'Analizando la estructura del documento',

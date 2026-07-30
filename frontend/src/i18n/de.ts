@@ -681,6 +681,18 @@ const de = {
     metaDescription: 'Lade deinen Lebenslauf hoch und erhalte sofort einen ATS-Score und KI-Feedback — ohne Konto.',
     heading: 'Analysiere deinen Lebenslauf in 30 Sekunden',
     sub: 'Kein Konto nötig. Lade deinen Lebenslauf hoch und sieh sofort deinen ATS-Score.',
+    // Copy that gives this page something to rank on, and that the
+    // prerender script emits into the static HTML for crawlers.
+    seo: {
+      h2a: 'Was ist eine Lebenslauf-Analyse und warum ist sie wichtig?',
+      p1: 'Die meisten großen Arbeitgeber filtern Bewerbungen mit Software, bevor ein Mensch sie sieht. Diese Software ist ein ATS (Applicant Tracking System). Ihr Lebenslauf durchläuft sie zuerst: Der Text wird extrahiert, in Abschnitte zerlegt und mit den Anforderungen der Stelle verglichen. Ein Lebenslauf, der für Sie gelungen aussieht, kann in dieser Phase ganz anders wirken.',
+      p2: 'Eine kostenlose Lebenslauf-Analyse zeigt genau, was dort passiert. Laden Sie Ihren Lebenslauf hoch und erhalten Sie in Sekunden Ihren ATS-Kompatibilitätswert, fehlende Schlüsselwörter und die Formatierungsprobleme, die sich zu beheben lohnen.',
+      h2b: 'Warum werden Lebensläufe aussortiert?',
+      p3: 'Die häufigsten Gründe sind technisch: Bei zweispaltigen Vorlagen verschränken sich die Zeilen, Tabellen zerfallen, Kontaktdaten im Randbereich der Seite werden nicht gelesen, oder der Lebenslauf wurde aus einem Designprogramm als Bild exportiert, sodass das System kein einziges Wort erkennt.',
+      p4: 'Nichts davon sehen Sie, wenn Sie Ihren eigenen Lebenslauf betrachten - Sie sehen das gestaltete PDF, das System sieht reinen Text. Das ATS-Röntgenbild von CVision stellt beides nebeneinander: den Lebenslauf, den Sie sehen, und die Fassung, die die Software tatsächlich liest.',
+      h2c: 'Was erhalten Sie?',
+      p5: 'Einen ATS-Kompatibilitätswert, die für Ihr Zielfeld fehlenden Schlüsselwörter, eine abschnittsweise Lückenprüfung, Vorschläge zur Quantifizierung Ihrer Erfolge und KI-gestützte Umformulierungsbeispiele. Für den ersten Scan ist kein Konto nötig.',
+    },
     processingHeading: 'Dein Lebenslauf wird analysiert',
     processingSub: 'Das dauert meist 15–30 Sekunden…',
     step1: 'Dokumentstruktur wird analysiert',

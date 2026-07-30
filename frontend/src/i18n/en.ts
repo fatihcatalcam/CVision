@@ -680,6 +680,18 @@ const en = {
     metaDescription: 'Upload your CV and get an instant ATS score and AI feedback — no account needed.',
     heading: 'Analyze your CV in 30 seconds',
     sub: 'No account needed. Upload your CV and see your ATS score instantly.',
+    // Copy that gives this page something to rank on, and that the
+    // prerender script emits into the static HTML for crawlers.
+    seo: {
+      h2a: 'What is a CV analysis, and why does it matter?',
+      p1: 'Most large employers filter applications with software before a person sees them. That software is an ATS (Applicant Tracking System). Your CV goes through it first: the text is extracted, split into sections, and compared against the job\'s requirements. A CV that looks polished to you can look very different at that stage.',
+      p2: 'A free CV analysis shows you exactly what happens there. Upload your CV and you get your ATS compatibility score, the keywords you are missing, and the formatting problems worth fixing - in seconds.',
+      h2b: 'Why do CVs get rejected?',
+      p3: 'The most common reasons are technical: two-column templates interleave their lines, tables scramble, contact details sitting in the page\'s edge band go unread, or the CV was exported from a design tool as an image, so the system cannot read a single word of it.',
+      p4: 'None of this is visible when you look at your own CV, because you see the PDF you designed while the system sees plain text. CVision\'s ATS X-Ray puts both side by side: the CV you see, and the version the software actually reads.',
+      h2c: 'What do you get?',
+      p5: 'An ATS compatibility score, the keywords missing for your target field, a section-by-section gap check, suggestions for quantifying your achievements, and AI-assisted rewrite examples. No account needed for the first scan.',
+    },
     processingHeading: 'Analyzing your CV',
     processingSub: 'This usually takes 15–30 seconds…',
     step1: 'Parsing document structure',

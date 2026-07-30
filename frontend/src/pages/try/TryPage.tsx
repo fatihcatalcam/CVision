@@ -122,6 +122,28 @@ export function TryPage() {
             <h1 className="font-sans text-3xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>{t('try.heading')}</h1>
             <p className="text-base mb-8" style={{ color: 'var(--color-muted)' }}>{t('try.sub')}</p>
             <CVUploader anonymous onUploadSuccess={handleUploaded} />
+
+            {/* Below the uploader so it never delays the action, but present in
+                the DOM (and in the prerendered HTML) so this page has something
+                to rank on. Every ranking query used to be the brand name. */}
+            <section className="mt-16 space-y-8">
+              {([
+                ['seo.h2a', ['seo.p1', 'seo.p2']],
+                ['seo.h2b', ['seo.p3', 'seo.p4']],
+                ['seo.h2c', ['seo.p5']],
+              ] as const).map(([headingKey, bodyKeys]) => (
+                <div key={headingKey} className="space-y-3">
+                  <h2 className="text-lg font-semibold tracking-tight" style={{ color: 'var(--color-foreground)' }}>
+                    {t(`try.${headingKey}`)}
+                  </h2>
+                  {bodyKeys.map((k) => (
+                    <p key={k} className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
+                      {t(`try.${k}`)}
+                    </p>
+                  ))}
+                </div>
+              ))}
+            </section>
           </div>
         )}
 
