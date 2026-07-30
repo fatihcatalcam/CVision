@@ -24,13 +24,23 @@ class AnonymousService:
 
     @staticmethod
     def count_recent_anon_by_ip(db: Session, client_ip: str, hours: int = 24) -> int:
-        """How many anonymous CVs this IP has created within the last `hours`."""
+        """How many anonymous analyses this IP has spent within the last `hours`.
+
+        Failed uploads are excluded: if we could not produce an analysis, the
+        visitor did not get what the daily allowance is for. Before this, an
+        image-only CV burned the single free run and the visitor could not
+        retry even after fixing it - they were pushed into signing up instead.
+
+        Pending/processing rows still count, so a single IP cannot flood the
+        service with parallel uploads while none have finished.
+        """
         since = datetime.now(timezone.utc) - timedelta(hours=hours)
         return (
             db.query(CV)
             .filter(CV.user_id.is_(None))
             .filter(CV.client_ip == client_ip)
             .filter(CV.uploaded_at >= since)
+            .filter(~CV.status.like("failed%"))
             .count()
         )
 

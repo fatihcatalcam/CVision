@@ -348,34 +348,42 @@ def list_all_analyses(
     limit: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
-    """Paginated list of all analysis results."""
-    query = db.query(AnalysisResult).order_by(AnalysisResult.created_at.desc())
-    total = query.count()
-    analyses = query.offset(skip).limit(limit).all()
-    
-    items = []
-    for a in analyses:
-        role = "Unknown"
-        if a.career_recommendations and len(a.career_recommendations) > 0:
-            role = a.career_recommendations[0].role_profile.title
-        elif a.cv and a.cv.target_domain:
-            role = a.cv.target_domain
+    """Paginated list of every upload attempt and its outcome.
 
-        # Anonymous /try analyses have an ownerless CV (cv.owner is None).
-        has_owner = bool(a.cv and a.cv.owner)
+    Driven by CV rather than AnalysisResult so failed uploads appear too: an
+    image-only CV never produces an analysis, and those were previously
+    invisible here - exactly the rows worth auditing for a wrong rejection.
+    """
+    query = db.query(CV).order_by(CV.uploaded_at.desc())
+    total = query.count()
+    cvs = query.offset(skip).limit(limit).all()
+
+    items = []
+    for cv in cvs:
+        analysis = cv.analysis_result
+
+        role = "Unknown"
+        if analysis and analysis.career_recommendations:
+            role = analysis.career_recommendations[0].role_profile.title
+        elif cv.target_domain:
+            role = cv.target_domain
+
+        # Anonymous /try uploads have an ownerless CV (cv.owner is None).
+        has_owner = bool(cv.owner)
         items.append(
             AdminAnalysisListItem(
-                id=a.id,
-                cv_id=a.cv.id if a.cv else 0,
-                user_email=a.cv.owner.email if has_owner else "Anonymous",
-                user_name=a.cv.owner.full_name if has_owner else "Anonymous",
-                cv_filename=a.cv.original_filename if a.cv else "Unknown",
+                id=analysis.id if analysis else None,
+                cv_id=cv.id,
+                user_email=cv.owner.email if has_owner else "Anonymous",
+                user_name=cv.owner.full_name if has_owner else "Anonymous",
+                cv_filename=cv.original_filename,
                 role_profile=role,
-                score=a.overall_score,
-                created_at=a.created_at
+                score=analysis.overall_score if analysis else None,
+                status=cv.status,
+                created_at=cv.uploaded_at,
             )
         )
-        
+
     return AdminAnalysisListResponse(items=items, total=total)
 
 

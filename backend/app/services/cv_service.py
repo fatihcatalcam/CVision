@@ -226,11 +226,7 @@ class CVService:
             # it distinctly so the frontend can explain that instead of showing
             # a generic "analysis failed".
             logger.info(f"CV {cv_id} has no extractable text (image-based): {e}")
-            db.rollback()
-            cv = db.query(CV).filter(CV.id == cv_id).first()
-            if cv:
-                cv.status = "failed_no_text"
-                db.commit()
+            CVService._mark_failed(db, cv_id, "failed_no_text")
 
         except Exception as e:
             # logger.exception captures the full traceback at ERROR level and
@@ -239,14 +235,36 @@ class CVService:
             # which overwrote itself on every crash and raced across concurrent
             # background tasks.
             logger.exception(f"Background task failed for CV {cv_id}: {e}")
-            # Fallback handling
-            db.rollback()
-            cv = db.query(CV).filter(CV.id == cv_id).first()
-            if cv:
-                cv.status = "failed"
-                db.commit()
+            CVService._mark_failed(db, cv_id, "failed")
         finally:
             db.close()
+
+    @staticmethod
+    def _mark_failed(db: Session, cv_id: int, status: str) -> None:
+        """Record the failure and give the user their quota unit back.
+
+        The weekly count is incremented at upload time, before we know whether
+        the analysis will succeed, so a failure would otherwise cost the user a
+        slot for something they never received. Anonymous uploads are refunded
+        implicitly: count_recent_anon_by_ip ignores failed rows.
+        """
+        db.rollback()
+        cv = db.query(CV).filter(CV.id == cv_id).first()
+        if not cv:
+            return
+
+        cv.status = status
+
+        if cv.user_id:
+            owner = db.query(User).filter(User.id == cv.user_id).with_for_update().first()
+            if owner and owner.analysis_count > 0:
+                owner.analysis_count -= 1
+                logger.info(
+                    f"Refunded 1 quota unit to user {owner.id} after CV {cv_id} "
+                    f"failed ({status}); count now {owner.analysis_count}"
+                )
+
+        db.commit()
 
     @staticmethod
     def list_user_cvs(

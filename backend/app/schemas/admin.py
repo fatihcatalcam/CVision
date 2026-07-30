@@ -82,14 +82,20 @@ class AdminCVContent(BaseModel):
 
 
 class AdminAnalysisListItem(BaseModel):
-    """Summary of a specific analysis for the Admin content list."""
-    id: int
+    """One upload attempt in the Admin content list.
+
+    Covers failed uploads too, so image-only CVs rejected by the parser can be
+    audited rather than vanishing. Those carry no analysis record, hence the
+    nullable id and score; `status` says which outcome this row represents.
+    """
+    id: int | None          # analysis id; None when the upload never analysed
     cv_id: int
     user_email: str
     user_name: str
     cv_filename: str
     role_profile: str
-    score: int | float
+    score: int | float | None
+    status: str             # pending | processing | completed | failed | failed_no_text
     created_at: datetime
 
     model_config = {"from_attributes": True}

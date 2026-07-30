@@ -51,13 +51,16 @@ interface RecentActivity {
 }
 
 interface AnalysisItem {
-  id: number;
+  // Failed uploads are listed too, and they have no analysis record -
+  // hence the nullable id and score. `status` says which outcome this row is.
+  id: number | null;
   cv_id: number;
   user_email: string;
   user_name: string;
   cv_filename: string;
   role_profile: string;
-  score: number;
+  score: number | null;
+  status: string;
   created_at: string;
 }
 
@@ -493,7 +496,7 @@ export function AdminPage() {
                         {filteredAnalyses.length === 0 ? (
                           <tr><td colSpan={6} className="px-6 py-8 text-center text-zinc-500">No content found</td></tr>
                         ) : filteredAnalyses.map((a) => (
-                          <tr key={a.id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
+                          <tr key={a.cv_id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
                             <td className="px-6 py-4">
                               <p className="text-white font-medium text-sm">{a.user_name}</p>
                               <p className="text-zinc-500 text-xs">{a.user_email}</p>
@@ -506,12 +509,26 @@ export function AdminPage() {
                             </td>
                             <td className="px-6 py-4 text-zinc-400 text-sm">{a.role_profile}</td>
                             <td className="px-6 py-4">
-                              <span className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
-                                a.score >= 80 ? 'bg-emerald-500/10 text-emerald-400' :
-                                a.score >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-red-500/10 text-red-400'
-                              }`}>
-                                {a.score}%
-                              </span>
+                              {a.score !== null ? (
+                                <span className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
+                                  a.score >= 80 ? 'bg-emerald-500/10 text-emerald-400' :
+                                  a.score >= 50 ? 'bg-amber-500/10 text-amber-400' : 'bg-red-500/10 text-red-400'
+                                }`}>
+                                  {a.score}%
+                                </span>
+                              ) : (
+                                // No analysis: say why, so a wrongly-rejected CV
+                                // is obvious and can be opened via "View CV PDF".
+                                <span className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${
+                                  a.status === 'failed_no_text' ? 'bg-amber-500/10 text-amber-400' :
+                                  a.status === 'failed' ? 'bg-red-500/10 text-red-400' :
+                                  'bg-zinc-500/10 text-zinc-400'
+                                }`}>
+                                  {a.status === 'failed_no_text' ? 'Image PDF'
+                                    : a.status === 'failed' ? 'Failed'
+                                    : a.status}
+                                </span>
+                              )}
                             </td>
                             <td className="px-6 py-4 text-zinc-500 text-sm">{new Date(a.created_at).toLocaleDateString()}</td>
                             <td className="px-6 py-4 text-right">
@@ -524,15 +541,21 @@ export function AdminPage() {
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-end gap-2">
+                                  {/* Always available - this is how a failed upload gets audited. */}
                                   <button onClick={() => handleViewCV(a.cv_id, a.cv_filename, a.user_name)} className="p-1.5 rounded-lg text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors" title="View CV PDF">
                                     <ScrollText className="w-4 h-4" />
                                   </button>
-                                  <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
-                                    <Eye className="w-4 h-4" />
-                                  </button>
-                                  <button onClick={() => setDeleteConfirm(`a-${a.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
+                                  {/* No analysis record on a failed upload: nothing to open or delete. */}
+                                  {a.id !== null && (
+                                    <>
+                                      <button onClick={() => setViewingAnalysis(a.id)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
+                                        <Eye className="w-4 h-4" />
+                                      </button>
+                                      <button onClick={() => setDeleteConfirm(`a-${a.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </>
+                                  )}
                                 </div>
                               )}
                             </td>
