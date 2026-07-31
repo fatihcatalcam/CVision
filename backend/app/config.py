@@ -47,7 +47,14 @@ class Settings(BaseSettings):
 
     # ---- OpenAI ----
     OPENAI_API_KEY: str = ""
-    OPENAI_MODEL: str = "gpt-4o-mini"
+    # Benchmarked on a real Turkish CV against gpt-4o-mini, gpt-5.5 and
+    # gpt-5.6-luna. 4o-mini under-extracted skills (it missed Google Ads and
+    # Meta Ads on a digital-marketing CV, which deflates the ATS score and made
+    # it advise adding SEO to a CV that already had it). The 5.5/5.6 reasoning
+    # models reject temperature != 1, which would make skill extraction
+    # non-deterministic - unacceptable for a scoring tool - and 5.5 took 48s.
+    # 5.4-mini is more accurate at the same latency for ~$0.008/analysis.
+    OPENAI_MODEL: str = "gpt-5.4-mini"
     OPENAI_ENABLED: bool = True  # Automatically disabled if key is empty
 
     # ---- Email (Resend) ----
