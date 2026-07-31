@@ -708,7 +708,7 @@ def ai_enhance_analysis(
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.4,
-            max_tokens=1500,
+            max_completion_tokens=1500,
             response_format=CVAnalysis,
         )
         parsed = response.choices[0].message.parsed
@@ -752,7 +752,7 @@ def _fallback_json_mode(
                 },
             ],
             temperature=0.4,
-            max_tokens=1500,
+            max_completion_tokens=1500,
             response_format={"type": "json_object"},
         )
         raw = response.choices[0].message.content
@@ -838,7 +838,7 @@ def ai_rewrite_bullet(
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.5,
-            max_tokens=200,
+            max_completion_tokens=200,
         )
         rewritten = (response.choices[0].message.content or "").strip()
         # Strip wrapping quotes the model sometimes adds despite instructions
@@ -912,7 +912,7 @@ def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.3,
-            max_tokens=1200,
+            max_completion_tokens=1200,
             response_format=JDMatchOutput,
         )
         parsed = response.choices[0].message.parsed
@@ -933,7 +933,7 @@ def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
                 {"role": "user", "content": user_prompt + "\n\nReturn ONLY valid JSON matching the schema."},
             ],
             temperature=0.3,
-            max_tokens=1200,
+            max_completion_tokens=1200,
             response_format={"type": "json_object"},
         )
         import json as _json
@@ -995,7 +995,7 @@ def ai_generate_cover_letter(cv_text: str, jd_text: str) -> str | None:
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.6,
-            max_tokens=800,
+            max_completion_tokens=800,
         )
         text = (response.choices[0].message.content or "").strip()
         if not text:
