@@ -47,6 +47,31 @@ const esc = (s: string) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+/**
+ * Styling for the pre-mount state.
+ *
+ * The app stylesheet is render-blocking and ~13KB; the JS bundle React needs is
+ * ~189KB. So the browser paints this markup roughly 120ms before React replaces
+ * it on desktop, and a second or more on slow mobile. Unstyled that reads as a
+ * broken wall of text, because Tailwind's preflight strips heading sizes.
+ *
+ * Both the <style> and the content live INSIDE #root, so createRoot wipes them
+ * together when React mounts and nothing can leak into the real app. Selectors
+ * are scoped to #prerender anyway - a <style> in the body is global while it
+ * exists. Colours come from the app's own variables so dark mode is inherited.
+ */
+const PRERENDER_STYLE =
+  '<style>' +
+  '#prerender{max-width:44rem;margin:0 auto;padding:3.5rem 1.5rem;color:var(--color-foreground)}' +
+  '#prerender h1{font-size:2rem;line-height:1.25;font-weight:700;margin:0 0 1rem}' +
+  '#prerender h2{font-size:1.35rem;line-height:1.3;font-weight:600;margin:2.5rem 0 .75rem}' +
+  '#prerender h3{font-size:1.05rem;line-height:1.4;font-weight:600;margin:1.5rem 0 .35rem}' +
+  '#prerender p{margin:0 0 1rem;line-height:1.65;color:var(--color-muted)}' +
+  '</style>';
+
+/** Everything that goes inside <div id="root"> for a prerendered page. */
+const shell = (body: string) => `${PRERENDER_STYLE}<div id="prerender">${body}</div>`;
+
 const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
 const h2 = (s: string) => `<h2>${esc(s)}</h2>`;
 const h3 = (s: string) => `<h3>${esc(s)}</h3>`;
@@ -177,7 +202,7 @@ function buildPage(template: string, route: Route): string {
   html = replaceOnce(
     html,
     /<div id="root"><\/div>/,
-    `<div id="root">${route.body}</div>`,
+    `<div id="root">${shell(route.body)}</div>`,
     '#root container',
   );
 
@@ -220,7 +245,7 @@ function main() {
     replaceOnce(
       template,
       /<div id="root"><\/div>/,
-      `<div id="root">${homeBody()}</div>${guard}`,
+      `<div id="root">${shell(homeBody())}</div>${guard}`,
       'empty #root container (run vite build again if this file was already prerendered)',
     ),
     'utf8',
