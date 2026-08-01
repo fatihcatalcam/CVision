@@ -8,11 +8,15 @@
  * The /how-ats-works guide, written specifically to rank, had zero impressions.
  *
  * This emits dist/<route>/index.html per route with that route's real title,
- * description, canonical, social tags and body copy. Vercel serves static files
- * before applying the SPA rewrite in vercel.json, so a crawler hitting
- * /how-ats-works gets the real page instead of the homepage shell. React then
- * mounts over it as usual (createRoot replaces the container, so there is no
- * hydration mismatch to manage).
+ * description, canonical, social tags and body copy, plus the homepage's own
+ * copy into dist/index.html. The homepage was the one page left out of the
+ * first pass, so the site's most-linked URL kept serving an empty <div
+ * id="root"> - no H1, no text - to every crawler that asked for it.
+ *
+ * Vercel serves static files before applying the SPA rewrite in vercel.json, so
+ * a crawler hitting /how-ats-works gets the real page instead of the homepage
+ * shell. React then mounts over it as usual (createRoot replaces the container,
+ * so there is no hydration mismatch to manage).
  *
  * Copy comes from the SAME i18n resource the React components render, so the
  * static HTML can never drift from what users see. Turkish is prerendered
@@ -45,7 +49,38 @@ const esc = (s: string) =>
 
 const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
 const h2 = (s: string) => `<h2>${esc(s)}</h2>`;
+const h3 = (s: string) => `<h3>${esc(s)}</h3>`;
 const p = (s: string) => `<p>${esc(s)}</p>`;
+
+/** The homepage: hero, how-it-works, features, and the full FAQ. */
+function homeBody(): string {
+  const h = tr.home;
+  const parts = [h1(h.hero.title), p(h.hero.subtitle)];
+
+  const steps = h.howItWorks as Record<string, string>;
+  parts.push(h2(steps.label));
+  for (const i of [1, 2, 3]) {
+    parts.push(h3(steps[`step${i}Title`]), p(steps[`step${i}Desc`]));
+  }
+
+  const features = h.features as Record<string, string>;
+  parts.push(h2(features.label));
+  for (const key of ['scoring', 'career', 'skills']) {
+    parts.push(h3(features[`${key}Title`]), p(features[`${key}Desc`]));
+  }
+
+  // The FAQ matters most here: the template already ships a FAQPage JSON-LD
+  // block with these exact answers, but the visible copy backing it only
+  // existed after React mounted. Crawlers that check the markup against the
+  // rendered page saw structured data with nothing behind it.
+  const faq = h.faq as Record<string, string>;
+  parts.push(h2(faq.label));
+  for (let i = 1; faq[`q${i}`]; i++) {
+    parts.push(h3(faq[`q${i}`]), p(faq[`a${i}`]));
+  }
+
+  return parts.join('');
+}
 
 /** The ATS guide: title, definition, then six heading/body sections. */
 function guideBody(): string {
@@ -162,7 +197,36 @@ function main() {
     fs.writeFileSync(path.join(outDir, 'index.html'), buildPage(template, route), 'utf8');
     console.log(`prerendered ${route.path} -> ${path.relative(DIST, outDir)}/index.html`);
   }
-  console.log(`prerender: ${ROUTES.length} routes written`);
+
+  // The homepage is written LAST because its output file IS dist/index.html -
+  // the template every page above was built from. Only the body is injected:
+  // the <head> here already describes the homepage, hand-tuned down to the
+  // keywords and JSON-LD, so running it through buildPage would be a downgrade.
+  //
+  // This is also the file vercel.json falls back to for every route that is not
+  // prerendered, which is a second reason it has to hold the homepage's copy.
+  // Being the fallback has a cost the three pages above do not pay: on /login,
+  // /dashboard and friends this homepage copy would PAINT before React mounts,
+  // because the app CSS is render-blocking and lands well before the JS bundle.
+  // The inline script below runs synchronously during parse - before first
+  // paint - and clears the copy off any route that is not the homepage, so
+  // those routes keep their old blank-shell behaviour. Crawlers asking for /
+  // are unaffected, which is the entire point of prerendering it.
+  const guard =
+    `<script>if(location.pathname!=='/')document.getElementById('root').textContent=''</script>`;
+
+  fs.writeFileSync(
+    templatePath,
+    replaceOnce(
+      template,
+      /<div id="root"><\/div>/,
+      `<div id="root">${homeBody()}</div>${guard}`,
+      'empty #root container (run vite build again if this file was already prerendered)',
+    ),
+    'utf8',
+  );
+  console.log('prerendered / -> index.html');
+  console.log(`prerender: ${ROUTES.length + 1} routes written`);
 }
 
 main();

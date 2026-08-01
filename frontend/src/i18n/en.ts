@@ -18,7 +18,7 @@ const en = {
   auth: {
     tagline: 'Know exactly where your CV stands.',
     taglineRegister: 'Your next role starts with a stronger CV.',
-    usedBy: 'Used by career professionals across 14 industries.',
+    usedBy: 'Used by career professionals across 24 industries.',
     backToHome: '← Back to home',
 
     login: {
@@ -479,7 +479,7 @@ const en = {
     s1Heading: 'What CVision does',
     s1Body: 'You upload a CV as a PDF or TXT file, and the AI reads it in seconds. It returns an ATS compatibility score with sub-scores for keywords, completeness, and experience, explains each score, and points out the exact sections to fix. It then rewrites weak bullet points, suggests matching career paths, and — on the Pro plan — matches your CV to a specific job description and generates a tailored cover letter.',
     s2Heading: 'Who CVision is for',
-    s2Body: 'Job seekers, students, recent graduates, and working professionals in any industry who want a stronger, ATS-friendly CV and clear, actionable feedback. CVision supports 14 industry domains and adapts its scoring to the standards of each one.',
+    s2Body: 'Job seekers, students, recent graduates, and working professionals in any industry who want a stronger, ATS-friendly CV and clear, actionable feedback. CVision supports 24 industry domains and adapts its scoring to the standards of each one.',
     s3Heading: 'What makes CVision different',
     s3Body: 'Most resume checkers stop at a score. CVision tells you exactly what to fix and rewrites your bullet points with AI, so you can act on the feedback in seconds instead of guessing. It also closes the loop most tools skip: match your CV against a real job description, see the missing keywords, and generate a tailored cover letter — all in one place.',
     s4Heading: 'Pricing',
@@ -507,7 +507,7 @@ const en = {
     s5Heading: "How to pass ATS screening",
     s5Body: "Use a single-column layout with standard section headings (Experience, Education, Skills). Save as PDF unless a TXT file is requested. Mirror the exact keywords and skills from the job description, spelled the way they appear. Avoid text inside images, tables, and headers or footers. Include measurable results in your bullet points and keep job titles and dates consistent. Then test the result against the specific job before you apply.",
     s6Heading: "How CVision checks your CV",
-    s6Body: "CVision runs your CV through the same kind of parsing and keyword matching an ATS uses, adapted to 14 industry domains and available in five languages. It returns an ATS compatibility score with sub-scores, flags missing keywords and weak or absent sections, rewrites weak bullet points with AI, and — on the Pro plan — matches your CV against a specific job description and writes a tailored cover letter. You see exactly what an ATS would penalize, and how to fix it, in seconds.",
+    s6Body: "CVision runs your CV through the same kind of parsing and keyword matching an ATS uses, adapted to 24 industry domains and available in five languages. It returns an ATS compatibility score with sub-scores, flags missing keywords and weak or absent sections, rewrites weak bullet points with AI, and — on the Pro plan — matches your CV against a specific job description and writes a tailored cover letter. You see exactly what an ATS would penalize, and how to fix it, in seconds.",
     ctaTitle: "See how your CV scores",
     ctaButton: "Check my CV free",
   },

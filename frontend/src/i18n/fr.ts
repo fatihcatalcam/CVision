@@ -18,7 +18,7 @@ const fr = {
   auth: {
     tagline: 'Sache exactement où en est ton CV.',
     taglineRegister: 'Ton prochain poste commence par un CV plus solide.',
-    usedBy: 'Utilisé par des professionnels dans 14 secteurs.',
+    usedBy: 'Utilisé par des professionnels dans 24 secteurs.',
     backToHome: "← Retour à l'accueil",
 
     login: {
@@ -480,7 +480,7 @@ const fr = {
     s1Heading: 'Ce que fait CVision',
     s1Body: "Tu télécharges un CV en PDF ou TXT, et l'IA le lit en quelques secondes. Elle renvoie un score de compatibilité ATS avec des sous-scores pour les mots-clés, la complétude et l'expérience, explique chaque score et indique les sections exactes à corriger. Elle réécrit ensuite les puces faibles, suggère des parcours professionnels correspondants et — sur le plan Pro — compare ton CV à une offre d'emploi spécifique et génère une lettre de motivation sur mesure.",
     s2Heading: 'Pour qui est CVision',
-    s2Body: "Les chercheurs d'emploi, étudiants, jeunes diplômés et professionnels en activité de tout secteur qui veulent un CV plus solide et compatible ATS, et des retours clairs et exploitables. CVision prend en charge 14 secteurs et adapte sa notation aux standards de chacun.",
+    s2Body: "Les chercheurs d'emploi, étudiants, jeunes diplômés et professionnels en activité de tout secteur qui veulent un CV plus solide et compatible ATS, et des retours clairs et exploitables. CVision prend en charge 24 secteurs et adapte sa notation aux standards de chacun.",
     s3Heading: 'Ce qui différencie CVision',
     s3Body: "La plupart des vérificateurs de CV s'arrêtent à un score. CVision te dit exactement quoi corriger et réécrit tes puces avec l'IA, pour que tu puisses agir en quelques secondes au lieu de deviner. Il boucle aussi la boucle que la plupart des outils sautent : compare ton CV à une vraie offre d'emploi, vois les mots-clés manquants et génère une lettre de motivation sur mesure — le tout au même endroit.",
     s4Heading: 'Tarifs',
@@ -508,7 +508,7 @@ const fr = {
     s5Heading: "Comment réussir le tri ATS",
     s5Body: "Utilisez une mise en page sur une seule colonne avec des titres de section standard (Expérience, Formation, Compétences). Enregistrez en PDF sauf si un fichier TXT est demandé. Reprenez exactement les mots-clés et compétences de l'offre, orthographiés tels qu'ils apparaissent. Évitez le texte dans les images, les tableaux et les en-têtes et pieds de page. Ajoutez des résultats mesurables dans vos puces et gardez des intitulés de poste et des dates cohérents. Testez ensuite le résultat sur l'offre précise avant de postuler.",
     s6Heading: "Comment CVision vérifie votre CV",
-    s6Body: "CVision fait passer votre CV par le même type d'analyse et de correspondance de mots-clés qu'un ATS, adapté à 14 secteurs et disponible en cinq langues. Il renvoie un score de compatibilité ATS avec des sous-scores, signale les mots-clés manquants et les sections faibles ou absentes, réécrit les puces faibles avec l'IA et — dans le forfait Pro — compare votre CV à une offre précise et rédige une lettre de motivation sur mesure. Vous voyez exactement ce qu'un ATS pénaliserait, et comment le corriger, en quelques secondes.",
+    s6Body: "CVision fait passer votre CV par le même type d'analyse et de correspondance de mots-clés qu'un ATS, adapté à 24 secteurs et disponible en cinq langues. Il renvoie un score de compatibilité ATS avec des sous-scores, signale les mots-clés manquants et les sections faibles ou absentes, réécrit les puces faibles avec l'IA et — dans le forfait Pro — compare votre CV à une offre précise et rédige une lettre de motivation sur mesure. Vous voyez exactement ce qu'un ATS pénaliserait, et comment le corriger, en quelques secondes.",
     ctaTitle: "Découvrez le score de votre CV",
     ctaButton: "Vérifier mon CV gratuitement",
   },

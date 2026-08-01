@@ -18,7 +18,7 @@ const tr = {
   auth: {
     tagline: 'CV\'nin ne kadar güçlü olduğunu keşfet.',
     taglineRegister: 'Bir sonraki rolün daha güçlü bir CV ile başlar.',
-    usedBy: '14 sektörde kariyer profesyonelleri tarafından kullanılıyor.',
+    usedBy: '24 sektörde kariyer profesyonelleri tarafından kullanılıyor.',
     backToHome: '← Ana sayfaya dön',
 
     login: {
@@ -479,7 +479,7 @@ const tr = {
     s1Heading: 'CVision ne yapar?',
     s1Body: 'CV\'ni PDF veya TXT olarak yüklersin, yapay zeka saniyeler içinde okur. Anahtar kelime, bütünlük ve deneyim alt skorlarıyla birlikte bir ATS uyumluluk skoru döndürür, her skoru açıklar ve düzeltilmesi gereken bölümleri tam olarak gösterir. Ardından zayıf madde işaretlerini yeniden yazar, uygun kariyer yollarını önerir ve Pro planında CV\'ni belirli bir iş ilanıyla eşleştirip sana özel bir ön yazı oluşturur.',
     s2Heading: 'CVision kimler için?',
-    s2Body: 'Daha güçlü, ATS uyumlu bir CV ve net, uygulanabilir geri bildirim isteyen her sektörden iş arayanlar, öğrenciler, yeni mezunlar ve çalışan profesyoneller. CVision 14 sektör alanını destekler ve puanlamasını her birinin standartlarına göre uyarlar.',
+    s2Body: 'Daha güçlü, ATS uyumlu bir CV ve net, uygulanabilir geri bildirim isteyen her sektörden iş arayanlar, öğrenciler, yeni mezunlar ve çalışan profesyoneller. CVision 24 sektör alanını destekler ve puanlamasını her birinin standartlarına göre uyarlar.',
     s3Heading: 'CVision\'ı farklı kılan ne?',
     s3Body: 'Çoğu CV kontrol aracı sadece skor verir. CVision tam olarak neyi düzeltmen gerektiğini söyler ve madde işaretlerini yapay zeka ile yeniden yazar; böylece tahmin etmek yerine geri bildirime saniyeler içinde göre hareket edebilirsin. Ayrıca çoğu aracın atladığı döngüyü kapatır: CV\'ni gerçek bir iş ilanıyla eşleştir, eksik anahtar kelimeleri gör ve sana özel bir ön yazı oluştur — hepsi tek yerde.',
     s4Heading: 'Fiyatlandırma',
@@ -507,7 +507,7 @@ const tr = {
     s5Heading: "ATS taramasını nasıl geçersiniz",
     s5Body: "Standart bölüm başlıklarıyla (Deneyim, Eğitim, Beceriler) tek sütunlu bir düzen kullanın. TXT dosyası istenmediği sürece PDF olarak kaydedin. İş ilanındaki anahtar kelimeleri ve becerileri, göründükleri şekliyle birebir yansıtın. Görsel içindeki metinlerden, tablolardan ve üst/alt bilgilerden kaçının. Madde işaretlerinize ölçülebilir sonuçlar ekleyin ve iş unvanları ile tarihleri tutarlı tutun. Ardından başvurmadan önce sonucu ilgili iş ilanına karşı test edin.",
     s6Heading: "CVision CV'nizi nasıl kontrol eder",
-    s6Body: "CVision, CV'nizi bir ATS'nin kullandığı türden ayrıştırma ve anahtar kelime eşleştirmesinden geçirir; bu, 14 sektör alanına uyarlanmıştır ve beş dilde kullanılabilir. Alt puanlarla birlikte bir ATS uyumluluk puanı verir, eksik anahtar kelimeleri ve zayıf veya olmayan bölümleri işaretler, zayıf madde işaretlerini yapay zekâ ile yeniden yazar ve — Pro planında — CV'nizi belirli bir iş ilanıyla eşleştirip size özel bir ön yazı hazırlar. Bir ATS'nin neyi cezalandıracağını ve bunu nasıl düzelteceğinizi saniyeler içinde görürsünüz.",
+    s6Body: "CVision, CV'nizi bir ATS'nin kullandığı türden ayrıştırma ve anahtar kelime eşleştirmesinden geçirir; bu, 24 sektör alanına uyarlanmıştır ve beş dilde kullanılabilir. Alt puanlarla birlikte bir ATS uyumluluk puanı verir, eksik anahtar kelimeleri ve zayıf veya olmayan bölümleri işaretler, zayıf madde işaretlerini yapay zekâ ile yeniden yazar ve — Pro planında — CV'nizi belirli bir iş ilanıyla eşleştirip size özel bir ön yazı hazırlar. Bir ATS'nin neyi cezalandıracağını ve bunu nasıl düzelteceğinizi saniyeler içinde görürsünüz.",
     ctaTitle: "CV'niz kaç puan alıyor görün",
     ctaButton: "CV'mi ücretsiz kontrol et",
   },

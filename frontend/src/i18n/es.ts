@@ -18,7 +18,7 @@ const es = {
   auth: {
     tagline: 'Sabe exactamente dónde está tu CV.',
     taglineRegister: 'Tu próximo trabajo empieza con un CV más sólido.',
-    usedBy: 'Usado por profesionales de 14 sectores.',
+    usedBy: 'Usado por profesionales de 24 sectores.',
     backToHome: '← Volver al inicio',
 
     login: {
@@ -480,7 +480,7 @@ const es = {
     s1Heading: 'Qué hace CVision',
     s1Body: 'Subes un CV en PDF o TXT y la IA lo lee en segundos. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones para palabras clave, completitud y experiencia, explica cada puntuación e indica las secciones exactas a corregir. Luego reescribe puntos débiles, sugiere trayectorias profesionales y, en el plan Pro, compara tu CV con una oferta de trabajo específica y genera una carta de presentación personalizada.',
     s2Heading: 'Para quién es CVision',
-    s2Body: 'Candidatos, estudiantes, recién graduados y profesionales en activo de cualquier sector que quieran un CV más sólido y compatible con ATS, y comentarios claros y accionables. CVision admite 14 sectores y adapta su puntuación a los estándares de cada uno.',
+    s2Body: 'Candidatos, estudiantes, recién graduados y profesionales en activo de cualquier sector que quieran un CV más sólido y compatible con ATS, y comentarios claros y accionables. CVision admite 24 sectores y adapta su puntuación a los estándares de cada uno.',
     s3Heading: 'Qué diferencia a CVision',
     s3Body: 'La mayoría de los verificadores de CV se detienen en una puntuación. CVision te dice exactamente qué corregir y reescribe tus puntos con IA, para que puedas actuar en segundos. También cierra el ciclo que la mayoría de las herramientas omiten: compara tu CV con una oferta real, ve las palabras clave faltantes y genera una carta de presentación personalizada, todo en un solo lugar.',
     s4Heading: 'Precios',
@@ -508,7 +508,7 @@ const es = {
     s5Heading: "Cómo superar el filtrado ATS",
     s5Body: "Usa un diseño de una sola columna con encabezados de sección estándar (Experiencia, Formación, Habilidades). Guarda en PDF salvo que se pida un archivo TXT. Refleja exactamente las palabras clave y habilidades de la oferta, escritas tal como aparecen. Evita el texto dentro de imágenes, las tablas y los encabezados y pies de página. Incluye resultados medibles en tus viñetas y mantén coherentes los puestos y las fechas. Luego prueba el resultado con la oferta concreta antes de postularte.",
     s6Heading: "Cómo revisa tu CV CVision",
-    s6Body: "CVision procesa tu CV con el mismo tipo de análisis y coincidencia de palabras clave que usa un ATS, adaptado a 14 sectores y disponible en cinco idiomas. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones, señala las palabras clave que faltan y las secciones débiles o ausentes, reescribe las viñetas flojas con IA y —en el plan Pro— compara tu CV con una oferta concreta y redacta una carta de presentación a medida. Ves exactamente qué penalizaría un ATS, y cómo corregirlo, en segundos.",
+    s6Body: "CVision procesa tu CV con el mismo tipo de análisis y coincidencia de palabras clave que usa un ATS, adaptado a 24 sectores y disponible en cinco idiomas. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones, señala las palabras clave que faltan y las secciones débiles o ausentes, reescribe las viñetas flojas con IA y —en el plan Pro— compara tu CV con una oferta concreta y redacta una carta de presentación a medida. Ves exactamente qué penalizaría un ATS, y cómo corregirlo, en segundos.",
     ctaTitle: "Descubre qué puntuación tiene tu CV",
     ctaButton: "Revisar mi CV gratis",
   },

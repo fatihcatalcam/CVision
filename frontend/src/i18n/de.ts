@@ -18,7 +18,7 @@ const de = {
   auth: {
     tagline: 'Wisse genau, wo dein Lebenslauf steht.',
     taglineRegister: 'Deine nächste Stelle beginnt mit einem stärkeren Lebenslauf.',
-    usedBy: 'Genutzt von Karrierefachleuten in 14 Branchen.',
+    usedBy: 'Genutzt von Karrierefachleuten in 24 Branchen.',
     backToHome: '← Zurück zur Startseite',
 
     login: {
@@ -480,7 +480,7 @@ const de = {
     s1Heading: 'Was CVision tut',
     s1Body: 'Du lädst einen Lebenslauf als PDF oder TXT hoch und die KI liest ihn in Sekunden. Sie gibt einen ATS-Kompatibilitätsscore mit Teilscores für Keywords, Vollständigkeit und Erfahrung zurück, erklärt jeden Score und zeigt genau die zu korrigierenden Abschnitte. Dann schreibt sie schwache Aufzählungspunkte um, schlägt passende Karrierewege vor und im Pro-Plan vergleicht deinen Lebenslauf mit einer konkreten Stellenbeschreibung und generiert ein maßgeschneidertes Anschreiben.',
     s2Heading: 'Für wen CVision ist',
-    s2Body: 'Jobsuchende, Studierende, Berufseinsteiger und Berufstätige in jeder Branche, die einen stärkeren, ATS-freundlichen Lebenslauf und klares, umsetzbares Feedback möchten. CVision unterstützt 14 Branchenfelder und passt seine Bewertung an die Standards jedes einzelnen an.',
+    s2Body: 'Jobsuchende, Studierende, Berufseinsteiger und Berufstätige in jeder Branche, die einen stärkeren, ATS-freundlichen Lebenslauf und klares, umsetzbares Feedback möchten. CVision unterstützt 24 Branchenfelder und passt seine Bewertung an die Standards jedes einzelnen an.',
     s3Heading: 'Was CVision unterscheidet',
     s3Body: 'Die meisten Lebenslauf-Checker bleiben bei einem Score stehen. CVision sagt dir genau, was du beheben musst, und schreibt deine Aufzählungspunkte mit KI um, sodass du in Sekunden handeln kannst. Es schließt auch die Lücke, die die meisten Tools überspringen: Vergleiche deinen Lebenslauf mit einer echten Stellenausschreibung, sieh die fehlenden Keywords und generiere ein maßgeschneidertes Anschreiben, alles an einem Ort.',
     s4Heading: 'Preise',
@@ -508,7 +508,7 @@ const de = {
     s5Heading: "Wie du das ATS-Screening bestehst",
     s5Body: "Verwende ein einspaltiges Layout mit Standardüberschriften (Erfahrung, Ausbildung, Kenntnisse). Speichere als PDF, sofern keine TXT-Datei verlangt wird. Übernimm die genauen Schlüsselwörter und Fähigkeiten aus der Stellenanzeige, so wie sie dort stehen. Vermeide Text in Bildern, Tabellen sowie Kopf- und Fußzeilen. Nimm messbare Ergebnisse in deine Stichpunkte auf und halte Jobtitel und Daten einheitlich. Teste das Ergebnis dann gegen die konkrete Stelle, bevor du dich bewirbst.",
     s6Heading: "Wie CVision deinen Lebenslauf prüft",
-    s6Body: "CVision lässt deinen Lebenslauf durch dieselbe Art von Auslesung und Schlüsselwortabgleich laufen wie ein ATS – angepasst an 14 Branchen und in fünf Sprachen verfügbar. Es liefert einen ATS-Kompatibilitätswert mit Teilwerten, markiert fehlende Schlüsselwörter sowie schwache oder fehlende Abschnitte, schreibt schwache Stichpunkte mit KI um und – im Pro-Tarif – gleicht deinen Lebenslauf mit einer konkreten Stellenanzeige ab und verfasst ein passendes Anschreiben. Du siehst in Sekunden genau, was ein ATS abstrafen würde und wie du es behebst.",
+    s6Body: "CVision lässt deinen Lebenslauf durch dieselbe Art von Auslesung und Schlüsselwortabgleich laufen wie ein ATS – angepasst an 24 Branchen und in fünf Sprachen verfügbar. Es liefert einen ATS-Kompatibilitätswert mit Teilwerten, markiert fehlende Schlüsselwörter sowie schwache oder fehlende Abschnitte, schreibt schwache Stichpunkte mit KI um und – im Pro-Tarif – gleicht deinen Lebenslauf mit einer konkreten Stellenanzeige ab und verfasst ein passendes Anschreiben. Du siehst in Sekunden genau, was ein ATS abstrafen würde und wie du es behebst.",
     ctaTitle: "Sieh, wie dein Lebenslauf abschneidet",
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },

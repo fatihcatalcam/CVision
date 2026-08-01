@@ -191,7 +191,7 @@ export function HomePage() {
         <div className="grid grid-cols-3 divide-x" style={{ borderColor: 'var(--color-card-border)' }}>
           {([
             { value: '10K+',  labelKey: 'home.stats.cvsLabel' },
-            { value: '14',    labelKey: 'home.stats.domainsLabel' },
+            { value: '24',    labelKey: 'home.stats.domainsLabel' },
             { value: '< 30s', labelKey: 'home.stats.timeLabel' },
           ] as const).map(({ value, labelKey }) => (
             <div key={labelKey} className="px-8 first:pl-0 last:pr-0">
