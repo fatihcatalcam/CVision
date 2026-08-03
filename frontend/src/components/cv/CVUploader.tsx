@@ -175,7 +175,7 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
         >
           <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept=".pdf" className="hidden" />
 
-          <div className={`p-4 rounded-2xl mb-4 transition-all duration-300 ${isDragging ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] scale-110' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] group-hover:bg-[#EAEAEA] dark:group-hover:bg-white/[0.08] group-hover:text-[#111111] dark:group-hover:text-[#e8e7e4]'}`}>
+          <div className={`p-4 rounded-2xl mb-4 transition-all duration-300 ${isDragging ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] scale-110' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] group-hover:bg-[#EAEAEA] dark:group-hover:bg-white/[0.08] group-hover:text-[#111111] dark:hover:text-[#e8e7e4] dark:group-hover:text-[#e8e7e4]'}`}>
             <UploadCloud className="w-8 h-8" />
           </div>
 
@@ -212,7 +212,7 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
             {!isUploading && (
               <button
                 onClick={() => setFile(null)}
-                className="p-1.5 text-[#6B6A65] hover:text-[#111111] hover:bg-[#EAEAEA] rounded-lg transition-colors ml-1"
+                className="p-1.5 text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] hover:bg-[#EAEAEA] rounded-lg transition-colors ml-1"
               >
                 <X className="w-4 h-4" />
               </button>

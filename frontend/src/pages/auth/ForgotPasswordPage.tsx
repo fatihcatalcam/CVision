@@ -31,7 +31,7 @@ export function ForgotPasswordPage() {
       <div className="w-full max-w-sm">
         <button
           onClick={() => navigate('/login')}
-          className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] transition-colors text-[#6B6A65] bg-transparent border-0 cursor-pointer"
+          className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors text-[#6B6A65] bg-transparent border-0 cursor-pointer"
         >
           {t('auth.forgotPassword.backToSignIn')}
         </button>

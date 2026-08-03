@@ -159,7 +159,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
                   <p className="text-[10px] uppercase font-bold text-[#346538] flex items-center gap-1">
                     <Sparkles className="w-3 h-3" /> {t('analysis.afterRewrite')}
                   </p>
-                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
+                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] dark:text-[#e8e7e4] transition-colors">
                     {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                     {copied ? t('analysis.copied') : t('analysis.copy')}
                   </button>
@@ -173,7 +173,7 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
                 <p className="text-[10px] uppercase font-bold text-[#6B6A65] flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> {t('try.aiTipLabel')}
                 </p>
-                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
+                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] dark:text-[#e8e7e4] transition-colors">
                   {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                   {copied ? t('analysis.copied') : t('analysis.copy')}
                 </button>
