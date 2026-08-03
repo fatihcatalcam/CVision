@@ -81,3 +81,19 @@ CVision is a SaaS-based platform designed to help students, graduates, and job s
 CVision aims to provide an **accessible, explainable, and scalable solution** for CV evaluation, combining software engineering principles with a real-world problem in recruitment and career preparation.
 
 ---
+
+## 📄 License
+
+Copyright (C) 2026 Fatih Çatalçam
+
+Licensed under the **GNU Affero General Public License v3.0** — see [LICENSE](LICENSE).
+
+The source is open to read, learn from and contribute to. The AGPL adds one
+condition beyond the GPL that matters for a hosted product like this one: if you
+run a modified version of CVision as a network service, you have to make your
+modified source available to its users. Running the unmodified project, or using
+it privately, carries no such obligation.
+
+CVision is also operated as a commercial service at
+[cvisionapp.com](https://www.cvisionapp.com); the licence covers this source
+code, not the hosted service or the CVision name.
