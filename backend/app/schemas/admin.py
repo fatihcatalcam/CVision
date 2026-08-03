@@ -89,7 +89,9 @@ class AdminAnalysisListItem(BaseModel):
     nullable id and score; `status` says which outcome this row represents.
     """
     id: int | None          # analysis id; None when the upload never analysed
-    cv_id: int
+    cv_id: int              # raw id - the admin CV-file and CV-content routes take it
+    cv_hash: str            # hashid form; /analysis/:id decodes this, so the
+                            # panel needs it to link to the real report page
     user_email: str
     user_name: str
     cv_filename: str

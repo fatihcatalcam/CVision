@@ -172,8 +172,16 @@ def _build_xray_response(layout_xray: dict | None, is_free: bool) -> LayoutXrayR
 
 def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False, force_locked: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
+    # Admins are never gated. The HQ panel links straight to this page to review
+    # a user's report, and a half-locked view defeats the point of reviewing it -
+    # an admin on the free plan would see teasers instead of the actual findings.
+    # The anonymous /try path passes force_locked with no user at all, so it is
+    # untouched by this.
+    is_admin = current_user is not None and current_user.role == "admin"
     is_free = force_locked or (
-        (current_user.plan_type == "free" if current_user else False) and not is_first_analysis
+        not is_admin
+        and (current_user.plan_type == "free" if current_user else False)
+        and not is_first_analysis
     )
 
     # Parse AI suggestions from JSON if present

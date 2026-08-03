@@ -24,6 +24,7 @@ from app.schemas.admin import (
 from app.schemas.user import UserResponse
 from app.schemas.analysis import AnalysisResponse
 from app.routers.analysis import _build_analysis_response
+from app.utils.hashids import encode_id
 
 router = APIRouter(prefix="/hq-portal", tags=["Admin"])
 
@@ -374,6 +375,7 @@ def list_all_analyses(
             AdminAnalysisListItem(
                 id=analysis.id if analysis else None,
                 cv_id=cv.id,
+                cv_hash=encode_id(cv.id),
                 user_email=cv.owner.email if has_owner else "Anonymous",
                 user_name=cv.owner.full_name if has_owner else "Anonymous",
                 cv_filename=cv.original_filename,

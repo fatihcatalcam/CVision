@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
 import api from '../../services/api';
@@ -8,7 +8,6 @@ import {
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
   Eye, Search, ScrollText,
 } from 'lucide-react';
-import { AdminAnalysisViewer } from '../../components/admin/AdminAnalysisViewer';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
 // Recharts for Data Visualization
@@ -55,6 +54,9 @@ interface AnalysisItem {
   // hence the nullable id and score. `status` says which outcome this row is.
   id: number | null;
   cv_id: number;
+  // Hashid form of cv_id - what /analysis/:id expects. cv_id stays raw because
+  // the admin CV-file route is keyed on the integer.
+  cv_hash: string;
   user_email: string;
   user_name: string;
   cv_filename: string;
@@ -81,7 +83,6 @@ export function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<number | string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | string | null>(null);
-  const [viewingAnalysis, setViewingAnalysis] = useState<number | null>(null);
   const [viewingCvId, setViewingCvId] = useState<number | null>(null);
   const [viewingCvMeta, setViewingCvMeta] = useState<{ filename: string; user: string } | null>(null);
 
@@ -553,9 +554,13 @@ export function AdminPage() {
                                   {/* No analysis record on a failed upload: nothing to open or delete. */}
                                   {analysisId !== null && (
                                     <>
-                                      <button onClick={() => setViewingAnalysis(analysisId)} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors" title="View Analysis Report">
+                                      {/* A real <Link>, not a modal: it opens the
+                                          same report the user sees, and having an
+                                          href means ctrl/middle-click keeps this
+                                          list open in the current tab. */}
+                                      <Link to={`/analysis/${a.cv_hash}`} className="p-1.5 rounded-lg text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors inline-flex" title="View Analysis Report">
                                         <Eye className="w-4 h-4" />
-                                      </button>
+                                      </Link>
                                       <button onClick={() => setDeleteConfirm(`a-${analysisId}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
                                         <Trash2 className="w-4 h-4" />
                                       </button>
@@ -676,15 +681,6 @@ export function AdminPage() {
           </div>
         )}
       </div>
-
-      {/* Admin Analysis Viewer Modal */}
-      {viewingAnalysis !== null && (
-        <AdminAnalysisViewer
-          analysisId={viewingAnalysis}
-          isOpen={true}
-          onClose={() => setViewingAnalysis(null)}
-        />
-      )}
 
       {/* CV PDF Viewer Modal - reuses the same component as the analysis page */}
       <PDFViewerModal
