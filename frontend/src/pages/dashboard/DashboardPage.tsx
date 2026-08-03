@@ -177,14 +177,14 @@ export function DashboardPage() {
           <ThemeToggle />
           <button
             onClick={() => navigate('/settings')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-[#272725] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
           >
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">{t('dashboard.settings')}</span>
           </button>
           <button
             onClick={logout}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-[#272725] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">{t('dashboard.signOut')}</span>
