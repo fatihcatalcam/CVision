@@ -59,7 +59,17 @@ class Settings(BaseSettings):
 
     # ---- Email (Resend) ----
     RESEND_API_KEY: str = ""
-    EMAIL_FROM: str = "CVision <onboarding@resend.dev>"
+    # cvisionapp.com is verified in Resend (DKIM + SPF), so send from it. The
+    # previous default, onboarding@resend.dev, is Resend's shared test address:
+    # it only delivers to the Resend account owner's own inbox and returns 403
+    # for everybody else. With no EMAIL_FROM set in the environment that default
+    # applied in production, so no user has ever received a welcome or a
+    # password-reset mail - the failure is swallowed by a log line.
+    EMAIL_FROM: str = "Fatih from CVision <fatih@cvisionapp.com>"
+    # Receiving is not enabled on the domain, so replies to EMAIL_FROM would
+    # bounce. The welcome mail explicitly asks people to reply, hence a Reply-To
+    # pointing at a mailbox that actually exists.
+    EMAIL_REPLY_TO: str = "fthctlcm@outlook.com"
 
     # ---- iyzico ----
     IYZICO_API_KEY: str = ""

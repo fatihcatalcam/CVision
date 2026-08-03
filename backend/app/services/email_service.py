@@ -13,6 +13,58 @@ from app.config import settings
 logger = logging.getLogger("cvision.services.email")
 
 
+def check_email_config() -> None:
+    """Log loudly at startup when outbound mail cannot possibly work.
+
+    Every send failure here is swallowed into a log line, so a misconfiguration
+    is invisible: users simply never get their welcome or reset mail and nothing
+    surfaces. That is exactly how the resend.dev default went unnoticed. This
+    turns the two fatal cases into something you see on the first boot.
+    """
+    if not settings.RESEND_API_KEY:
+        logger.warning(
+            "EMAIL DISABLED: RESEND_API_KEY is empty. Welcome and password-reset "
+            "mails will be skipped."
+        )
+        return
+    if "resend.dev" in settings.EMAIL_FROM:
+        logger.error(
+            "EMAIL BROKEN: EMAIL_FROM is %r, which is Resend's shared test "
+            "address. It only delivers to the Resend account owner and returns "
+            "403 for every other recipient. Set EMAIL_FROM to an address on a "
+            "domain verified in Resend.",
+            settings.EMAIL_FROM,
+        )
+        return
+    logger.info("Email configured: sending as %s", settings.EMAIL_FROM)
+
+
+def _send(to_email: str, subject: str, html_body: str) -> bool:
+    """Send one mail via Resend, returning whether it was accepted.
+
+    Reply-To is set on every message because the domain has receiving disabled -
+    without it a reply to EMAIL_FROM goes nowhere, and the welcome mail asks for
+    replies directly.
+    """
+    resend.api_key = settings.RESEND_API_KEY
+    payload = {
+        "from": settings.EMAIL_FROM,
+        "to": [to_email],
+        "subject": subject,
+        "html": html_body,
+    }
+    if settings.EMAIL_REPLY_TO:
+        payload["reply_to"] = settings.EMAIL_REPLY_TO
+
+    try:
+        resend.Emails.send(payload)
+        logger.info("Sent %r to %s", subject, to_email)
+        return True
+    except Exception as e:
+        logger.error("Failed to send %r to %s: %s", subject, to_email, e)
+        return False
+
+
 def generate_reset_code() -> str:
     """Generate a 5-character case-sensitive alphanumeric reset code (e.g. A3b2X)."""
     alphabet = string.ascii_letters + string.digits
@@ -66,19 +118,7 @@ def send_reset_password_email(to_email: str, code: str, full_name: str) -> bool:
     </html>
     """
 
-    try:
-        resend.Emails.send({
-            "from": settings.EMAIL_FROM,
-            "to": [to_email],
-            "subject": "CVision - Şifre Sıfırlama Kodunuz",
-            "html": html_body,
-        })
-        logger.info("Password reset email sent to %s", to_email)
-        return True
-
-    except Exception as e:
-        logger.error("Failed to send password reset email to %s: %s", to_email, e)
-        return False
+    return _send(to_email, "CVision - Şifre Sıfırlama Kodunuz", html_body)
 
 
 def send_welcome_email(to_email: str, full_name: str) -> None:
@@ -128,14 +168,4 @@ def send_welcome_email(to_email: str, full_name: str) -> None:
     </html>
     """
 
-    resend.api_key = settings.RESEND_API_KEY
-    try:
-        resend.Emails.send({
-            "from": settings.EMAIL_FROM,
-            "to": [to_email],
-            "subject": "Welcome to CVision, a quick note from the founder",
-            "html": html_body,
-        })
-        logger.info("Welcome email sent to %s", to_email)
-    except Exception as e:
-        logger.error("Failed to send welcome email to %s: %s", to_email, e)
+    _send(to_email, "Welcome to CVision, a quick note from the founder", html_body)

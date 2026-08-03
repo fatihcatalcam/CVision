@@ -144,6 +144,12 @@ async def lifespan(app: FastAPI):
     """
     logger.info("Starting CVision backend...")
 
+    # Outbound mail fails silently by design (a send error is only a log line),
+    # so surface a broken configuration here instead of finding out from a user
+    # who never got their welcome mail.
+    from app.services.email_service import check_email_config
+    check_email_config()
+
     # Bring the schema to head via Alembic (single source of truth). Handles
     # fresh DBs, legacy pre-Alembic prod (auto-baseline), and migrated DBs.
     action = run_migrations(engine)
