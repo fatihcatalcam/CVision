@@ -57,7 +57,7 @@ function PasswordStrength({ password }: { password: string }) {
 }
 
 export function RegisterPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -88,7 +88,14 @@ export function RegisterPage() {
     setIsLoading(true);
 
     try {
-      await api.post('/auth/register', { full_name: fullName, email, password });
+      // The UI language is stored on the account so transactional mail matches
+      // it. Sliced to the base code ("tr-TR" -> "tr") to fit the column.
+      await api.post('/auth/register', {
+        full_name: fullName,
+        email,
+        password,
+        language: i18n.language?.slice(0, 5),
+      });
     } catch (error: any) {
       toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.register.errorToast'));
       setIsLoading(false);

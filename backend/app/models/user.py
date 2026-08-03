@@ -21,6 +21,10 @@ class User(Base):
     google_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     role: Mapped[str] = mapped_column(String(20), nullable=False, default="user")  # "user" or "admin"
     plan_type: Mapped[str] = mapped_column(String(20), nullable=False, default="free")
+    # UI language at sign-up ('tr', 'en', ...), used to pick the language of
+    # transactional mail. NULL on accounts created before the column existed;
+    # the email layer treats that as English.
+    language: Mapped[str | None] = mapped_column(String(5), nullable=True)
     analysis_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     quota_reset_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_end_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

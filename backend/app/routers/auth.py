@@ -100,12 +100,15 @@ def register(request: Request, background_tasks: BackgroundTasks, user_data: Use
         email=user_data.email,
         password_hash=hash_password(user_data.password),
         role="user",
+        language=user_data.language,
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
-    background_tasks.add_task(send_welcome_email, new_user.email, new_user.full_name)
+    background_tasks.add_task(
+        send_welcome_email, new_user.email, new_user.full_name, new_user.language
+    )
 
     return new_user
 
@@ -284,7 +287,7 @@ def forgot_password(request: Request, body: ForgotPasswordRequest, db: Session =
     user.reset_code_attempts = 0
     db.commit()
 
-    send_reset_password_email(user.email, code, user.full_name)
+    send_reset_password_email(user.email, code, user.full_name, user.language)
     return {"message": "If that email exists, a reset code has been sent."}
 
 

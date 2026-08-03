@@ -24,8 +24,16 @@ import app.models  # noqa: F401
 # Alembic Config object
 config = context.config
 
-# Override sqlalchemy.url from our app settings
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Override sqlalchemy.url from our app settings.
+#
+# The value goes through configparser, which treats "%" as the start of an
+# interpolation token - so a URL-encoded password (Supabase hands out passwords
+# containing "," and "$", which percent-encode to %2C and %24) raises
+# "invalid interpolation syntax" and takes the whole migration down. Since
+# run_migrations is unguarded in the lifespan, that is a startup crash, not a
+# degraded boot. Doubling the percent signs escapes them for configparser; the
+# value it hands back to SQLAlchemy is the original string.
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace("%", "%%"))
 
 # Set up Python logging from the config file
 if config.config_file_name is not None:

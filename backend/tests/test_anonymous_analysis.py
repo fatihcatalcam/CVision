@@ -33,20 +33,51 @@ def test_cv_can_be_anonymous(db_session):
     assert cv.client_ip == "203.0.113.7"
 
 
-def test_anon_migration_chains_and_xray_is_head():
-    """The anon migration chains off the lemon migration; the ATS X-Ray
-    migration chains off it and is the current head."""
+def _script_directory():
     from alembic.config import Config
     from alembic.script import ScriptDirectory
 
-    cfg = Config("alembic.ini")
-    script = ScriptDirectory.from_config(cfg)
+    return ScriptDirectory.from_config(Config("alembic.ini"))
 
-    assert script.get_current_head() == "b7c8d9e0f1a2"
+
+def test_anon_migration_chains_off_lemon_and_xray_off_anon():
+    """The anon migration chains off the lemon migration, and the ATS X-Ray
+    migration off the anon one."""
+    script = _script_directory()
+
     xray = script.get_revision("b7c8d9e0f1a2")
     assert xray.down_revision == "f1a2b3c4d5e6"
     anon = script.get_revision("f1a2b3c4d5e6")
     assert anon.down_revision == "a3b4c5d6e7f8"
+
+
+def test_migration_history_is_a_single_unbranched_chain():
+    """Alembic refuses to upgrade a history with more than one head, and the
+    backend hard-crashes on a failed migration rather than booting degraded - so
+    a fork is a production outage, not a warning.
+
+    This used to pin the head to a specific revision id, which meant every new
+    migration failed the test and had to be hand-edited. Asserting the shape
+    instead keeps catching the real failure (two migrations written off the same
+    parent, or an accidental merge point) without needing an edit each time.
+    """
+    script = _script_directory()
+
+    heads = script.get_heads()
+    assert len(heads) == 1, f"migration history has forked into {len(heads)} heads: {heads}"
+
+    seen: list[str] = []
+    rev = script.get_revision(heads[0])
+    while rev is not None:
+        assert not isinstance(rev.down_revision, tuple), (
+            f"{rev.revision} is a merge point with parents {rev.down_revision}"
+        )
+        seen.append(rev.revision)
+        rev = script.get_revision(rev.down_revision) if rev.down_revision else None
+
+    assert len(seen) == len(set(seen)), "a revision appears twice in the chain"
+    # Sanity: the chain has to actually reach back through the known history.
+    assert "b7c8d9e0f1a2" in seen
 
 
 def _make_analysis_with_ai(db_session, cv):

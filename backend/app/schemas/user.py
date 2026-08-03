@@ -14,6 +14,9 @@ class UserRegister(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=150, examples=["John Doe"])
     email: EmailStr = Field(..., examples=["john@example.com"])
     password: str = Field(..., min_length=8, max_length=128, examples=["SecurePass123!"])
+    # UI language the form was submitted in, so transactional mail can match it.
+    # Optional: an older client that does not send it falls back to English.
+    language: str | None = Field(None, max_length=5, examples=["tr"])
 
     @field_validator('password')
     @classmethod
