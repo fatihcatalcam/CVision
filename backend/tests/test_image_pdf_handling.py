@@ -70,6 +70,17 @@ def _make_cv_and_run(monkeypatch, extract_side_effect):
 
     setup = SessionLocal()
     try:
+        # These rows are committed for real, so an interrupted run (a killed
+        # process, a laptop suspending mid-suite) leaves them behind - and then
+        # the fixed email and stored_filename collide on their unique indexes,
+        # failing this test on every later run until someone deletes them by
+        # hand. Clearing first makes the setup self-healing instead.
+        stale = setup.query(User).filter(User.email == "imgpdf@test.com").first()
+        if stale is not None:
+            setup.query(CV).filter(CV.user_id == stale.id).delete()
+            setup.delete(stale)
+            setup.commit()
+
         user = User(
             full_name="Img User", email="imgpdf@test.com",
             password_hash=hash_password("Passw0rd!"), role="user", plan_type="free",
