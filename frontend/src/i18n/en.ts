@@ -534,6 +534,10 @@ const en = {
         title: "Contact info in the header/footer",
         desc: "Your contact details sit in the page's edge band — some systems skip that region. Moving them into the body is the safe choice.",
       },
+      charset_loss: {
+        title: "Turkish characters were stripped from the PDF",
+        desc: "The letters ı, ğ and ş were never written into your file — \"eğitimini\" comes out as \"eIitimini\". An ATS reads the same damaged text, so your keywords do not match. Fix it by re-exporting: in Word use \"Export > Create PDF\" rather than \"Save As > PDF\", or upload the document to Google Docs and download the PDF from there.",
+      },
     },
     teaser: {
       title: "The ATS scan found {{count}} issue in your CV",

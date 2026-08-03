@@ -534,6 +534,10 @@ const tr = {
         title: "Üst/alt bilgide iletişim bilgisi",
         desc: "İletişim bilgilerin sayfanın kenar bandında — bazı sistemler bu bölgeyi okumaz. Gövde metnine taşımak garantidir.",
       },
+      charset_loss: {
+        title: "Türkçe karakterler PDF'ten silinmiş",
+        desc: "CV'ndeki ı, ğ ve ş harfleri dosyaya hiç yazılmamış — \"eğitimini\" yerine \"eIitimini\" görünüyor. ATS de aynı bozuk metni okuyor, yani anahtar kelimelerin eşleşmiyor. Çözüm: PDF'i yeniden dışa aktar. Word'de \"Farklı Kaydet > PDF\" yerine \"Dışa Aktar > PDF Oluştur\" kullan, ya da belgeyi Google Dokümanlar'a yükleyip oradan PDF indir.",
+      },
     },
     teaser: {
       title: "ATS taraması CV'nde {{count}} sorun buldu",

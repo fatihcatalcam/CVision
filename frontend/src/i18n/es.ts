@@ -535,6 +535,10 @@ const es = {
         title: "Datos de contacto en el encabezado/pie",
         desc: "Tus datos de contacto están en el borde de la página — algunos sistemas omiten esa zona. Moverlos al cuerpo del documento es lo seguro.",
       },
+      charset_loss: {
+        title: "Los caracteres turcos se perdieron en el PDF",
+        desc: "Las letras ı, ğ y ş nunca se escribieron en tu archivo: \"eğitimini\" aparece como \"eIitimini\". Un ATS lee ese mismo texto dañado, así que tus palabras clave no coinciden. Solución: vuelve a exportar el PDF. En Word usa \"Exportar > Crear PDF\" en lugar de \"Guardar como > PDF\", o sube el documento a Google Docs y descarga el PDF desde allí.",
+      },
     },
     teaser: {
       title: "El escaneo ATS encontró {{count}} problema en tu CV",

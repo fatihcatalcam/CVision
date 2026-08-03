@@ -535,6 +535,10 @@ const fr = {
         title: "Coordonnées dans l'en-tête/pied de page",
         desc: "Vos coordonnées se trouvent en bordure de page — certains systèmes ignorent cette zone. Les déplacer dans le corps du document est le choix sûr.",
       },
+      charset_loss: {
+        title: "Les caractères turcs ont disparu du PDF",
+        desc: "Les lettres ı, ğ et ş n'ont jamais été écrites dans votre fichier : « eğitimini » devient « eIitimini ». Un ATS lit ce même texte abîmé, vos mots-clés ne correspondent donc pas. Solution : réexportez le PDF. Dans Word, utilisez « Exporter > Créer un PDF » plutôt que « Enregistrer sous > PDF », ou importez le document dans Google Docs et téléchargez-en le PDF.",
+      },
     },
     teaser: {
       title: "L'analyse ATS a trouvé {{count}} problème dans votre CV",

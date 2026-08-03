@@ -49,6 +49,58 @@ _CONTACT_RE = re.compile(
     r"|\+?\d[\d\s\-\(\)]{6,}\d"                          # phone
 )
 
+# ── Charset loss ──────────────────────────────────────────────────────────────
+# A PDF that declares WinAnsiEncoding (CP1252) and does not embed its font
+# cannot carry these six letters - CP1252 has no code point for them - so the
+# generator drops or substitutes them while writing the file. Nothing downstream
+# can recover them, and a real ATS reads the same damaged text.
+_TR_LOST = "ıİğĞşŞ"
+# These Turkish letters DO exist in CP1252, so they come through intact. Their
+# presence is what proves the document is Turkish AND that diacritics are being
+# carried at all - which is the difference between a PDF that destroyed the
+# letters and a writer who simply never typed them.
+_TR_SURVIVES = "öÖüÜçÇ"
+# Function words that contain none of _TR_LOST, so they survive the damage and
+# can still identify the language afterwards.
+_TR_MARKERS = frozenset({
+    "ve", "bir", "ile", "için", "olarak", "veya", "daha", "kadar", "sonra",
+    "üzere", "olan", "bu", "de", "da", "ama", "hem", "en", "çok", "her",
+})
+# Below this, the absence of ı/ğ/ş is not yet improbable enough to act on.
+_CHARSET_MIN_WORDS = 40
+_CHARSET_MIN_MARKERS = 3
+_CHARSET_MIN_SURVIVORS = 3
+# Only used to aim the highlight once _charset_loss has already decided, never
+# to decide - see its docstring for why this shape is not a safe signal.
+_MANGLED_WORD_RE = re.compile(r"[a-zçöü][A-ZÇÖÜİ][a-zçöü]")
+
+
+def _charset_loss(text: str) -> bool:
+    """True when Turkish text has lost exactly the letters CP1252 cannot encode.
+
+    Deliberately keyed on the character inventory rather than on capitals
+    appearing inside words. The substitution happens to produce "eIitimini" here,
+    but the replacement glyph varies by generator, and that shape is also what
+    JavaScript, PostgreSQL and eBay look like - a detector built on it would fire
+    on half the software CVs we see.
+
+    The font tables would corroborate this (non-embedded + WinAnsiEncoding), but
+    they are not required: an embedded font with a broken ToUnicode map does the
+    same damage, and the text evidence alone is already decisive. In genuine
+    Turkish, ı, ğ and ş are far too common to be absent from forty-odd words.
+    """
+    words = text.split()
+    if len(words) < _CHARSET_MIN_WORDS:
+        return False
+
+    if any(ch in text for ch in _TR_LOST):
+        return False
+    if sum(text.count(ch) for ch in _TR_SURVIVES) < _CHARSET_MIN_SURVIVORS:
+        return False
+
+    seen = {w.strip(".,;:()[]!?\"'").lower() for w in words}
+    return len(seen & _TR_MARKERS) >= _CHARSET_MIN_MARKERS
+
 
 def analyze_layout(pdf_path: Path) -> dict:
     """Analyze a PDF's layout for ATS-parsing risk. Never raises."""
@@ -94,6 +146,12 @@ def analyze_layout(pdf_path: Path) -> dict:
                     "header_footer_content", "info", page_num, edge_hit, w, h,
                 ))
 
+            if _charset_loss(page.get_text("text")):
+                findings.append(_finding(
+                    "charset_loss", "high", page_num,
+                    _charset_bbox(words, text_blocks, w, h), w, h,
+                ))
+
             robot_lines.extend(_naive_lines(words, split_x))
 
         return {
@@ -124,6 +182,24 @@ def _image_rects(page) -> list:
     except Exception:
         logger.debug("image rect extraction failed", exc_info=True)
     return rects
+
+
+def _charset_bbox(words: list, text_blocks: list, w: float, h: float):
+    """Where to point the highlight for charset damage.
+
+    The damage is spread across the whole document, so there is no single
+    region - but a mangled word is the one thing a user can look at and
+    recognise, so prefer the first word carrying a capital wedged between
+    lowercase letters (what the dropped glyph usually leaves behind). Falls back
+    to the first text block when the substitution left no such shape.
+    """
+    for x0, y0, x1, y1, word, *_ in words:
+        if _MANGLED_WORD_RE.search(word):
+            return (x0, y0, x1, y1)
+    if text_blocks:
+        b = text_blocks[0]
+        return (b[0], b[1], b[2], b[3])
+    return (0.0, 0.0, w, h)
 
 
 def _finding(ftype: str, severity: str, page: int, bbox, w: float, h: float) -> dict:

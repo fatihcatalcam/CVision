@@ -535,6 +535,10 @@ const de = {
         title: "Kontaktdaten in Kopf-/Fußzeile",
         desc: "Deine Kontaktdaten liegen im Randbereich der Seite — manche Systeme überspringen diese Zone. Sie in den Textkörper zu verschieben ist die sichere Wahl.",
       },
+      charset_loss: {
+        title: "Türkische Zeichen fehlen im PDF",
+        desc: "Die Buchstaben ı, ğ und ş wurden nie in deine Datei geschrieben — aus \"eğitimini\" wird \"eIitimini\". Ein ATS liest denselben beschädigten Text, deine Schlüsselwörter passen also nicht. Lösung: exportiere das PDF neu. Nutze in Word \"Exportieren > PDF erstellen\" statt \"Speichern unter > PDF\", oder lade das Dokument in Google Docs hoch und lade das PDF dort herunter.",
+      },
     },
     teaser: {
       title: "Der ATS-Scan fand {{count}} Problem in deinem Lebenslauf",
