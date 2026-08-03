@@ -13,7 +13,7 @@ export function NextStepCard({ suggestion }: NextStepCardProps) {
         <div className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-500/10">
           <Lightbulb className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
         </div>
-        <span className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">
           {t('nextStep.label')}
         </span>
       </div>

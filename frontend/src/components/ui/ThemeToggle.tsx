@@ -8,7 +8,7 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       className="flex items-center justify-center w-8 h-8 rounded-lg
-        text-[#787774] dark:text-[#908d89]
+        text-[#6B6A65] dark:text-[#908d89]
         hover:text-[#111111] dark:hover:text-[#e8e7e4]
         hover:bg-[#F7F6F3] dark:hover:bg-white/[0.06]
         border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07]

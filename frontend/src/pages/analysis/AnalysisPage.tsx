@@ -75,14 +75,14 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           <div className="mt-1.5 w-2 h-2 rounded-full bg-[#787774] flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774]">{t('match.lockedInsightBadge')}</span>
+              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#6B6A65]">{t('match.lockedInsightBadge')}</span>
             </div>
             <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">{t('match.lockedInsightDesc')}</p>
           </div>
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 dark:bg-[#111110]/70 backdrop-blur-sm">
            <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] dark:bg-white/[0.08] rounded-full">
-             <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
+             <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
            </div>
            <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
            <button
@@ -127,11 +127,11 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${meta.bg} ${meta.text}`}>
               {t(meta.labelKey)}
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#787774] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06]">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6B6A65] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06]">
               {suggestion.category}
             </span>
             {hasRewrite && (
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#787774] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] flex items-center gap-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B6A65] px-2 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5" /> {t('analysis.rewriteAvailable')}
               </span>
             )}
@@ -139,8 +139,8 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           <p className="text-sm text-[#111111] dark:text-[#e8e7e4] leading-snug">{suggestion.message}</p>
         </div>
         {hasRewrite && (expanded
-          ? <ChevronUp   className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />
-          : <ChevronDown className="w-4 h-4 text-[#787774] flex-shrink-0 mt-1" />)}
+          ? <ChevronUp   className="w-4 h-4 text-[#6B6A65] flex-shrink-0 mt-1" />
+          : <ChevronDown className="w-4 h-4 text-[#6B6A65] flex-shrink-0 mt-1" />)}
       </button>
 
       {expanded && hasRewrite && (
@@ -152,14 +152,14 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
                 <p className="text-sm text-[#111111] dark:text-[#e8e7e4] italic">"{beforeText}"</p>
               </div>
               <div className="flex justify-center">
-                <ArrowRight className="w-4 h-4 text-[#787774]" />
+                <ArrowRight className="w-4 h-4 text-[#6B6A65]" />
               </div>
               <div className="p-3 bg-[#346538]/5 border border-[#346538]/20 rounded-lg">
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[10px] uppercase font-bold text-[#346538] flex items-center gap-1">
                     <Sparkles className="w-3 h-3" /> {t('analysis.afterRewrite')}
                   </p>
-                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
+                  <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                     {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                     {copied ? t('analysis.copied') : t('analysis.copy')}
                   </button>
@@ -170,10 +170,10 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
           ) : (
             <div className="p-3 bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] rounded-lg">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-[10px] uppercase font-bold text-[#787774] flex items-center gap-1">
+                <p className="text-[10px] uppercase font-bold text-[#6B6A65] flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> {t('try.aiTipLabel')}
                 </p>
-                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#787774] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
+                <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-[#6B6A65] hover:text-[#111111] dark:text-[#e8e7e4] transition-colors">
                   {copied ? <Check className="w-3 h-3 text-[#346538]" /> : <Copy className="w-3 h-3" />}
                   {copied ? t('analysis.copied') : t('analysis.copy')}
                 </button>
@@ -318,7 +318,7 @@ export function AnalysisPage() {
             <Zap className="w-8 h-8" />
           </div>
           <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">{t('analysis.errorTitle')}</h2>
-          <p className="text-[#787774] text-sm mb-6 leading-relaxed">{error}</p>
+          <p className="text-[#6B6A65] text-sm mb-6 leading-relaxed">{error}</p>
           <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#111111] dark:text-[#e8e7e4] hover:bg-[#EAEAEA] transition-colors text-sm font-medium mx-auto"
@@ -366,7 +366,7 @@ export function AnalysisPage() {
         {/* Back */}
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center text-sm font-medium text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:text-[#e8e7e4] dark:hover:text-[#e8e7e4] transition-colors mb-6"
+          className="flex items-center text-sm font-medium text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:text-[#e8e7e4] dark:hover:text-[#e8e7e4] transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t('common.backToDashboard')}
@@ -378,12 +378,12 @@ export function AnalysisPage() {
             <div className="flex items-center gap-3 mb-1">
               <h1 className="font-sans text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('analysis.reportTitle')}</h1>
               {data!.ai_enhanced && (
-                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#787774] text-xs font-bold uppercase tracking-wider">
+                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] border border-[#EAEAEA] text-[#6B6A65] text-xs font-bold uppercase tracking-wider">
                   <Sparkles className="w-3 h-3" /> {t('analysis.aiEnhanced')}
                 </span>
               )}
             </div>
-            <p className="text-[#787774] text-sm">{t('analysis.reportMeta', { id: data!.id })}</p>
+            <p className="text-[#6B6A65] text-sm">{t('analysis.reportMeta', { id: data!.id })}</p>
           </div>
           <button
             onClick={() => setIsPdfModalOpen(true)}
@@ -418,7 +418,7 @@ export function AnalysisPage() {
           {data!.ai_summary && (
             <Card className="surface relative overflow-hidden">
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-4 h-4 text-[#787774]" />
+                <Sparkles className="w-4 h-4 text-[#6B6A65]" />
                 <h3 className="font-semibold text-base text-[#111111] dark:text-[#e8e7e4]">{t('analysis.aiExecSummary')}</h3>
               </div>
               <p className={`text-[#111111] dark:text-[#e8e7e4] leading-relaxed text-[15px] ${data!.is_summary_locked ? 'blur-[3px] opacity-60 select-none pointer-events-none' : ''}`}>
@@ -427,7 +427,7 @@ export function AnalysisPage() {
               {data!.is_summary_locked && (
                 <div className="absolute inset-0 bg-white/80 dark:bg-[#111110]/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
                   <div className="p-2 bg-[#F1F1EF] dark:bg-white/[0.06] dark:bg-white/[0.08] rounded-full">
-                    <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
+                    <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
                   </div>
                   <button
                     onClick={undefined}
@@ -482,12 +482,12 @@ export function AnalysisPage() {
                     'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px',
                     activeTab === 'ai'
                       ? 'border-[#111111] dark:border-[#e8e7e4] text-[#111111] dark:text-[#e8e7e4]'
-                      : 'border-transparent text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
+                      : 'border-transparent text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
                   ].join(' ')}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   {t('analysis.aiSuggestionsTab')}
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774] font-bold">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#6B6A65] font-bold">
                     {data!.ai_suggestions.length}
                   </span>
                 </button>
@@ -498,12 +498,12 @@ export function AnalysisPage() {
                   'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px',
                   activeTab === 'classic'
                     ? 'border-[#111111] dark:border-[#e8e7e4] text-[#111111] dark:text-[#e8e7e4]'
-                    : 'border-transparent text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
+                    : 'border-transparent text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4]',
                 ].join(' ')}
               >
                 <Zap className="w-3.5 h-3.5" />
                 {t('analysis.ruleBasedTab')}
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#787774] font-bold">
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F1F1EF] dark:bg-white/[0.06] text-[#6B6A65] font-bold">
                   {data!.suggestions.length}
                 </span>
               </button>
@@ -520,7 +520,7 @@ export function AnalysisPage() {
             {activeTab === 'classic' && (
               <>
                 <div className="flex justify-between items-center mb-4">
-                  <p className="text-sm text-[#787774]">
+                  <p className="text-sm text-[#6B6A65]">
                     {t('analysis.classicHint')}
                   </p>
                   {activeSuggestion?.snippets?.length > 0 && (
@@ -547,7 +547,7 @@ export function AnalysisPage() {
             <Card noPadding className="overflow-hidden">
               <div className="p-6 border-b border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03]">
                 <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('analysis.careerMatches')}</h3>
-                <p className="text-sm text-[#787774] mt-1">{t('analysis.careerMatchesDesc')}</p>
+                <p className="text-sm text-[#6B6A65] mt-1">{t('analysis.careerMatchesDesc')}</p>
               </div>
               <div className="p-6">
                 <RoleMatcher recommendations={data!.career_recommendations ?? []} />
@@ -564,12 +564,12 @@ export function AnalysisPage() {
             {user?.plan_type !== 'premium' ? (
               <>
                 <div className="blur-sm pointer-events-none select-none opacity-40 min-h-[120px]">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-2">{t('match.sectionLabel')}</p>
-                  <p className="text-sm text-[#787774]">{t('match.sectionDesc')}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-2">{t('match.sectionLabel')}</p>
+                  <p className="text-sm text-[#6B6A65]">{t('match.sectionDesc')}</p>
                 </div>
                 <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-white/60 dark:bg-[#111110]/70">
                   <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] rounded-full">
-                    <Lock className="w-5 h-5 text-[#787774] dark:text-[#908d89]" />
+                    <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
                   </div>
                   <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
                   <button
@@ -582,7 +582,7 @@ export function AnalysisPage() {
               </>
             ) : matchResult ? (
               <>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-4">{t('match.sectionLabel')}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-4">{t('match.sectionLabel')}</p>
                 <MatchResultCard
                   match={matchResult}
                   onGenerateCoverLetter={handleGenerateCoverLetter}
@@ -590,15 +590,15 @@ export function AnalysisPage() {
                 />
                 <button
                   onClick={() => setShowJDModal(true)}
-                  className="mt-4 text-sm underline text-[#787774] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
+                  className="mt-4 text-sm underline text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
                 >
                   {t('match.tryAnotherJD')}
                 </button>
               </>
             ) : (
               <>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#787774] mb-2">{t('match.sectionLabel')}</p>
-                <p className="text-sm text-[#787774] mb-4">{t('match.sectionDesc')}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-2">{t('match.sectionLabel')}</p>
+                <p className="text-sm text-[#6B6A65] mb-4">{t('match.sectionDesc')}</p>
                 <button
                   onClick={() => setShowJDModal(true)}
                   className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"

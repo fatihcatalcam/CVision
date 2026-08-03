@@ -203,10 +203,10 @@ export function TryPage() {
                 </div>
 
                 <div className="flex-1 w-full space-y-3">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('try.overallLabel')}</p>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#6B6A65] dark:text-[#908d89]">{t('try.overallLabel')}</p>
                   {bars.map(({ label, value }) => (
                     <div key={label} className="flex items-center gap-3">
-                      <span className="w-24 shrink-0 text-xs font-medium text-[#787774] dark:text-[#908d89] truncate">{label}</span>
+                      <span className="w-24 shrink-0 text-xs font-medium text-[#6B6A65] dark:text-[#908d89] truncate">{label}</span>
                       <div className="flex-1 h-2 rounded-full bg-[#F0EFEC] dark:bg-white/[0.08] overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.round(value)}%`, background: barColor(value) }} />
                       </div>

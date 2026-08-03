@@ -45,7 +45,7 @@ function PasswordStrength({ password }: { password: string }) {
             {c.pass
               ? <Check className="w-3 h-3 text-[#346538] flex-shrink-0" />
               : <X className="w-3 h-3 text-[#A09D9A] dark:text-[#6a6764] flex-shrink-0" />}
-            <span className={`text-[10px] ${c.pass ? 'text-[#787774] dark:text-[#908d89]' : 'text-[#A09D9A] dark:text-[#6a6764]'}`}>{c.label}</span>
+            <span className={`text-[10px] ${c.pass ? 'text-[#6B6A65] dark:text-[#908d89]' : 'text-[#A09D9A] dark:text-[#6a6764]'}`}>{c.label}</span>
           </div>
         ))}
       </div>
@@ -135,7 +135,7 @@ export function RegisterPage() {
           <blockquote className="font-sans text-2xl leading-snug tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-6">
             "{t('auth.taglineRegister')}"
           </blockquote>
-          <p className="text-sm text-[#787774] dark:text-[#908d89]">{t('auth.usedBy')}</p>
+          <p className="text-sm text-[#6B6A65] dark:text-[#908d89]">{t('auth.usedBy')}</p>
         </div>
         <p className="text-xs text-[#A09D9A] dark:text-[#6a6764]">{t('common.copyright')}</p>
       </div>
@@ -145,16 +145,16 @@ export function RegisterPage() {
         <div className="w-full max-w-sm stagger-list">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
+            className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
           >
             {t('auth.backToHome')}
           </button>
           <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">{t('auth.register.title')}</h1>
-          <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">{t('auth.register.subtitle')}</p>
+          <p className="text-sm text-[#6B6A65] dark:text-[#908d89] mb-8">{t('auth.register.subtitle')}</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.fullName')}</label>
+              <label className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.fullName')}</label>
               <input
                 type="text"
                 placeholder={t('auth.register.fullNamePlaceholder')}
@@ -167,7 +167,7 @@ export function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.email')}</label>
+              <label className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.email')}</label>
               <input
                 type="email"
                 placeholder={t('auth.register.emailPlaceholder')}
@@ -179,7 +179,7 @@ export function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.password')}</label>
+              <label className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">{t('auth.register.password')}</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -193,7 +193,7 @@ export function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -224,7 +224,7 @@ export function RegisterPage() {
             <GoogleAuthButton />
           </div>
 
-          <p className="mt-8 text-center text-sm text-[#787774] dark:text-[#908d89]">
+          <p className="mt-8 text-center text-sm text-[#6B6A65] dark:text-[#908d89]">
             {t('auth.register.hasAccount')}{' '}
             <Link to="/login" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] font-semibold transition-colors">
               {t('auth.register.signIn')}

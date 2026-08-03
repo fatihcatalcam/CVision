@@ -28,7 +28,7 @@ export function AboutPage() {
           <a
             href="/"
             onClick={(e) => { e.preventDefault(); navigate('/'); }}
-            className="flex items-center gap-1.5 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('about.back')}
@@ -56,7 +56,7 @@ export function AboutPage() {
         <div className="space-y-10">
           {sections.map((i) => (
             <section key={i} className="space-y-3">
-              <h2 className="text-base font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">
+              <h2 className="text-base font-bold uppercase tracking-wider text-[#6B6A65] dark:text-[#908d89]">
                 {t(`about.s${i}Heading`)}
               </h2>
               <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
@@ -82,7 +82,7 @@ export function AboutPage() {
       <footer className="border-t border-[#EAEAEA] dark:border-white/[0.07] bg-white dark:bg-[#1c1c1a] mt-auto">
         <div className="max-w-3xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
-          <div className="flex items-center gap-5 text-xs text-[#787774] dark:text-[#908d89]">
+          <div className="flex items-center gap-5 text-xs text-[#6B6A65] dark:text-[#908d89]">
             <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
             <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>

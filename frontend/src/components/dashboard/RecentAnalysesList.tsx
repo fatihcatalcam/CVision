@@ -32,12 +32,12 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold text-[#111111] dark:text-[#e8e7e4] text-sm flex items-center gap-2">
-          <History className="w-4 h-4 text-[#787774] dark:text-[#908d89]" />
+          <History className="w-4 h-4 text-[#6B6A65] dark:text-[#908d89]" />
           {t('recent.title')}
         </h2>
         <button
           onClick={() => navigate('/history')}
-          className="flex items-center gap-1.5 text-xs text-[#787774] hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] transition-colors font-medium"
+          className="flex items-center gap-1.5 text-xs text-[#6B6A65] hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] transition-colors font-medium"
         >
           {t('recent.viewAll')} <ChevronRight className="w-3.5 h-3.5" />
         </button>
@@ -54,14 +54,14 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
                 : ''
             }`}
           >
-            <div className="p-2 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] flex-shrink-0">
+            <div className="p-2 rounded-lg bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] flex-shrink-0">
               <FileText className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-[#111111] dark:text-[#e8e7e4] truncate">
                 {item.original_filename}
               </p>
-              <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">
+              <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">
                 {item.target_domain && <span className="mr-2">{item.target_domain}</span>}
                 {new Date(item.uploaded_at).toLocaleDateString(dateLocale, {
                   day: '2-digit',
@@ -78,7 +78,7 @@ export function RecentAnalysesList({ items }: RecentAnalysesListProps) {
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                 item.status.startsWith('failed')
                   ? 'text-red-600 bg-red-50 dark:bg-red-500/10'
-                  : 'text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05]'
+                  : 'text-[#6B6A65] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05]'
               }`}>
                 {item.status}
               </span>

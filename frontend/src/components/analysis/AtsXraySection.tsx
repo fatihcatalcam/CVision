@@ -71,7 +71,7 @@ export function AtsXraySection({ xray, cvId }: Props) {
             <ScanSearch className="w-4 h-4 text-[#111111] dark:text-[#e8e7e4]" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#787774] dark:text-[#908d89]">{t('xray.label')}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B6A65] dark:text-[#908d89]">{t('xray.label')}</p>
             <h2 className="text-base font-bold text-[#111111] dark:text-[#e8e7e4]">
               {clean ? t('xray.clean') : t('xray.title')}
             </h2>
@@ -89,7 +89,7 @@ export function AtsXraySection({ xray, cvId }: Props) {
       {/* Split view: original PDF vs the naive-parser simulation */}
       <div className="flex flex-col md:flex-row gap-3">
         <div className="flex-1 min-w-0 border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl overflow-hidden">
-          <div className="px-3 py-1.5 bg-[#F7F6F3] dark:bg-white/[0.04] text-[10px] font-bold tracking-wider text-[#787774] dark:text-[#908d89]">
+          <div className="px-3 py-1.5 bg-[#F7F6F3] dark:bg-white/[0.04] text-[10px] font-bold tracking-wider text-[#6B6A65] dark:text-[#908d89]">
             {t('xray.yourCv')}
           </div>
           {pdfUrl ? (

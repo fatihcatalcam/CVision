@@ -31,7 +31,7 @@ function PasswordStrength({ password }: { password: string }) {
         {checks.map(c => (
           <div key={c.label} className="flex items-center gap-1.5">
             {c.pass ? <Check className="w-3 h-3 text-[#346538] flex-shrink-0" /> : <X className="w-3 h-3 text-[#A09D9A] dark:text-[#6a6764] flex-shrink-0" />}
-            <span className={`text-[10px] ${c.pass ? 'text-[#787774] dark:text-[#908d89]' : 'text-[#A09D9A] dark:text-[#6a6764]'}`}>{c.label}</span>
+            <span className={`text-[10px] ${c.pass ? 'text-[#6B6A65] dark:text-[#908d89]' : 'text-[#A09D9A] dark:text-[#6a6764]'}`}>{c.label}</span>
           </div>
         ))}
       </div>
@@ -140,12 +140,12 @@ export function ResetPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#FBFBFA] dark:bg-[#111110] p-6">
       <div className="w-full max-w-sm">
         <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">{t('auth.resetPassword.title')}</h1>
-        <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">{t('auth.resetPassword.subtitle')}</p>
+        <p className="text-sm text-[#6B6A65] dark:text-[#908d89] mb-8">{t('auth.resetPassword.subtitle')}</p>
 
         {step === 'code' ? (
           <>
             <div className="text-center mb-8">
-              <p className="text-[#787774] dark:text-[#908d89] text-sm leading-relaxed">
+              <p className="text-[#6B6A65] dark:text-[#908d89] text-sm leading-relaxed">
                 {t('auth.resetPassword.codeInfo')}<br />
                 <span className="text-[#111111] dark:text-[#e8e7e4]">{maskedEmail}</span>
               </p>
@@ -181,12 +181,12 @@ export function ResetPasswordPage() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <p className="text-[#787774] dark:text-[#908d89] text-sm">{t('auth.resetPassword.newPassword')}</p>
+              <p className="text-[#6B6A65] dark:text-[#908d89] text-sm">{t('auth.resetPassword.newPassword')}</p>
             </div>
 
             <form onSubmit={handleResetPassword} className="space-y-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">{t('auth.resetPassword.newPassword')}</label>
+                <label className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">{t('auth.resetPassword.newPassword')}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -200,7 +200,7 @@ export function ResetPasswordPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors p-1"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -215,7 +215,7 @@ export function ResetPasswordPage() {
           </>
         )}
 
-        <p className="mt-8 text-center text-xs text-[#787774] dark:text-[#908d89]">
+        <p className="mt-8 text-center text-xs text-[#6B6A65] dark:text-[#908d89]">
           {t('auth.resetPassword.havingTrouble')}{' '}
           <Link to="/forgot-password" className="text-[#1B3A6B] dark:text-[#4a7dd1] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">
             {t('auth.resetPassword.requestNewCode')}

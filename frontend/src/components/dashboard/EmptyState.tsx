@@ -44,7 +44,7 @@ export function EmptyState({ onUploadSuccess }: EmptyStateProps) {
         <h2 className="text-2xl font-black text-[#111111] dark:text-[#e8e7e4] mb-2 tracking-tight">
           {t('emptyState.heading')}
         </h2>
-        <p className="text-sm text-[#787774] dark:text-[#908d89] leading-relaxed max-w-sm mx-auto">
+        <p className="text-sm text-[#6B6A65] dark:text-[#908d89] leading-relaxed max-w-sm mx-auto">
           {t('emptyState.subtext')}
         </p>
       </div>
@@ -58,7 +58,7 @@ export function EmptyState({ onUploadSuccess }: EmptyStateProps) {
             </div>
             <div>
               <p className="text-xs font-bold text-[#111111] dark:text-[#e8e7e4]">{title}</p>
-              <p className="text-[11px] text-[#787774] dark:text-[#908d89] mt-0.5 leading-snug">{desc}</p>
+              <p className="text-[11px] text-[#6B6A65] dark:text-[#908d89] mt-0.5 leading-snug">{desc}</p>
             </div>
           </div>
         ))}
@@ -69,7 +69,7 @@ export function EmptyState({ onUploadSuccess }: EmptyStateProps) {
         <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
         <div>
           <p className="text-sm font-semibold text-amber-400">{t('emptyState.bannerTitle')}</p>
-          <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">
+          <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">
             {t('emptyState.bannerSubtext')}
           </p>
         </div>

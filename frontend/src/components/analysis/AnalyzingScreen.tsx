@@ -43,7 +43,7 @@ export function AnalyzingScreen({ progress, heading, message, steps, footer }: A
 
       <div className="text-center">
         <h2 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-2">{heading}</h2>
-        <p className="text-[#787774] dark:text-[#908d89] text-sm font-medium mb-6 min-h-[20px]">{message}</p>
+        <p className="text-[#6B6A65] dark:text-[#908d89] text-sm font-medium mb-6 min-h-[20px]">{message}</p>
 
         {/* Step indicators */}
         <div className="space-y-3 text-left mb-6">

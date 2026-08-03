@@ -54,13 +54,16 @@ export function HomePage() {
               </Button>
             ) : (
               <>
-                <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>{t('home.nav.signIn')}</Button>
+                {/* secondary, not ghost: a ghost button is bare text, and next
+                    to the solid "Get started" it did not read as a control at
+                    all on the light background. */}
+                <Button variant="secondary" size="sm" onClick={() => navigate('/login')}>{t('home.nav.signIn')}</Button>
                 <Button variant="primary" size="sm" onClick={() => navigate('/register')}>{t('home.nav.getStarted')}</Button>
               </>
             )}
             <button
               onClick={() => setMobileNavOpen(o => !o)}
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.06] transition-colors"
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-[#6B6A65] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.06] transition-colors"
               aria-label="Menu"
               aria-expanded={mobileNavOpen}
             >
@@ -105,7 +108,7 @@ export function HomePage() {
                     {t('home.hero.ctaAnalyze')}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                  <Button variant="ghost" size="lg" onClick={() => navigate('/login')}>
+                  <Button variant="secondary" size="lg" onClick={() => navigate('/login')}>
                     {t('home.hero.ctaSignIn')}
                   </Button>
                 </>

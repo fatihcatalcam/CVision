@@ -61,7 +61,7 @@ export function HeroMockup() {
         <div className="space-y-2.5 mb-5">
           {BARS.map(({ labelKey, value }) => (
             <div key={labelKey} className="flex items-center gap-2.5">
-              <span className="w-24 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-[#787774] dark:text-[#908d89] truncate">
+              <span className="w-24 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-[#6B6A65] dark:text-[#908d89] truncate">
                 {t(labelKey)}
               </span>
               <div className="flex-1 h-1.5 rounded-full bg-[#F0EFEC] dark:bg-white/[0.08] overflow-hidden">
@@ -74,7 +74,7 @@ export function HeroMockup() {
 
         {/* Missing keywords */}
         <div className="mb-4">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-[#787774] dark:text-[#908d89] mb-2">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-[#6B6A65] dark:text-[#908d89] mb-2">
             {t('home.heroMockup.missing')}
           </p>
           <div className="flex flex-wrap gap-1.5">

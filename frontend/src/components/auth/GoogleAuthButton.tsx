@@ -128,7 +128,7 @@ function GoogleAuthButtonInner() {
                 <h2 className="text-xl font-bold text-[#111111] dark:text-[#e8e7e4]">
                   {t('auth.google.nameModal.title')}
                 </h2>
-                <p className="mt-1 text-sm text-[#787774] dark:text-[#908d89]">
+                <p className="mt-1 text-sm text-[#6B6A65] dark:text-[#908d89]">
                   {t('auth.google.nameModal.subtitle')}
                 </p>
               </div>
@@ -146,7 +146,7 @@ function GoogleAuthButtonInner() {
               <div className="space-y-1.5">
                 <label
                   htmlFor="google-fullname"
-                  className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider"
+                  className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider"
                 >
                   {t('auth.register.fullName')}
                 </label>
@@ -175,7 +175,7 @@ function GoogleAuthButtonInner() {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="w-full text-xs text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
+                className="w-full text-xs text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors py-1"
               >
                 {t('auth.google.nameModal.back')}
               </button>

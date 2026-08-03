@@ -13,7 +13,7 @@ export function CancelPage() {
         </div>
 
         <h1 className="text-3xl font-bold text-[#111111] dark:text-[#e8e7e4] mb-3">Ödeme İptal Edildi</h1>
-        <p className="text-[#787774] dark:text-[#908d89] mb-8 leading-relaxed">
+        <p className="text-[#6B6A65] dark:text-[#908d89] mb-8 leading-relaxed">
           Ödeme işlemi tamamlanamadı veya iptal edildi. Hesabınızda herhangi bir ücret alınmadı.
         </p>
 

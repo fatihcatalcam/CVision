@@ -21,7 +21,7 @@ function SectionHeader({ icon: Icon, title, desc }: { icon: any; title: string; 
       </div>
       <div>
         <h2 className="text-base font-bold text-[#111111] dark:text-[#e8e7e4]">{title}</h2>
-        <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{desc}</p>
+        <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{desc}</p>
       </div>
     </div>
   );
@@ -199,7 +199,7 @@ export function SettingsPage() {
 
       <button
         onClick={() => navigate('/dashboard')}
-        className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
+        className="flex items-center gap-2 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" /> {t('settings.backToDashboard')}
       </button>
@@ -207,7 +207,7 @@ export function SettingsPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('settings.title')}</h1>
-          <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{t('settings.subtitle')}</p>
+          <p className="text-[#6B6A65] dark:text-[#908d89] text-sm mt-1">{t('settings.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
@@ -221,11 +221,11 @@ export function SettingsPage() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="flex flex-col items-center text-center gap-3 py-8">
             <div className="w-16 h-16 rounded-full bg-[#F7F6F3] dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] flex items-center justify-center mb-3">
-              <span className="text-lg font-medium text-[#787774] dark:text-[#908d89]">{initials}</span>
+              <span className="text-lg font-medium text-[#6B6A65] dark:text-[#908d89]">{initials}</span>
             </div>
             <div>
               <p className="text-[#111111] dark:text-[#e8e7e4] font-bold text-lg leading-tight">{user?.full_name}</p>
-              <p className="text-[#787774] dark:text-[#908d89] text-xs mt-0.5 flex items-center gap-1 justify-center">
+              <p className="text-[#6B6A65] dark:text-[#908d89] text-xs mt-0.5 flex items-center gap-1 justify-center">
                 <Mail className="w-3 h-3" /> {user?.email}
               </p>
             </div>
@@ -248,20 +248,20 @@ export function SettingsPage() {
 
           {/* Usage */}
           <Card className="p-4 space-y-3">
-            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.usageSection')}</p>
+            <p className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.usageSection')}</p>
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-[#787774] dark:text-[#908d89]">{t('settings.analysesUsed')}</span>
+                <span className="text-[#6B6A65] dark:text-[#908d89]">{t('settings.analysesUsed')}</span>
                 <span className="text-[#111111] dark:text-[#e8e7e4] font-bold stat-number">{used} / {quota}</span>
               </div>
               <div className="w-full h-1.5 bg-[#EAEAEA] dark:bg-white/[0.07] rounded-full">
                 <div className="h-full bg-[#1B3A6B] dark:bg-[#4a7dd1] rounded-full transition-all" style={{ width: `${usagePercent}%` }} />
               </div>
-              <p className="text-[10px] text-[#787774] dark:text-[#908d89]">{Math.max(0, quota - used)} {t('settings.remainingThisWeek')}</p>
+              <p className="text-[10px] text-[#6B6A65] dark:text-[#908d89]">{Math.max(0, quota - used)} {t('settings.remainingThisWeek')}</p>
             </div>
             <div className="pt-2 border-t border-[#EAEAEA] dark:border-white/[0.07] space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
+                <span className="text-[#6B6A65] dark:text-[#908d89] flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5" /> {t('settings.memberSince')}
                 </span>
                 <span className="text-[#111111] dark:text-[#e8e7e4] text-xs">
@@ -270,7 +270,7 @@ export function SettingsPage() {
               </div>
               {user?.role === 'admin' && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#787774] dark:text-[#908d89] flex items-center gap-1.5">
+                  <span className="text-[#6B6A65] dark:text-[#908d89] flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" /> {t('settings.roleLabel')}
                   </span>
                   <span className="text-[#956400] text-xs font-bold">{t('settings.roleAdmin')}</span>
@@ -281,10 +281,10 @@ export function SettingsPage() {
 
           {/* Account actions */}
           <Card className="p-4 space-y-2">
-            <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-3">{t('settings.accountSection')}</p>
+            <p className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider mb-3">{t('settings.accountSection')}</p>
             <button
               onClick={() => { logout(); navigate('/'); }}
-              className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] dark:border-white/[0.07] text-[#787774] dark:text-[#908d89] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
+              className="w-full py-2 rounded-[var(--radius-sm)] border border-[#EAEAEA] dark:border-white/[0.07] text-[#6B6A65] dark:text-[#908d89] text-xs font-medium hover:text-[#9F2F2D] hover:border-[#9F2F2D]/30 hover:bg-[#9F2F2D]/5 transition-all"
             >
               {t('settings.signOut')}
             </button>
@@ -299,16 +299,16 @@ export function SettingsPage() {
             <SectionHeader icon={User} title={t('settings.profile.title')} desc={t('settings.profile.subtitle')} />
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.profile.fullName')}</label>
+                <label className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.profile.fullName')}</label>
                 <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                   minLength={2} maxLength={150} className={inputCls} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.profile.email')}</label>
+                <label className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.profile.email')}</label>
                 <div className="relative">
                   <input type="email" value={user?.email ?? ''} disabled
                     className="w-full bg-[#F7F6F3] dark:bg-white/[0.03] border border-[#EAEAEA] dark:border-white/[0.07] text-[#A09D9A] dark:text-[#6a6764] rounded-[var(--radius-md)] h-11 px-4 cursor-not-allowed pr-28" />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#787774] dark:text-[#908d89] bg-[#EAEAEA] dark:bg-white/[0.07] px-2 py-0.5 rounded border border-[#D5D3D0] dark:border-white/[0.05]">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#6B6A65] dark:text-[#908d89] bg-[#EAEAEA] dark:bg-white/[0.07] px-2 py-0.5 rounded border border-[#D5D3D0] dark:border-white/[0.05]">
                     {t('settings.profile.cannotChange')}
                   </span>
                 </div>
@@ -326,32 +326,32 @@ export function SettingsPage() {
             <SectionHeader icon={Lock} title={t('settings.password.title')} desc={t('settings.password.subtitle')} />
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.current')}</label>
+                <label className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.password.current')}</label>
                 <div className="relative">
                   <input type={showCurrent ? 'text' : 'password'} value={currentPassword}
                     onChange={e => setCurrentPassword(e.target.value)} placeholder={t('settings.password.currentPlaceholder')} required
                     className={`${inputCls} pr-12`} />
                   <button type="button" onClick={() => setShowCurrent(!showCurrent)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#6B6A65] transition-colors p-1">
                     {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.new')}</label>
+                <label className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.password.new')}</label>
                 <div className="relative">
                   <input type={showNew ? 'text' : 'password'} value={newPassword}
                     onChange={e => setNewPassword(e.target.value)} placeholder={t('settings.password.newPlaceholder')} required minLength={8}
                     className={`${inputCls} pr-12`} />
                   <button type="button" onClick={() => setShowNew(!showNew)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#787774] transition-colors p-1">
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A09D9A] hover:text-[#6B6A65] transition-colors p-1">
                     {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 <PasswordStrengthBar password={newPassword} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#787774] uppercase tracking-wider">{t('settings.password.confirm')}</label>
+                <label className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider">{t('settings.password.confirm')}</label>
                 <div className="relative">
                   <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
                     placeholder={t('settings.password.confirmPlaceholder')} required
@@ -378,7 +378,7 @@ export function SettingsPage() {
             <div className="flex items-center justify-between py-3 border-b border-[#EAEAEA] dark:border-white/[0.07] last:border-0">
               <div>
                 <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.appearance.theme')}</p>
-                <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.appearance.themeDesc')}</p>
+                <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{t('settings.appearance.themeDesc')}</p>
               </div>
               <ThemeToggle />
             </div>
@@ -391,7 +391,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.notifications.analysisComplete')}</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.notifications.analysisCompleteDesc')}</p>
+                  <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{t('settings.notifications.analysisCompleteDesc')}</p>
                 </div>
                 <button
                   onClick={() => setNotifyAnalysis(!notifyAnalysis)}
@@ -403,9 +403,9 @@ export function SettingsPage() {
               <div className="flex items-center justify-between opacity-50">
                 <div>
                   <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.notifications.weeklyDigest')}</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.notifications.weeklyDigestDesc')}</p>
+                  <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{t('settings.notifications.weeklyDigestDesc')}</p>
                 </div>
-                <span className="text-[10px] text-[#787774] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] px-2 py-0.5 rounded-full">{t('settings.notifications.comingSoon')}</span>
+                <span className="text-[10px] text-[#6B6A65] dark:text-[#908d89] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] px-2 py-0.5 rounded-full">{t('settings.notifications.comingSoon')}</span>
               </div>
             </div>
           </div>
@@ -423,7 +423,7 @@ export function SettingsPage() {
                     <p className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
                       {user?.plan_type === 'premium' ? t('settings.subscription.proPlan') : t('settings.subscription.freePlan')}
                     </p>
-                    <p className="text-xs text-[#787774] dark:text-[#908d89]">
+                    <p className="text-xs text-[#6B6A65] dark:text-[#908d89]">
                       {user?.plan_type === 'premium'
                         ? subEndDate ? t('settings.subscription.renews', { date: subEndDate }) : t('settings.subscription.price')
                         : t('settings.subscription.freeLimit')}
@@ -442,13 +442,13 @@ export function SettingsPage() {
                 <>
                   {!showCancelConfirm ? (
                     <button onClick={() => setShowCancelConfirm(true)}
-                      className="text-xs text-[#787774] dark:text-[#908d89] hover:text-[#9F2F2D] dark:hover:text-[#d4524f] transition-colors underline underline-offset-2">
+                      className="text-xs text-[#6B6A65] dark:text-[#908d89] hover:text-[#9F2F2D] dark:hover:text-[#d4524f] transition-colors underline underline-offset-2">
                       {t('settings.subscription.cancelButton')}
                     </button>
                   ) : (
                     <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5">
                       <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4] mb-1">{t('settings.subscription.cancelConfirmTitle')}</p>
-                      <p className="text-xs text-[#787774] dark:text-[#908d89] mb-4">
+                      <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-4">
                         {t('settings.subscription.cancelConfirmBody', { date: subEndDate || '...' })}
                       </p>
                       <div className="flex gap-2">
@@ -458,7 +458,7 @@ export function SettingsPage() {
                           {t('settings.subscription.cancelYes')}
                         </button>
                         <button onClick={() => setShowCancelConfirm(false)}
-                          className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
+                          className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#6B6A65] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
                           {t('settings.subscription.keepPro')}
                         </button>
                       </div>
@@ -477,10 +477,10 @@ export function SettingsPage() {
               <div className="flex items-center justify-between py-3 border-b border-[#EAEAEA] dark:border-white/[0.07]">
                 <div>
                   <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.data.exportTitle')}</p>
-                  <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.data.exportDesc')}</p>
+                  <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{t('settings.data.exportDesc')}</p>
                 </div>
                 <button onClick={handleExportData} disabled={isExporting}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:border-[#1B3A6B]/30 hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] hover:bg-[#EEF2F8] dark:hover:bg-[#1B3A6B]/10 transition-all disabled:opacity-50">
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#6B6A65] dark:text-[#908d89] hover:border-[#1B3A6B]/30 hover:text-[#1B3A6B] dark:hover:text-[#4a7dd1] hover:bg-[#EEF2F8] dark:hover:bg-[#1B3A6B]/10 transition-all disabled:opacity-50">
                   {isExporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
                   {t('settings.data.exportButton')}
                 </button>
@@ -491,7 +491,7 @@ export function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-[#111111] dark:text-[#e8e7e4]">{t('settings.data.deleteTitle')}</p>
-                    <p className="text-xs text-[#787774] dark:text-[#908d89] mt-0.5">{t('settings.data.deleteDesc')}</p>
+                    <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-0.5">{t('settings.data.deleteDesc')}</p>
                   </div>
                   {!showDeleteConfirm && (
                     <button onClick={() => setShowDeleteConfirm(true)}
@@ -505,12 +505,12 @@ export function SettingsPage() {
                   <div className="mt-4 p-4 rounded-xl border border-[#9F2F2D]/20 bg-[#9F2F2D]/5">
                     <div className="flex items-start gap-2 mb-3">
                       <AlertTriangle className="w-4 h-4 text-[#9F2F2D] dark:text-[#d4524f] flex-shrink-0 mt-0.5" />
-                      <p className="text-xs text-[#787774] dark:text-[#908d89]">
+                      <p className="text-xs text-[#6B6A65] dark:text-[#908d89]">
                         {t('settings.data.deleteWarning').replace(' **cannot be undone**', '')}
                         <span className="font-bold text-[#9F2F2D] dark:text-[#d4524f]"> {t('common.confirm').toLowerCase()}</span>.
                       </p>
                     </div>
-                    <p className="text-xs font-bold text-[#787774] uppercase tracking-wider mb-2">{t('settings.data.deleteEmailConfirm')}</p>
+                    <p className="text-xs font-bold text-[#6B6A65] uppercase tracking-wider mb-2">{t('settings.data.deleteEmailConfirm')}</p>
                     <input
                       type="email"
                       value={deleteEmail}
@@ -526,7 +526,7 @@ export function SettingsPage() {
                         {t('settings.data.deleteConfirmButton')}
                       </button>
                       <button onClick={() => { setShowDeleteConfirm(false); setDeleteEmail(''); }}
-                        className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#787774] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
+                        className="px-4 py-2 rounded-lg border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium text-[#6B6A65] dark:text-[#908d89] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] transition-colors">
                         {t('common.cancel')}
                       </button>
                     </div>

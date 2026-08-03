@@ -29,7 +29,7 @@ export function QuotaCard({
             ? <Sparkles className="w-3.5 h-3.5 text-[#956400]" />
             : <Lock className="w-3.5 h-3.5 text-[#956400]" />}
         </div>
-        <span className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">
           {isPremium ? t('quota.proLabel') : t('quota.freeLabel')}
         </span>
       </div>
@@ -38,7 +38,7 @@ export function QuotaCard({
         <span className="text-2xl font-black text-[#111111] dark:text-[#e8e7e4]">
           {remaining}
         </span>
-        <span className="text-sm text-[#787774] dark:text-[#908d89]"> {t('quota.remaining', { quota })}</span>
+        <span className="text-sm text-[#6B6A65] dark:text-[#908d89]"> {t('quota.remaining', { quota })}</span>
       </div>
 
       <div className="w-full bg-[#EAEAEA] dark:bg-white/[0.07] rounded-full h-1.5 overflow-hidden">
@@ -49,7 +49,7 @@ export function QuotaCard({
       </div>
 
       {countdown && (
-        <div className="flex items-center gap-1.5 text-[10px] text-[#787774] dark:text-[#6a6764]">
+        <div className="flex items-center gap-1.5 text-[10px] text-[#6B6A65] dark:text-[#6a6764]">
           <RotateCcw className="w-3 h-3 flex-shrink-0" />
           <span>
             {t('quota.resetsIn')}{' '}

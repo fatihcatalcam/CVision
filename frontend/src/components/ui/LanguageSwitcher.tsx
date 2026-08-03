@@ -54,7 +54,7 @@ export function LanguageSwitcher() {
       <button
         onClick={toggleOpen}
         className="flex items-center justify-center gap-1.5 px-2 h-8 rounded-lg
-          text-[#787774] dark:text-[#908d89]
+          text-[#6B6A65] dark:text-[#908d89]
           hover:text-[#111111] dark:hover:text-[#e8e7e4]
           hover:bg-[#F7F6F3] dark:hover:bg-white/[0.06]
           border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07]
@@ -79,7 +79,7 @@ export function LanguageSwitcher() {
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors text-left
                 ${current.code === lang.code
                   ? 'text-[#111111] dark:text-[#e8e7e4] font-medium bg-[#F7F6F3] dark:bg-white/[0.05]'
-                  : 'text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05]'
+                  : 'text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05]'
                 }`}
             >
               <Flag flagCode={lang.flagCode} alt={lang.label} />

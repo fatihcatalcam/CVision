@@ -150,7 +150,7 @@ export function DashboardPage() {
         <div className="flex items-center gap-3.5">
           <Avatar name={user?.full_name || 'U'} />
           <div>
-            <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium">
+            <p className="text-xs text-[#6B6A65] dark:text-[#908d89] font-medium">
               {getGreeting()},
             </p>
             <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">
@@ -177,14 +177,14 @@ export function DashboardPage() {
           <ThemeToggle />
           <button
             onClick={() => navigate('/settings')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
           >
             <Settings className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">{t('dashboard.settings')}</span>
           </button>
           <button
             onClick={logout}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#787774] hover:text-[#111111] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-transparent hover:border-[#EAEAEA] dark:hover:border-white/[0.07] transition-all text-xs font-medium"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[#6B6A65] hover:text-[#111111] bg-white dark:bg-[#1c1c1a] hover:bg-[#F7F6F3] dark:hover:bg-white/[0.05] border border-[#8A8985] dark:border-white/[0.36] transition-all text-xs font-medium"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">{t('dashboard.signOut')}</span>
@@ -261,7 +261,7 @@ export function DashboardPage() {
         <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4] tracking-tight">
           CVision
         </span>
-        <div className="flex items-center gap-5 text-xs text-[#787774] dark:text-[#908d89]">
+        <div className="flex items-center gap-5 text-xs text-[#6B6A65] dark:text-[#908d89]">
           <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
           <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
           <span>{t('common.copyright')}</span>

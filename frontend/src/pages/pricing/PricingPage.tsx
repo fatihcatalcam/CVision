@@ -60,7 +60,7 @@ export function PricingPage() {
 
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
+          className="flex items-center gap-2 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" /> {t('common.backToDashboard')}
         </button>
@@ -76,7 +76,7 @@ export function PricingPage() {
           <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
             {t('settings.pricing.header')}
           </h1>
-          <p className="text-base text-[#787774] dark:text-[#908d89]">
+          <p className="text-base text-[#6B6A65] dark:text-[#908d89]">
             {isTurkey
               ? t('settings.pricing.subheader')
               : t('settings.pricing.subheaderIntl', { price: usdPrice ? `$${usdPrice}` : '~$4' })}
@@ -91,12 +91,12 @@ export function PricingPage() {
             <p className="label-sm mb-6">{t('settings.pricing.planFree')}</p>
             <div className="mb-6">
               <span className="stat-number text-4xl font-semibold text-[#111111] dark:text-[#e8e7e4]">$0</span>
-              <span className="text-sm text-[#787774] dark:text-[#908d89] ml-1">{t('settings.pricing.freePerMonth')}</span>
+              <span className="text-sm text-[#6B6A65] dark:text-[#908d89] ml-1">{t('settings.pricing.freePerMonth')}</span>
             </div>
 
             <ul className="space-y-3 mb-8">
               {FREE_FEATURE_KEYS.map((key) => (
-                <li key={key} className="flex items-start gap-2 text-sm text-[#787774] dark:text-[#908d89]">
+                <li key={key} className="flex items-start gap-2 text-sm text-[#6B6A65] dark:text-[#908d89]">
                   <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
                   {t(key)}
                 </li>
@@ -111,7 +111,7 @@ export function PricingPage() {
           {/* Pro */}
           <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8 border border-transparent dark:border-white/[0.08]">
             <div className="flex items-center justify-between mb-6">
-              <p className="label-sm text-[#787774]">{t('settings.pricing.planPro')}</p>
+              <p className="label-sm text-[#6B6A65]">{t('settings.pricing.planPro')}</p>
               <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
                 <Gift className="w-3 h-3" /> {t('settings.pricing.trialBadge')}
               </span>
@@ -120,15 +120,15 @@ export function PricingPage() {
               {isTurkey ? (
                 <>
                   <span className="stat-number text-4xl font-semibold text-white">₺199.99</span>
-                  <span className="text-sm text-[#787774] ml-1">{t('settings.pricing.freePerMonth')}</span>
+                  <span className="text-sm text-[#6B6A65] ml-1">{t('settings.pricing.freePerMonth')}</span>
                 </>
               ) : (
                 <>
                   <span className="stat-number text-4xl font-semibold text-white">
                     {usdPrice ? `$${usdPrice}` : '...'}
                   </span>
-                  <span className="text-sm text-[#787774] ml-1">{t('settings.pricing.freePerMonth')}</span>
-                  <p className="text-[11px] text-[#787774] mt-1.5 italic">{t('settings.pricing.chargedNote')}</p>
+                  <span className="text-sm text-[#6B6A65] ml-1">{t('settings.pricing.freePerMonth')}</span>
+                  <p className="text-[11px] text-[#6B6A65] mt-1.5 italic">{t('settings.pricing.chargedNote')}</p>
                 </>
               )}
             </div>
@@ -163,7 +163,7 @@ export function PricingPage() {
                   {t('settings.pricing.ctaButton')}
                 </button>
 
-                <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#787774]">
+                <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#6B6A65]">
                   <Lock className="w-3 h-3" /> {t('settings.pricing.noCard')}
                 </div>
               </div>
@@ -171,7 +171,7 @@ export function PricingPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-2 text-xs text-[#787774]">
+        <div className="flex items-center justify-center gap-2 text-xs text-[#6B6A65]">
           <Shield className="w-3.5 h-3.5" />
           {t('settings.pricing.footerNote')}
         </div>

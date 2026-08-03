@@ -72,7 +72,7 @@ function MiniBar({ value }: { value: number }) {
           style={{ width: `${Math.min(value, 100)}%`, background: bg }}
         />
       </div>
-      <span className="text-xs text-[#787774] stat-number w-8 text-right">{Math.round(value)}%</span>
+      <span className="text-xs text-[#6B6A65] stat-number w-8 text-right">{Math.round(value)}%</span>
     </div>
   );
 }
@@ -145,7 +145,7 @@ export function HistoryPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-[#787774] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-5"
+          className="flex items-center gap-2 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-5"
         >
           <ArrowLeft className="w-4 h-4" /> {t('history.backToDashboard')}
         </button>
@@ -153,7 +153,7 @@ export function HistoryPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4]">{t('history.title')}</h1>
-            <p className="text-[#787774] dark:text-[#908d89] text-sm mt-1">{t('history.totalUploaded', { count: total })}</p>
+            <p className="text-[#6B6A65] dark:text-[#908d89] text-sm mt-1">{t('history.totalUploaded', { count: total })}</p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
@@ -178,7 +178,7 @@ export function HistoryPage() {
                 <s.icon className={`w-4 h-4 ${s.iconColor}`} />
               </div>
               <div>
-                <p className="text-xs text-[#787774] font-medium">{s.label}</p>
+                <p className="text-xs text-[#6B6A65] font-medium">{s.label}</p>
                 <p className="text-xl font-black text-[#111111] stat-number">{s.value}</p>
               </div>
             </Card>
@@ -224,12 +224,12 @@ export function HistoryPage() {
       ) : filtered.length === 0 ? (
         <Card className="text-center py-16">
           <div className="w-16 h-16 rounded-[var(--radius-lg)] bg-[#F7F6F3] dark:bg-white/[0.05] border border-[#EAEAEA] dark:border-white/[0.07] flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="w-8 h-8 text-[#787774] dark:text-[#908d89]" />
+            <AlertCircle className="w-8 h-8 text-[#6B6A65] dark:text-[#908d89]" />
           </div>
           <h3 className="text-lg font-bold text-[#111111] dark:text-[#e8e7e4] mb-2">
             {items.length === 0 ? t('history.emptyHeading') : t('history.emptyFilterHeading')}
           </h3>
-          <p className="text-[#787774] text-sm mb-6">
+          <p className="text-[#6B6A65] text-sm mb-6">
             {items.length === 0
               ? t('history.emptyBody')
               : t('history.emptyFilterBody')}
@@ -273,7 +273,7 @@ export function HistoryPage() {
                     {/* File */}
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className={`p-2 rounded-[var(--radius-sm)] flex-shrink-0 ${canView ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] dark:text-[#4a7dd1]' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89]'}`}>
+                        <div className={`p-2 rounded-[var(--radius-sm)] flex-shrink-0 ${canView ? 'bg-[#EEF2F8] dark:bg-[#1B3A6B]/20 text-[#1B3A6B] dark:text-[#4a7dd1]' : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89]'}`}>
                           <FileText className="w-4 h-4" />
                         </div>
                         <span className="font-medium text-[#111111] dark:text-[#e8e7e4] truncate max-w-[160px] sm:max-w-[220px]">
@@ -284,24 +284,24 @@ export function HistoryPage() {
 
                     {/* Domain */}
                     <td className="px-5 py-3 hidden sm:table-cell">
-                      <span className="text-[#787774] text-xs">{item.target_domain ?? '-'}</span>
+                      <span className="text-[#6B6A65] text-xs">{item.target_domain ?? '-'}</span>
                     </td>
 
                     {/* Score bars */}
                     <td className="px-5 py-3 hidden md:table-cell">
                       {item.overall_score !== null ? (
                         <div className="space-y-1.5 min-w-[120px]">
-                          <div className="flex items-center gap-2 text-[10px] text-[#787774]">
+                          <div className="flex items-center gap-2 text-[10px] text-[#6B6A65]">
                             <span className="w-14">{t('scoreHero.ats')}</span>
                             <MiniBar value={item.ats_score ?? 0} />
                           </div>
-                          <div className="flex items-center gap-2 text-[10px] text-[#787774]">
+                          <div className="flex items-center gap-2 text-[10px] text-[#6B6A65]">
                             <span className="w-14">{t('scoreHero.keywords')}</span>
                             <MiniBar value={item.keyword_score ?? 0} />
                           </div>
                         </div>
                       ) : (
-                        <span className="text-[#787774]">-</span>
+                        <span className="text-[#6B6A65]">-</span>
                       )}
                     </td>
 
@@ -312,7 +312,7 @@ export function HistoryPage() {
                       ) : item.status.startsWith('failed') ? (
                         <span className="text-xs text-[#9F2F2D]">{t('history.filterFailed')}</span>
                       ) : (
-                        <span className="text-xs text-[#787774]">-</span>
+                        <span className="text-xs text-[#6B6A65]">-</span>
                       )}
                     </td>
 
@@ -325,7 +325,7 @@ export function HistoryPage() {
 
                     {/* Date */}
                     <td className="px-5 py-3 hidden sm:table-cell">
-                      <span className="text-xs text-[#787774]">
+                      <span className="text-xs text-[#6B6A65]">
                         {new Date(item.uploaded_at).toLocaleDateString(
                           i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB',
                           { day: '2-digit', month: 'short', year: 'numeric' }
@@ -347,7 +347,7 @@ export function HistoryPage() {
                             </button>
                             <button
                               onClick={() => setConfirmDelete(null)}
-                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
+                              className="px-3 py-1.5 rounded-[var(--radius-sm)] bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] border border-[#EAEAEA] dark:border-white/[0.07] text-xs font-medium hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
                             >
                               {t('common.cancel')}
                             </button>

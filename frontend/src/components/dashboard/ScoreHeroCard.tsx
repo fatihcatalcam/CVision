@@ -51,7 +51,7 @@ export function ScoreHeroCard({
 
       {/* Top section */}
       <div className="flex items-start justify-between">
-        <p className="text-xs text-[#787774] dark:text-[#908d89] font-medium uppercase tracking-wider">
+        <p className="text-xs text-[#6B6A65] dark:text-[#908d89] font-medium uppercase tracking-wider">
           {t('scoreHero.subtitle')}{latestRoleTitle ? ` · ${latestRoleTitle}` : ''}
         </p>
         <button
@@ -67,7 +67,7 @@ export function ScoreHeroCard({
       <div className="flex items-end gap-4">
         <span className={`text-7xl font-bold leading-none tracking-tight ${scoreColor(latestScore)}`}>
           {rounded}
-          <span className="text-3xl font-semibold text-[#787774] dark:text-[#908d89]">%</span>
+          <span className="text-3xl font-semibold text-[#6B6A65] dark:text-[#908d89]">%</span>
         </span>
 
         {scoreDelta !== null && (
@@ -76,7 +76,7 @@ export function ScoreHeroCard({
               ? 'bg-[#EDF3EC] dark:bg-[#346538]/15 text-[#346538] dark:text-[#4ade80]'
               : scoreDelta < 0
               ? 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400'
-              : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89]'
+              : 'bg-[#F7F6F3] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89]'
           }`}>
             {scoreDelta > 0
               ? <TrendingUp className="w-3.5 h-3.5" />
@@ -96,7 +96,7 @@ export function ScoreHeroCard({
               key={label}
               className="bg-[#F7F6F3] dark:bg-white/[0.03] rounded-xl p-3 border border-[#EAEAEA] dark:border-white/[0.05]"
             >
-              <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase font-semibold tracking-wider">
+              <p className="text-[10px] text-[#6B6A65] dark:text-[#908d89] uppercase font-semibold tracking-wider">
                 {label}
               </p>
               <p className={`text-lg font-bold mt-0.5 ${scoreColor(value)}`}>
@@ -116,14 +116,14 @@ export function ScoreHeroCard({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold uppercase tracking-wider text-[#111111] dark:text-[#e8e7e4] mb-0.5">{t('match.sectionLabel')}</p>
-              <p className="text-xs text-[#787774] dark:text-[#908d89] leading-relaxed">{t('match.sectionDesc')}</p>
+              <p className="text-xs text-[#6B6A65] dark:text-[#908d89] leading-relaxed">{t('match.sectionDesc')}</p>
             </div>
           </div>
           {!isPremium ? (
             /* Free: locked button */
             <button
               onClick={() => navigate('/pricing')}
-              className="w-full py-2 flex items-center justify-center gap-2 bg-[#F1F1EF] dark:bg-white/[0.05] text-[#787774] dark:text-[#908d89] text-xs font-semibold rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
+              className="w-full py-2 flex items-center justify-center gap-2 bg-[#F1F1EF] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] text-xs font-semibold rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
             >
               <Lock className="w-3.5 h-3.5" />
               {t('match.proGateButton')}
@@ -145,7 +145,7 @@ export function ScoreHeroCard({
         {/* Stats */}
         <div className="flex gap-6">
           <div>
-            <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
+            <p className="text-[10px] text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider font-semibold">
               {t('scoreHero.totalAnalyses')}
             </p>
             <p className="text-base font-bold text-[#111111] dark:text-[#e8e7e4] mt-0.5 stat-number">
@@ -154,7 +154,7 @@ export function ScoreHeroCard({
           </div>
           {averageScore != null && (
             <div>
-              <p className="text-[10px] text-[#787774] dark:text-[#908d89] uppercase tracking-wider font-semibold">
+              <p className="text-[10px] text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider font-semibold">
                 {t('scoreHero.averageScore')}
               </p>
               <p className={`text-base font-bold mt-0.5 stat-number ${scoreColor(averageScore)}`}>

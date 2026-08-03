@@ -18,7 +18,7 @@ export function CareerInsightCard({ roleTitle, matchScore }: CareerInsightCardPr
         <div className="p-1.5 rounded-lg bg-[#EEF2F8] dark:bg-[#1B3A6B]/20">
           <Target className="w-3.5 h-3.5 text-[#1B3A6B] dark:text-[#4a7dd1]" />
         </div>
-        <span className="text-xs font-semibold text-[#787774] dark:text-[#908d89] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[#6B6A65] dark:text-[#908d89] uppercase tracking-wider">
           {t('careerInsight.label')}
         </span>
       </div>

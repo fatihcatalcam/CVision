@@ -31,16 +31,16 @@ export function ForgotPasswordPage() {
       <div className="w-full max-w-sm">
         <button
           onClick={() => navigate('/login')}
-          className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] transition-colors text-[#787774] bg-transparent border-0 cursor-pointer"
+          className="label-sm flex items-center gap-1 mb-8 hover:text-[#111111] transition-colors text-[#6B6A65] bg-transparent border-0 cursor-pointer"
         >
           {t('auth.forgotPassword.backToSignIn')}
         </button>
         <h1 className="font-sans text-2xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">{t('auth.forgotPassword.title')}</h1>
-        <p className="text-sm text-[#787774] dark:text-[#908d89] mb-8">{t('auth.forgotPassword.subtitle')}</p>
+        <p className="text-sm text-[#6B6A65] dark:text-[#908d89] mb-8">{t('auth.forgotPassword.subtitle')}</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#787774] uppercase tracking-wider">{t('auth.forgotPassword.email')}</label>
+            <label className="text-xs font-semibold text-[#6B6A65] uppercase tracking-wider">{t('auth.forgotPassword.email')}</label>
             <input
               type="email"
               placeholder={t('auth.forgotPassword.emailPlaceholder')}
@@ -61,7 +61,7 @@ export function ForgotPasswordPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-[#787774]">
+        <p className="mt-6 text-center text-xs text-[#6B6A65]">
           {t('auth.forgotPassword.spamNote')}
         </p>
       </div>
