@@ -142,7 +142,27 @@ tool; 10/minute is.
 them - `plan_type` is now only a badge, an admin count and the cancel flow.
 Dropping columns is irreversible and separate.
 
-### Not done
+### Credit packs (roadmap step 3) — done
 
-Selling credits for money (roadmap step 3). Until then `/pricing` still sells the
-30-day subscription, which now at least delivers credits.
+Three packs of 10 / 30 / 75 credits, sold through Lemon Squeezy, replacing the
+monthly subscription. Prices live on the Lemon variant, never in our code.
+
+`grant_once()` keys on the Lemon order id: their webhook is retried by design,
+and a second delivery must not hand out a second pack. A checkout may only be
+opened for a variant we know the credit value of, and an order for an unknown
+variant grants nothing and logs loudly - a guess would be either theft or a
+giveaway.
+
+**Needs manual setup before it works.** Create three one-time products in Lemon
+Squeezy, take their variant ids, and set on Render:
+
+    CREDIT_PACKS=<variant1>:10,<variant2>:30,<variant3>:75
+
+Empty means nothing is on sale and the page says so, so this is safe to deploy
+before the products exist.
+
+### Still open
+
+`CREDIT_PREMIUM_PURCHASE` (200) is the placeholder for the legacy subscription
+path, which the packs now supersede. Once nobody can reach the subscription,
+that constant and `_upgrade_user` can go.
