@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Coins, Gift, ChevronRight } from 'lucide-react';
+import { Coins, Gift, ChevronRight, ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useCreditPacks } from '../../hooks/useCreditPacks';
 
 interface CreditCardProps {
   credits: number;
@@ -20,6 +21,7 @@ interface CreditCardProps {
 export function CreditCard({ credits, weekly, cap }: CreditCardProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { onSale } = useCreditPacks();
 
   const low = credits < 3;
 
@@ -57,6 +59,16 @@ export function CreditCard({ credits, weekly, cap }: CreditCardProps) {
       >
         <Gift className="w-3 h-3" /> {t('credits.inviteCta')} <ChevronRight className="w-3 h-3" />
       </button>
+
+      {/* Only rendered once packs are actually on sale - see useCreditPacks. */}
+      {onSale && (
+        <button
+          onClick={() => navigate('/pricing')}
+          className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] active:scale-[0.98] transition-all"
+        >
+          <ShoppingCart className="w-3 h-3" /> {t('credits.buyCta')}
+        </button>
+      )}
     </div>
   );
 }

@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
+import { useCreditPacks } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
 import { ArrowLeft, Loader2, Coins, Shield, Lock, Gift } from 'lucide-react';
-
-interface Pack {
-  variant_id: string;
-  credits: number;
-}
 
 /**
  * Credit packs. Replaces the monthly subscription page.
@@ -34,15 +30,9 @@ export function PricingPage() {
     canonical: 'https://www.cvisionapp.com/pricing',
   });
 
-  const [packs, setPacks] = useState<Pack[] | null>(null);
+  const { packs } = useCreditPacks();
   const [loadingVariant, setLoadingVariant] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    api.get('/payment/packs')
-      .then((res) => setPacks(res.data.packs))
-      .catch(() => setPacks([]));
-  }, []);
 
   const buy = async (variantId: string) => {
     setError(null);
