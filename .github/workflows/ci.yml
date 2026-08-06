@@ -8,6 +8,12 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Manual trigger. A push on 2026-08-07 produced no run at all - the workflow
+  # was active and the commit was on main, GitHub simply never created one - and
+  # with only push/pull_request triggers there was no way to ask for it again
+  # short of pushing another commit. This adds the "Run workflow" button so a
+  # missed event can be re-run against any ref.
+  workflow_dispatch:
 
 # A newer push to the same branch/PR cancels the older in-flight run.
 concurrency:
