@@ -172,6 +172,44 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
         </div>
       </div>
 
+      {/* Tier choice, shown before the file is picked rather than after. The
+          price is the first thing worth knowing about an analysis, and the
+          version that only appeared once a file was selected read as if there
+          were no choice at all. Anonymous /try has no balance to spend, so it
+          never appears there. */}
+      {!anonymous && (
+        <div className="grid grid-cols-2 gap-2">
+          {([
+            { key: 'normal' as const, cost: ANALYSIS_COST },
+            { key: 'pro' as const, cost: ANALYSIS_COST + UNLOCK_COST },
+          ]).map(({ key, cost }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setTier(key)}
+              aria-pressed={tier === key}
+              className={`text-left p-3 rounded-xl border transition-all ${
+                tier === key
+                  ? 'border-[#111111] dark:border-[#e8e7e4] bg-[#F7F6F3] dark:bg-[#272725]'
+                  : 'border-[#8A8985] dark:border-white/[0.36] hover:bg-[#F7F6F3] dark:hover:bg-[#272725]'
+              }`}
+            >
+              <span className="flex items-center justify-between gap-2 mb-0.5">
+                <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
+                  {t(`uploader.tier.${key}Title`)}
+                </span>
+                <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap">
+                  {t('uploader.tier.cost', { cost })}
+                </span>
+              </span>
+              <span className="block text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
+                {t(`uploader.tier.${key}Desc`)}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Upload zone */}
       {!file ? (
         <div
@@ -241,41 +279,6 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
               </p>
             </div>
           </div>
-
-          {/* Tier choice. Anonymous /try has no balance to spend, so it never
-              appears there. */}
-          {!anonymous && (
-            <div className="grid grid-cols-2 gap-2">
-              {([
-                { key: 'normal' as const, cost: ANALYSIS_COST },
-                { key: 'pro' as const, cost: ANALYSIS_COST + UNLOCK_COST },
-              ]).map(({ key, cost }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setTier(key)}
-                  aria-pressed={tier === key}
-                  className={`text-left p-3 rounded-xl border transition-all ${
-                    tier === key
-                      ? 'border-[#111111] dark:border-[#e8e7e4] bg-[#F7F6F3] dark:bg-[#272725]'
-                      : 'border-[#8A8985] dark:border-white/[0.36] hover:bg-[#F7F6F3] dark:hover:bg-[#272725]'
-                  }`}
-                >
-                  <span className="flex items-center justify-between gap-2 mb-0.5">
-                    <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
-                      {t(`uploader.tier.${key}Title`)}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap">
-                      {t('uploader.tier.cost', { cost })}
-                    </span>
-                  </span>
-                  <span className="block text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
-                    {t(`uploader.tier.${key}Desc`)}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
 
           {/* Upload button */}
           <button
