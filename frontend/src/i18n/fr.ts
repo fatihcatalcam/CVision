@@ -169,6 +169,14 @@ const fr = {
   },
 
   uploader: {
+    analyzeButtonCost: 'Analyser mon CV ({{cost}} crédits)',
+    tier: {
+      normalTitle: 'Normal',
+      proTitle: 'Pro',
+      normalDesc: 'Score ATS, mots-clés manquants et le premier conseil. Vous pourrez débloquer le rapport complet plus tard.',
+      proDesc: 'Le rapport complet dès le départ : tous les conseils, le résumé IA et la radio ATS.',
+      cost: '{{cost}} crédits',
+    },
     step1: 'Télécharger le fichier',
     step2: 'Choisir le secteur',
     step3: 'Analyser',

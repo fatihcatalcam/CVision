@@ -115,6 +115,7 @@ class CVService:
         target_domain: str,
         user: User,
         db: Session,
+        unlock: bool = False,
     ) -> CV:
         """
         Upload pipeline: validate → charge → save → create DB record → fast return.
@@ -141,13 +142,19 @@ class CVService:
         # still be refused.
         from app.services.credit_service import CreditService, InsufficientCredits
 
+        # A "Pro analysis" is analysis + unlock bought together, charged as one
+        # spend. Two separate charges would let the second fail after the first
+        # succeeded, leaving a paid-for analysis the user cannot open.
+        cost = settings.CREDIT_ANALYSIS + (settings.CREDIT_UNLOCK if unlock else 0)
+        reason = "spend_analysis_pro" if unlock else "spend_analysis"
+
         try:
-            CreditService.spend(db, user, settings.CREDIT_ANALYSIS, "spend_analysis")
+            CreditService.spend(db, user, cost, reason)
         except InsufficientCredits as exc:
             raise HTTPException(
                 status_code=402,
                 detail=(
-                    f"Not enough credits: an analysis costs {exc.needed}, "
+                    f"Not enough credits: this costs {exc.needed}, "
                     f"you have {exc.available}."
                 ),
             )
@@ -169,6 +176,7 @@ class CVService:
             file_content=file_content,
             status="pending",
             target_domain=target_domain,
+            unlock_requested=unlock,
         )
         db.add(cv)
         db.flush()
@@ -181,7 +189,7 @@ class CVService:
             db.query(CreditTransaction)
             .filter(
                 CreditTransaction.user_id == user.id,
-                CreditTransaction.reason == "spend_analysis",
+                CreditTransaction.reason == reason,
                 CreditTransaction.ref_id.is_(None),
             )
             .order_by(CreditTransaction.id.desc())
@@ -280,11 +288,16 @@ class CVService:
         if cv.user_id:
             owner = db.query(User).filter(User.id == cv.user_id).first()
             if owner:
+                # Refund what was actually charged: a Pro analysis paid for the
+                # unlock too, and a failure means they got neither.
+                spent = settings.CREDIT_ANALYSIS + (
+                    settings.CREDIT_UNLOCK if cv.unlock_requested else 0
+                )
                 balance = CreditService.refund(
-                    db, owner, settings.CREDIT_ANALYSIS, "refund_failed_analysis", ref_id=str(cv_id)
+                    db, owner, spent, "refund_failed_analysis", ref_id=str(cv_id)
                 )
                 logger.info(
-                    f"Refunded {settings.CREDIT_ANALYSIS} credit to user {owner.id} after CV "
+                    f"Refunded {spent} credit(s) to user {owner.id} after CV "
                     f"{cv_id} failed ({status}); balance now {balance}"
                 )
 

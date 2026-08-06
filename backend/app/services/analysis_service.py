@@ -167,6 +167,8 @@ class AnalysisService:
         # Computed before the row is added, because adding it first would make
         # the "does this user have any analysis yet" query answer itself.
         is_first = AnalysisService._is_users_first_analysis(cv, db)
+        # Either the welcome perk, or the user paid for the full report up front.
+        unlocked = is_first or bool(cv.unlock_requested)
 
         # Persist analysis result
         analysis = AnalysisResult(
@@ -190,7 +192,7 @@ class AnalysisService:
             # total_analyses == 1, so uploading a second CV silently re-locked
             # the first report: the user watched something they already had get
             # taken away.
-            is_unlocked=is_first,
+            is_unlocked=unlocked,
         )
         db.add(analysis)
         db.flush()  # Get the analysis ID

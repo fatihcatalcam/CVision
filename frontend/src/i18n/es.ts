@@ -169,6 +169,14 @@ const es = {
   },
 
   uploader: {
+    analyzeButtonCost: 'Analizar mi CV ({{cost}} créditos)',
+    tier: {
+      normalTitle: 'Normal',
+      proTitle: 'Pro',
+      normalDesc: 'Puntuación ATS, palabras clave que faltan y la primera sugerencia. Puedes desbloquear el informe completo más tarde.',
+      proDesc: 'El informe completo desde el principio: todas las sugerencias, el resumen con IA y el ATS X-Ray.',
+      cost: '{{cost}} créditos',
+    },
     step1: 'Subir archivo',
     step2: 'Seleccionar sector',
     step3: 'Analizar',

@@ -169,6 +169,14 @@ const en = {
   },
 
   uploader: {
+    analyzeButtonCost: 'Analyse my CV ({{cost}} credits)',
+    tier: {
+      normalTitle: 'Normal',
+      proTitle: 'Pro',
+      normalDesc: 'ATS score, missing keywords and the first suggestion. You can unlock the full report later.',
+      proDesc: 'The full report from the start: every suggestion, the AI summary and the ATS X-Ray.',
+      cost: '{{cost}} credits',
+    },
     step1: 'Upload File',
     step2: 'Select Domain',
     step3: 'Analyze',

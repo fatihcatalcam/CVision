@@ -43,6 +43,7 @@ async def upload_cv(
     file: UploadFile = File(..., description="CV file (PDF only, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
     ui_language: str = Form("en", description="UI language for localized suggestions (en/tr/de/fr/es)"),
+    tier: str = Form("normal", description="'normal' (analysis only) or 'pro' (analysis + unlocked report)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -57,7 +58,9 @@ async def upload_cv(
     **Status lifecycle**: pending → processing → completed / failed
     """
     # The upload_cv service validates, saves, and creates the record quickly
-    cv = await CVService.upload_cv(file, target_domain, current_user, db)
+    cv = await CVService.upload_cv(
+        file, target_domain, current_user, db, unlock=(tier == "pro")
+    )
     
     # Delegate parsing and analysis to background task
     background_tasks.add_task(CVService.process_analysis_background, cv.id, ui_language)

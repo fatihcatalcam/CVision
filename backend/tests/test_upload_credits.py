@@ -25,6 +25,7 @@ import pytest
 from fastapi import HTTPException
 from starlette.datastructures import Headers, UploadFile
 
+from app.config import settings
 from app.models.cv import CV
 from app.models.credit_transaction import CreditTransaction
 from app.models.user import User
@@ -193,3 +194,89 @@ def test_an_anonymous_failure_refunds_nobody(db_session):
 
     db_session.expire_all()
     assert db_session.get(CV, cv.id).status == "failed_no_text"
+
+
+# ── the Pro tier ──────────────────────────────────────────────────────────────
+
+def _upload_pro(user, db) -> CV:
+    return asyncio.run(
+        CVService.upload_cv(
+            _make_upload(), "Software Engineering", user, db, unlock=True
+        )
+    )
+
+
+def test_a_pro_analysis_costs_analysis_plus_unlock(
+    make_user, db_session, stub_save_file
+):
+    user = make_user(email="pro@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+
+    _upload_pro(user, db_session)
+
+    expected = settings.CREDIT_ANALYSIS + settings.CREDIT_UNLOCK
+    assert _balance(db_session, user.id) == 5 - expected
+    last = _ledger(db_session, user.id)[-1]
+    assert last.reason == "spend_analysis_pro"
+    assert last.delta == -expected
+
+
+def test_pro_is_charged_as_one_spend(make_user, db_session, stub_save_file):
+    """Two separate charges would let the unlock fail after the analysis
+    succeeded, leaving a paid-for report the user cannot open."""
+    user = make_user(email="oneshot@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+
+    _upload_pro(user, db_session)
+
+    spends = [r for r in _ledger(db_session, user.id) if r.delta < 0]
+    assert len(spends) == 1
+
+
+def test_pro_marks_the_cv_so_the_report_lands_unlocked(
+    make_user, db_session, stub_save_file
+):
+    """The purchase happens before the analysis exists, so the intent has to
+    survive on the CV until the background task reads it."""
+    user = make_user(email="marked@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+
+    cv = _upload_pro(user, db_session)
+
+    assert cv.unlock_requested is True
+
+
+def test_a_normal_upload_is_not_marked(make_user, db_session, stub_save_file):
+    user = make_user(email="plain@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+
+    cv = _upload(user, db_session)
+
+    assert cv.unlock_requested is False
+
+
+def test_pro_is_refused_when_only_a_normal_analysis_is_affordable(
+    make_user, db_session, stub_save_file
+):
+    user = make_user(email="tooshort@test.com")
+    CreditService.grant(db_session, user, settings.CREDIT_ANALYSIS, "grant_signup")
+
+    with pytest.raises(HTTPException) as exc:
+        _upload_pro(user, db_session)
+
+    assert exc.value.status_code == 402
+    assert _balance(db_session, user.id) == settings.CREDIT_ANALYSIS
+
+
+def test_a_failed_pro_analysis_refunds_the_whole_price(
+    make_user, db_session, stub_save_file
+):
+    """They paid for a report and an unlock and received neither."""
+    user = make_user(email="profail@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+    cv = _upload_pro(user, db_session)
+    db_session.commit()
+
+    CVService._mark_failed(db_session, cv.id, "failed_no_text")
+
+    assert _balance(db_session, user.id) == 5

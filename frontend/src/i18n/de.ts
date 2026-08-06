@@ -169,6 +169,14 @@ const de = {
   },
 
   uploader: {
+    analyzeButtonCost: 'Lebenslauf analysieren ({{cost}} Credits)',
+    tier: {
+      normalTitle: 'Normal',
+      proTitle: 'Pro',
+      normalDesc: 'ATS-Score, fehlende Schlüsselwörter und der erste Hinweis. Den vollständigen Bericht kannst du später freischalten.',
+      proDesc: 'Der vollständige Bericht von Anfang an: alle Hinweise, die KI-Zusammenfassung und das ATS-Röntgenbild.',
+      cost: '{{cost}} Credits',
+    },
     step1: 'Datei hochladen',
     step2: 'Branche wählen',
     step3: 'Analysieren',

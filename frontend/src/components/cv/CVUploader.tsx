@@ -35,6 +35,12 @@ const DOMAIN_VALUES = [
   { value: 'Other', key: 'other', emoji: '✨' },
 ];
 
+// Mirrors CREDIT_ANALYSIS / CREDIT_UNLOCK in backend/app/config.py. Display
+// only - the server decides what is actually charged, so drift here misinforms
+// but cannot mis-charge.
+const ANALYSIS_COST = 1;
+const UNLOCK_COST = 2;
+
 interface CVUploaderProps {
   onUploadSuccess: (idOrToken: string) => void;
   /** When true, suppresses the outer card wrapper so the parent controls padding/bg */
@@ -49,6 +55,11 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState('Other');
+  // Normal buys the analysis; Pro buys it with the full report already open.
+  // Both routes exist because the report can also be unlocked afterwards - this
+  // is the same 3 credits, just decided up front by someone who already knows
+  // they want the whole thing.
+  const [tier, setTier] = useState<'normal' | 'pro'>('normal');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (f: File): boolean => {
@@ -88,6 +99,7 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
     // the site in. i18n.language can carry a region (e.g. "en-US"); the backend
     // only knows the base code, and unknown values fall back to English there.
     formData.append('ui_language', i18n.language.split('-')[0]);
+    if (!anonymous) formData.append('tier', tier);
     try {
       const endpoint = anonymous ? '/public/analyze' : '/cvs/upload';
       const response = await api.post(endpoint, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -230,6 +242,41 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
             </div>
           </div>
 
+          {/* Tier choice. Anonymous /try has no balance to spend, so it never
+              appears there. */}
+          {!anonymous && (
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { key: 'normal' as const, cost: ANALYSIS_COST },
+                { key: 'pro' as const, cost: ANALYSIS_COST + UNLOCK_COST },
+              ]).map(({ key, cost }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setTier(key)}
+                  aria-pressed={tier === key}
+                  className={`text-left p-3 rounded-xl border transition-all ${
+                    tier === key
+                      ? 'border-[#111111] dark:border-[#e8e7e4] bg-[#F7F6F3] dark:bg-[#272725]'
+                      : 'border-[#8A8985] dark:border-white/[0.36] hover:bg-[#F7F6F3] dark:hover:bg-[#272725]'
+                  }`}
+                >
+                  <span className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
+                      {t(`uploader.tier.${key}Title`)}
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap">
+                      {t('uploader.tier.cost', { cost })}
+                    </span>
+                  </span>
+                  <span className="block text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
+                    {t(`uploader.tier.${key}Desc`)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Upload button */}
           <button
             onClick={triggerUpload}
@@ -244,7 +291,11 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                {t('uploader.analyzeButton')}
+                {anonymous
+                  ? t('uploader.analyzeButton')
+                  : t('uploader.analyzeButtonCost', {
+                      cost: tier === 'pro' ? ANALYSIS_COST + UNLOCK_COST : ANALYSIS_COST,
+                    })}
               </>
             )}
           </button>

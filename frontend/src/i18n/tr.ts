@@ -169,6 +169,14 @@ const tr = {
   },
 
   uploader: {
+    analyzeButtonCost: 'CV\'mi Analiz Et ({{cost}} kredi)',
+    tier: {
+      normalTitle: 'Normal',
+      proTitle: 'Pro',
+      normalDesc: 'ATS skoru, eksik anahtar kelimeler ve ilk öneri. Tam raporu sonradan da açabilirsin.',
+      proDesc: 'Tam rapor baştan açık: tüm öneriler, yapay zeka özeti ve ATS X-Ray.',
+      cost: '{{cost}} kredi',
+    },
     step1: 'Dosya Yükle',
     step2: 'Alan Seç',
     step3: 'Analiz Et',

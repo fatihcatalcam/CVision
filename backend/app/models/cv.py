@@ -5,7 +5,7 @@ Maps to FR4, FR5, FR6, FR7, FR19, FR21, FR22.
 """
 
 from datetime import datetime
-from sqlalchemy import String, Integer, Text, DateTime, ForeignKey, func, LargeBinary
+from sqlalchemy import String, Integer, Text, DateTime, ForeignKey, func, LargeBinary, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -24,6 +24,14 @@ class CV(Base):
     file_content: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True)  # raw bytes stored for persistence
     extracted_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     target_domain: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    # The full report was paid for at upload time ("Pro analysis"). Carried on
+    # the CV because the purchase happens before the analysis exists, and the
+    # background task that creates it needs to know. Charging the unlock again
+    # afterwards could fail once the money is already taken.
+    unlock_requested: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="pending"
     )  # pending, processing, completed, failed
