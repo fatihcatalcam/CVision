@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
@@ -66,6 +66,11 @@ export function RegisterPage() {
 
   const navigate = useNavigate();
   const { login } = useAuth();
+  // Invite code from the link the visitor followed (/register?ref=CODE). An
+  // unknown code is ignored by the server rather than rejected, so a mangled
+  // link costs the referrer their reward but never blocks the signup.
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get('ref');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,6 +100,7 @@ export function RegisterPage() {
         email,
         password,
         language: i18n.language?.slice(0, 5),
+        referral_code: referralCode || undefined,
       });
     } catch (error: any) {
       toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.register.errorToast'));

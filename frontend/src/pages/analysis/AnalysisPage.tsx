@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import {
   ArrowLeft, Zap, FileText,
   Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock,
@@ -56,6 +57,10 @@ interface AnalysisData {
 
 // â”€â”€â”€ Priority styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+// Mirrors CREDIT_UNLOCK in backend/app/config.py — display only; the server
+// decides what is actually charged.
+const UNLOCK_COST = 2;
+
 const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; labelKey: string }> = {
   high:   { dot: 'bg-[#9F2F2D]', bg: 'bg-[#9F2F2D]/10', text: 'text-[#9F2F2D]', labelKey: 'analysis.priorityHigh' },
   medium: { dot: 'bg-[#956400]', bg: 'bg-[#956400]/10', text: 'text-[#956400]', labelKey: 'analysis.priorityMedium' },
@@ -64,9 +69,11 @@ const PRIORITY_META: Record<string, { dot: string; bg: string; text: string; lab
 
 // â”€â”€â”€ AI Suggestion Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; index: number }) {
+function AISuggestionCard(
+  { suggestion, index, onUnlock, unlocking }:
+  { suggestion: AISuggestion; index: number; onUnlock: () => void; unlocking: boolean }
+) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   if (suggestion.is_locked) {
     return (
@@ -84,12 +91,13 @@ function AISuggestionCard({ suggestion, index }: { suggestion: AISuggestion; ind
            <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] dark:bg-white/[0.08] rounded-full">
              <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
            </div>
-           <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
+           <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('analysis.unlockTitle')}</p>
            <button
-             onClick={() => navigate('/pricing')}
-             className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
+             onClick={onUnlock}
+             disabled={unlocking}
+             className="px-4 py-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 transition-colors"
            >
-             {t('match.proGateButton')}
+             {unlocking ? t('analysis.unlocking') : t('analysis.unlockCta', { cost: UNLOCK_COST })}
            </button>
         </div>
       </div>
@@ -193,7 +201,7 @@ export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [isNewAnalysis, setIsNewAnalysis] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState(() => t('analysis.loadingInit'));
@@ -207,6 +215,27 @@ export function AnalysisPage() {
   const [matchJdId, setMatchJdId] = useState<string | null>(null);
   const [coverLetterContent, setCoverLetterContent] = useState<string | null>(null);
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+
+  // Buying the full report. The server returns the unlocked payload, so the page
+  // swaps to it in place rather than refetching - and refreshUser pulls the new
+  // balance so the header does not keep showing what the user had a moment ago.
+  const handleUnlock = async () => {
+    if (!id || isUnlocking) return;
+    setIsUnlocking(true);
+    try {
+      const { data: unlocked } = await api.post(`/analysis/${id}/unlock`);
+      setData(unlocked);
+      await refreshUser();
+      toast.success(t('analysis.unlockedToast'));
+    } catch (err: any) {
+      toast.error(
+        err.response?.data?.detail || err.response?.data?.message || t('analysis.unlockFailed')
+      );
+    } finally {
+      setIsUnlocking(false);
+    }
+  };
 
   // Animated progress bar - only when doing a new analysis
   useEffect(() => {
@@ -430,10 +459,11 @@ export function AnalysisPage() {
                     <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
                   </div>
                   <button
-                    onClick={undefined}
-                    className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
+                    onClick={handleUnlock}
+                    disabled={isUnlocking}
+                    className="px-4 py-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 transition-colors"
                   >
-                    {t('analysis.upgradeToUnlock')}
+                    {isUnlocking ? t('analysis.unlocking') : t('analysis.unlockCta', { cost: UNLOCK_COST })}
                   </button>
                 </div>
               )}
@@ -512,7 +542,7 @@ export function AnalysisPage() {
             {activeTab === 'ai' && hasAI && (
               <div className="space-y-3">
                 {data!.ai_suggestions.map((s, i) => (
-                  <AISuggestionCard key={i} suggestion={s} index={i} />
+                  <AISuggestionCard key={i} suggestion={s} index={i} onUnlock={handleUnlock} unlocking={isUnlocking} />
                 ))}
               </div>
             )}

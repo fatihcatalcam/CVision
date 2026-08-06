@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/ui/Card';
+import { ReferralCard } from '../../components/settings/ReferralCard';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
@@ -293,6 +294,11 @@ export function SettingsPage() {
 
         {/* Right forms */}
         <div className="lg:col-span-2 space-y-5">
+
+          {/* Invites. High in the column on purpose: it is the only free way to
+              get more credits, so burying it under password settings would hide
+              the answer to "I am out of credits". */}
+          <ReferralCard />
 
           {/* 1 - Profile */}
           <div className="surface p-6">

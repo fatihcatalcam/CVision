@@ -512,6 +512,25 @@ const en = {
     ctaButton: "Check my CV free",
   },
 
+  credits: {
+    label: 'CREDITS',
+    unit: 'credits',
+    weekly: '+{{weekly}} credits every week. An analysis costs 1, unlocking the full report 2.',
+    weeklyPaused: 'Weekly credits are paused while your balance is {{cap}} or above.',
+    low: 'Running low. You can earn free credits by inviting a friend.',
+    inviteCta: 'Invite a friend',
+  },
+
+  referral: {
+    title: 'Invite a friend',
+    desc: 'Earn {{reward}} credits when someone you invite completes their first analysis.',
+    copy: 'Copy',
+    copied: 'Link copied',
+    copyFailed: 'Could not copy — select the link manually',
+    whenPaid: 'Credits arrive when your invitee finishes their first CV analysis, not when they sign up.',
+    earned: 'You have earned {{credits}} credits from {{count}} invites so far.',
+  },
+
   xray: {
     label: "ATS X-Ray",
     title: "How the ATS reads your CV",
@@ -641,6 +660,11 @@ const en = {
   },
 
   analysis: {
+    unlockTitle: 'Full report locked',
+    unlockCta: 'Unlock for {{cost}} credits',
+    unlocking: 'Unlocking...',
+    unlockedToast: 'Full report unlocked',
+    unlockFailed: 'Could not unlock',
     priorityHigh: 'High Priority',
     priorityMedium: 'Medium',
     priorityLow: 'Low',

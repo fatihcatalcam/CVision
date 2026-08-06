@@ -513,6 +513,25 @@ const de = {
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },
 
+  credits: {
+    label: 'GUTHABEN',
+    unit: 'Credits',
+    weekly: '+{{weekly}} Credits pro Woche. Eine Analyse kostet 1, den vollständigen Bericht freizuschalten 2.',
+    weeklyPaused: 'Die wöchentlichen Credits pausieren, solange dein Guthaben bei {{cap}} oder darüber liegt.',
+    low: 'Dein Guthaben wird knapp. Lade jemanden ein und verdiene kostenlose Credits.',
+    inviteCta: 'Freunde einladen',
+  },
+
+  referral: {
+    title: 'Freunde einladen',
+    desc: 'Erhalte {{reward}} Credits, sobald jemand, den du einlädst, seine erste Analyse abschließt.',
+    copy: 'Kopieren',
+    copied: 'Link kopiert',
+    copyFailed: 'Kopieren fehlgeschlagen — markiere den Link manuell',
+    whenPaid: 'Die Credits kommen an, wenn deine eingeladene Person ihre erste CV-Analyse abschließt, nicht bei der Registrierung.',
+    earned: 'Du hast bisher {{credits}} Credits aus {{count}} Einladungen verdient.',
+  },
+
   xray: {
     label: "ATS X-Ray",
     title: "So liest das ATS deinen Lebenslauf",
@@ -642,6 +661,11 @@ const de = {
   },
 
   analysis: {
+    unlockTitle: 'Vollständiger Bericht gesperrt',
+    unlockCta: 'Für {{cost}} Credits freischalten',
+    unlocking: 'Wird freigeschaltet...',
+    unlockedToast: 'Vollständiger Bericht freigeschaltet',
+    unlockFailed: 'Freischalten fehlgeschlagen',
     priorityHigh: 'Hohe Priorität',
     priorityMedium: 'Mittel',
     priorityLow: 'Niedrig',

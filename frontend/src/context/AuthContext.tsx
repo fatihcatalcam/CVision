@@ -8,6 +8,7 @@ export interface User {
   email: string;
   role: string;
   plan_type: string;
+  credits: number;
   analysis_count: number;
   quota_reset_at: string | null;
   subscription_end_at: string | null;

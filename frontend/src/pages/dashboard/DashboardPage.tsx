@@ -9,10 +9,16 @@ import { Shield, Settings, LogOut, Plus, Sparkles } from 'lucide-react';
 import { ScoreHeroCard } from '../../components/dashboard/ScoreHeroCard';
 import { CareerInsightCard } from '../../components/dashboard/CareerInsightCard';
 import { NextStepCard } from '../../components/dashboard/NextStepCard';
-import { QuotaCard } from '../../components/dashboard/QuotaCard';
+import { CreditCard } from '../../components/dashboard/CreditCard';
 import { RecentAnalysesList } from '../../components/dashboard/RecentAnalysesList';
 import { EmptyState } from '../../components/dashboard/EmptyState';
 import { UploadModal } from '../../components/dashboard/UploadModal';
+
+// Mirrors CREDIT_WEEKLY / CREDIT_WEEKLY_CAP in backend/app/config.py. Copy only:
+// the balance itself always comes from the server, so drift here misinforms but
+// cannot mis-charge.
+const WEEKLY_CREDITS = 2;
+const WEEKLY_CREDIT_CAP = 12;
 
 interface DashboardSummary {
   total_cvs: number;
@@ -54,25 +60,7 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
-function formatCountdown(resetAt: string | null, now: number): string | null {
-  if (!resetAt) return null;
-  const diff = new Date(resetAt).getTime() - now;
-  if (diff <= 0) return null;
-  const days = Math.floor(diff / 86_400_000);
-  const hours = Math.floor((diff % 86_400_000) / 3_600_000);
-  const mins = Math.floor((diff % 3_600_000) / 60_000);
-  if (days > 0) return `${days}d ${hours}h`;
-  if (hours > 0) return `${hours}h ${mins}m`;
-  if (mins > 0) return `${mins}m`;
-  return '< 1m';
-}
 
-function formatResetDate(resetAt: string | null, locale: string = 'en-GB'): string | null {
-  if (!resetAt) return null;
-  const d = new Date(resetAt);
-  if (isNaN(d.getTime()) || d.getTime() <= Date.now()) return null;
-  return d.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
-}
 
 function DashboardSkeleton() {
   return (
@@ -88,21 +76,13 @@ function DashboardSkeleton() {
 }
 
 export function DashboardPage() {
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language?.startsWith('tr') ? 'tr-TR' : 'en-GB';
+  const { t } = useTranslation();
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [recentItems, setRecentItems] = useState<HistoryItem[]>([]);
-  const [now, setNow] = useState(() => Date.now());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 60_000);
-    return () => clearInterval(id);
-  }, []);
-
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -131,14 +111,6 @@ export function DashboardPage() {
     return t('dashboard.greeting.evening');
   }
 
-  const quota = user?.plan_type === 'premium' ? 50 : 3;
-  const quotaWindowExpired = user?.quota_reset_at
-    ? new Date(user.quota_reset_at).getTime() <= now
-    : false;
-  const used = quotaWindowExpired ? 0 : (user?.analysis_count ?? 0);
-  const remaining = Math.max(0, quota - used);
-  const countdown = formatCountdown(user?.quota_reset_at ?? null, now);
-  const resetDate = formatResetDate(user?.quota_reset_at ?? null, dateLocale);
   const hasAnalyses = !!(summary && summary.total_analyses > 0);
 
   return (
@@ -224,12 +196,10 @@ export function DashboardPage() {
               {summary!.top_suggestion && (
                 <NextStepCard suggestion={summary!.top_suggestion} />
               )}
-              <QuotaCard
-                remaining={remaining}
-                quota={quota}
-                isPremium={user?.plan_type === 'premium'}
-                countdown={countdown}
-                resetDate={resetDate}
+              <CreditCard
+                credits={user?.credits ?? 0}
+                weekly={WEEKLY_CREDITS}
+                cap={WEEKLY_CREDIT_CAP}
               />
             </div>
           </div>

@@ -512,6 +512,25 @@ const tr = {
     ctaButton: "CV'mi ücretsiz kontrol et",
   },
 
+  credits: {
+    label: 'KREDİ',
+    unit: 'kredi',
+    weekly: 'Her hafta +{{weekly}} kredi. Analiz 1, tam raporu açmak 2 kredi.',
+    weeklyPaused: 'Bakiyen {{cap}} kredi ve üzerinde olduğu için haftalık kredi duraklatıldı.',
+    low: 'Kredin azalıyor. Arkadaşını davet ederek ücretsiz kredi kazanabilirsin.',
+    inviteCta: 'Arkadaşını davet et',
+  },
+
+  referral: {
+    title: 'Arkadaşını davet et',
+    desc: 'Davet ettiğin kişi ilk analizini tamamladığında {{reward}} kredi kazanırsın.',
+    copy: 'Kopyala',
+    copied: 'Bağlantı kopyalandı',
+    copyFailed: 'Kopyalanamadı, bağlantıyı elle seç',
+    whenPaid: 'Krediler kayıt anında değil, davet ettiğin kişi ilk CV analizini tamamladığında hesabına geçer.',
+    earned: 'Şimdiye kadar {{count}} davet karşılığı {{credits}} kredi kazandın.',
+  },
+
   xray: {
     label: "ATS X-Ray",
     title: "ATS, CV'ni böyle okuyor",
@@ -641,6 +660,11 @@ const tr = {
   },
 
   analysis: {
+    unlockTitle: 'Tam rapor kilitli',
+    unlockCta: '{{cost}} kredi ile aç',
+    unlocking: 'Açılıyor...',
+    unlockedToast: 'Tam rapor açıldı',
+    unlockFailed: 'Kilit açılamadı',
     priorityHigh: 'Yüksek Öncelik',
     priorityMedium: 'Orta',
     priorityLow: 'Düşük',

@@ -513,6 +513,25 @@ const fr = {
     ctaButton: "Vérifier mon CV gratuitement",
   },
 
+  credits: {
+    label: 'CRÉDITS',
+    unit: 'crédits',
+    weekly: '+{{weekly}} crédits chaque semaine. Une analyse coûte 1, débloquer le rapport complet 2.',
+    weeklyPaused: 'Les crédits hebdomadaires sont en pause tant que votre solde atteint {{cap}} ou plus.',
+    low: 'Votre solde baisse. Invitez quelqu\'un pour gagner des crédits gratuits.',
+    inviteCta: 'Inviter un ami',
+  },
+
+  referral: {
+    title: 'Invitez un ami',
+    desc: 'Gagnez {{reward}} crédits lorsqu\'une personne que vous invitez termine sa première analyse.',
+    copy: 'Copier',
+    copied: 'Lien copié',
+    copyFailed: 'Copie impossible — sélectionnez le lien manuellement',
+    whenPaid: 'Les crédits arrivent quand votre invité termine sa première analyse de CV, pas à son inscription.',
+    earned: 'Vous avez gagné {{credits}} crédits grâce à {{count}} invitations jusqu\'ici.',
+  },
+
   xray: {
     label: "ATS X-Ray",
     title: "Voici comment l'ATS lit votre CV",
@@ -642,6 +661,11 @@ const fr = {
   },
 
   analysis: {
+    unlockTitle: 'Rapport complet verrouillé',
+    unlockCta: 'Débloquer pour {{cost}} crédits',
+    unlocking: 'Déverrouillage...',
+    unlockedToast: 'Rapport complet débloqué',
+    unlockFailed: 'Déverrouillage impossible',
     priorityHigh: 'Priorité haute',
     priorityMedium: 'Moyenne',
     priorityLow: 'Basse',

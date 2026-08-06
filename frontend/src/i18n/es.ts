@@ -513,6 +513,25 @@ const es = {
     ctaButton: "Revisar mi CV gratis",
   },
 
+  credits: {
+    label: 'CRÉDITOS',
+    unit: 'créditos',
+    weekly: '+{{weekly}} créditos cada semana. Un análisis cuesta 1; desbloquear el informe completo, 2.',
+    weeklyPaused: 'Los créditos semanales están en pausa mientras tu saldo sea de {{cap}} o más.',
+    low: 'Te quedan pocos. Puedes ganar créditos gratis invitando a alguien.',
+    inviteCta: 'Invitar a un amigo',
+  },
+
+  referral: {
+    title: 'Invita a un amigo',
+    desc: 'Gana {{reward}} créditos cuando alguien que invites complete su primer análisis.',
+    copy: 'Copiar',
+    copied: 'Enlace copiado',
+    copyFailed: 'No se pudo copiar: selecciona el enlace manualmente',
+    whenPaid: 'Los créditos llegan cuando tu invitado termina su primer análisis de CV, no cuando se registra.',
+    earned: 'Has ganado {{credits}} créditos con {{count}} invitaciones hasta ahora.',
+  },
+
   xray: {
     label: "ATS X-Ray",
     title: "Así lee el ATS tu currículum",
@@ -642,6 +661,11 @@ const es = {
   },
 
   analysis: {
+    unlockTitle: 'Informe completo bloqueado',
+    unlockCta: 'Desbloquear por {{cost}} créditos',
+    unlocking: 'Desbloqueando...',
+    unlockedToast: 'Informe completo desbloqueado',
+    unlockFailed: 'No se pudo desbloquear',
     priorityHigh: 'Prioridad Alta',
     priorityMedium: 'Media',
     priorityLow: 'Baja',
