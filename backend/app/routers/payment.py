@@ -1,9 +1,11 @@
 """
-Payment router - iyzico (TR) and LemonSqueezy (International) subscription integration.
+Payment router - credit-pack purchases via LemonSqueezy, plus the legacy
+iyzico subscription flow.
 Endpoints:
   POST /payment/iyzico/init              - Create iyzico Checkoutform session
   POST /payment/iyzico/callback          - iyzico payment result callback
-  POST /payment/lemon/create-checkout    - Create LemonSqueezy Checkout
+  GET  /payment/packs                    - Credit packs on sale
+  POST /payment/lemon/create-checkout    - Checkout for one credit pack
   POST /payment/lemon/webhook            - LemonSqueezy webhook handler
   POST /payment/lemon/cancel             - Cancel LemonSqueezy subscription
   GET  /payment/status                   - Current user subscription status
@@ -20,12 +22,14 @@ import httpx
 import iyzipay
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import SessionLocal
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
+from app.services.credit_service import CreditService
 
 logger = logging.getLogger("cvision.payment")
 
@@ -245,16 +249,45 @@ def _lemon_headers() -> dict:
     }
 
 
+class CheckoutRequest(BaseModel):
+    variant_id: str
+
+
+@router.get("/packs", summary="Credit packs available for purchase")
+def list_credit_packs():
+    """What is on sale, smallest first.
+
+    The price is not here on purpose: it lives on the Lemon Squeezy variant, so
+    quoting it from our config would give us a second copy to keep in sync and a
+    way to show a number the checkout then contradicts.
+    """
+    packs = settings.credit_packs
+    return {
+        "packs": [
+            {"variant_id": variant, "credits": credits}
+            for variant, credits in sorted(packs.items(), key=lambda kv: kv[1])
+        ]
+    }
+
+
 @router.post("/lemon/create-checkout")
 def lemon_create_checkout(
+    body: CheckoutRequest,
     current_user: User = Depends(get_current_user),
 ):
-    """Creates a LemonSqueezy hosted checkout and returns the URL."""
-    if current_user.plan_type == "premium":
-        raise HTTPException(status_code=400, detail="You already have a premium subscription.")
-
+    """Creates a LemonSqueezy hosted checkout for a credit pack."""
     if not settings.LEMONSQUEEZY_API_KEY:
         raise HTTPException(status_code=503, detail="Payment system not configured.")
+
+    packs = settings.credit_packs
+    if not packs:
+        raise HTTPException(status_code=503, detail="Credit packs are not on sale yet.")
+
+    # Only variants we know the credit value of. Otherwise a crafted request
+    # could open a checkout for any product in the store, and the webhook would
+    # then take the money with nothing to grant for it.
+    if body.variant_id not in packs:
+        raise HTTPException(status_code=400, detail="Unknown credit pack.")
 
     payload = {
         "data": {
@@ -274,7 +307,7 @@ def lemon_create_checkout(
                     "data": {"type": "stores", "id": str(settings.LEMONSQUEEZY_STORE_ID)}
                 },
                 "variant": {
-                    "data": {"type": "variants", "id": str(settings.LEMONSQUEEZY_VARIANT_ID)}
+                    "data": {"type": "variants", "id": body.variant_id}
                 },
             },
         }
@@ -327,25 +360,52 @@ async def lemon_webhook(request: Request):
     custom_data = event.get("meta", {}).get("custom_data") or {}
     user_id_str = custom_data.get("user_id") if isinstance(custom_data, dict) else None
 
-    if event_name in ("subscription_created", "subscription_payment_success", "order_created"):
+    if event_name == "order_created":
         if not user_id_str:
             logger.warning(f"No user_id in custom_data for event {event_name}")
             return {"received": True}
+
+        data = event.get("data", {}) or {}
+        attrs = data.get("attributes", {}) or {}
+        item = attrs.get("first_order_item", {}) or {}
+        variant_id = str(item.get("variant_id", ""))
+        order_id = str(data.get("id", ""))
+
+        credits = settings.credit_packs.get(variant_id)
+        if credits is None:
+            # Money we cannot attribute to a pack. Log loudly and grant nothing
+            # rather than guess - a wrong guess is either theft or a giveaway.
+            logger.error(
+                "Paid order %s is for unknown variant %s; no credits granted",
+                order_id, variant_id,
+            )
+            return {"received": True}
+
         try:
             user_id = int(user_id_str)
-            sub_id = str(event.get("data", {}).get("id", ""))
-            db = SessionLocal()
-            try:
-                if sub_id:
-                    user = db.query(User).filter(User.id == user_id).first()
-                    if user:
-                        user.lemon_subscription_id = sub_id
-                        db.commit()
-                _upgrade_user(db, user_id)
-            finally:
-                db.close()
         except (ValueError, TypeError):
             logger.error(f"Invalid user_id in LemonSqueezy webhook: {user_id_str}")
+            return {"received": True}
+
+        db = SessionLocal()
+        try:
+            user = db.query(User).filter(User.id == user_id).first()
+            if user is None:
+                logger.error("Paid order %s names unknown user %s", order_id, user_id)
+                return {"received": True}
+
+            # Keyed on the Lemon order id: this endpoint is retried by design,
+            # and a second delivery must not hand out a second pack.
+            granted = CreditService.grant_once(
+                db, user, credits, "purchase", ref_id=f"ls_order_{order_id}"
+            )
+            db.commit()
+            if granted:
+                logger.info(
+                    "Order %s granted %d credits to user %s", order_id, credits, user_id
+                )
+        finally:
+            db.close()
 
     elif event_name in ("subscription_cancelled", "subscription_expired"):
         if not user_id_str:

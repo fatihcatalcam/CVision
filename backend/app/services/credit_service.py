@@ -163,6 +163,38 @@ class CreditService:
         return granted
 
     @staticmethod
+    def grant_once(
+        db: Session, user: User, amount: int, reason: str, ref_id: str
+    ) -> bool:
+        """Grant credits unless this exact (reason, ref_id) already granted them.
+
+        For anything driven by an external system that retries. Payment webhooks
+        are delivered more than once by design - on our timeout, on a 500, on a
+        manual replay from the dashboard - and a second delivery must not hand
+        out a second pack. The ledger is the deduplication key, which is another
+        reason it has to exist before money does.
+
+        Returns whether credits were actually granted.
+        """
+        already = (
+            db.query(CreditTransaction)
+            .filter(
+                CreditTransaction.user_id == user.id,
+                CreditTransaction.reason == reason,
+                CreditTransaction.ref_id == ref_id,
+            )
+            .first()
+        )
+        if already is not None:
+            logger.info(
+                "Ignoring duplicate %s for user %s (ref %s)", reason, user.id, ref_id
+            )
+            return False
+
+        CreditService.grant(db, user, amount, reason, ref_id)
+        return True
+
+    @staticmethod
     def refund(
         db: Session, user: User, amount: int, reason: str, ref_id: str | None = None
     ) -> int:

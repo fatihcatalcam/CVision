@@ -56,6 +56,36 @@ class Settings(BaseSettings):
     # already paid cannot be undone.
     CREDIT_PREMIUM_PURCHASE: int = 200
 
+    # Credit packs, as "<lemon_variant_id>:<credits>" pairs.
+    #
+    # The money lives in Lemon Squeezy - a variant carries its own price - so
+    # this maps a purchase back to what it bought and nothing more. Keeping it
+    # in the environment means prices and pack sizes can be changed in the Lemon
+    # dashboard and here without a deploy, which is the whole point while the
+    # right numbers are still unknown.
+    #
+    # Empty means packs are not for sale yet, and the checkout says so rather
+    # than taking money for an unknown variant.
+    CREDIT_PACKS: str = ""
+
+    @property
+    def credit_packs(self) -> dict[str, int]:
+        """{variant_id: credits}. Malformed entries are skipped, not fatal - a
+        typo in an env var must not take the whole app down at import time."""
+        packs: dict[str, int] = {}
+        for entry in self.CREDIT_PACKS.split(","):
+            entry = entry.strip()
+            if not entry or ":" not in entry:
+                continue
+            variant, _, amount = entry.partition(":")
+            try:
+                credits = int(amount)
+            except ValueError:
+                continue
+            if variant.strip() and credits > 0:
+                packs[variant.strip()] = credits
+        return packs
+
     # ---- Job recovery (Track 2) ----
     # A pending/processing CV older than this is considered stuck and swept.
     STUCK_JOB_TIMEOUT_MINUTES: int = 10
