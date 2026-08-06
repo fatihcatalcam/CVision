@@ -8,17 +8,24 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  # Manual trigger. A push on 2026-08-07 produced no run at all - the workflow
-  # was active and the commit was on main, GitHub simply never created one - and
-  # with only push/pull_request triggers there was no way to ask for it again
-  # short of pushing another commit. This adds the "Run workflow" button so a
-  # missed event can be re-run against any ref.
+  # Manual trigger, so a run can be asked for against any ref without pushing
+  # another commit.
   workflow_dispatch:
 
-# A newer push to the same branch/PR cancels the older in-flight run.
+# A newer push to the same branch/PR supersedes the older run.
+#
+# cancel-in-progress used to be true here, and that is what made CI look broken:
+# several pushes in a row each cancelled the one before with "Canceling since a
+# higher priority waiting request for ci-refs/heads/main exists", so the runs
+# existed but every one of them ended cancelled. Nothing was wrong with the
+# workflow - it was never allowed to finish.
+#
+# Cancelling still makes sense for pull requests, where only the newest commit
+# matters and runs are cheap to redo. On main it does not: a cancelled run on
+# main leaves a commit with no verdict, and main is the branch that deploys.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   backend:
@@ -50,10 +57,10 @@ jobs:
       SECRET_KEY: ci-test-secret-not-for-production
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
@@ -80,10 +87,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Node 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: npm
