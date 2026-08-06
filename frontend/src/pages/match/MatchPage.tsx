@@ -11,6 +11,7 @@ import {
   fetchUrlText, saveJD, createMatch, createCoverLetter,
   type MatchResponse,
 } from '../../services/matchApi';
+import { MATCH_COST } from '../../constants/credits';
 
 interface CVOption {
   id: string;
@@ -38,13 +39,6 @@ export function MatchPage() {
   const [coverLetterContent, setCoverLetterContent] = useState<string | null>(null);
   const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Redirect free users
-  useEffect(() => {
-    if (user && user.plan_type !== 'premium') {
-      navigate('/pricing');
-    }
-  }, [user, navigate]);
 
   // Load CVs
   useEffect(() => {
@@ -129,8 +123,16 @@ export function MatchPage() {
             {t('match.pageTitle')}
           </h1>
         </div>
-        <p className="text-sm mb-10 ml-[52px]" style={{ color: 'var(--color-muted)' }}>
+        <p className="text-sm mb-2 ml-[52px]" style={{ color: 'var(--color-muted)' }}>
           {t('match.sectionDesc')}
+        </p>
+        {/* Price and balance together, before anything is typed: this used to be
+            a Pro-only page and is now simply a paid one. */}
+        <p className="text-sm mb-10 ml-[52px]" style={{ color: 'var(--color-muted)' }}>
+          <span className="font-mono font-bold text-[#956400]">
+            {t('credits.cost', { cost: MATCH_COST })}
+          </span>
+          {user && <> · {t('packs.currentBalance', { credits: user.credits })}</>}
         </p>
 
         <div className="space-y-6">
@@ -253,7 +255,14 @@ export function MatchPage() {
           >
             <span className="flex items-center justify-center gap-2">
               {t('match.matchButton')}
-              {!isMatching && <ChevronRight className="w-4 h-4" />}
+              {!isMatching && (
+                <>
+                  <span className="font-mono font-bold opacity-80">
+                    {t('credits.costSuffix', { cost: MATCH_COST })}
+                  </span>
+                  <ChevronRight className="w-4 h-4" />
+                </>
+              )}
             </span>
           </Button>
 

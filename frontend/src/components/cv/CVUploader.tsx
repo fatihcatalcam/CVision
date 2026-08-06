@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { saveAnonToken } from '../../services/anonymousAnalysis';
+import { ANALYSIS_COST, UNLOCK_COST } from '../../constants/credits';
 
 // Domain values are always sent to the backend in English - do not change these
 const DOMAIN_VALUES = [
@@ -34,12 +35,6 @@ const DOMAIN_VALUES = [
   { value: 'Public Sector & NGO', key: 'publicSector', emoji: '🏛️' },
   { value: 'Other', key: 'other', emoji: '✨' },
 ];
-
-// Mirrors CREDIT_ANALYSIS / CREDIT_UNLOCK in backend/app/config.py. Display
-// only - the server decides what is actually charged, so drift here misinforms
-// but cannot mis-charge.
-const ANALYSIS_COST = 1;
-const UNLOCK_COST = 2;
 
 interface CVUploaderProps {
   onUploadSuccess: (idOrToken: string) => void;

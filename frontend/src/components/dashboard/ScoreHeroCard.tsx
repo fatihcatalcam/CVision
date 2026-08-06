@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, TrendingUp, TrendingDown, Minus, Plus, Lock, Briefcase } from 'lucide-react';
+import { ChevronRight, TrendingUp, TrendingDown, Minus, Plus, Briefcase } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { MATCH_COST } from '../../constants/credits';
 
 // Aligned with semantic design tokens (success / warning / danger) for cross-component consistency
 function scoreColor(score: number): string {
@@ -20,7 +21,6 @@ interface ScoreHeroCardProps {
   totalAnalyses: number;
   averageScore: number | null;
   onNewAnalysis: () => void;
-  isPremium: boolean;
 }
 
 export function ScoreHeroCard({
@@ -34,7 +34,6 @@ export function ScoreHeroCard({
   totalAnalyses,
   averageScore,
   onNewAnalysis,
-  isPremium,
 }: ScoreHeroCardProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -119,24 +118,16 @@ export function ScoreHeroCard({
               <p className="text-xs text-[#6B6A65] dark:text-[#908d89] leading-relaxed">{t('match.sectionDesc')}</p>
             </div>
           </div>
-          {!isPremium ? (
-            /* Free: locked button */
-            <button
-              onClick={() => navigate('/pricing')}
-              className="w-full py-2 flex items-center justify-center gap-2 bg-[#F1F1EF] dark:bg-white/[0.05] text-[#6B6A65] dark:text-[#908d89] text-xs font-semibold rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] hover:bg-[#EAEAEA] dark:hover:bg-white/[0.08] transition-colors"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              {t('match.proGateButton')}
-            </button>
-          ) : (
-            /* Pro: active button */
-            <button
-              onClick={() => navigate('/match')}
-              className="w-full py-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
-            >
-              {t('match.openModal')}
-            </button>
-          )}
+          {/* Open to everyone, priced instead of locked. */}
+          <button
+            onClick={() => navigate('/match')}
+            className="w-full py-2 flex items-center justify-center gap-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-xs font-bold rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#d0cfcc] active:scale-[0.98] transition-all"
+          >
+            {t('match.openModal')}
+            <span className="font-mono font-bold text-[#f0c761] dark:text-[#956400]">
+              {t('credits.costSuffix', { cost: MATCH_COST })}
+            </span>
+          </button>
         </div>
       </div>
 

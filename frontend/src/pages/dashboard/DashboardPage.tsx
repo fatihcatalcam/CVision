@@ -13,12 +13,7 @@ import { CreditCard } from '../../components/dashboard/CreditCard';
 import { RecentAnalysesList } from '../../components/dashboard/RecentAnalysesList';
 import { CVUploader } from '../../components/cv/CVUploader';
 import { UploadModal } from '../../components/dashboard/UploadModal';
-
-// Mirrors CREDIT_WEEKLY / CREDIT_WEEKLY_CAP in backend/app/config.py. Copy only:
-// the balance itself always comes from the server, so drift here misinforms but
-// cannot mis-charge.
-const WEEKLY_CREDITS = 2;
-const WEEKLY_CREDIT_CAP = 12;
+import { WEEKLY_CREDITS, WEEKLY_CREDIT_CAP } from '../../constants/credits';
 
 interface DashboardSummary {
   total_cvs: number;
@@ -207,7 +202,6 @@ export function DashboardPage() {
               totalAnalyses={summary!.total_analyses}
               averageScore={summary!.average_score}
               onNewAnalysis={() => setShowUploadModal(true)}
-              isPremium={user?.plan_type === 'premium'}
             />
             <div className="flex flex-col gap-4">
               {summary!.latest_role_title && summary!.latest_role_match !== null && (

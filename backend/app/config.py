@@ -37,7 +37,11 @@ class Settings(BaseSettings):
     # mostly finding out what a credit is worth.
     CREDIT_ANALYSIS: int = 1
     CREDIT_UNLOCK: int = 2          # unlock the full report on one analysis
-    CREDIT_MATCH: int = 1
+    # A match is a second full AI pass over the CV plus the job ad, and it is
+    # the feature people come back for once per application - priced above an
+    # analysis for both reasons. It used to be gated behind the Pro plan
+    # instead, which meant almost nobody could reach it.
+    CREDIT_MATCH: int = 2
     CREDIT_COVER_LETTER: int = 2
     CREDIT_REWRITE: int = 1
     # Grants

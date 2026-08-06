@@ -20,6 +20,7 @@ import { JDInputModal } from '../../components/match/JDInputModal';
 import { MatchResultCard } from '../../components/match/MatchResultCard';
 import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
+import { MATCH_COST } from '../../constants/credits';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -207,7 +208,7 @@ export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { user, refreshUser } = useAuth();
+  const { refreshUser } = useAuth();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [isNewAnalysis, setIsNewAnalysis] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState(() => t('analysis.loadingInit'));
@@ -597,26 +598,7 @@ export function AnalysisPage() {
 
           {/* JD Match Section */}
           <div className="surface p-6 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] relative overflow-hidden">
-            {user?.plan_type !== 'premium' ? (
-              <>
-                <div className="blur-sm pointer-events-none select-none opacity-40 min-h-[120px]">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-2">{t('match.sectionLabel')}</p>
-                  <p className="text-sm text-[#6B6A65]">{t('match.sectionDesc')}</p>
-                </div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-white/60 dark:bg-[#111110]/70">
-                  <div className="p-2 mb-2 bg-[#F1F1EF] dark:bg-white/[0.06] rounded-full">
-                    <Lock className="w-5 h-5 text-[#6B6A65] dark:text-[#908d89]" />
-                  </div>
-                  <p className="text-xs font-semibold text-[#111111] dark:text-[#e8e7e4] mb-3">{t('match.proGateTitle')}</p>
-                  <button
-                    onClick={() => navigate('/pricing')}
-                    className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
-                  >
-                    {t('match.proGateButton')}
-                  </button>
-                </div>
-              </>
-            ) : matchResult ? (
+            {matchResult ? (
               <>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-4">{t('match.sectionLabel')}</p>
                 <MatchResultCard
@@ -637,9 +619,12 @@ export function AnalysisPage() {
                 <p className="text-sm text-[#6B6A65] mb-4">{t('match.sectionDesc')}</p>
                 <button
                   onClick={() => setShowJDModal(true)}
-                  className="px-4 py-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
+                  className="px-4 py-2 flex items-center gap-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
                 >
                   {t('match.openModal')}
+                  <span className="font-mono font-bold text-[#f0c761]">
+                    {t('credits.costSuffix', { cost: MATCH_COST })}
+                  </span>
                 </button>
               </>
             )}
