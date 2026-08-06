@@ -108,6 +108,10 @@ const tr = {
   },
 
   dashboard: {
+    firstRun: {
+      title: 'İlk analizini yap',
+      subtext: 'Normal analiz 1 kredi, Pro analiz 3. Kayıt olurken 3 kredi verdik - tam olarak bir Pro analiz eder.',
+    },
     greeting: {
       morning: 'Günaydın',
       afternoon: 'İyi günler',
@@ -153,19 +157,6 @@ const tr = {
   recent: {
     title: 'Son Analizler',
     viewAll: 'Tüm geçmiş',
-  },
-
-  emptyState: {
-    heading: 'CV\'ni yükle, anında geri bildirim al',
-    subtext: 'Yapay zeka CV\'ni saniyeler içinde analiz ediyor: güçlü yönler, eksikler ve kişiselleştirilmiş öneriler.',
-    benefit1Title: 'ATS Skoru',
-    benefit1Desc: 'Filtreleri geçer mi, geçmez mi, anında öğren',
-    benefit2Title: 'Kariyer Uyumu',
-    benefit2Desc: 'Hedef role ne kadar yakınsın',
-    benefit3Title: 'Öncelikli Adımlar',
-    benefit3Desc: 'Ne yapman gerektiğini tam olarak bil',
-    bannerTitle: 'İlk analizin tamamen AI destekli ve ücretsiz',
-    bannerSubtext: 'Kayıt olduktan sonra 3 ücretsiz analiz hakkın var.',
   },
 
   uploader: {
@@ -540,6 +531,7 @@ const tr = {
     weeklyPaused: 'Bakiyen {{cap}} kredi ve üzerinde olduğu için haftalık kredi duraklatıldı.',
     low: 'Kredin azalıyor. Arkadaşını davet ederek ücretsiz kredi kazanabilirsin.',
     inviteCta: 'Arkadaşını davet et',
+    buyCta: 'Kredi al',
   },
 
   referral: {

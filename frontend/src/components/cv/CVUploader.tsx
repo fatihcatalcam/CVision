@@ -178,7 +178,7 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
           were no choice at all. Anonymous /try has no balance to spend, so it
           never appears there. */}
       {!anonymous && (
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 mb-5">
           {([
             { key: 'normal' as const, cost: ANALYSIS_COST },
             { key: 'pro' as const, cost: ANALYSIS_COST + UNLOCK_COST },

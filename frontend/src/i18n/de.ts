@@ -108,6 +108,10 @@ const de = {
   },
 
   dashboard: {
+    firstRun: {
+      title: 'Starte deine erste Analyse',
+      subtext: 'Eine normale Analyse kostet 1 Credit, Pro kostet 3. Bei der Anmeldung hast du 3 Credits bekommen - genau eine Pro-Analyse.',
+    },
     greeting: {
       morning: 'Guten Morgen',
       afternoon: 'Guten Tag',
@@ -153,19 +157,6 @@ const de = {
   recent: {
     title: 'Letzte Analysen',
     viewAll: 'Alle anzeigen',
-  },
-
-  emptyState: {
-    heading: 'Lade deinen Lebenslauf hoch und erhalte sofortiges Feedback',
-    subtext: 'Die KI analysiert deinen Lebenslauf in Sekunden: Stärken, Lücken und personalisierte Vorschläge.',
-    benefit1Title: 'ATS-Score',
-    benefit1Desc: 'Erfahre sofort, ob du Recruiter-Filter passierst',
-    benefit2Title: 'Karriere-Match',
-    benefit2Desc: 'Sieh, wie gut du zu deiner Zielrolle passt',
-    benefit3Title: 'Prioritätsmaßnahmen',
-    benefit3Desc: 'Wisse genau, was du zuerst beheben solltest',
-    bannerTitle: 'Deine erste Analyse ist vollständig KI-gestützt und kostenlos',
-    bannerSubtext: 'Du erhältst 3 kostenlose Analysen nach der Registrierung.',
   },
 
   uploader: {
@@ -541,6 +532,7 @@ const de = {
     weeklyPaused: 'Die wöchentlichen Credits pausieren, solange dein Guthaben bei {{cap}} oder darüber liegt.',
     low: 'Dein Guthaben wird knapp. Lade jemanden ein und verdiene kostenlose Credits.',
     inviteCta: 'Freunde einladen',
+    buyCta: 'Credits kaufen',
   },
 
   referral: {

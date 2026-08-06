@@ -108,6 +108,10 @@ const en = {
   },
 
   dashboard: {
+    firstRun: {
+      title: 'Start your first analysis',
+      subtext: 'A Normal analysis costs 1 credit, Pro costs 3. We gave you 3 credits when you signed up - exactly one Pro analysis.',
+    },
     greeting: {
       morning: 'Good morning',
       afternoon: 'Good afternoon',
@@ -153,19 +157,6 @@ const en = {
   recent: {
     title: 'Recent Analyses',
     viewAll: 'View all',
-  },
-
-  emptyState: {
-    heading: 'Upload your CV, get instant feedback',
-    subtext: 'AI analyses your CV in seconds: strengths, gaps, and personalised suggestions.',
-    benefit1Title: 'ATS Score',
-    benefit1Desc: 'Know instantly if you pass recruiter filters',
-    benefit2Title: 'Career Match',
-    benefit2Desc: 'See how well you fit your target role',
-    benefit3Title: 'Priority Actions',
-    benefit3Desc: 'Know exactly what to fix first',
-    bannerTitle: 'Your first analysis is fully AI-powered and free',
-    bannerSubtext: 'You get 3 free analyses after signing up.',
   },
 
   uploader: {
@@ -540,6 +531,7 @@ const en = {
     weeklyPaused: 'Weekly credits are paused while your balance is {{cap}} or above.',
     low: 'Running low. You can earn free credits by inviting a friend.',
     inviteCta: 'Invite a friend',
+    buyCta: 'Buy credits',
   },
 
   referral: {

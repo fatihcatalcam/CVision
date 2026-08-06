@@ -11,7 +11,7 @@ import { CareerInsightCard } from '../../components/dashboard/CareerInsightCard'
 import { NextStepCard } from '../../components/dashboard/NextStepCard';
 import { CreditCard } from '../../components/dashboard/CreditCard';
 import { RecentAnalysesList } from '../../components/dashboard/RecentAnalysesList';
-import { EmptyState } from '../../components/dashboard/EmptyState';
+import { CVUploader } from '../../components/cv/CVUploader';
 import { UploadModal } from '../../components/dashboard/UploadModal';
 
 // Mirrors CREDIT_WEEKLY / CREDIT_WEEKLY_CAP in backend/app/config.py. Copy only:
@@ -168,7 +168,30 @@ export function DashboardPage() {
       {isLoading ? (
         <DashboardSkeleton />
       ) : !hasAnalyses ? (
-        <EmptyState onUploadSuccess={(cvId) => navigate(`/analysis/${cvId}`)} />
+        /* Someone with no analyses yet gets the same dashboard as everyone
+           else, minus the cards that would have nothing to show. It used to be
+           a separate marketing page promising "your first analysis is free" -
+           untrue since credits, and it hid the balance and the price at the one
+           moment both matter most. Same grid, uploader where the score card
+           goes, credits in the sidebar. */
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mb-8">
+          <div className="surface rounded-2xl p-6 border border-[#EAEAEA] dark:border-white/[0.07]">
+            <h2 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-1">
+              {t('dashboard.firstRun.title')}
+            </h2>
+            <p className="text-sm text-[#6B6A65] dark:text-[#908d89] leading-relaxed mb-6">
+              {t('dashboard.firstRun.subtext')}
+            </p>
+            <CVUploader embedded onUploadSuccess={(cvId) => navigate(`/analysis/${cvId}`)} />
+          </div>
+          <div className="flex flex-col gap-4">
+            <CreditCard
+              credits={user?.credits ?? 0}
+              weekly={WEEKLY_CREDITS}
+              cap={WEEKLY_CREDIT_CAP}
+            />
+          </div>
+        </div>
       ) : (
         <>
           {/* 2-column grid */}

@@ -108,6 +108,10 @@ const es = {
   },
 
   dashboard: {
+    firstRun: {
+      title: 'Empieza tu primer análisis',
+      subtext: 'Un análisis Normal cuesta 1 crédito y el Pro cuesta 3. Te dimos 3 créditos al registrarte: exactamente un análisis Pro.',
+    },
     greeting: {
       morning: 'Buenos días',
       afternoon: 'Buenas tardes',
@@ -153,19 +157,6 @@ const es = {
   recent: {
     title: 'Análisis recientes',
     viewAll: 'Ver todos',
-  },
-
-  emptyState: {
-    heading: 'Sube tu CV y obtén comentarios al instante',
-    subtext: 'La IA analiza tu CV en segundos: fortalezas, carencias y sugerencias personalizadas.',
-    benefit1Title: 'Puntuación ATS',
-    benefit1Desc: 'Sabe al instante si superas los filtros',
-    benefit2Title: 'Coincidencia de carrera',
-    benefit2Desc: 'Ve qué tan bien encajas en tu rol objetivo',
-    benefit3Title: 'Acciones prioritarias',
-    benefit3Desc: 'Sabe exactamente qué corregir primero',
-    bannerTitle: 'Tu primer análisis es completamente gratuito con IA',
-    bannerSubtext: 'Tienes 3 análisis gratuitos tras registrarte.',
   },
 
   uploader: {
@@ -541,6 +532,7 @@ const es = {
     weeklyPaused: 'Los créditos semanales están en pausa mientras tu saldo sea de {{cap}} o más.',
     low: 'Te quedan pocos. Puedes ganar créditos gratis invitando a alguien.',
     inviteCta: 'Invitar a un amigo',
+    buyCta: 'Comprar créditos',
   },
 
   referral: {
