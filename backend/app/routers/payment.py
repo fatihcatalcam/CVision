@@ -48,13 +48,34 @@ def _iyzico_options() -> dict:
 
 
 def _upgrade_user(db: Session, user_id: int) -> None:
-    """Set user plan to premium for 30 days."""
+    """Set user plan to premium for 30 days and hand over the credits it buys.
+
+    The credits are the part that matters now. plan_type stopped gating anything
+    when the credit system landed - features are priced, not tiered - so a
+    purchase that only set the flag would take the money and deliver nothing.
+    The flag is still set because the badge, the admin counts and the cancel flow
+    read it.
+
+    CREDIT_PREMIUM_PURCHASE is deliberately generous while the real pricing is
+    still being worked out: with no paying users yet, over-delivering to the
+    first few costs nothing, and under-delivering to someone who paid is not
+    recoverable.
+    """
+    from app.services.credit_service import CreditService
+
     user = db.query(User).filter(User.id == user_id).first()
     if user:
         user.plan_type = "premium"
         user.subscription_end_at = datetime.now(timezone.utc) + timedelta(days=30)
         db.commit()
-        logger.info(f"User {user_id} upgraded to premium.")
+        CreditService.grant(
+            db, user, settings.CREDIT_PREMIUM_PURCHASE, "purchase", ref_id="premium_30d"
+        )
+        db.commit()
+        logger.info(
+            f"User {user_id} upgraded to premium and granted "
+            f"{settings.CREDIT_PREMIUM_PURCHASE} credits."
+        )
 
 
 def _redirect_html(url: str) -> HTMLResponse:
