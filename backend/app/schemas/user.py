@@ -17,6 +17,9 @@ class UserRegister(BaseModel):
     # UI language the form was submitted in, so transactional mail can match it.
     # Optional: an older client that does not send it falls back to English.
     language: str | None = Field(None, max_length=5, examples=["tr"])
+    # Invite code from the link the user arrived through. Unknown codes are
+    # ignored rather than rejected - a typo must never block a signup.
+    referral_code: str | None = Field(None, max_length=12, examples=["K7M2QX9A"])
 
     @field_validator('password')
     @classmethod
@@ -45,6 +48,10 @@ class UserResponse(BaseModel):
     email: str
     role: str
     plan_type: str
+    credits: int
+    # Legacy quota fields. The credit balance above has replaced them; they are
+    # still serialized so a frontend mid-deploy does not break on their absence,
+    # and go when the columns do.
     analysis_count: int
     quota_reset_at: datetime | None
     subscription_end_at: datetime | None

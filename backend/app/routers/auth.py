@@ -106,6 +106,14 @@ def register(request: Request, background_tasks: BackgroundTasks, user_data: Use
     db.commit()
     db.refresh(new_user)
 
+    from app.services.credit_service import CreditService
+
+    CreditService.open_account(db, new_user)
+
+    from app.services.referral_service import ReferralService
+
+    ReferralService.attach_inviter(db, new_user, user_data.referral_code)
+
     background_tasks.add_task(
         send_welcome_email, new_user.email, new_user.full_name, new_user.language
     )
@@ -146,25 +154,46 @@ def get_me(current_user: User = Depends(get_current_user), db: Session = Depends
     """
     Return the profile of the currently authenticated user.
 
-    Performs a lazy quota reset: if the weekly window has expired since the last
-    upload, analysis_count is zeroed out here so the dashboard always shows
-    accurate remaining quota — not the stale value from when the window was active.
+    Also claims the weekly credit grant. This endpoint is where "the user showed
+    up" is actually observable: the frontend calls it on load, whereas the login
+    endpoint is only hit when a token expires, so someone using the product every
+    day could go weeks without touching it. It already carried a lazy quota reset
+    in exactly this shape, which the grant now replaces.
     """
-    now = datetime.now(timezone.utc)
-    quota_reset = current_user.quota_reset_at
+    from app.services.credit_service import CreditService
 
-    if quota_reset:
-        if quota_reset.tzinfo is None:
-            quota_reset = quota_reset.replace(tzinfo=timezone.utc)
-        if quota_reset < now:
-            # Window expired: reset count so frontend shows correct remaining quota.
-            # Keep quota_reset_at as-is (null would be set on next upload anyway).
-            current_user.analysis_count = 0
-            current_user.quota_reset_at = None  # cleared — next upload starts fresh window
-            db.commit()
-            db.refresh(current_user)
-
+    CreditService.claim_weekly_grant(db, current_user)
     return current_user
+
+
+class ReferralResponse(BaseModel):
+    code: str
+    reward: int
+    rewarded_count: int
+
+
+@router.get(
+    "/me/referral",
+    response_model=ReferralResponse,
+    summary="Get this user's invite code and how many invites have paid out",
+)
+def get_referral(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """The invite code, minted on first request.
+
+    rewarded_count counts invites that actually paid - an account that signed up
+    but never ran an analysis is not worth anything yet, and showing it as a
+    pending win would only invite the question of when it pays.
+    """
+    from app.services.referral_service import ReferralService
+
+    return ReferralResponse(
+        code=ReferralService.get_or_create_code(db, current_user),
+        reward=settings.CREDIT_REFERRAL,
+        rewarded_count=ReferralService.count_rewarded(db, current_user),
+    )
 
 
 @router.patch(
@@ -424,6 +453,12 @@ def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    # Same opening balance as an email signup. Without this a Google account
+    # starts at zero credits and cannot run a single analysis.
+    from app.services.credit_service import CreditService
+
+    CreditService.open_account(db, new_user)
 
     token = create_access_token(data={"sub": str(new_user.id)})
     return TokenResponse(access_token=token, user=UserResponse.model_validate(new_user))
