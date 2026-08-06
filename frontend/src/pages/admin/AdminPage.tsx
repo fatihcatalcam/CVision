@@ -38,6 +38,7 @@ interface UserItem {
   email: string;
   role: string;
   plan_type: string;
+  credits: number;
   created_at: string;
 }
 
@@ -159,6 +160,20 @@ export function AdminPage() {
       setDeleteConfirm(null);
     } catch (error: any) {
       alert(error.response?.data?.detail || 'Failed to delete analysis');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // Support adjustments go through the same endpoint everything else does, so
+  // they land in the credit ledger rather than silently moving a column.
+  const handleCreditAdjust = async (userId: number, delta: number) => {
+    setActionLoading(`credits-${userId}`);
+    try {
+      const { data } = await api.patch(`/hq-portal/users/${userId}/credits?delta=${delta}`);
+      setUsers(prev => prev.map(u => (u.id === userId ? { ...u, credits: data.credits } : u)));
+    } catch (error: any) {
+      alert(error.response?.data?.detail || error.response?.data?.message || 'Adjustment failed');
     } finally {
       setActionLoading(null);
     }
@@ -605,6 +620,7 @@ export function AdminPage() {
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Email</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Role</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Plan</th>
+                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Credits</th>
                           <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Joined</th>
                           <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Actions</th>
                         </tr>
@@ -633,6 +649,23 @@ export function AdminPage() {
                               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${u.plan_type === 'premium' ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'}`}>
                                 {u.plan_type}
                               </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-white font-mono text-sm w-8">{u.credits}</span>
+                                <button
+                                  onClick={() => handleCreditAdjust(u.id, 10)}
+                                  disabled={actionLoading === `credits-${u.id}`}
+                                  title="Give 10 credits"
+                                  className="px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 disabled:opacity-50 transition-colors"
+                                >+10</button>
+                                <button
+                                  onClick={() => handleCreditAdjust(u.id, -10)}
+                                  disabled={actionLoading === `credits-${u.id}`}
+                                  title="Take back 10 credits"
+                                  className="px-2 py-0.5 rounded text-[11px] font-bold border border-zinc-700 text-zinc-400 hover:bg-zinc-800 disabled:opacity-50 transition-colors"
+                                >-10</button>
+                              </div>
                             </td>
                             <td className="px-6 py-4 text-zinc-500 text-sm">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
                             <td className="px-6 py-4 text-right">

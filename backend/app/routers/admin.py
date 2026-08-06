@@ -258,6 +258,82 @@ def change_user_plan(
     return UserResponse.model_validate(user)
 
 
+@router.patch(
+    "/users/{user_id}/credits",
+    response_model=UserResponse,
+    summary="Adjust a user's credit balance (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def adjust_user_credits(
+    user_id: int,
+    delta: int = Query(..., description="Credits to add (positive) or take away (negative)"),
+    db: Session = Depends(get_db),
+):
+    """Hand out or claw back credits by hand - support, goodwill, a botched run.
+
+    Goes through CreditService like everything else rather than writing the
+    column directly. An adjustment that skipped the ledger would be the one
+    balance change nobody could explain afterwards, which is exactly the change
+    most likely to be questioned.
+    """
+    from app.services.credit_service import CreditService, InsufficientCredits
+
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found.",
+        )
+
+    if delta == 0:
+        raise HTTPException(status_code=400, detail="delta must not be zero.")
+
+    try:
+        if delta > 0:
+            CreditService.grant(db, user, delta, "grant_admin")
+        else:
+            CreditService.spend(db, user, -delta, "spend_admin")
+    except InsufficientCredits as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot take {exc.needed} credits: the user only has {exc.available}.",
+        )
+
+    db.commit()
+    db.refresh(user)
+    return UserResponse.model_validate(user)
+
+
+@router.get(
+    "/users/{user_id}/credits",
+    summary="A user's credit ledger (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def get_user_credit_ledger(
+    user_id: int,
+    limit: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db),
+):
+    """The statement behind a balance - what "where did my credits go" is
+    answered from."""
+    from app.models.credit_transaction import CreditTransaction
+
+    rows = (
+        db.query(CreditTransaction)
+        .filter(CreditTransaction.user_id == user_id)
+        .order_by(CreditTransaction.created_at.desc(), CreditTransaction.id.desc())
+        .limit(limit)
+        .all()
+    )
+    return [
+        {
+            "id": r.id, "delta": r.delta, "balance_after": r.balance_after,
+            "reason": r.reason, "ref_id": r.ref_id, "created_at": r.created_at,
+        }
+        for r in rows
+    ]
+
+
 @router.delete(
     "/users/{user_id}",
     status_code=status.HTTP_204_NO_CONTENT,
