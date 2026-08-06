@@ -42,6 +42,15 @@ class AdminOverviewResponse(BaseModel):
     credits_in_circulation: int
     credits_spent_this_week: int
     paying_users: int
+    # Jobs in flight. `stuck` is the subset old enough that the recovery sweep
+    # would pick them up - a non-zero number here means uploads are sitting
+    # unanswered right now, which nothing in the panel used to say.
+    jobs_in_flight: int
+    stuck_jobs: int
+    # Analyses whose X-Ray found the PDF had dropped Turkish characters at
+    # generation time. One was found by chance in a single user's report; this
+    # is how many others have it.
+    charset_loss_count: int
     score_distribution: ScoreDistribution
     top_domains: List[DomainStat]
     daily_activity: List[DailyActivity]
@@ -64,6 +73,39 @@ class AdminUsersListResponse(BaseModel):
     total: int
 
     model_config = {"from_attributes": True}
+
+
+class AdminReferralInvitee(BaseModel):
+    """One account that signed up through someone's invite link."""
+    id: int
+    full_name: str
+    email: str
+    joined_at: datetime
+    rewarded_at: datetime | None
+    analyses: int
+
+
+class AdminReferralGroup(BaseModel):
+    """An inviter and everyone who joined through them.
+
+    Referrals pay 3 credits each, so this is where a farm shows up: one account
+    with a long list of invitees who signed up together and never analysed
+    anything. `analyses` per invitee is the tell - a real invitee uses the
+    product, and the reward only fires after their first analysis anyway.
+    """
+    inviter_id: int
+    inviter_name: str
+    inviter_email: str
+    invited: int
+    rewarded: int
+    credits_earned: int
+    invitees: List[AdminReferralInvitee]
+
+
+class AdminReferralsResponse(BaseModel):
+    groups: List[AdminReferralGroup]
+    total_rewarded: int
+    total_credits_paid: int
 
 class RecentActivity(BaseModel):
     """Unified activity log (User registrations, CV uploads)."""

@@ -6,7 +6,7 @@ import api from '../../services/api';
 import {
   Users, FileText, Activity, TrendingUp, Shield, Trash2,
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
-  Eye, Search, ScrollText, Coins,
+  Eye, Search, ScrollText, Coins, X, Gift, AlertTriangle, Type,
 } from 'lucide-react';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
@@ -29,6 +29,9 @@ interface AdminOverview {
   credits_in_circulation: number;
   credits_spent_this_week: number;
   paying_users: number;
+  jobs_in_flight: number;
+  stuck_jobs: number;
+  charset_loss_count: number;
   score_distribution: { low: number; medium: number; high: number };
   top_domains: { domain: string; count: number }[];
   daily_activity: { date: string; analyses: number; signups: number }[];
@@ -51,6 +54,162 @@ interface RecentActivity {
   title: string;
   description: string;
   timestamp: string;
+}
+
+interface LedgerEntry {
+  id: number;
+  delta: number;
+  balance_after: number;
+  reason: string;
+  ref_id: string | null;
+  created_at: string;
+}
+
+interface ReferralInvitee {
+  id: number;
+  full_name: string;
+  email: string;
+  joined_at: string;
+  rewarded_at: string | null;
+  analyses: number;
+}
+
+interface ReferralGroup {
+  inviter_id: number;
+  inviter_name: string;
+  inviter_email: string;
+  invited: number;
+  rewarded: number;
+  credits_earned: number;
+  invitees: ReferralInvitee[];
+}
+
+interface ReferralsResponse {
+  groups: ReferralGroup[];
+  total_rewarded: number;
+  total_credits_paid: number;
+}
+
+// One page of users or analyses. Small enough that a page is scannable without
+// scrolling past the header.
+const PAGE_SIZE = 25;
+
+// Mirrors CREDIT_REFERRAL in backend/app/config.py - copy in the explainer only.
+const REFERRAL_REWARD = 3;
+
+/**
+ * A user's credit statement.
+ *
+ * The endpoint has existed since the credit switch and nothing called it, so
+ * "where did my credits go" had no answer short of opening the database. Every
+ * grant, spend, refund and support adjustment is in here with the balance it
+ * left behind, which is also how an adjustment gets audited afterwards.
+ */
+function CreditLedgerModal({ user, onClose }: { user: UserItem; onClose: () => void }) {
+  const [entries, setEntries] = useState<LedgerEntry[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    api.get(`/hq-portal/users/${user.id}/credits?limit=200`)
+      .then((res) => setEntries(res.data))
+      .catch(() => setFailed(true));
+  }, [user.id]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-2xl max-h-[80vh] flex flex-col rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between p-5 border-b border-zinc-800">
+          <div>
+            <h3 className="text-white font-bold">{user.full_name}</h3>
+            <p className="text-xs text-zinc-500 mt-0.5">{user.email}</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-xl font-bold text-white font-mono">{user.credits}</p>
+              <p className="text-[10px] text-zinc-500 uppercase tracking-wider">Balance</p>
+            </div>
+            <button onClick={onClose} className="p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-y-auto">
+          {failed ? (
+            <p className="p-8 text-center text-sm text-red-400">Could not load the ledger.</p>
+          ) : entries === null ? (
+            <div className="p-8 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-zinc-600" /></div>
+          ) : entries.length === 0 ? (
+            <p className="p-8 text-center text-sm text-zinc-500">No credit movements yet.</p>
+          ) : (
+            <table className="w-full text-left border-collapse">
+              <tbody>
+                {entries.map((e) => (
+                  <tr key={e.id} className="border-b border-zinc-800/60 last:border-0">
+                    <td className="px-5 py-2.5 w-16">
+                      <span className={`font-mono text-sm font-bold ${e.delta > 0 ? 'text-emerald-400' : 'text-zinc-400'}`}>
+                        {e.delta > 0 ? `+${e.delta}` : e.delta}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2.5">
+                      <p className="text-sm text-zinc-200">{e.reason.replace(/_/g, ' ')}</p>
+                      {e.ref_id && <p className="text-[11px] text-zinc-600 font-mono">{e.ref_id}</p>}
+                    </td>
+                    <td className="px-2 py-2.5 text-right text-xs text-zinc-500 font-mono w-20">
+                      → {e.balance_after}
+                    </td>
+                    <td className="px-5 py-2.5 text-right text-xs text-zinc-600 whitespace-nowrap w-32">
+                      {new Date(e.created_at).toLocaleString('tr-TR', {
+                        day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit',
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Shared by the user and content tables, which are both server-paged. */
+function Pager({ page, total, onPage }: { page: number; total: number; onPage: (p: number) => void }) {
+  const pages = Math.ceil(total / PAGE_SIZE);
+  if (pages <= 1) return null;
+
+  const from = page * PAGE_SIZE + 1;
+  const to = Math.min((page + 1) * PAGE_SIZE, total);
+
+  return (
+    <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--color-card-border)]">
+      <span className="text-xs text-zinc-500">{from}–{to} of {total}</span>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onPage(page - 1)}
+          disabled={page === 0}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+        >
+          Previous
+        </button>
+        <span className="text-xs text-zinc-500 font-mono">{page + 1} / {pages}</span>
+        <button
+          onClick={() => onPage(page + 1)}
+          disabled={page + 1 >= pages}
+          className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
 }
 
 interface AnalysisItem {
@@ -76,39 +235,67 @@ export function AdminPage() {
   const navigate = useNavigate();
   
   // Tab State
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'users'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'content' | 'users' | 'referrals'>('dashboard');
 
   // Data States
   const [overview, setOverview] = useState<AdminOverview | null>(null);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
-  
+  const [referrals, setReferrals] = useState<ReferralsResponse | null>(null);
+
   // UI States
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<number | string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | string | null>(null);
   const [viewingCvId, setViewingCvId] = useState<number | null>(null);
   const [viewingCvMeta, setViewingCvMeta] = useState<{ filename: string; user: string } | null>(null);
+  const [ledgerFor, setLedgerFor] = useState<UserItem | null>(null);
 
-  // Search / Filters
+  // Search / Filters / paging.
+  //
+  // The search box used to filter the rows already in the browser, which meant
+  // it could only ever find someone inside the first hundred accounts - and
+  // said nothing when it could not. It now goes to the server, so `page` and
+  // `total` come back with the results.
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedQuery(searchQuery.trim()), 300);
+    return () => clearTimeout(id);
+  }, [searchQuery]);
+
+  // A new search or filter has to start from the first page; staying on page 4
+  // of the old result set shows an empty table for a query that has matches.
+  useEffect(() => { setPage(0); }, [debouncedQuery, statusFilter, activeTab]);
 
   useEffect(() => {
     fetchData();
-  }, [activeTab]); // Refetch when tab changes to refresh data
+  }, [activeTab, debouncedQuery, statusFilter, page]);
 
   const fetchData = async () => {
     setIsLoading(true);
+    const paging = `skip=${page * PAGE_SIZE}&limit=${PAGE_SIZE}`;
+    const search = debouncedQuery ? `&q=${encodeURIComponent(debouncedQuery)}` : '';
     try {
       if (activeTab === 'dashboard') {
         const res = await api.get('/hq-portal/overview');
         setOverview(res.data);
       } else if (activeTab === 'users') {
-        const usersRes = await api.get('/hq-portal/users?limit=100');
+        const usersRes = await api.get(`/hq-portal/users?${paging}${search}`);
         setUsers(usersRes.data.users);
+        setTotal(usersRes.data.total);
       } else if (activeTab === 'content') {
-        const analysesRes = await api.get('/hq-portal/analyses?limit=100');
+        const status = statusFilter ? `&status=${statusFilter}` : '';
+        const analysesRes = await api.get(`/hq-portal/analyses?${paging}${search}${status}`);
         setAnalyses(analysesRes.data.items);
+        setTotal(analysesRes.data.total);
+      } else if (activeTab === 'referrals') {
+        const res = await api.get('/hq-portal/referrals');
+        setReferrals(res.data);
       }
     } catch (error: any) {
       if (error.response?.status === 403) navigate('/dashboard');
@@ -176,16 +363,7 @@ export function AdminPage() {
     setViewingCvId(cvId);
   };
 
-  const filteredUsers = users.filter(u =>
-    u.full_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   
-  const filteredAnalyses = analyses.filter(a => 
-    a.user_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    a.cv_filename.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    a.role_profile.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const scoreDistData = overview ? [
     { name: 'Low (<50)', value: overview.score_distribution.low, fill: '#ef4444' },
@@ -260,6 +438,18 @@ export function AdminPage() {
             <Users className="w-5 h-5" />
             <span className="font-medium">User Management</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('referrals')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              activeTab === 'referrals'
+                ? 'bg-zinc-800 text-white shadow-lg border border-zinc-700'
+                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+            }`}
+          >
+            <Gift className="w-5 h-5" />
+            <span className="font-medium">Referrals</span>
+          </button>
         </nav>
       </div>
 
@@ -322,6 +512,49 @@ export function AdminPage() {
                         {overview?.paying_users || 0} paid
                       </span>
                     </div>
+                  </Card>
+
+                  {/* Jobs in flight. The recovery sweep already re-queues stuck
+                      uploads; until now the only way to learn there was a
+                      backlog was a user reporting one. */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className={`p-2 rounded-lg w-fit ${
+                      overview?.stuck_jobs ? 'bg-red-500/10 text-red-400' : 'bg-sky-500/10 text-sky-400'
+                    }`}>
+                      <AlertTriangle className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{overview?.jobs_in_flight || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Jobs In Flight</p>
+                    </div>
+                    <button
+                      onClick={() => { setStatusFilter('in_flight'); setActiveTab('content'); }}
+                      className={`text-[10px] px-1.5 py-0.5 rounded w-fit transition-colors ${
+                        overview?.stuck_jobs
+                          ? 'text-red-400 bg-red-500/10 hover:bg-red-500/20'
+                          : 'text-zinc-500 bg-zinc-800/60 hover:bg-zinc-800'
+                      }`}
+                    >
+                      {overview?.stuck_jobs || 0} stuck →
+                    </button>
+                  </Card>
+
+                  {/* Turkish characters destroyed by the PDF's own font
+                      encoding. Found once by chance in a user's report; this is
+                      how widespread it actually is. */}
+                  <Card className="p-5 col-span-1 flex flex-col gap-2">
+                    <div className="p-2 bg-orange-500/10 text-orange-400 rounded-lg w-fit">
+                      <Type className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">{overview?.charset_loss_count || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Charset Loss</p>
+                    </div>
+                    <span className="text-[10px] text-zinc-500">
+                      {overview && overview.total_analyses > 0
+                        ? `${Math.round((overview.charset_loss_count / overview.total_analyses) * 100)}% of analyses`
+                        : 'no analyses yet'}
+                    </span>
                   </Card>
 
                   {/* Total CVs */}
@@ -496,6 +729,31 @@ export function AdminPage() {
                   </div>
                 </div>
 
+                {/* Status filter. Runs on the server, so "show me the failures"
+                    reaches past the newest page rather than filtering the rows
+                    that happen to be loaded. */}
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: '', label: 'All' },
+                    { value: 'completed', label: 'Completed' },
+                    { value: 'in_flight', label: 'In flight' },
+                    { value: 'failed', label: 'Failed' },
+                    { value: 'failed_no_text', label: 'Image PDF' },
+                  ].map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setStatusFilter(value)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                        statusFilter === value
+                          ? 'bg-zinc-800 text-white border-zinc-600'
+                          : 'border-[var(--color-card-border)] text-zinc-400 hover:bg-zinc-800/50'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
                 <Card noPadding>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
@@ -510,9 +768,9 @@ export function AdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredAnalyses.length === 0 ? (
+                        {analyses.length === 0 ? (
                           <tr><td colSpan={6} className="px-6 py-8 text-center text-zinc-500">No content found</td></tr>
-                        ) : filteredAnalyses.map((a) => {
+                        ) : analyses.map((a) => {
                           // Captured as a const so the null check narrows inside
                           // the onClick closures too (property narrowing does not
                           // survive into nested functions).
@@ -591,6 +849,7 @@ export function AdminPage() {
                       </tbody>
                     </table>
                   </div>
+                  <Pager page={page} total={total} onPage={setPage} />
                 </Card>
               </div>
             )}
@@ -633,9 +892,9 @@ export function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.length === 0 ? (
+                      {users.length === 0 ? (
                          <tr><td colSpan={5} className="px-4 py-8 text-center text-zinc-500">No users found</td></tr>
-                      ) : filteredUsers.map((u) => (
+                      ) : users.map((u) => (
                         <tr key={u.id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
                           <td className="px-4 py-4">
                             <div className="flex items-center gap-3 min-w-0">
@@ -656,7 +915,14 @@ export function AdminPage() {
                           </td>
                           <td className="px-3 py-4">
                             <div className="flex items-center gap-1.5">
-                              <span className="text-white font-mono text-sm w-7 text-right">{u.credits}</span>
+                              {/* The balance opens the statement behind it. */}
+                              <button
+                                onClick={() => setLedgerFor(u)}
+                                title="Credit ledger"
+                                className="text-white font-mono text-sm w-7 text-right hover:text-amber-400 hover:underline transition-colors"
+                              >
+                                {u.credits}
+                              </button>
                               <button
                                 onClick={() => handleCreditAdjust(u.id, 10)}
                                 disabled={actionLoading === `credits-${u.id}`}
@@ -703,13 +969,95 @@ export function AdminPage() {
                       ))}
                     </tbody>
                   </table>
+                  <Pager page={page} total={total} onPage={setPage} />
                 </Card>
               </div>
             )}
-            
+
+            {/* TAB: REFERRALS */}
+            {activeTab === 'referrals' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-[#111111]">Referrals</h2>
+                  <p className="text-sm text-zinc-500 mt-1">
+                    An invite pays {REFERRAL_REWARD} credits once the invitee finishes their first
+                    analysis. A long list of invitees with no analyses is someone
+                    trying, not someone earning.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="p-5">
+                    <p className="text-2xl font-bold text-white">{referrals?.total_rewarded ?? 0}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">Invites paid out</p>
+                  </Card>
+                  <Card className="p-5">
+                    <p className="text-2xl font-bold text-white">{referrals?.total_credits_paid ?? 0}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">Credits given away</p>
+                  </Card>
+                </div>
+
+                {!referrals || referrals.groups.length === 0 ? (
+                  <Card className="p-8 text-center text-zinc-500 text-sm">
+                    Nobody has signed up through an invite link yet.
+                  </Card>
+                ) : (
+                  <div className="space-y-4">
+                    {referrals.groups.map((g) => (
+                      <Card key={g.inviter_id} noPadding>
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-card-border)]">
+                          <div>
+                            <p className="text-white font-medium text-sm">{g.inviter_name}</p>
+                            <p className="text-zinc-500 text-xs">{g.inviter_email}</p>
+                          </div>
+                          <div className="flex items-center gap-4 text-xs">
+                            <span className="text-zinc-400">{g.invited} invited</span>
+                            <span className="text-emerald-400">{g.rewarded} paid</span>
+                            <span className="text-amber-400 font-mono font-bold">+{g.credits_earned}</span>
+                          </div>
+                        </div>
+                        <table className="w-full text-left border-collapse">
+                          <tbody>
+                            {g.invitees.map((m) => (
+                              <tr key={m.id} className="border-b border-zinc-800/50 last:border-0">
+                                <td className="px-5 py-2.5">
+                                  <p className="text-sm text-zinc-300">{m.full_name}</p>
+                                  <p className="text-[11px] text-zinc-600">{m.email}</p>
+                                </td>
+                                <td className="px-2 py-2.5 text-xs text-zinc-500 whitespace-nowrap">
+                                  {new Date(m.joined_at).toLocaleDateString('tr-TR')}
+                                </td>
+                                <td className="px-2 py-2.5 text-xs whitespace-nowrap">
+                                  {/* Zero analyses is the tell: the reward only
+                                      fires after the first one, so these are
+                                      accounts that signed up and stopped. */}
+                                  <span className={m.analyses === 0 ? 'text-amber-400' : 'text-zinc-500'}>
+                                    {m.analyses} CV
+                                  </span>
+                                </td>
+                                <td className="px-5 py-2.5 text-right text-xs whitespace-nowrap">
+                                  {m.rewarded_at
+                                    ? <span className="text-emerald-400">paid</span>
+                                    : <span className="text-zinc-600">unpaid</span>}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
           </div>
         )}
       </div>
+
+      {ledgerFor && (
+        <CreditLedgerModal user={ledgerFor} onClose={() => setLedgerFor(null)} />
+      )}
 
       {/* CV PDF Viewer Modal - reuses the same component as the analysis page */}
       <PDFViewerModal

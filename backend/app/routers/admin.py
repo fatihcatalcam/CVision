@@ -7,11 +7,12 @@ Maps to FR21, FR22.
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, cast, String, or_
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 from pathlib import Path
 
+from app.config import settings
 from app.dependencies import get_db, require_admin
 from app.models.user import User
 from app.models.cv import CV
@@ -20,7 +21,8 @@ from app.models.credit_transaction import CreditTransaction
 from app.schemas.admin import (
     AdminStatsResponse, AdminUsersListResponse, RecentActivity,
     AdminAnalysisListResponse, AdminAnalysisListItem, AdminCVContent,
-    AdminOverviewResponse, DailyActivity, ScoreDistribution, DomainStat
+    AdminOverviewResponse, DailyActivity, ScoreDistribution, DomainStat,
+    AdminReferralsResponse, AdminReferralGroup, AdminReferralInvitee,
 )
 from app.schemas.user import UserResponse
 from app.schemas.analysis import AnalysisResponse
@@ -72,6 +74,25 @@ def get_overview(db: Session = Depends(get_db)):
         db.query(func.count(func.distinct(CreditTransaction.user_id)))
         .filter(CreditTransaction.reason == "purchase")
         .scalar()
+    )
+
+    # Jobs still in flight, and the subset old enough to be considered stuck.
+    # The recovery sweep already re-queues these; the panel had no way to know
+    # they existed, so a backlog was only visible by a user complaining.
+    stuck_before = now - timedelta(minutes=settings.STUCK_JOB_TIMEOUT_MINUTES)
+    in_flight_q = db.query(CV).filter(CV.status.in_(("pending", "processing")))
+    jobs_in_flight = in_flight_q.count()
+    stuck_jobs = in_flight_q.filter(CV.uploaded_at < stuck_before).count()
+
+    # Analyses where the X-Ray found the PDF had lost its Turkish characters at
+    # generation time. Matched against the serialised JSON rather than with a
+    # JSON path operator so this does not depend on the column being JSONB;
+    # "charset_loss" is a finding type, so a substring hit cannot be anything
+    # else.
+    charset_loss_count = (
+        db.query(AnalysisResult)
+        .filter(cast(AnalysisResult.layout_xray, String).like('%"charset_loss"%'))
+        .count()
     )
 
     # Analysis breakdown
@@ -157,6 +178,9 @@ def get_overview(db: Session = Depends(get_db)):
         credits_in_circulation=credits_in_circulation,
         credits_spent_this_week=credits_spent_this_week,
         paying_users=paying_users,
+        jobs_in_flight=jobs_in_flight,
+        stuck_jobs=stuck_jobs,
+        charset_loss_count=charset_loss_count,
         score_distribution=ScoreDistribution(low=low, medium=medium, high=high),
         top_domains=top_domains,
         daily_activity=daily_activity,
@@ -202,16 +226,32 @@ def get_system_stats(db: Session = Depends(get_db)):
 def list_all_users(
     skip: int = Query(0, ge=0, description="Number of users to skip"),
     limit: int = Query(20, ge=1, le=100, description="Max users to return"),
+    q: str | None = Query(None, description="Match against name or email"),
     db: Session = Depends(get_db)
 ):
     """
     List all users with pagination support.
     Requires 'admin' role.
+
+    `q` searches the whole table, not the current page. The panel used to fetch
+    100 rows and filter them in the browser, which quietly stopped finding
+    anyone past the hundredth account - and gave no sign that it had.
     """
-    users_query = db.query(User).order_by(User.created_at.desc())
+    # id breaks ties on created_at. Without it the sort is unstable across
+    # pages, so a row inserted in the same second as its neighbours can appear
+    # on two pages or on neither - which pagination turns from harmless into a
+    # user that cannot be found.
+    users_query = db.query(User).order_by(User.created_at.desc(), User.id.desc())
+
+    if q:
+        pattern = f"%{q.strip()}%"
+        users_query = users_query.filter(
+            or_(User.full_name.ilike(pattern), User.email.ilike(pattern))
+        )
+
     total = users_query.count()
     users = users_query.offset(skip).limit(limit).all()
-    
+
     return AdminUsersListResponse(
         users=[UserResponse.model_validate(u) for u in users],
         total=total
@@ -359,6 +399,90 @@ def get_user_credit_ledger(
     ]
 
 
+@router.get(
+    "/referrals",
+    response_model=AdminReferralsResponse,
+    summary="Who invited whom (Admin)",
+    dependencies=[Depends(require_admin)]
+)
+def list_referrals(db: Session = Depends(get_db)):
+    """Every inviter with the accounts that joined through them.
+
+    An invite pays CREDIT_REFERRAL, which makes it the one place in the product
+    where creating accounts earns something. Nothing showed who was doing it.
+    The reward already only fires after the invitee's first analysis, so the
+    per-invitee analysis count is what separates a real invite from a farm:
+    a row of invitees with zero analyses is someone who tried and was refused.
+
+    Sorted by invite count, because the interesting end of this list is the top.
+    """
+    invitees = (
+        db.query(User)
+        .filter(User.referred_by_id.isnot(None))
+        .order_by(User.created_at.desc())
+        .all()
+    )
+    if not invitees:
+        return AdminReferralsResponse(groups=[], total_rewarded=0, total_credits_paid=0)
+
+    inviter_ids = {u.referred_by_id for u in invitees}
+    inviters = {
+        u.id: u for u in db.query(User).filter(User.id.in_(inviter_ids)).all()
+    }
+
+    # One grouped count rather than a query per invitee.
+    analysis_counts = dict(
+        db.query(CV.user_id, func.count(CV.id))
+        .filter(CV.user_id.in_([u.id for u in invitees]))
+        .group_by(CV.user_id)
+        .all()
+    )
+
+    grouped: dict[int, list[User]] = defaultdict(list)
+    for u in invitees:
+        grouped[u.referred_by_id].append(u)
+
+    groups = []
+    total_rewarded = 0
+    for inviter_id, members in grouped.items():
+        inviter = inviters.get(inviter_id)
+        if inviter is None:
+            # referred_by_id is ON DELETE SET NULL, so this should not happen -
+            # but a deleted inviter must not take the whole page down.
+            continue
+
+        rewarded = sum(1 for m in members if m.referral_rewarded_at is not None)
+        total_rewarded += rewarded
+
+        groups.append(AdminReferralGroup(
+            inviter_id=inviter.id,
+            inviter_name=inviter.full_name,
+            inviter_email=inviter.email,
+            invited=len(members),
+            rewarded=rewarded,
+            credits_earned=rewarded * settings.CREDIT_REFERRAL,
+            invitees=[
+                AdminReferralInvitee(
+                    id=m.id,
+                    full_name=m.full_name,
+                    email=m.email,
+                    joined_at=m.created_at,
+                    rewarded_at=m.referral_rewarded_at,
+                    analyses=analysis_counts.get(m.id, 0),
+                )
+                for m in members
+            ],
+        ))
+
+    groups.sort(key=lambda g: (g.invited, g.rewarded), reverse=True)
+
+    return AdminReferralsResponse(
+        groups=groups,
+        total_rewarded=total_rewarded,
+        total_credits_paid=total_rewarded * settings.CREDIT_REFERRAL,
+    )
+
+
 @router.delete(
     "/users/{user_id}",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -448,6 +572,12 @@ def get_recent_activity(db: Session = Depends(get_db)):
 def list_all_analyses(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
+    status: str | None = Query(
+        None,
+        description="pending | processing | completed | failed | failed_no_text, "
+                    "or 'in_flight' for anything not finished",
+    ),
+    q: str | None = Query(None, description="Match against user name, email or filename"),
     db: Session = Depends(get_db)
 ):
     """Paginated list of every upload attempt and its outcome.
@@ -455,8 +585,28 @@ def list_all_analyses(
     Driven by CV rather than AnalysisResult so failed uploads appear too: an
     image-only CV never produces an analysis, and those were previously
     invisible here - exactly the rows worth auditing for a wrong rejection.
+
+    Filtering happens here rather than in the browser for the same reason as
+    the user list: the page only ever held the newest hundred rows, so "show me
+    the failures" could not see past them.
     """
-    query = db.query(CV).order_by(CV.uploaded_at.desc())
+    query = db.query(CV).order_by(CV.uploaded_at.desc(), CV.id.desc())
+
+    if status == "in_flight":
+        query = query.filter(CV.status.in_(("pending", "processing")))
+    elif status:
+        query = query.filter(CV.status == status)
+
+    if q:
+        pattern = f"%{q.strip()}%"
+        query = query.outerjoin(User, CV.user_id == User.id).filter(
+            or_(
+                CV.original_filename.ilike(pattern),
+                User.full_name.ilike(pattern),
+                User.email.ilike(pattern),
+            )
+        )
+
     total = query.count()
     cvs = query.offset(skip).limit(limit).all()
 
