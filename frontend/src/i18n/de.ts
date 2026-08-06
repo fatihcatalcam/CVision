@@ -513,6 +513,19 @@ const de = {
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },
 
+  packs: {
+    title: 'Guthaben-Pakete',
+    subtitle: 'Kaufe, was du brauchst, und nutze es, wann du willst. Kein Abo, keine monatliche Zahlung — gekaufte Credits verfallen nie.',
+    currentBalance: 'Dein Guthaben: {{credits}} Credits',
+    popular: 'Am beliebtesten',
+    worth: 'Etwa {{applications}} vollständige Bewerbungen (Analyse + vollständiger Bericht + Stellenabgleich + Anschreiben).',
+    buy: 'Kaufen',
+    notOnSale: 'Guthaben-Pakete sind noch nicht im Verkauf.',
+    earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',
+    freeRoutes: 'Kaufen ist nicht nötig: jede Woche kommen kostenlose Credits dazu, und du verdienst mehr, sobald jemand, den du eingeladen hast, seine erste Analyse abschließt.',
+    noExpiry: 'Gekaufte Credits verfallen nie',
+  },
+
   credits: {
     label: 'GUTHABEN',
     unit: 'Credits',

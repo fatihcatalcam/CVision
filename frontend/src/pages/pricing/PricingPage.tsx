@@ -1,181 +1,161 @@
-﻿import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import { useTryToUsd } from '../../hooks/useTryToUsd';
 import { useSeo } from '../../hooks/useSeo';
 import api from '../../services/api';
-import {
-  ArrowLeft, Loader2, CreditCard, Shield, Lock, CheckCircle2, Sparkles, Gift,
-} from 'lucide-react';
+import { ArrowLeft, Loader2, Coins, Shield, Lock, Gift } from 'lucide-react';
 
-const FREE_FEATURE_KEYS = [
-  'settings.pricing.freeF1',
-  'settings.pricing.freeF2',
-  'settings.pricing.freeF3',
-  'settings.pricing.freeF4',
-];
+interface Pack {
+  variant_id: string;
+  credits: number;
+}
 
-const PRO_FEATURE_KEYS = [
-  'settings.pricing.proF1',
-  'settings.pricing.proF2',
-  'settings.pricing.proF3',
-  'settings.pricing.proF4',
-  'settings.pricing.proF5',
-  'settings.pricing.proF6',
-];
-
+/**
+ * Credit packs. Replaces the monthly subscription page.
+ *
+ * The reason for the switch is in the product, not the billing: job hunting is a
+ * temporary need. A subscription asks someone to commit to a thing they hope to
+ * stop needing in six weeks. A pack is bought once, used up, and bought again
+ * the next time they are looking.
+ *
+ * No prices are rendered here. They live on the Lemon Squeezy variant, and the
+ * checkout is the only place that can state them without risking a number the
+ * next screen contradicts.
+ */
 export function PricingPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  const { isTurkey, usdPrice } = useTryToUsd();
 
   useSeo({
     title: t('settings.pricing.metaTitle'),
     description: t('settings.pricing.metaDescription'),
     canonical: 'https://www.cvisionapp.com/pricing',
   });
-  const [loadingStripe, setLoadingStripe] = useState(false);
+
+  const [packs, setPacks] = useState<Pack[] | null>(null);
+  const [loadingVariant, setLoadingVariant] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleStripe = async () => {
+  useEffect(() => {
+    api.get('/payment/packs')
+      .then((res) => setPacks(res.data.packs))
+      .catch(() => setPacks([]));
+  }, []);
+
+  const buy = async (variantId: string) => {
     setError(null);
-    setLoadingStripe(true);
+    setLoadingVariant(variantId);
     try {
-      const res = await api.post('/payment/lemon/create-checkout');
+      const res = await api.post('/payment/lemon/create-checkout', { variant_id: variantId });
       window.location.href = res.data.checkoutUrl;
     } catch (err: unknown) {
       setError((err as any)?.response?.data?.detail || t('settings.pricing.errorInit'));
-      setLoadingStripe(false);
+      setLoadingVariant(null);
     }
   };
 
-  const isPremium = user?.plan_type === 'premium';
+  // The middle pack is the one worth steering people to: big enough to cover a
+  // real search, small enough not to need thinking about.
+  const featuredIndex = packs && packs.length === 3 ? 1 : -1;
 
   return (
     <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#111110]">
       <div className="max-w-4xl mx-auto py-16 px-6">
-
         <button
-          onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
-          <ArrowLeft className="w-4 h-4" /> {t('common.backToDashboard')}
+          <ArrowLeft className="w-4 h-4" /> {t('settings.pricing.back')}
         </button>
 
-        {/* Free trial banner */}
-        <div className="flex items-center justify-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl px-5 py-3 mb-10 text-sm font-medium">
-          <Gift className="w-4 h-4 shrink-0" />
-          <span>{t('settings.pricing.trialBanner')}</span>
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="font-sans text-4xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
-            {t('settings.pricing.header')}
+        <div className="text-center mb-4">
+          <h1 className="font-sans text-3xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-3">
+            {t('packs.title')}
           </h1>
-          <p className="text-base text-[#6B6A65] dark:text-[#908d89]">
-            {isTurkey
-              ? t('settings.pricing.subheader')
-              : t('settings.pricing.subheaderIntl', { price: usdPrice ? `$${usdPrice}` : '~$4' })}
+          <p className="text-[#6B6A65] dark:text-[#908d89] max-w-xl mx-auto leading-relaxed">
+            {t('packs.subtitle')}
           </p>
         </div>
 
-        {/* Plan cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        {user && (
+          <p className="text-center text-sm text-[#6B6A65] dark:text-[#908d89] mb-10">
+            {t('packs.currentBalance', { credits: user.credits })}
+          </p>
+        )}
 
-          {/* Free */}
-          <div className="surface hover-lift p-8">
-            <p className="label-sm mb-6">{t('settings.pricing.planFree')}</p>
-            <div className="mb-6">
-              <span className="stat-number text-4xl font-semibold text-[#111111] dark:text-[#e8e7e4]">$0</span>
-              <span className="text-sm text-[#6B6A65] dark:text-[#908d89] ml-1">{t('settings.pricing.freePerMonth')}</span>
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {FREE_FEATURE_KEYS.map((key) => (
-                <li key={key} className="flex items-start gap-2 text-sm text-[#6B6A65] dark:text-[#908d89]">
-                  <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
-                  {t(key)}
-                </li>
-              ))}
-            </ul>
-
-            <div className="w-full py-2.5 px-4 bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] text-sm font-medium rounded-[var(--radius-md)] border border-[#EAEAEA] dark:border-white/[0.07] text-center">
-              {isPremium ? t('settings.pricing.previousPlan') : t('settings.pricing.currentPlan')}
-            </div>
+        {packs === null ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-6 h-6 animate-spin text-[#6B6A65]" />
           </div>
-
-          {/* Pro */}
-          <div className="bg-[#111111] rounded-[var(--radius-xl)] hover-lift p-8 border border-transparent dark:border-white/[0.08]">
-            <div className="flex items-center justify-between mb-6">
-              <p className="label-sm text-[#6B6A65]">{t('settings.pricing.planPro')}</p>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
-                <Gift className="w-3 h-3" /> {t('settings.pricing.trialBadge')}
-              </span>
-            </div>
-            <div className="mb-6">
-              {isTurkey ? (
-                <>
-                  <span className="stat-number text-4xl font-semibold text-white">₺199.99</span>
-                  <span className="text-sm text-[#6B6A65] ml-1">{t('settings.pricing.freePerMonth')}</span>
-                </>
-              ) : (
-                <>
-                  <span className="stat-number text-4xl font-semibold text-white">
-                    {usdPrice ? `$${usdPrice}` : '...'}
+        ) : packs.length === 0 ? (
+          <div className="surface p-8 text-center">
+            <p className="text-[#111111] dark:text-[#e8e7e4] mb-2">{t('packs.notOnSale')}</p>
+            <p className="text-sm text-[#6B6A65] dark:text-[#908d89]">{t('packs.earnInstead')}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {packs.map((pack, i) => (
+              <div
+                key={pack.variant_id}
+                className={`surface p-6 flex flex-col ${
+                  i === featuredIndex ? 'ring-2 ring-[#111111] dark:ring-[#e8e7e4]' : ''
+                }`}
+              >
+                {i === featuredIndex && (
+                  <span className="self-start mb-3 px-2 py-0.5 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-[10px] font-bold uppercase tracking-wider">
+                    {t('packs.popular')}
                   </span>
-                  <span className="text-sm text-[#6B6A65] ml-1">{t('settings.pricing.freePerMonth')}</span>
-                  <p className="text-[11px] text-[#6B6A65] mt-1.5 italic">{t('settings.pricing.chargedNote')}</p>
-                </>
-              )}
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {PRO_FEATURE_KEYS.map((key) => (
-                <li key={key} className="flex items-start gap-2 text-sm text-[#A09D9A]">
-                  <CheckCircle2 className="w-4 h-4 text-[#346538] mt-0.5 shrink-0" strokeWidth={1.5} />
-                  {t(key)}
-                </li>
-              ))}
-            </ul>
-
-            {isPremium ? (
-              <div className="w-full py-2.5 px-4 bg-white/10 border border-white/20 text-white text-sm font-medium rounded-[var(--radius-md)] text-center flex items-center justify-center gap-2">
-                <Sparkles className="w-4 h-4" /> {t('settings.pricing.youreOnPro')}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {error && (
-                  <div className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
-                    {error}
-                  </div>
                 )}
 
-                <button
-                  onClick={handleStripe}
-                  disabled={loadingStripe}
-                  className="w-full py-2.5 px-4 rounded-[var(--radius-md)] text-sm font-medium transition-colors active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed bg-white text-[#111111] hover:bg-[#F7F6F3]"
-                >
-                  {loadingStripe ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                  {t('settings.pricing.ctaButton')}
-                </button>
-
-                <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#6B6A65]">
-                  <Lock className="w-3 h-3" /> {t('settings.pricing.noCard')}
+                <div className="flex items-center gap-2 mb-1">
+                  <Coins className="w-4 h-4 text-[#956400]" />
+                  <span className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4]">
+                    {pack.credits}
+                  </span>
+                  <span className="text-sm text-[#6B6A65] dark:text-[#908d89]">
+                    {t('credits.unit')}
+                  </span>
                 </div>
+
+                <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-6 leading-relaxed">
+                  {t('packs.worth', { applications: Math.floor(pack.credits / 6) })}
+                </p>
+
+                <button
+                  onClick={() => buy(pack.variant_id)}
+                  disabled={loadingVariant !== null}
+                  className="mt-auto w-full py-2.5 rounded-lg bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  {loadingVariant === pack.variant_id
+                    ? <Loader2 className="w-4 h-4 animate-spin" />
+                    : t('packs.buy')}
+                </button>
               </div>
-            )}
+            ))}
           </div>
+        )}
+
+        {error && (
+          <p className="mt-6 text-center text-sm text-[#9F2F2D] dark:text-[#d4524f]">{error}</p>
+        )}
+
+        <div className="mt-10 surface p-5 flex items-start gap-3">
+          <Gift className="w-4 h-4 text-[#956400] flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-[#6B6A65] dark:text-[#908d89] leading-relaxed">
+            {t('packs.freeRoutes')}
+          </p>
         </div>
 
-        <div className="flex items-center justify-center gap-2 text-xs text-[#6B6A65]">
-          <Shield className="w-3.5 h-3.5" />
-          {t('settings.pricing.footerNote')}
+        <div className="mt-6 flex items-center justify-center gap-6 text-xs text-[#6B6A65] dark:text-[#908d89]">
+          <span className="flex items-center gap-1.5">
+            <Lock className="w-3 h-3" /> {t('settings.pricing.footerNote')}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Shield className="w-3 h-3" /> {t('packs.noExpiry')}
+          </span>
         </div>
-
       </div>
     </div>
   );

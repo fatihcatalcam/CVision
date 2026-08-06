@@ -513,6 +513,19 @@ const es = {
     ctaButton: "Revisar mi CV gratis",
   },
 
+  packs: {
+    title: 'Paquetes de créditos',
+    subtitle: 'Compra lo que necesites y úsalo cuando quieras. Sin suscripción ni cargo mensual: los créditos comprados no caducan.',
+    currentBalance: 'Tu saldo: {{credits}} créditos',
+    popular: 'Más elegido',
+    worth: 'Unas {{applications}} candidaturas completas (análisis + informe completo + comparación con la oferta + carta de presentación).',
+    buy: 'Comprar',
+    notOnSale: 'Los paquetes de créditos aún no están a la venta.',
+    earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',
+    freeRoutes: 'No hace falta comprar: cada semana llegan créditos gratis y ganas más cuando alguien que invitas completa su primer análisis.',
+    noExpiry: 'Los créditos comprados no caducan',
+  },
+
   credits: {
     label: 'CRÉDITOS',
     unit: 'créditos',

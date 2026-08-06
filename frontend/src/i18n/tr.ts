@@ -512,6 +512,19 @@ const tr = {
     ctaButton: "CV'mi ücretsiz kontrol et",
   },
 
+  packs: {
+    title: 'Kredi paketleri',
+    subtitle: 'İhtiyacın kadar al, istediğin zaman kullan. Abonelik yok, aylık ödeme yok — krediler son kullanma tarihi taşımaz.',
+    currentBalance: 'Şu anki bakiyen: {{credits}} kredi',
+    popular: 'En çok tercih edilen',
+    worth: 'Yaklaşık {{applications}} tam başvuruya yeter (analiz + tam rapor + ilan eşleştirme + ön yazı).',
+    buy: 'Satın al',
+    notOnSale: 'Kredi paketleri henüz satışta değil.',
+    earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',
+    freeRoutes: 'Kredi almadan da devam edebilirsin: her hafta ücretsiz kredi yükleniyor ve davet ettiğin kişi ilk analizini tamamladığında kredi kazanıyorsun.',
+    noExpiry: 'Satın alınan krediler son kullanma tarihi taşımaz',
+  },
+
   credits: {
     label: 'KREDİ',
     unit: 'kredi',

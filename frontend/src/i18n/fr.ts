@@ -513,6 +513,19 @@ const fr = {
     ctaButton: "Vérifier mon CV gratuitement",
   },
 
+  packs: {
+    title: 'Packs de crédits',
+    subtitle: 'Achetez ce dont vous avez besoin et utilisez-le quand vous voulez. Sans abonnement ni prélèvement mensuel — les crédits achetés n\'expirent jamais.',
+    currentBalance: 'Votre solde : {{credits}} crédits',
+    popular: 'Le plus choisi',
+    worth: 'Environ {{applications}} candidatures complètes (analyse + rapport complet + comparaison à l\'offre + lettre de motivation).',
+    buy: 'Acheter',
+    notOnSale: 'Les packs de crédits ne sont pas encore en vente.',
+    earnInstead: 'Vous recevez toujours des crédits gratuits chaque semaine, et vous pouvez en gagner en invitant quelqu\'un.',
+    freeRoutes: 'Acheter n\'est pas obligatoire : des crédits gratuits arrivent chaque semaine, et vous en gagnez lorsqu\'une personne que vous invitez termine sa première analyse.',
+    noExpiry: 'Les crédits achetés n\'expirent jamais',
+  },
+
   credits: {
     label: 'CRÉDITS',
     unit: 'crédits',

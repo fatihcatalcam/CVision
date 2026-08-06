@@ -512,6 +512,19 @@ const en = {
     ctaButton: "Check my CV free",
   },
 
+  packs: {
+    title: 'Credit packs',
+    subtitle: 'Buy what you need, use it whenever. No subscription, no monthly charge — purchased credits never expire.',
+    currentBalance: 'Your balance: {{credits}} credits',
+    popular: 'Most popular',
+    worth: 'Around {{applications}} full applications (analysis + full report + job match + cover letter).',
+    buy: 'Buy',
+    notOnSale: 'Credit packs are not on sale yet.',
+    earnInstead: 'You still get free credits every week, and you can earn more by inviting a friend.',
+    freeRoutes: 'You do not have to buy: free credits land every week, and you earn more when someone you invite completes their first analysis.',
+    noExpiry: 'Purchased credits never expire',
+  },
+
   credits: {
     label: 'CREDITS',
     unit: 'credits',
