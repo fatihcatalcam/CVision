@@ -25,9 +25,36 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     CORS_ORIGINS: str = ""  # Comma-separated string in .env
     
-    # ---- Plan Limits ----
+    # ---- Plan Limits (legacy) ----
+    # Superseded by the credit prices below. Kept until the quota columns are
+    # dropped, so nothing that still reads them breaks mid-migration.
     FREE_WEEKLY_LIMIT: int = 3
     PREMIUM_WEEKLY_LIMIT: int = 50
+
+    # ---- Credit prices ----
+    # In settings rather than a constants module so pricing can be tuned from
+    # the environment without a deploy - the first months of a paid product are
+    # mostly finding out what a credit is worth.
+    CREDIT_ANALYSIS: int = 1
+    CREDIT_UNLOCK: int = 2          # unlock the full report on one analysis
+    CREDIT_MATCH: int = 1
+    CREDIT_COVER_LETTER: int = 2
+    CREDIT_REWRITE: int = 1
+    # Grants
+    CREDIT_SIGNUP: int = 3          # one analysis plus its unlock
+    CREDIT_WEEKLY: int = 2
+    CREDIT_REFERRAL: int = 3
+    # The weekly grant is skipped at or above this balance. Stops a dormant
+    # account banking a year of grants, which would remove any reason to buy;
+    # someone sitting on a purchased balance does not need the handout either.
+    CREDIT_WEEKLY_CAP: int = 12
+    # What one month of the existing Pro subscription hands over. plan_type no
+    # longer gates anything, so without this a purchase would take the money and
+    # deliver nothing. Set high on purpose until real credit packs replace the
+    # subscription: over-delivering to the first payers costs almost nothing at
+    # ~$0.008 of compute per analysis, while under-delivering to someone who
+    # already paid cannot be undone.
+    CREDIT_PREMIUM_PURCHASE: int = 200
 
     # ---- Job recovery (Track 2) ----
     # A pending/processing CV older than this is considered stuck and swept.

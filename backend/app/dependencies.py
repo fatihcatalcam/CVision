@@ -60,6 +60,34 @@ def get_current_user(
     return user
 
 
+def charge(db: Session, user: User, amount: int, reason: str, ref_id: str | None = None) -> int:
+    """Spend credits for a request, or reject it with 402 Payment Required.
+
+    The HTTP translation lives here rather than in CreditService so the service
+    stays free of web concerns, and here rather than inline at each call site so
+    every endpoint refuses in the same words - the frontend reads this message
+    and offers a top-up, and it can only do that if the shape is predictable.
+
+    402 rather than 403: an empty balance is a payment problem, not a
+    permissions one, and the two need different buttons in the UI.
+    """
+    from app.services.credit_service import CreditService, InsufficientCredits
+
+    # A price of zero means "free", not "charge nothing and write a ledger row
+    # about it". Without this a price could never be tuned down to free from the
+    # environment, because CreditService rightly refuses a zero-value spend.
+    if amount == 0:
+        return CreditService.balance(db, user)
+
+    try:
+        return CreditService.spend(db, user, amount, reason, ref_id)
+    except InsufficientCredits as exc:
+        raise HTTPException(
+            status_code=402,
+            detail=f"Not enough credits: this costs {exc.needed}, you have {exc.available}.",
+        )
+
+
 def require_admin(current_user: User = Depends(get_current_user)) -> User:
     """
     Ensures the current user has the 'admin' role.
