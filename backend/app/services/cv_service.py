@@ -117,42 +117,42 @@ class CVService:
         db: Session,
     ) -> CV:
         """
-        Upload pipeline: validate → quota check → save → create DB record → fast return.
+        Upload pipeline: validate → charge → save → create DB record → fast return.
 
-        Quota is checked BEFORE saving to disk so that a 403 never leaks an orphan file.
-        The analysis must be dispatched to background_process_cv separately.
+        The credit is taken BEFORE saving to disk so that a 402 never leaks an
+        orphan file. The analysis must be dispatched to background_process_cv
+        separately, and a failure there refunds via _mark_failed.
         """
         from fastapi import HTTPException
-        from datetime import datetime, timezone, timedelta
 
         # Step 1: Validate file (no I/O yet)
         original_filename, extension = CVService.validate_file(file)
 
-        # Step 2: Atomic Quota Check & Increment (before any disk write)
-        user_db = db.query(User).filter(User.id == user.id).with_for_update().first()
-        now = datetime.now(timezone.utc)
+        # Step 2: Charge one credit (before any disk write)
+        #
+        # Charging first is what keeps a rejected upload from leaving an orphan
+        # file or CV row behind - the same guarantee the weekly quota gate used
+        # to provide. CreditService puts the balance comparison in the UPDATE's
+        # WHERE clause, so two uploads arriving together cannot both pass.
+        #
+        # The CV id is not known yet, so the ledger row is written here with no
+        # ref_id and pointed at the CV once it exists (step 4). Doing it the
+        # other way round would mean saving a file for an upload that might
+        # still be refused.
+        from app.services.credit_service import CreditService, InsufficientCredits
 
-        quota_reset = user_db.quota_reset_at
-        if quota_reset and quota_reset.tzinfo is None:
-            quota_reset = quota_reset.replace(tzinfo=timezone.utc)
+        try:
+            CreditService.spend(db, user, settings.CREDIT_ANALYSIS, "spend_analysis")
+        except InsufficientCredits as exc:
+            raise HTTPException(
+                status_code=402,
+                detail=(
+                    f"Not enough credits: an analysis costs {exc.needed}, "
+                    f"you have {exc.available}."
+                ),
+            )
 
-        if quota_reset and quota_reset < now:
-            # Window expired: reset count and open a new 7-day window from now
-            user_db.analysis_count = 0
-            user_db.quota_reset_at = now + timedelta(days=7)
-        elif not user_db.quota_reset_at:
-            # First-ever upload: start the first window
-            user_db.quota_reset_at = now + timedelta(days=7)
-
-        limit = settings.PREMIUM_WEEKLY_LIMIT if user_db.plan_type == "premium" else settings.FREE_WEEKLY_LIMIT
-
-        if user_db.analysis_count >= limit:
-            # Raise BEFORE saving file — no orphan files left on disk
-            raise HTTPException(status_code=403, detail="Weekly upload quota exceeded.")
-
-        user_db.analysis_count += 1
-
-        # Step 3: Save to disk (only reached when quota check passes)
+        # Step 3: Save to disk (only reached once the credit is taken)
         stored_filename, file_path, file_size, file_content = await CVService.save_file(
             file, extension
         )
@@ -171,6 +171,25 @@ class CVService:
             target_domain=target_domain,
         )
         db.add(cv)
+        db.flush()
+
+        # Point the charge at the CV now that it has an id. Without this the
+        # ledger row says "spend_analysis" and nothing else, which is no answer
+        # to "what was this credit for".
+        from app.models.credit_transaction import CreditTransaction
+        charge = (
+            db.query(CreditTransaction)
+            .filter(
+                CreditTransaction.user_id == user.id,
+                CreditTransaction.reason == "spend_analysis",
+                CreditTransaction.ref_id.is_(None),
+            )
+            .order_by(CreditTransaction.id.desc())
+            .first()
+        )
+        if charge is not None:
+            charge.ref_id = str(cv.id)
+
         db.commit()
         db.refresh(cv)
 
@@ -241,13 +260,16 @@ class CVService:
 
     @staticmethod
     def _mark_failed(db: Session, cv_id: int, status: str) -> None:
-        """Record the failure and give the user their quota unit back.
+        """Record the failure and give the user their credit back.
 
-        The weekly count is incremented at upload time, before we know whether
-        the analysis will succeed, so a failure would otherwise cost the user a
-        slot for something they never received. Anonymous uploads are refunded
-        implicitly: count_recent_anon_by_ip ignores failed rows.
+        The credit is taken at upload time, before anyone knows whether the file
+        is even parseable, so a failure would otherwise charge the user for a
+        result they never received - an image-only PDF being the case that
+        actually happens. Anonymous uploads never paid a credit and are refunded
+        implicitly elsewhere: count_recent_anon_by_ip ignores failed rows.
         """
+        from app.services.credit_service import CreditService
+
         db.rollback()
         cv = db.query(CV).filter(CV.id == cv_id).first()
         if not cv:
@@ -256,12 +278,14 @@ class CVService:
         cv.status = status
 
         if cv.user_id:
-            owner = db.query(User).filter(User.id == cv.user_id).with_for_update().first()
-            if owner and owner.analysis_count > 0:
-                owner.analysis_count -= 1
+            owner = db.query(User).filter(User.id == cv.user_id).first()
+            if owner:
+                balance = CreditService.refund(
+                    db, owner, settings.CREDIT_ANALYSIS, "refund_failed_analysis", ref_id=str(cv_id)
+                )
                 logger.info(
-                    f"Refunded 1 quota unit to user {owner.id} after CV {cv_id} "
-                    f"failed ({status}); count now {owner.analysis_count}"
+                    f"Refunded {settings.CREDIT_ANALYSIS} credit to user {owner.id} after CV "
+                    f"{cv_id} failed ({status}); balance now {balance}"
                 )
 
         db.commit()

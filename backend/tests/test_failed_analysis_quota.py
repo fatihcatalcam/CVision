@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""A failed analysis must not cost the user their quota.
+"""A failed analysis must not cost the user a credit.
 
 Founder-reported: someone uploaded an image-only CV through /try. It failed
 (no text layer), and because the daily anonymous limit counts uploads rather
@@ -8,7 +8,7 @@ they were pushed into signing up instead. The same held for registered users,
 whose weekly count is incremented at upload time, before the analysis runs.
 
 If we could not produce an analysis, the user did not get what they paid a
-quota unit for.
+credit for.
 """
 
 from datetime import datetime, timezone
@@ -75,7 +75,11 @@ def test_in_flight_upload_still_counts(db_session):
 
 
 def _run_background_with_failure(monkeypatch, error: Exception) -> int:
-    """Run the background task for a registered user's CV, return their count."""
+    """Run the real background task for a registered user's CV, return their
+    credit balance afterwards.
+
+    Goes through process_analysis_background rather than calling _mark_failed
+    directly, so the refund is exercised on the path a genuine failure takes."""
     monkeypatch.setattr(
         CVService, "extract_text",
         staticmethod(lambda path, ftype: (_ for _ in ()).throw(error)),
@@ -86,7 +90,7 @@ def _run_background_with_failure(monkeypatch, error: Exception) -> int:
         user = User(
             full_name="Quota User", email="quotarefund@test.com",
             password_hash=hash_password("Passw0rd!"), role="user", plan_type="free",
-            analysis_count=3,  # already spent 3 of the weekly allowance
+            credits=2,  # what is left after paying for this upload
         )
         setup.add(user)
         setup.commit()
@@ -107,7 +111,7 @@ def _run_background_with_failure(monkeypatch, error: Exception) -> int:
         CVService.process_analysis_background(cv_id)
         check = SessionLocal()
         try:
-            return check.query(User).filter(User.id == user_id).first().analysis_count
+            return check.query(User).filter(User.id == user_id).first().credits
         finally:
             check.close()
     finally:
@@ -120,11 +124,11 @@ def _run_background_with_failure(monkeypatch, error: Exception) -> int:
             cleanup.close()
 
 
-def test_image_pdf_failure_refunds_the_registered_users_quota(monkeypatch):
-    count = _run_background_with_failure(monkeypatch, EmptyTextError("no text"))
-    assert count == 2, "the spent quota unit must be given back on failure"
+def test_image_pdf_failure_refunds_the_registered_users_credit(monkeypatch):
+    balance = _run_background_with_failure(monkeypatch, EmptyTextError("no text"))
+    assert balance == 3, "the credit spent on the upload must come back"
 
 
-def test_generic_failure_refunds_the_registered_users_quota(monkeypatch):
-    count = _run_background_with_failure(monkeypatch, RuntimeError("boom"))
-    assert count == 2, "our own crash must not cost the user a weekly slot"
+def test_generic_failure_refunds_the_registered_users_credit(monkeypatch):
+    balance = _run_background_with_failure(monkeypatch, RuntimeError("boom"))
+    assert balance == 3, "our own crash must not cost the user a credit"
