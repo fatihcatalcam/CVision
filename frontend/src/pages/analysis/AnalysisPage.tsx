@@ -74,6 +74,14 @@ function AISuggestionCard(
   { suggestion: AISuggestion; index: number; onUnlock: () => void; unlocking: boolean }
 ) {
   const { t } = useTranslation();
+  // Declared before the locked branch returns. React counts hooks per render,
+  // and unlocking flips is_locked on a MOUNTED card - so with these below the
+  // early return the card went from zero hooks to two mid-life and React tore
+  // the tree down ("rendered more hooks than during the previous render"),
+  // which is the grey screen that only a reload fixed. Unreachable before the
+  // unlock button existed, because the locked card used to navigate away.
+  const [expanded, setExpanded] = useState(index === 0);
+  const [copied, setCopied] = useState(false);
 
   if (suggestion.is_locked) {
     return (
@@ -104,8 +112,6 @@ function AISuggestionCard(
     );
   }
 
-  const [expanded, setExpanded] = useState(index === 0);
-  const [copied, setCopied] = useState(false);
   const meta = PRIORITY_META[suggestion.priority] ?? PRIORITY_META.medium;
 
   const hint = suggestion.rewrite_hint?.trim() ?? '';
