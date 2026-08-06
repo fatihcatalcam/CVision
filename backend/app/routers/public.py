@@ -111,7 +111,7 @@ def public_results(token: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Analysis not ready yet.")
 
     return _build_analysis_response(
-        analysis, current_user=None, is_first_analysis=False, force_locked=True
+        analysis, current_user=None, force_locked=True
     )
 
 

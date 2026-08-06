@@ -97,6 +97,23 @@ class AnonymousService:
         cv.user_id = user.id
         cv.session_token = None
         cv.client_ip = None
+
+        # Hand over the full report with the CV. The welcome perk is applied at
+        # analysis time, and an anonymous analysis has no owner then, so a
+        # claimed report would otherwise arrive locked - breaking the funnel this
+        # whole flow exists for: try it, sign up, read the answer. Applied only
+        # when the account has nothing else, so claiming cannot be used to unlock
+        # a second report for free.
+        from app.models.analysis import AnalysisResult
+        from app.services.analysis_service import AnalysisService
+
+        if AnalysisService._is_users_first_analysis(cv, db):
+            analysis = (
+                db.query(AnalysisResult).filter(AnalysisResult.cv_id == cv.id).first()
+            )
+            if analysis is not None:
+                analysis.is_unlocked = True
+
         db.commit()
         db.refresh(cv)
         logger.info(f"Anonymous CV {cv.id} claimed by user {user.id}")

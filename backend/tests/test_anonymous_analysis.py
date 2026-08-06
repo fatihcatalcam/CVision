@@ -109,7 +109,7 @@ def test_force_locked_locks_all_but_first_suggestion(db_session, make_user, make
     analysis = _make_analysis_with_ai(db_session, cv)
 
     resp = _build_analysis_response(
-        analysis, current_user=None, is_first_analysis=False, force_locked=True
+        analysis, current_user=None, force_locked=True
     )
 
     assert resp.ai_suggestions[0].is_locked is False

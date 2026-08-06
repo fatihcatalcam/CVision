@@ -2,8 +2,8 @@
 Match router — trigger and retrieve CV vs JD match results.
 
 Endpoints:
-    POST /match/     - Run AI match for cv_id + jd_id (Pro only)
-    GET  /match/{id} - Retrieve a saved match result (Pro only)
+    POST /match/     - Run AI match for cv_id + jd_id (costs credits)
+    GET  /match/{id} - Retrieve a saved match result (free: already paid for)
 """
 
 import logging
@@ -14,7 +14,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.dependencies import get_db, get_current_user
+from app.config import settings
+from app.dependencies import get_db, get_current_user, charge
+from app.services.credit_service import CreditService
 from app.models.user import User
 from app.models.cv_jd_match import CVJDMatch
 from app.services.jd_service import get_jd
@@ -27,9 +29,6 @@ logger = logging.getLogger("cvision.routers.match")
 router = APIRouter(prefix="/match", tags=["JD Matching"])
 
 
-def _require_pro(user: User) -> None:
-    if user.plan_type != "premium":
-        raise HTTPException(status_code=403, detail="Bu özellik Pro kullanıcılara özeldir.")
 
 
 # ── Schemas ──────────────────────────────────────────────────────────────────
@@ -66,8 +65,7 @@ def create_match(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Run AI-powered CV vs job description matching. Pro only."""
-    _require_pro(current_user)
+    """Run AI-powered CV vs job description matching. Costs credits."""
 
     if not is_ai_enabled():
         raise HTTPException(status_code=503, detail="AI servisi şu an kullanılamıyor.")
@@ -86,8 +84,19 @@ def create_match(
     if jd is None:
         raise HTTPException(status_code=404, detail="İş ilanı bulunamadı.")
 
+    # Charged after validation, before the AI call: a bad request must not cost
+    # anything, and neither must a failure on our side - hence the refund below
+    # rather than charging only on success, which would leave a window where the
+    # work is done and unpaid.
+    charge(db, current_user, settings.CREDIT_MATCH, "spend_match", ref_id=str(cv_db_id))
+
     result = ai_match_cv_jd(cv.extracted_text, jd.raw_text)
     if not result:
+        CreditService.refund(
+            db, current_user, settings.CREDIT_MATCH, "refund_failed_match",
+            ref_id=str(cv_db_id),
+        )
+        db.commit()
         raise HTTPException(status_code=502, detail="Eşleştirme tamamlanamadı. Tekrar deneyin.")
 
     match = CVJDMatch(
@@ -113,7 +122,6 @@ def get_match(
     db: Session = Depends(get_db),
 ):
     """Retrieve a previously computed match result."""
-    _require_pro(current_user)
 
     db_id = decode_id(match_id)
     match = db.query(CVJDMatch).filter(CVJDMatch.id == db_id).first()

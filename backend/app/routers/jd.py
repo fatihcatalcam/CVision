@@ -12,11 +12,12 @@ All endpoints require Pro plan.
 import logging
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
+from app.limiter import limiter
 from app.models.user import User
 from app.services.jd_service import fetch_url_text, create_jd, list_user_jds
 from app.utils.hashids import encode_id, decode_id
@@ -26,9 +27,6 @@ logger = logging.getLogger("cvision.routers.jd")
 router = APIRouter(prefix="/jd", tags=["JD Matching"])
 
 
-def _require_pro(user: User) -> None:
-    if user.plan_type != "premium":
-        raise HTTPException(status_code=403, detail="Bu özellik Pro kullanıcılara özeldir.")
 
 
 # ── Schemas ──────────────────────────────────────────────────────────────────
@@ -61,12 +59,20 @@ class JDResponse(BaseModel):
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.post("/fetch-url", response_model=FetchUrlResponse, summary="Extract text from a job posting URL")
+@limiter.limit("10/minute")
 def fetch_url(
+    request: Request,
     body: FetchUrlRequest,
     current_user: User = Depends(get_current_user),
 ):
-    """Fetch job description text from a URL. Does not save to database."""
-    _require_pro(current_user)
+    """Fetch job description text from a URL. Does not save to database.
+
+    Rate limited rather than charged. This makes the server fetch a URL the
+    caller chose, and its only protection used to be the Pro gate that credits
+    replaced - without a limit here, dropping that gate would hand every
+    registered account an unbounded outbound fetcher. It is an input step, not
+    billable work, so a credit price would be the wrong tool.
+    """
     result = fetch_url_text(body.url)
     return FetchUrlResponse(**result)
 
@@ -78,7 +84,6 @@ def save_jd(
     db: Session = Depends(get_db),
 ):
     """Save a job description (text or URL-sourced) to the database."""
-    _require_pro(current_user)
 
     if not body.raw_text or len(body.raw_text.strip()) < 50:
         raise HTTPException(status_code=400, detail="İlan metni çok kısa (min 50 karakter).")
@@ -106,7 +111,6 @@ def list_jds(
     db: Session = Depends(get_db),
 ):
     """List all job descriptions saved by the current user."""
-    _require_pro(current_user)
     jds = list_user_jds(current_user.id, db)
     return [
         JDResponse(

@@ -34,6 +34,25 @@ class AnalysisService:
     """Handles analysis business logic - triggering, persisting, and retrieving."""
 
     @staticmethod
+    def _is_users_first_analysis(cv: CV, db: Session) -> bool:
+        """True when this CV's owner has no analysis yet.
+
+        Anonymous uploads have no owner and are never treated as a first
+        analysis - the /try flow gates its own results and hands them over at
+        signup, where the perk is applied to the claimed report instead.
+        """
+        if cv.user_id is None:
+            return False
+
+        return (
+            db.query(AnalysisResult)
+            .join(CV, CV.id == AnalysisResult.cv_id)
+            .filter(CV.user_id == cv.user_id)
+            .first()
+            is None
+        )
+
+    @staticmethod
     def _load_skills(db: Session) -> list[dict[str, Any]]:
         """Load all skills from the database for the skill extractor."""
         skills = db.query(Skill).all()
@@ -145,6 +164,10 @@ class AnalysisService:
         )
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 
+        # Computed before the row is added, because adding it first would make
+        # the "does this user have any analysis yet" query answer itself.
+        is_first = AnalysisService._is_users_first_analysis(cv, db)
+
         # Persist analysis result
         analysis = AnalysisResult(
             cv_id=cv.id,
@@ -158,9 +181,27 @@ class AnalysisService:
             weaknesses=context.weaknesses,
             detected_sections=context.detected_sections,
             layout_xray=layout_xray,
+            # A registered user's very first report is unlocked as a welcome
+            # perk - it is the moment the product proves itself, and charging
+            # for it costs more in conversion than the two credits are worth.
+            #
+            # Persisting it also fixes a bug in the rule it replaces. The old
+            # gate computed "is this their first?" per request as
+            # total_analyses == 1, so uploading a second CV silently re-locked
+            # the first report: the user watched something they already had get
+            # taken away.
+            is_unlocked=is_first,
         )
         db.add(analysis)
         db.flush()  # Get the analysis ID
+
+        if is_first and cv.owner is not None:
+            # The invite reward is paid here, on a real analysis, rather than at
+            # signup - see ReferralService for why that is what makes the feature
+            # safe without email verification.
+            from app.services.referral_service import ReferralService
+
+            ReferralService.reward_inviter(db, cv.owner)
 
         # Persist suggestions
         for sug_data in context.suggestions:

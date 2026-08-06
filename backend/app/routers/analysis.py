@@ -103,15 +103,66 @@ def get_analysis_results(
             detail=f"No analysis found for CV {cv_id}. Trigger analysis first.",
         )
 
-    total_analyses = (
-        db.query(AnalysisResult)
-        .join(CV, CV.id == AnalysisResult.cv_id)
-        .filter(CV.user_id == current_user.id)
-        .count()
-    )
-    is_first_analysis = total_analyses == 1
+    return _build_analysis_response(analysis, current_user)
 
-    return _build_analysis_response(analysis, current_user, is_first_analysis=is_first_analysis)
+
+@router.post(
+    "/{cv_id}/unlock",
+    response_model=AnalysisResponse,
+    summary="Unlock the full report for this analysis",
+)
+def unlock_analysis(
+    cv_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Spend credits to unlock one report, and return it unlocked.
+
+    Charging here rather than at upload is what makes the first step cheap: a
+    user pays one credit to see the score and the teasers, and only pays the
+    rest once they have decided the answer is worth having.
+    """
+    from app.config import settings
+    from app.services.credit_service import CreditService, InsufficientCredits
+
+    db_cv_id = decode_id(cv_id)
+    cv = CVService.get_cv(db_cv_id, current_user, db)
+    if cv is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CV with id {cv_id} not found",
+        )
+
+    analysis = AnalysisService.get_analysis(db_cv_id, db)
+    if analysis is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No analysis found for CV {cv_id}.",
+        )
+
+    # Idempotent: a double-click, a retry or a stale tab must not charge twice.
+    if analysis.is_unlocked:
+        return _build_analysis_response(analysis, current_user)
+
+    try:
+        CreditService.spend(
+            db, current_user, settings.CREDIT_UNLOCK, "spend_unlock",
+            ref_id=str(db_cv_id),
+        )
+    except InsufficientCredits as exc:
+        raise HTTPException(
+            status_code=402,
+            detail=(
+                f"Not enough credits: unlocking costs {exc.needed}, "
+                f"you have {exc.available}."
+            ),
+        )
+
+    analysis.is_unlocked = True
+    db.commit()
+    db.refresh(analysis)
+
+    return _build_analysis_response(analysis, current_user)
 
 
 def _suggestion_teaser(message: str | None, max_words: int = 6, max_chars: int = 55) -> str | None:
@@ -170,19 +221,17 @@ def _build_xray_response(layout_xray: dict | None, is_free: bool) -> LayoutXrayR
     )
 
 
-def _build_analysis_response(analysis, current_user: User | None = None, is_first_analysis: bool = False, force_locked: bool = False) -> AnalysisResponse:
+def _build_analysis_response(analysis, current_user: User | None = None, force_locked: bool = False) -> AnalysisResponse:
     """Build the response model from an AnalysisResult ORM instance."""
-    # Admins are never gated. The HQ panel links straight to this page to review
-    # a user's report, and a half-locked view defeats the point of reviewing it -
-    # an admin on the free plan would see teasers instead of the actual findings.
-    # The anonymous /try path passes force_locked with no user at all, so it is
-    # untouched by this.
+    # Locking is now a property of the report, not of the viewer. Under the old
+    # rule a lapsed subscription silently re-locked results the user had already
+    # paid for; unlocking is a purchase, so it sticks to what was bought.
+    #
+    # Admins are never gated: the HQ panel links straight here to review a
+    # user's report, and a half-locked view defeats the point. The anonymous
+    # /try path passes force_locked with no user at all, so it is untouched.
     is_admin = current_user is not None and current_user.role == "admin"
-    is_free = force_locked or (
-        not is_admin
-        and (current_user.plan_type == "free" if current_user else False)
-        and not is_first_analysis
-    )
+    is_free = force_locked or (not is_admin and not analysis.is_unlocked)
 
     # Parse AI suggestions from JSON if present
     raw_ai_suggestions = analysis.ai_suggestions or []
@@ -296,18 +345,16 @@ class RewriteResponse(BaseModel):
 def rewrite_bullet(
     body: RewriteRequest,
     current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """
     Use GPT to rewrite a single CV bullet point to be more impactful.
-    Premium feature - requires AI to be enabled.
+    Costs credits; requires AI to be enabled.
     """
+    from app.config import settings
+    from app.dependencies import charge
     from app.services.ai_service import ai_rewrite_bullet, is_ai_enabled
-
-    if current_user.plan_type == "free":
-        raise HTTPException(
-            status_code=403,
-            detail="Rewriting CV bullets is a Premium feature."
-        )
+    from app.services.credit_service import CreditService
 
     if not is_ai_enabled():
         raise HTTPException(
@@ -315,11 +362,18 @@ def rewrite_bullet(
             detail="AI service is not available. Please try again later."
         )
 
+    charge(db, current_user, settings.CREDIT_REWRITE, "spend_rewrite")
+
     rewritten = ai_rewrite_bullet(
         bullet_text=body.bullet_text,
         cv_context=body.cv_context,
         target_role=body.target_role,
     )
+    if rewritten is None:
+        CreditService.refund(
+            db, current_user, settings.CREDIT_REWRITE, "refund_failed_rewrite"
+        )
+        db.commit()
 
     return RewriteResponse(
         original=body.bullet_text,
