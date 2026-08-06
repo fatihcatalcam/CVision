@@ -18,6 +18,7 @@ from app.models.admin_log import AdminLog
 from app.models.job_description import JobDescription
 from app.models.cv_jd_match import CVJDMatch
 from app.models.cover_letter import CoverLetter
+from app.models.credit_transaction import CreditTransaction
 
 __all__ = [
     "User",
@@ -32,4 +33,5 @@ __all__ = [
     "JobDescription",
     "CVJDMatch",
     "CoverLetter",
+    "CreditTransaction",
 ]

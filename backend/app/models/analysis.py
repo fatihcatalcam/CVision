@@ -5,7 +5,7 @@ Maps to FR8, FR9, FR20.
 """
 
 from datetime import datetime
-from sqlalchemy import Integer, Float, Text, DateTime, ForeignKey, JSON, func
+from sqlalchemy import Integer, Float, Text, DateTime, ForeignKey, JSON, Boolean, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -44,6 +44,14 @@ class AnalysisResult(Base):
     # ATS X-Ray layout analysis - see app/analysis/layout_xray.py for the
     # JSON contract. Null on legacy rows; {"available": False} on TXT uploads.
     layout_xray: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+
+    # Whether the full report has been paid for on THIS analysis. Gating used to
+    # key off the viewer's plan, which meant a lapsed subscription silently
+    # re-locked reports the user had already earned. Per-report is both fairer
+    # and what the credit model needs: unlocking is a purchase, not a status.
+    is_unlocked: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

@@ -5,7 +5,7 @@ Maps to FR1, FR2, FR3, FR16, FR25.
 """
 
 from datetime import datetime, timezone
-from sqlalchemy import String, Integer, DateTime, func
+from sqlalchemy import String, Integer, DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -30,6 +30,29 @@ class User(Base):
     subscription_end_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     stripe_customer_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
     lemon_subscription_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    # Credit balance. A cached total - credit_transactions is the record of how
+    # it got here, and the two must always agree (see CreditTransaction).
+    credits: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    # When the weekly grant was last handed out. The grant is claimed on login
+    # rather than accrued by a job, so an account away for five weeks collects
+    # one grant on its return, not five.
+    credits_granted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Referral. The code is generated on first request rather than at signup:
+    # most accounts never open the invite screen, and a lazily-created code keeps
+    # the migration from having to mint one for every existing row.
+    referral_code: Mapped[str | None] = mapped_column(
+        String(12), unique=True, nullable=True, index=True
+    )
+    referred_by_id: Mapped[int | None] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    # Set when the inviter was paid for this account, so the reward can only
+    # ever fire once no matter how the first analysis is retried.
+    referral_rewarded_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     reset_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
     reset_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     reset_code_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
@@ -46,6 +69,9 @@ class User(Base):
     cvs: Mapped[list["CV"]] = relationship("CV", back_populates="owner", cascade="all, delete-orphan")
     job_descriptions: Mapped[list["JobDescription"]] = relationship(
         "JobDescription", back_populates="owner", cascade="all, delete-orphan"
+    )
+    credit_transactions: Mapped[list["CreditTransaction"]] = relationship(
+        "CreditTransaction", back_populates="user", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
