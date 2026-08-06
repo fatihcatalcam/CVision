@@ -227,6 +227,22 @@ def test_an_order_for_an_unknown_variant_grants_nothing(
     assert _balance(user_id) == 0
 
 
+def test_an_order_with_no_id_grants_nothing(client, real_user, packs_on_sale):
+    """The order id is the deduplication key. Without one, every such payload
+    collapses onto the same key - so the first would grant and every real order
+    after it would be silently skipped as a duplicate. Refusing is recoverable
+    by hand through the admin adjustment; a silent skip is not even visible.
+    """
+    user_id = real_user()
+
+    raw, headers = _signed(_order(user_id, "1001", ""))
+    resp = client.post("/payment/lemon/webhook", content=raw, headers=headers)
+
+    assert resp.status_code == 200
+    assert _balance(user_id) == 0
+    assert _purchases(user_id) == []
+
+
 def test_a_forged_signature_is_rejected(client, real_user, packs_on_sale):
     user_id = real_user()
     raw = json.dumps(_order(user_id, "1003", "ord_6")).encode()

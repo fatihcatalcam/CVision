@@ -371,6 +371,15 @@ async def lemon_webhook(request: Request):
         variant_id = str(item.get("variant_id", ""))
         order_id = str(data.get("id", ""))
 
+        if not order_id:
+            # Without an order id there is no deduplication key, and every such
+            # payload would collapse onto the same one - so the FIRST malformed
+            # order would grant, and every real one after it would be silently
+            # skipped as a duplicate. Refusing is recoverable by hand; a silent
+            # skip is not even visible.
+            logger.error("order_created with no order id; granting nothing: %s", attrs)
+            return {"received": True}
+
         credits = settings.credit_packs.get(variant_id)
         if credits is None:
             # Money we cannot attribute to a pack. Log loudly and grant nothing
