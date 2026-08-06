@@ -35,6 +35,13 @@ class AdminOverviewResponse(BaseModel):
     new_users_this_week: int
     new_analyses_this_week: int
     ai_enhanced_count: int
+    # Credits. plan_type stopped meaning anything when credits arrived, so
+    # "premium users" and the conversion rate built on it measure nothing; what
+    # the panel needs instead is how much currency is outstanding and how fast
+    # it is being spent.
+    credits_in_circulation: int
+    credits_spent_this_week: int
+    paying_users: int
     score_distribution: ScoreDistribution
     top_domains: List[DomainStat]
     daily_activity: List[DailyActivity]

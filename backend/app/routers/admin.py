@@ -16,6 +16,7 @@ from app.dependencies import get_db, require_admin
 from app.models.user import User
 from app.models.cv import CV
 from app.models.analysis import AnalysisResult
+from app.models.credit_transaction import CreditTransaction
 from app.schemas.admin import (
     AdminStatsResponse, AdminUsersListResponse, RecentActivity,
     AdminAnalysisListResponse, AdminAnalysisListItem, AdminCVContent,
@@ -51,6 +52,27 @@ def get_overview(db: Session = Depends(get_db)):
     free_users = db.query(User).filter(User.plan_type == "free").count()
     premium_users = db.query(User).filter(User.plan_type == "premium").count()
     new_users_this_week = db.query(User).filter(User.created_at >= week_ago).count()
+
+    # Credits.
+    #
+    # Spend is read off the ledger rather than the balance because a balance
+    # only shows what is left: a user who was granted 3 and spent 3 looks
+    # identical to one who never came back. `delta` is negative on a spend, so
+    # the sum is negated to read as a positive quantity of credits consumed.
+    credits_in_circulation = db.query(func.coalesce(func.sum(User.credits), 0)).scalar()
+    credits_spent_this_week = -(
+        db.query(func.coalesce(func.sum(CreditTransaction.delta), 0))
+        .filter(
+            CreditTransaction.delta < 0,
+            CreditTransaction.created_at >= week_ago,
+        )
+        .scalar()
+    )
+    paying_users = (
+        db.query(func.count(func.distinct(CreditTransaction.user_id)))
+        .filter(CreditTransaction.reason == "purchase")
+        .scalar()
+    )
 
     # Analysis breakdown
     new_analyses_this_week = db.query(AnalysisResult).filter(AnalysisResult.created_at >= week_ago).count()
@@ -132,6 +154,9 @@ def get_overview(db: Session = Depends(get_db)):
         new_users_this_week=new_users_this_week,
         new_analyses_this_week=new_analyses_this_week,
         ai_enhanced_count=ai_enhanced_count,
+        credits_in_circulation=credits_in_circulation,
+        credits_spent_this_week=credits_spent_this_week,
+        paying_users=paying_users,
         score_distribution=ScoreDistribution(low=low, medium=medium, high=high),
         top_domains=top_domains,
         daily_activity=daily_activity,

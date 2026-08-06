@@ -6,7 +6,7 @@ import api from '../../services/api';
 import {
   Users, FileText, Activity, TrendingUp, Shield, Trash2,
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
-  Eye, Search, ScrollText,
+  Eye, Search, ScrollText, Coins,
 } from 'lucide-react';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
@@ -26,6 +26,9 @@ interface AdminOverview {
   new_users_this_week: number;
   new_analyses_this_week: number;
   ai_enhanced_count: number;
+  credits_in_circulation: number;
+  credits_spent_this_week: number;
+  paying_users: number;
   score_distribution: { low: number; medium: number; high: number };
   top_domains: { domain: string; count: number }[];
   daily_activity: { date: string; analyses: number; signups: number }[];
@@ -127,17 +130,6 @@ export function AdminPage() {
     }
   };
 
-  const handlePlanChange = async (userId: number, newPlan: string) => {
-    setActionLoading(`plan-${userId}`);
-    try {
-      await api.patch(`/hq-portal/users/${userId}/plan?plan=${newPlan}`);
-      setUsers(prev => prev.map(u => u.id === userId ? { ...u, plan_type: newPlan } : u));
-    } catch (error: any) {
-      alert(error.response?.data?.detail || 'Failed to change plan');
-    } finally {
-      setActionLoading(null);
-    }
-  };
 
   const handleDeleteUser = async (userId: number) => {
     setActionLoading(`del-user-${userId}`);
@@ -206,9 +198,6 @@ export function AdminPage() {
     count: d.count,
   }));
 
-  const conversionRate = overview && overview.total_users > 0
-    ? Math.round((overview.premium_users / overview.total_users) * 100)
-    : 0;
 
   const aiRate = overview && overview.total_analyses > 0
     ? Math.round((overview.ai_enhanced_count / overview.total_analyses) * 100)
@@ -303,23 +292,35 @@ export function AdminPage() {
                       <p className="text-2xl font-bold text-white">{overview?.total_users || 0}</p>
                       <p className="text-xs text-zinc-500 mt-0.5">Total Users</p>
                     </div>
-                    <div className="flex gap-2 mt-1">
-                      <span className="text-[10px] text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded">{overview?.free_users || 0} free</span>
-                      <span className="text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{overview?.premium_users || 0} pro</span>
-                    </div>
+                    {/* The free/pro split lived here. Both halves counted
+                        plan_type, which no longer decides anything. */}
                   </Card>
 
-                  {/* Pro Conversion */}
+                  {/* Credits.
+                      Replaces "Pro Conversion", which divided premium_users by
+                      total_users - a ratio of a plan that stopped meaning
+                      anything, permanently reading 0%. Spend is the number that
+                      answers the same question now: whether the thing being
+                      given away is being used. */}
                   <Card className="p-5 col-span-1 flex flex-col gap-2">
-                    <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg w-fit">
-                      <Crown className="w-4 h-4" />
+                    <div className="flex items-center justify-between">
+                      <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg">
+                        <Coins className="w-4 h-4" />
+                      </div>
+                      {!!overview?.credits_spent_this_week && (
+                        <span className="text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded font-bold">
+                          −{overview.credits_spent_this_week} wk
+                        </span>
+                      )}
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-white">{conversionRate}%</p>
-                      <p className="text-xs text-zinc-500 mt-0.5">Pro Conversion</p>
+                      <p className="text-2xl font-bold text-white">{overview?.credits_in_circulation || 0}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Credits Held</p>
                     </div>
-                    <div className="w-full bg-zinc-800 rounded-full h-1 mt-1">
-                      <div className="bg-amber-500 h-1 rounded-full transition-all" style={{ width: `${conversionRate}%` }} />
+                    <div className="flex gap-2 mt-1">
+                      <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        {overview?.paying_users || 0} paid
+                      </span>
                     </div>
                   </Card>
 
@@ -611,102 +612,97 @@ export function AdminPage() {
                   </div>
                 </div>
 
+                {/* Seven columns at px-6, three action buttons and a separate
+                    Email column pushed the table past the viewport, so the
+                    controls on the right could only be reached by scrolling
+                    sideways - they were effectively invisible.
+
+                    Two of those columns were also dead. Plan showed plan_type,
+                    which gates nothing since credits, and "Give Premium" handed
+                    out a status that buys nothing. Email now sits under the
+                    name, where it costs no width at all. */}
                 <Card noPadding>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="border-b border-[var(--color-card-border)] bg-[rgba(255,255,255,0.02)]">
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">User</th>
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Email</th>
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Role</th>
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Plan</th>
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Credits</th>
-                          <th className="px-6 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Joined</th>
-                          <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredUsers.length === 0 ? (
-                           <tr><td colSpan={5} className="px-6 py-8 text-center text-zinc-500">No users found</td></tr>
-                        ) : filteredUsers.map((u) => (
-                          <tr key={u.id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${u.role === 'admin' ? 'bg-amber-500/15 text-amber-400' : 'bg-indigo-500/15 text-indigo-400'}`}>
-                                  {u.full_name.charAt(0).toUpperCase()}
+                  <table className="w-full text-left border-collapse table-fixed">
+                    <thead>
+                      <tr className="border-b border-[var(--color-card-border)] bg-[rgba(255,255,255,0.02)]">
+                        <th className="px-4 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">User</th>
+                        <th className="w-28 px-3 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Role</th>
+                        <th className="w-36 px-3 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Credits</th>
+                        <th className="w-28 px-3 py-4 text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Joined</th>
+                        <th className="w-52 px-4 py-4 text-right text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.length === 0 ? (
+                         <tr><td colSpan={5} className="px-4 py-8 text-center text-zinc-500">No users found</td></tr>
+                      ) : filteredUsers.map((u) => (
+                        <tr key={u.id} className="border-b border-[var(--color-card-border)] last:border-0 hover:bg-white/[0.02] transition-colors">
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className={`w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold ${u.role === 'admin' ? 'bg-amber-500/15 text-amber-400' : 'bg-indigo-500/15 text-indigo-400'}`}>
+                                {u.full_name.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-white font-medium text-sm truncate">{u.full_name}</p>
+                                <p className="text-zinc-500 text-xs truncate" title={u.email}>{u.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-3 py-4">
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${u.role === 'admin' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' : 'bg-zinc-800 text-zinc-300 border border-zinc-700'}`}>
+                              {u.role === 'admin' ? <Crown className="w-3 h-3" /> : <User className="w-3 h-3" />}
+                              {u.role}
+                            </span>
+                          </td>
+                          <td className="px-3 py-4">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-white font-mono text-sm w-7 text-right">{u.credits}</span>
+                              <button
+                                onClick={() => handleCreditAdjust(u.id, 10)}
+                                disabled={actionLoading === `credits-${u.id}`}
+                                title="Give 10 credits"
+                                className="px-1.5 py-0.5 rounded text-[11px] font-bold border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 disabled:opacity-50 transition-colors"
+                              >+10</button>
+                              <button
+                                onClick={() => handleCreditAdjust(u.id, -10)}
+                                disabled={actionLoading === `credits-${u.id}`}
+                                title="Take back 10 credits"
+                                className="px-1.5 py-0.5 rounded text-[11px] font-bold border border-zinc-700 text-zinc-400 hover:bg-zinc-800 disabled:opacity-50 transition-colors"
+                              >-10</button>
+                            </div>
+                          </td>
+                          <td className="px-3 py-4 text-zinc-500 text-xs whitespace-nowrap">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
+                          <td className="px-4 py-4 text-right">
+                            {u.id !== user?.id ? (
+                              deleteConfirm === `u-${u.id}` ? (
+                                <div className="flex items-center justify-end gap-2">
+                                  <button onClick={() => handleDeleteUser(u.id)} disabled={actionLoading === `del-user-${u.id}`} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors">
+                                    Confirm
+                                  </button>
+                                  <button onClick={() => setDeleteConfirm(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">Cancel</button>
                                 </div>
-                                <span className="text-white font-medium text-sm">{u.full_name}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-zinc-400 text-sm">{u.email}</td>
-                            <td className="px-6 py-4">
-                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${u.role === 'admin' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' : 'bg-zinc-800 text-zinc-300 border border-zinc-700'}`}>
-                                {u.role === 'admin' ? <Crown className="w-3 h-3" /> : <User className="w-3 h-3" />}
-                                {u.role}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${u.plan_type === 'premium' ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'}`}>
-                                {u.plan_type}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-white font-mono text-sm w-8">{u.credits}</span>
-                                <button
-                                  onClick={() => handleCreditAdjust(u.id, 10)}
-                                  disabled={actionLoading === `credits-${u.id}`}
-                                  title="Give 10 credits"
-                                  className="px-2 py-0.5 rounded text-[11px] font-bold border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 disabled:opacity-50 transition-colors"
-                                >+10</button>
-                                <button
-                                  onClick={() => handleCreditAdjust(u.id, -10)}
-                                  disabled={actionLoading === `credits-${u.id}`}
-                                  title="Take back 10 credits"
-                                  className="px-2 py-0.5 rounded text-[11px] font-bold border border-zinc-700 text-zinc-400 hover:bg-zinc-800 disabled:opacity-50 transition-colors"
-                                >-10</button>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-zinc-500 text-sm">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
-                            <td className="px-6 py-4 text-right">
-                              {u.id !== user?.id ? (
-                                deleteConfirm === `u-${u.id}` ? (
-                                  <div className="flex items-center justify-end gap-2">
-                                    <button onClick={() => handleDeleteUser(u.id)} disabled={actionLoading === `del-user-${u.id}`} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors">
-                                      Confirm
-                                    </button>
-                                    <button onClick={() => setDeleteConfirm(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">Cancel</button>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center justify-end gap-2">
-                                    <button
-                                      onClick={() => handlePlanChange(u.id, u.plan_type === 'premium' ? 'free' : 'premium')}
-                                      disabled={actionLoading === `plan-${u.id}`}
-                                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors disabled:opacity-50 ${u.plan_type === 'premium' ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-800' : 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10'}`}
-                                    >
-                                      {actionLoading === `plan-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.plan_type === 'premium' ? 'Demote to Free' : 'Give Premium')}
-                                    </button>
-                                    <button
-                                      onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'user' : 'admin')}
-                                      disabled={actionLoading === `user-${u.id}`}
-                                      className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
-                                    >
-                                      {actionLoading === `user-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.role === 'admin' ? 'Remove Admin' : 'Make Admin')}
-                                    </button>
-                                    <button onClick={() => setDeleteConfirm(`u-${u.id}`)} className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors">
-                                      <Trash2 className="w-4 h-4" />
-                                    </button>
-                                  </div>
-                                )
                               ) : (
-                                <span className="text-xs text-zinc-500 italic pr-2">You</span>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => handleRoleChange(u.id, u.role === 'admin' ? 'user' : 'admin')}
+                                    disabled={actionLoading === `user-${u.id}`}
+                                    className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50 whitespace-nowrap"
+                                  >
+                                    {actionLoading === `user-${u.id}` ? <Loader2 className="w-3 h-3 animate-spin" /> : (u.role === 'admin' ? 'Remove Admin' : 'Make Admin')}
+                                  </button>
+                                  <button onClick={() => setDeleteConfirm(`u-${u.id}`)} title="Delete user" className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              )
+                            ) : (
+                              <span className="text-xs text-zinc-500 italic pr-2">You</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </Card>
               </div>
             )}
