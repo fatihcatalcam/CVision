@@ -174,3 +174,64 @@ def test_the_referral_endpoint_reports_code_and_payouts(
     assert body["reward"] == settings.CREDIT_REFERRAL
     # Only the invite that actually produced an analysis counts.
     assert body["rewarded_count"] == 1
+    # And both pending and paid signups are visible, so a zero payout can be
+    # told apart from a link nobody followed.
+    assert body["invited_count"] == 2
+
+
+def test_the_panel_separates_no_clicks_from_no_analyses(
+    client, make_user, auth_headers, db_session
+):
+    """A user whose link nobody has followed reports zero of both. The card
+    reads that as "nobody clicked" rather than "something is broken"."""
+    lonely = make_user(email="lonely@test.com")
+
+    body = client.get("/auth/me/referral", headers=auth_headers(lonely)).json()
+
+    assert body["invited_count"] == 0
+    assert body["rewarded_count"] == 0
+
+
+# ── the Google signup path ────────────────────────────────────────────────────
+
+def test_google_signup_records_the_inviter(client, make_user, db_session, monkeypatch):
+    """The bug this pins: only /auth/register read referral_code, so following
+    an invite link and then pressing "Continue with Google" - the easier of the
+    two buttons - dropped the referral silently. The inviter could never be paid
+    and the invite panel showed zero forever with nothing to explain it.
+    """
+    import requests
+
+    inviter = make_user(email="ginviter@test.com")
+    code = ReferralService.get_or_create_code(db_session, inviter)
+
+    class _FakeResponse:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "sub": "google-sub-12345",
+                "email": "ginvitee@test.com",
+                "email_verified": True,
+                "name": "Google Invitee",
+            }
+
+    # The endpoint does `import requests as _requests` inside the function, so
+    # the module attribute is what has to be patched - a name bound on the
+    # router module is never consulted.
+    monkeypatch.setattr(settings, "GOOGLE_CLIENT_ID", "test-client-id")
+    monkeypatch.setattr(requests, "get", lambda *a, **k: _FakeResponse())
+
+    resp = client.post(
+        "/auth/google",
+        json={
+            "access_token": "x" * 40,
+            "full_name": "Google Invitee",
+            "referral_code": code,
+        },
+    )
+
+    assert resp.status_code == 200, resp.text
+    invited = db_session.query(User).filter(User.email == "ginvitee@test.com").one()
+    assert invited.referred_by_id == inviter.id

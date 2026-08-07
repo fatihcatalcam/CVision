@@ -170,6 +170,11 @@ class ReferralResponse(BaseModel):
     code: str
     reward: int
     rewarded_count: int
+    # How many accounts arrived through the link at all. Without this the panel
+    # can only say "0 credits from 0 invites", which reads identically whether
+    # nobody clicked the link, three people signed up and have not analysed yet,
+    # or the reward is broken - and those need very different reactions.
+    invited_count: int
 
 
 @router.get(
@@ -193,6 +198,7 @@ def get_referral(
         code=ReferralService.get_or_create_code(db, current_user),
         reward=settings.CREDIT_REFERRAL,
         rewarded_count=ReferralService.count_rewarded(db, current_user),
+        invited_count=ReferralService.count_invited(db, current_user),
     )
 
 
@@ -384,6 +390,11 @@ def reset_password(request: Request, body: ResetPasswordRequest, db: Session = D
 class GoogleAuthRequest(BaseModel):
     access_token: str = Field(..., min_length=20, max_length=2048)
     full_name: str | None = Field(None, min_length=2, max_length=150)
+    # Only the email signup carried this, so anyone who followed an invite link
+    # and then chose "Continue with Google" - the easier of the two buttons -
+    # was recorded as having arrived on their own. The invite was lost at that
+    # click and the inviter could never be paid for it.
+    referral_code: str | None = Field(None, max_length=12)
 
 
 @router.post("/google", summary="Sign in or register with Google")
@@ -457,8 +468,14 @@ def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends
     # Same opening balance as an email signup. Without this a Google account
     # starts at zero credits and cannot run a single analysis.
     from app.services.credit_service import CreditService
+    from app.services.referral_service import ReferralService
 
     CreditService.open_account(db, new_user)
+
+    # And the same invite handling, for the same reason: a signup route that
+    # forgets who sent the visitor makes the whole referral scheme unreliable in
+    # a way nobody can see from the outside.
+    ReferralService.attach_inviter(db, new_user, body.referral_code)
 
     token = create_access_token(data={"sub": str(new_user.id)})
     return TokenResponse(access_token=token, user=UserResponse.model_validate(new_user))

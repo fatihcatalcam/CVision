@@ -116,3 +116,14 @@ class ReferralService:
             .filter(User.referred_by_id == user.id, User.referral_rewarded_at.isnot(None))
             .count()
         )
+
+    @staticmethod
+    def count_invited(db: Session, user: User) -> int:
+        """How many accounts arrived through this user's link, paid or not.
+
+        Shown next to count_rewarded so the difference between the two is
+        visible: signups that have not run their first analysis are the whole
+        explanation for a zero balance, and hiding them makes a working scheme
+        look broken.
+        """
+        return db.query(User).filter(User.referred_by_id == user.id).count()

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -30,10 +30,19 @@ function GoogleAuthButtonInner() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  // The invite code off /register?ref=CODE. Only the email form used to send
+  // this, so following an invite link and then pressing "Continue with Google"
+  // - the easier button - silently dropped the referral.
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get('ref') || undefined;
+
   const handleGoogleSuccess = async (accessToken: string) => {
     setIsLoading(true);
     try {
-      const res = await api.post('/auth/google', { access_token: accessToken });
+      const res = await api.post('/auth/google', {
+        access_token: accessToken,
+        referral_code: referralCode,
+      });
       if (res.data.status === 'needs_name') {
         setPendingToken(accessToken);
         setFullName(res.data.suggested_name ?? '');
@@ -69,6 +78,7 @@ function GoogleAuthButtonInner() {
       const res = await api.post('/auth/google', {
         access_token: pendingToken,
         full_name: fullName.trim(),
+        referral_code: referralCode,
       });
       login(res.data.access_token, res.data.user);
       const claimedId = await claimPendingAnalysis();

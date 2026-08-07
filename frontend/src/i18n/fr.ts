@@ -509,6 +509,9 @@ const fr = {
     copyFailed: 'Copie impossible — sélectionnez le lien manuellement',
     whenPaid: 'Les crédits arrivent quand votre invité termine sa première analyse de CV, pas à son inscription.',
     earned: 'Vous avez gagné {{credits}} crédits grâce à {{count}} invitations jusqu\'ici.',
+    noneYet: 'Personne ne s\'est encore inscrit via ce lien.',
+    pending_one: '{{count}} personne s\'est inscrite mais n\'a pas encore fait sa première analyse.',
+    pending_other: '{{count}} personnes se sont inscrites mais n\'ont pas encore fait leur première analyse.',
   },
 
   xray: {

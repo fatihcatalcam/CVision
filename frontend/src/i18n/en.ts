@@ -508,6 +508,9 @@ const en = {
     copyFailed: 'Could not copy — select the link manually',
     whenPaid: 'Credits arrive when your invitee finishes their first CV analysis, not when they sign up.',
     earned: 'You have earned {{credits}} credits from {{count}} invites so far.',
+    noneYet: 'Nobody has signed up through this link yet.',
+    pending_one: '{{count}} person has signed up but not run their first analysis yet.',
+    pending_other: '{{count}} people have signed up but not run their first analysis yet.',
   },
 
   xray: {

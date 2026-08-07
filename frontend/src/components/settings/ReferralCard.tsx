@@ -9,6 +9,7 @@ interface Referral {
   code: string;
   reward: number;
   rewarded_count: number;
+  invited_count: number;
 }
 
 /**
@@ -79,12 +80,33 @@ export function ReferralCard() {
         {t('referral.whenPaid')}
       </p>
 
-      <p className="text-sm text-[#111111] dark:text-[#e8e7e4] mt-4">
-        {t('referral.earned', {
-          count: referral.rewarded_count,
-          credits: referral.rewarded_count * referral.reward,
-        })}
-      </p>
+      {/* Three different situations used to render as the same "0 credits from
+          0 invites": nobody followed the link, people signed up but have not
+          analysed yet, or something is broken. Only the last one is worth
+          worrying about, so they are told apart here. */}
+      <div className="mt-4 pt-4 border-t border-[#EAEAEA] dark:border-white/[0.07]">
+        {referral.invited_count === 0 ? (
+          <p className="text-sm text-[#6B6A65] dark:text-[#908d89]">
+            {t('referral.noneYet')}
+          </p>
+        ) : (
+          <>
+            <p className="text-sm text-[#111111] dark:text-[#e8e7e4]">
+              {t('referral.earned', {
+                count: referral.rewarded_count,
+                credits: referral.rewarded_count * referral.reward,
+              })}
+            </p>
+            {referral.invited_count > referral.rewarded_count && (
+              <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mt-1">
+                {t('referral.pending', {
+                  count: referral.invited_count - referral.rewarded_count,
+                })}
+              </p>
+            )}
+          </>
+        )}
+      </div>
     </Card>
   );
 }

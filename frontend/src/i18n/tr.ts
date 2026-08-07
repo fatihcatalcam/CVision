@@ -508,6 +508,9 @@ const tr = {
     copyFailed: 'Kopyalanamadı, bağlantıyı elle seç',
     whenPaid: 'Krediler kayıt anında değil, davet ettiğin kişi ilk CV analizini tamamladığında hesabına geçer.',
     earned: 'Şimdiye kadar {{count}} davet karşılığı {{credits}} kredi kazandın.',
+    noneYet: 'Henüz kimse bu linkten kaydolmadı.',
+    pending_one: '{{count}} kişi kaydoldu ama ilk analizini yapmadı.',
+    pending_other: '{{count}} kişi kaydoldu ama henüz ilk analizini yapmadı.',
   },
 
   xray: {

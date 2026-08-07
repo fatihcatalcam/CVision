@@ -509,6 +509,9 @@ const de = {
     copyFailed: 'Kopieren fehlgeschlagen — markiere den Link manuell',
     whenPaid: 'Die Credits kommen an, wenn deine eingeladene Person ihre erste CV-Analyse abschließt, nicht bei der Registrierung.',
     earned: 'Du hast bisher {{credits}} Credits aus {{count}} Einladungen verdient.',
+    noneYet: 'Über diesen Link hat sich noch niemand angemeldet.',
+    pending_one: '{{count}} Person hat sich angemeldet, aber noch keine Analyse gemacht.',
+    pending_other: '{{count}} Personen haben sich angemeldet, aber noch keine Analyse gemacht.',
   },
 
   xray: {

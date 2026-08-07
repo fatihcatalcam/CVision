@@ -509,6 +509,9 @@ const es = {
     copyFailed: 'No se pudo copiar: selecciona el enlace manualmente',
     whenPaid: 'Los créditos llegan cuando tu invitado termina su primer análisis de CV, no cuando se registra.',
     earned: 'Has ganado {{credits}} créditos con {{count}} invitaciones hasta ahora.',
+    noneYet: 'Todavía nadie se ha registrado con este enlace.',
+    pending_one: '{{count}} persona se ha registrado pero aún no ha hecho su primer análisis.',
+    pending_other: '{{count}} personas se han registrado pero aún no han hecho su primer análisis.',
   },
 
   xray: {
