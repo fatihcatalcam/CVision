@@ -21,7 +21,19 @@ class CV(Base):
     file_path: Mapped[str] = mapped_column(String(500), nullable=False)
     file_type: Mapped[str] = mapped_column(String(10), nullable=False)  # "pdf" or "txt"
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)  # bytes
-    file_content: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True)  # raw bytes stored for persistence
+    # The raw upload, kept so files survive Render's ephemeral disk.
+    #
+    # Deferred, which is the whole point: three places actually read it (two
+    # download routes and the PDF viewer) but as an ordinary column it was
+    # fetched by EVERY query returning CV objects - the dashboard history, the
+    # user's CV list, the data export, the recovery sweep, and the HQ content
+    # list at 25 rows a page. A megabyte-sized blob crossed the network for
+    # screens that only ever show a filename, which is what put egress over the
+    # Supabase quota. Reading `cv.file_content` still works; it just costs a
+    # separate SELECT of that one column, on the paths that genuinely want it.
+    file_content: Mapped[bytes | None] = mapped_column(
+        LargeBinary, nullable=True, deferred=True
+    )
     extracted_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     target_domain: Mapped[str | None] = mapped_column(String(100), nullable=True)
     # The full report was paid for at upload time ("Pro analysis"). Carried on
