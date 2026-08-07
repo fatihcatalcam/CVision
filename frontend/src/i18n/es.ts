@@ -481,6 +481,7 @@ const es = {
     worth_one: 'Alrededor de {{count}} candidatura completa (análisis + informe completo + comparación + carta).',
     worth_other: 'Alrededor de {{count}} candidaturas completas (análisis + informe completo + comparación + carta).',
     perCredit: '{{price}} por crédito',
+    saving: 'Ahorra un {{percent}}%',
     buy: 'Comprar',
     notOnSale: 'Los paquetes de créditos aún no están a la venta.',
     earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',

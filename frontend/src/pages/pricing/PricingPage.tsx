@@ -5,7 +5,10 @@ import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
 import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
-import { ArrowLeft, Loader2, Coins, Shield, Lock, Gift } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield, Lock, Gift } from 'lucide-react';
+import {
+  ANALYSIS_COST, UNLOCK_COST, MATCH_COST, COVER_LETTER_COST,
+} from '../../constants/credits';
 
 /**
  * Credit packs. Replaces the monthly subscription page.
@@ -51,6 +54,12 @@ export function PricingPage() {
   // real search, small enough not to need thinking about.
   const featuredIndex = packs && packs.length === 3 ? 1 : -1;
 
+  // Per-credit cost of the smallest pack - the reference every other pack's
+  // saving is measured against. Packs arrive sorted smallest first.
+  const cheapest = packs?.[0];
+  const baseUnit =
+    cheapest && cheapest.price != null ? cheapest.price / cheapest.credits : null;
+
   return (
     <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#111110]">
       <div className="max-w-4xl mx-auto py-16 px-6">
@@ -71,10 +80,26 @@ export function PricingPage() {
         </div>
 
         {user && (
-          <p className="text-center text-sm text-[#6B6A65] dark:text-[#908d89] mb-10">
+          <p className="text-center text-sm text-[#6B6A65] dark:text-[#908d89] mb-8">
             {t('packs.currentBalance', { credits: user.credits })}
           </p>
         )}
+
+        {/* What a credit is. The packs quote a number of credits, which means
+            nothing on its own to someone seeing the page for the first time. */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10 py-3 px-5 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07]">
+          {[
+            { label: t('settings.credits.priceAnalysis'), cost: ANALYSIS_COST },
+            { label: t('settings.credits.pricePro'), cost: ANALYSIS_COST + UNLOCK_COST },
+            { label: t('settings.credits.priceMatch'), cost: MATCH_COST },
+            { label: t('settings.credits.priceCoverLetter'), cost: COVER_LETTER_COST },
+          ].map(({ label, cost }) => (
+            <span key={label} className="text-xs text-[#6B6A65] dark:text-[#908d89] whitespace-nowrap">
+              {label}{' '}
+              <span className="font-mono font-bold text-[#956400]">{cost}</span>
+            </span>
+          ))}
+        </div>
 
         {packs === null ? (
           <div className="flex justify-center py-16">
@@ -90,48 +115,59 @@ export function PricingPage() {
              neighbours and knock the row out of line. */
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
             {packs.map((pack, i) => {
+              const featured = i === featuredIndex;
               const price = formatPrice(pack, i18n.language);
-              // What one credit costs here, against the smallest pack. This is
-              // the only thing that makes a bigger pack visibly a better deal,
-              // and it is the reason the middle one gets the badge.
-              const perCredit = pack.price != null
-                ? formatPrice({ price: Math.round(pack.price / pack.credits), currency: pack.currency }, i18n.language)
+              // What one credit costs here. This is the only thing that makes a
+              // bigger pack visibly the better deal - the badge on the middle
+              // card was asserting it with no evidence on the page.
+              const unit = pack.price != null ? pack.price / pack.credits : null;
+              const perCredit = unit != null
+                ? formatPrice({ price: Math.round(unit), currency: pack.currency }, i18n.language)
                 : null;
+              // Measured against the smallest pack, which is the reference
+              // anyone compares to. Hidden under 5%, where it reads as noise.
+              const saving = unit != null && baseUnit != null && unit < baseUnit
+                ? Math.round((1 - unit / baseUnit) * 100)
+                : 0;
 
               return (
                 <div
                   key={pack.variant_id}
-                  className={`surface p-6 flex flex-col ${
-                    i === featuredIndex ? 'ring-2 ring-[#111111] dark:ring-[#e8e7e4]' : ''
+                  className={`relative rounded-2xl p-6 flex flex-col border transition-all ${
+                    featured
+                      ? 'bg-white dark:bg-[#1c1c1a] border-[#111111] dark:border-[#e8e7e4] shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] md:-mt-3 md:mb-3'
+                      : 'surface border-[#EAEAEA] dark:border-white/[0.07] hover:border-[#8A8985] dark:hover:border-white/[0.2]'
                   }`}
                 >
-                  {/* Reserved whether or not the badge is there, so all three
-                      cards start their content on the same line. */}
-                  <div className="h-6 mb-3">
-                    {i === featuredIndex && (
-                      <span className="px-2 py-0.5 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-[10px] font-bold uppercase tracking-wider">
-                        {t('packs.popular')}
+                  {featured && (
+                    <span className="absolute -top-2.5 left-6 px-2 py-0.5 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-[10px] font-bold uppercase tracking-wider">
+                      {t('packs.popular')}
+                    </span>
+                  )}
+
+                  <div className="flex items-baseline justify-between gap-2 mb-4">
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4]">
+                        {pack.credits}
+                      </span>
+                      <span className="text-sm text-[#6B6A65] dark:text-[#908d89]">
+                        {t('credits.unit')}
+                      </span>
+                    </span>
+                    {saving >= 5 && (
+                      <span className="px-2 py-0.5 rounded-full bg-[#EDF3EC] dark:bg-[#346538]/20 text-[#346538] dark:text-[#5a9b5e] text-[10px] font-bold whitespace-nowrap">
+                        {t('packs.saving', { percent: saving })}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 mb-3">
-                    <Coins className="w-4 h-4 text-[#956400]" />
-                    <span className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4]">
-                      {pack.credits}
-                    </span>
-                    <span className="text-sm text-[#6B6A65] dark:text-[#908d89]">
-                      {t('credits.unit')}
-                    </span>
-                  </div>
-
                   {price && (
-                    <div className="mb-3">
-                      <p className="text-2xl font-bold text-[#111111] dark:text-[#e8e7e4] leading-none">
+                    <div className="mb-4 pb-4 border-b border-[#EAEAEA] dark:border-white/[0.07]">
+                      <p className="text-[28px] leading-none font-bold text-[#111111] dark:text-[#e8e7e4]">
                         {price}
                       </p>
                       {perCredit && (
-                        <p className="text-[11px] text-[#6B6A65] dark:text-[#908d89] mt-1">
+                        <p className="text-[11px] text-[#6B6A65] dark:text-[#908d89] mt-1.5">
                           {t('packs.perCredit', { price: perCredit })}
                         </p>
                       )}
@@ -145,7 +181,11 @@ export function PricingPage() {
                   <button
                     onClick={() => buy(pack.variant_id)}
                     disabled={loadingVariant !== null}
-                    className="mt-auto w-full py-2.5 rounded-lg bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    className={`mt-auto w-full py-2.5 rounded-lg text-sm font-bold disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2 ${
+                      featured
+                        ? 'bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee]'
+                        : 'bg-transparent text-[#111111] dark:text-[#e8e7e4] border border-[#8A8985] dark:border-white/[0.36] hover:bg-[#F7F6F3] dark:hover:bg-[#272725]'
+                    }`}
                   >
                     {loadingVariant === pack.variant_id
                       ? <Loader2 className="w-4 h-4 animate-spin" />

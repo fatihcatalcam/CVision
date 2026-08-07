@@ -286,6 +286,26 @@ def _lemon_prices(variant_ids: list[str]) -> dict[str, dict]:
 
     try:
         with httpx.Client(timeout=10) as client:
+            # The amount is on the variant; the currency is not - it is a
+            # property of the store. Defaulting to USD here is what printed
+            # "$79.99" over prices that were set in lira.
+            currency = None
+            if settings.LEMONSQUEEZY_STORE_ID:
+                store = client.get(
+                    f"{_LEMON_API_BASE}/stores/{settings.LEMONSQUEEZY_STORE_ID}",
+                    headers=headers,
+                )
+                if store.status_code == 200:
+                    currency = (
+                        (store.json().get("data") or {}).get("attributes") or {}
+                    ).get("currency")
+
+            if not currency:
+                # No currency means no way to label the number. A bare amount
+                # with the wrong symbol is worse than no price at all.
+                logger.warning("Could not read the Lemon store currency; prices hidden")
+                return {}
+
             for variant_id in variant_ids:
                 resp = client.get(f"{_LEMON_API_BASE}/variants/{variant_id}", headers=headers)
                 if resp.status_code != 200:
@@ -302,10 +322,7 @@ def _lemon_prices(variant_ids: list[str]) -> dict[str, dict]:
                     logger.info("Lemon variant %s exposes no price attribute", variant_id)
                     continue
 
-                prices[str(variant_id)] = {
-                    "price": amount,
-                    "currency": attrs.get("currency") or "USD",
-                }
+                prices[str(variant_id)] = {"price": amount, "currency": currency}
     except httpx.HTTPError as exc:
         logger.warning("Could not reach Lemon Squeezy for prices: %s", exc)
         return _price_cache  # last known good, even if stale

@@ -480,6 +480,7 @@ const tr = {
     worth_one: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
     worth_other: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
     perCredit: 'Kredi başına {{price}}',
+    saving: '%{{percent}} tasarruf',
     buy: 'Satın al',
     notOnSale: 'Kredi paketleri henüz satışta değil.',
     earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',

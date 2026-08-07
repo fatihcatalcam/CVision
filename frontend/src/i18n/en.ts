@@ -480,6 +480,7 @@ const en = {
     worth_one: 'About {{count}} full application (analysis + full report + job match + cover letter).',
     worth_other: 'About {{count}} full applications (analysis + full report + job match + cover letter).',
     perCredit: '{{price}} per credit',
+    saving: 'Save {{percent}}%',
     buy: 'Buy',
     notOnSale: 'Credit packs are not on sale yet.',
     earnInstead: 'You still get free credits every week, and you can earn more by inviting a friend.',

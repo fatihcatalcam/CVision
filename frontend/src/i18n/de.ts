@@ -481,6 +481,7 @@ const de = {
     worth_one: 'Etwa {{count}} vollständige Bewerbung (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
     worth_other: 'Etwa {{count}} vollständige Bewerbungen (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
     perCredit: '{{price}} pro Credit',
+    saving: '{{percent}}% sparen',
     buy: 'Kaufen',
     notOnSale: 'Guthaben-Pakete sind noch nicht im Verkauf.',
     earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',
