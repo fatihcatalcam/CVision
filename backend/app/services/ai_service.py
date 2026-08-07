@@ -288,6 +288,24 @@ def _persona_for_domain(target_domain: str | None) -> str:
 OUTPUT_RULES = """OUTPUT RULES:
 1. Return EXACTLY 3 strengths and EXACTLY 3 weaknesses - no more, no less.
 2. Return 4 to 6 ai_suggestions.
+2b. COVERAGE - the suggestions must not all be the same suggestion.
+   At most TWO may be of the form "this bullet is vague / unquantified, rewrite
+   it". The others must attack different problems, and at least two `category`
+   values other than "experience" must appear across the set.
+   Angles to look at before settling for another bullet rewrite:
+     - ats: a section header, date format, column layout or embedded table the
+       parser will mangle, so the content never reaches a human at all
+     - skills: a capability the target role expects that this CV never states,
+       or one it states without any supporting evidence
+     - content: a summary that lists duties instead of positioning the
+       candidate for a role - or no summary section at all
+     - formatting: ordering and length; the strongest work buried on page two,
+       or a section that earns its space taking a third of page one
+     - experience: seniority framing - scope, ownership, who was influenced -
+       which is a different failure from a missing number
+   If this CV genuinely has one dominant problem, make that the highest-priority
+   suggestion and say it once, forcefully. Restating it four times in different
+   words is a failed output: the reader cannot tell what to fix first.
 3. Every `message` MUST reference SPECIFIC content from THIS CV (quote a phrase,
    reference a job title or company, mention a listed skill). Generic advice is a
    failed output.
@@ -357,6 +375,11 @@ EXAMPLE OF A GOOD SKILLS SUGGESTION:
   bracket placeholders for the candidate to fill in.
 
 SELF-CHECK BEFORE RESPONDING:
+- Are more than two of your suggestions making the same point about vague or
+  unquantified bullets? (If yes, replace the extras using the COVERAGE list -
+  this is the most common way this output goes wrong.)
+- Do at least two suggestions carry a category other than "experience"?
+  (If no, you have looked at only one part of the CV.)
 - Did each suggestion reference a SPECIFIC quote, section, skill, role, or
   company from the CV? (If no, rewrite the suggestion.)
 - Did you invent any number, percentage, team size, or metric not in the CV?

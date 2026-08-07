@@ -21,6 +21,7 @@ import { MatchResultCard } from '../../components/match/MatchResultCard';
 import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
 import { MATCH_COST } from '../../constants/credits';
+import { parseRewriteHint } from '../../utils/rewriteHint';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -118,11 +119,7 @@ function AISuggestionCard(
   const hint = suggestion.rewrite_hint?.trim() ?? '';
   const hasRewrite = hint.length > 5;
 
-  // Parse "Before: X â†’ After: Y"
-  const beforeMatch = hint.match(/before[:\s]+(.+?)(?=â†’|after:|$)/i);
-  const afterMatch  = hint.match(/(?:â†’|after[:\s]+)(.+)/i);
-  const beforeText  = beforeMatch?.[1]?.trim() ?? '';
-  const afterText   = afterMatch?.[1]?.trim()  ?? hint;
+  const { before: beforeText, after: afterText } = parseRewriteHint(hint);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(afterText || hint);
