@@ -72,6 +72,16 @@ SENIORITY_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Someone still in education, in all 5 UI languages (normalized text).
+STUDENT_PATTERN = re.compile(
+    r"\b(?:student|undergraduate|freshman|sophomore|senior\s+year"
+    r"|ogrenci\w*|lisans\s+ogrenci\w*"
+    r"|studentin|studierend\w*|studiere\b"
+    r"|estudiante|universitari[oa]"
+    r"|etudiant\w*)\b",
+    re.IGNORECASE,
+)
+
 
 def _line_context(text: str, pos: int) -> str:
     """The line containing `pos` plus the previous non-empty line."""
@@ -178,21 +188,51 @@ class ExperienceEvaluator(BaseAnalyzer):
         context.total_years_experience = total_years
         context.experience_entries = entries
 
-        # Score experience (geared towards intern/junior roles)
-        # 0 years = 0, 0.5 years = 40, 1 year = 60, 2+ years = 80, 4+ years = 100
-        if total_years <= 0:
-            context.experience_score = 0.0
-        elif total_years < 1:
-            context.experience_score = 40.0
-        elif total_years < 2:
-            context.experience_score = 60.0
-        elif total_years < 4:
-            context.experience_score = 80.0
+        # Still studying? An education range that has not ended, or the CV
+        # calling the candidate a student.
+        still_studying = bool(STUDENT_PATTERN.search(text)) or any(
+            e.startswith("Education period") and not e.rstrip(")").split("-")[-1].isdigit()
+            for e in entries
+        )
+        context.is_student = still_studying
+
+        # Scored against what is achievable at the candidate's stage.
+        #
+        # One flat curve topping out at "4+ years = 100" meant a student could
+        # not reach the ceiling however good the CV was: this product's audience
+        # is students and early-career candidates, so the component was scoring
+        # age rather than the CV. Meanwhile a mediocre CV from someone with five
+        # years collected full marks automatically. Two years of real work
+        # alongside a degree is exceptional for a student and now scores as such.
+        if still_studying:
+            if total_years <= 0:
+                # With no dated work, what counts is whether the CV shows built
+                # things at all. A student with three production projects is in
+                # a different position from one with an empty page, and scoring
+                # both the same would reward absence - the mistake this whole
+                # change is correcting, only inverted.
+                has_evidence = bool(context.detected_sections.get("projects"))
+                context.experience_score = 55.0 if has_evidence else 20.0
+            elif total_years < 1:
+                context.experience_score = 70.0   # an internship or placement
+            elif total_years < 2:
+                context.experience_score = 85.0
+            else:
+                context.experience_score = 100.0
         else:
-            context.experience_score = 100.0
+            if total_years <= 0:
+                context.experience_score = 0.0
+            elif total_years < 1:
+                context.experience_score = 40.0
+            elif total_years < 2:
+                context.experience_score = 60.0
+            elif total_years < 4:
+                context.experience_score = 80.0
+            else:
+                context.experience_score = 100.0
 
         logger.info(
-            f"Experience: ~{total_years} years, "
+            f"Experience: ~{total_years} years, student={still_studying}, "
             f"score={context.experience_score}%, "
             f"entries={len(entries)}"
         )

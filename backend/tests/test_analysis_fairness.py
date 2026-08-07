@@ -228,16 +228,32 @@ def test_german_sections_detected():
 
 
 def test_spanish_and_french_section_headers_detected():
+    """Header synonyms in es/fr are recognised.
+
+    Each heading carries a line of content: a section is a heading plus what is
+    under it, so a bare list of headings is deliberately not a complete CV. The
+    subject here is still the patterns, not the content rule.
+    """
     es = _detected_sections(
-        "Perfil\nExperiencia laboral\nFormación académica\n"
-        "Habilidades\nProyectos\nIdiomas\nReferencias"
+        "Perfil\nIngeniero de software con cinco años de experiencia.\n"
+        "Experiencia laboral\nDesarrollador backend en Acme, 2020-2024\n"
+        "Formación académica\nGrado en Ingeniería Informática, Madrid\n"
+        "Habilidades\nPython, Django, PostgreSQL, Docker\n"
+        "Proyectos\nPlataforma de reservas construida con Flask\n"
+        "Idiomas\nEspañol (nativo), Inglés (C1)\n"
+        "Referencias\nDisponibles a petición del empleador\n"
     )
     assert {"summary", "experience", "education", "skills", "projects",
             "languages", "references"} <= es
 
     fr = _detected_sections(
-        "Profil\nExpérience professionnelle\nFormation\n"
-        "Compétences\nProjets\nLangues\nRéférences"
+        "Profil\nIngénieur logiciel avec cinq ans d'expérience.\n"
+        "Expérience professionnelle\nDéveloppeur backend chez Acme, 2020-2024\n"
+        "Formation\nDiplôme en génie informatique, Paris\n"
+        "Compétences\nPython, Django, PostgreSQL, Docker\n"
+        "Projets\nPlateforme de réservation construite avec Flask\n"
+        "Langues\nFrançais (natif), Anglais (C1)\n"
+        "Références\nDisponibles sur demande de l'employeur\n"
     )
     assert {"summary", "experience", "education", "skills", "projects",
             "languages", "references"} <= fr

@@ -45,6 +45,9 @@ class AnalysisContext:
     # Experience evaluation
     total_years_experience: float = 0.0
     experience_entries: list[str] = field(default_factory=list)
+    # Still in education. Decides which curve the experience score is read
+    # against, so a student is not measured on a professional's timeline.
+    is_student: bool = False
 
     # Scores (0.0 to 100.0)
     completeness_score: float = 0.0

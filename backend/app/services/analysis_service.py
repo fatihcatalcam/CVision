@@ -19,6 +19,7 @@ from app.models.role_profile import RoleProfile
 from app.analysis.engine import AnalysisEngine
 from app.analysis.base_analyzer import AnalysisContext
 from app.analysis.layout_xray import analyze_layout
+from app.analysis.section_detector import SECTION_WEIGHTS
 from app.services.recommendation_service import RecommendationService
 from app.services.ai_service import (
     ai_enhance_analysis,
@@ -281,9 +282,14 @@ class AnalysisService:
                     extracted_skills=[
                         s["skill_name"] for s in context.extracted_skills
                     ],
+                    # Only sections worth having. This list is handed to the
+                    # model as "suggesting these is high-value", so an unweighted
+                    # section here would have it recommend adding exactly the
+                    # filler the completeness score just stopped paying for -
+                    # "References: available upon request".
                     missing_sections=[
                         name for name, found in context.detected_sections.items()
-                        if not found
+                        if not found and name in SECTION_WEIGHTS
                     ],
                 )
                 
