@@ -157,3 +157,35 @@ def test_an_admin_still_sees_everything(
     resp = client.get(f"/analysis/{encode_id(cv.id)}/results", headers=auth_headers(admin))
 
     assert resp.json()["ai_suggestions"][1]["is_locked"] is False
+
+
+# ── the report is open only if it was paid for ────────────────────────────────
+
+def test_a_normal_first_analysis_is_locked(make_user, make_cv, db_session):
+    """The regression this pins.
+
+    `is_first` used to unlock the report as a welcome perk, left over from the
+    weekly-quota days. Under credits that pays twice: signup already grants
+    exactly enough for one Pro analysis. So a new account picked Normal, was
+    charged 1 credit, and got the entire Pro report - which then became every
+    new user's idea of what Normal includes, and nobody had a reason to buy the
+    upgrade they had already been given.
+    """
+    from app.services.analysis_service import AnalysisService
+
+    user = make_user(email="firstnormal@test.com")
+    cv = make_cv(user, extracted_text="Some CV text", unlock_requested=False)
+
+    assert AnalysisService._is_users_first_analysis(cv, db_session) is True
+
+    row = _analysis(db_session, cv, unlocked=bool(cv.unlock_requested))
+    assert row.is_unlocked is False
+
+
+def test_a_pro_first_analysis_is_open(make_user, make_cv, db_session):
+    """Paying up front still buys the whole report on the very first one."""
+    user = make_user(email="firstpro@test.com")
+    cv = make_cv(user, extracted_text="Some CV text", unlock_requested=True)
+
+    row = _analysis(db_session, cv, unlocked=bool(cv.unlock_requested))
+    assert row.is_unlocked is True

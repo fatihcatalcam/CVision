@@ -171,3 +171,72 @@ def test_hashed_cv_id_is_present_on_failed_uploads_too(
     row = next(r for r in resp.json()["items"] if r["cv_filename"] == "image_only.pdf")
     assert row["id"] is None
     assert decode_id(row["cv_hash"]) == cv.id
+
+
+# ── the escape hatch stops at the admin's own reports ─────────────────────────
+
+def test_an_admin_sees_their_own_normal_report_locked(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    """The admin exemption used to apply to any report, including the admin's
+    own. That made the founder's account the one account that could never see
+    what a paying user sees, and it is how "Normal shows the whole Pro report"
+    went unnoticed - the person most likely to test the product was
+    structurally blind to the bug.
+    """
+    admin = make_user(email="selfadmin@test.com", role="admin")
+    cv = make_cv(admin)
+    row = _analysis(db_session, cv)
+    row.is_unlocked = False
+    row.ai_suggestions = [
+        {"category": "experience", "priority": "high", "message": "First", "rewrite_hint": ""},
+        {"category": "skills", "priority": "medium", "message": "Second", "rewrite_hint": ""},
+    ]
+    db_session.commit()
+
+    resp = client.get(f"/analysis/{encode_id(cv.id)}/results", headers=auth_headers(admin))
+
+    assert resp.status_code == 200
+    suggestions = resp.json()["ai_suggestions"]
+    assert suggestions[0]["is_locked"] is False       # the free one
+    assert suggestions[1]["is_locked"] is True        # and the rest are not
+
+
+def test_an_admin_still_sees_another_users_report_in_full(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    """The HQ review path is the reason the exemption exists; it must survive."""
+    owner = make_user(email="reviewed@test.com")
+    admin = make_user(email="reviewer@test.com", role="admin")
+    cv = make_cv(owner)
+    row = _analysis(db_session, cv)
+    row.is_unlocked = False
+    row.ai_suggestions = [
+        {"category": "experience", "priority": "high", "message": "First", "rewrite_hint": ""},
+        {"category": "skills", "priority": "medium", "message": "Second", "rewrite_hint": ""},
+    ]
+    db_session.commit()
+
+    resp = client.get(f"/analysis/{encode_id(cv.id)}/results", headers=auth_headers(admin))
+
+    assert resp.status_code == 200
+    assert [s["is_locked"] for s in resp.json()["ai_suggestions"]] == [False, False]
+
+
+def test_an_admin_who_paid_sees_their_own_report_in_full(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    """Nothing is taken away from an admin who bought the unlock."""
+    admin = make_user(email="paidadmin@test.com", role="admin")
+    cv = make_cv(admin)
+    row = _analysis(db_session, cv)
+    row.is_unlocked = True
+    row.ai_suggestions = [
+        {"category": "experience", "priority": "high", "message": "First", "rewrite_hint": ""},
+        {"category": "skills", "priority": "medium", "message": "Second", "rewrite_hint": ""},
+    ]
+    db_session.commit()
+
+    resp = client.get(f"/analysis/{encode_id(cv.id)}/results", headers=auth_headers(admin))
+
+    assert [s["is_locked"] for s in resp.json()["ai_suggestions"]] == [False, False]

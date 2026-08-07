@@ -165,10 +165,17 @@ class AnalysisService:
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 
         # Computed before the row is added, because adding it first would make
-        # the "does this user have any analysis yet" query answer itself.
+        # the "does this user have any analysis yet" query answer itself. Still
+        # needed for the invite reward below, which fires on a real analysis.
         is_first = AnalysisService._is_users_first_analysis(cv, db)
-        # Either the welcome perk, or the user paid for the full report up front.
-        unlocked = is_first or bool(cv.unlock_requested)
+
+        # The report is open only if it was paid for. `is_first` used to unlock
+        # it too - a welcome perk from the weekly-quota days - and that survived
+        # the switch to credits, where it double-pays: signup already grants
+        # exactly enough credits for one Pro analysis. So a new account chose
+        # Normal, was charged 1 credit, and got the whole Pro report anyway,
+        # which is every new user's first impression of what Normal includes.
+        unlocked = bool(cv.unlock_requested)
 
         # Persist analysis result
         analysis = AnalysisResult(

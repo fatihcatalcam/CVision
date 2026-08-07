@@ -227,11 +227,23 @@ def _build_analysis_response(analysis, current_user: User | None = None, force_l
     # rule a lapsed subscription silently re-locked results the user had already
     # paid for; unlocking is a purchase, so it sticks to what was bought.
     #
-    # Admins are never gated: the HQ panel links straight here to review a
-    # user's report, and a half-locked view defeats the point. The anonymous
-    # /try path passes force_locked with no user at all, so it is untouched.
-    is_admin = current_user is not None and current_user.role == "admin"
-    is_free = force_locked or (not is_admin and not analysis.is_unlocked)
+    # An admin is not gated on SOMEONE ELSE'S report: the HQ panel links
+    # straight here to review a user's analysis and a half-locked view defeats
+    # the point. On their own reports an admin pays like anyone else.
+    #
+    # It used to be any admin, on any report. That made the founder's account
+    # the one account that could never see what a paying user sees - which is
+    # how "Normal shows the whole Pro report" survived unnoticed. The person
+    # most likely to test the product was structurally blind to the bug.
+    #
+    # The anonymous /try path passes force_locked with no user at all.
+    owner_id = analysis.cv.user_id if analysis.cv else None
+    is_admin_reviewing = (
+        current_user is not None
+        and current_user.role == "admin"
+        and owner_id != current_user.id
+    )
+    is_free = force_locked or (not is_admin_reviewing and not analysis.is_unlocked)
 
     # Parse AI suggestions from JSON if present
     raw_ai_suggestions = analysis.ai_suggestions or []
