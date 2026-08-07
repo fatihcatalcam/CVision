@@ -289,10 +289,14 @@ OUTPUT_RULES = """OUTPUT RULES:
 1. Return EXACTLY 3 strengths and EXACTLY 3 weaknesses - no more, no less.
 2. Return 4 to 6 ai_suggestions.
 2b. COVERAGE - the suggestions must not all be the same suggestion.
-   At most TWO may be of the form "this bullet is vague / unquantified, rewrite
-   it". The others must attack different problems, and at least two `category`
-   values other than "experience" must appear across the set.
-   Angles to look at before settling for another bullet rewrite:
+   a) Each suggestion must target a DIFFERENT line or section of the CV. Never
+      two suggestions about the same bullet.
+   b) Classify each suggestion by its FIX, not its wording. "Add a metric",
+      "needs operational proof", "impact is vague", "should show adoption
+      evidence", "lacks scale" are all the SAME fix: add numbers/evidence.
+      At most TWO suggestions in the set may have that fix, however phrased.
+   c) At least two `category` values other than "experience" must appear.
+   Angles to look at before settling for another add-numbers suggestion:
      - ats: a section header, date format, column layout or embedded table the
        parser will mangle, so the content never reaches a human at all
      - skills: a capability the target role expects that this CV never states,
@@ -318,10 +322,24 @@ OUTPUT_RULES = """OUTPUT RULES:
      - "[X%]" for percentages
      - "[N users]" / "[N customers]" for scale
      - "[Xms -> Yms]" for performance deltas
+   Use at most TWO placeholders per rewrite. An After line that is mostly blanks
+   is a form, not a rewrite - the candidate cannot paste it into their CV.
+5b. RESPECT NUMBERS THE CV ALREADY HAS. A bullet that states a real figure
+   ("by 20%", "4 production apps", "100 concurrent sessions") is ALREADY
+   quantified: never describe it as vague or unquantified, and if you rewrite it
+   for another reason, carry every existing figure into the After VERBATIM.
+   Replacing a real "20%" with "[X%]" deletes the candidate's strongest
+   evidence and hands back a blank - that is the single worst thing this output
+   can do.
 6. Use strong action verbs: Led, Architected, Shipped, Reduced, Owned, Scaled,
    Launched, Delivered, Drove, Built.
    BANNED weak verbs: "worked on", "helped with", "responsible for",
    "assisted with", "participated in", "involved with".
+   In Turkish CVs the same failure appears as passive nominalization -
+   "...destek verilmesi", "...yürütülmesi", "sorumlu olmak", "görev almak",
+   "katkı sağlamak" - sentences with no owner. Flag these and rewrite them as
+   first-person active verbs: "Yürüttüm", "Yönettim", "Kurdum", "Azalttım",
+   "Başlattım", "Geliştirdim".
 7. Strengths and weaknesses must each be one tight sentence under 25 words.
 8. Write executive_summary, strengths, weaknesses, and suggestion messages in
    the SAME language as the CV (detected language is provided in the user prompt).
@@ -332,6 +350,11 @@ OUTPUT_RULES = """OUTPUT RULES:
    Marketing & Communications; Finance & Accounting; Healthcare & Biomedical;
    Environmental & Energy; Cybersecurity; UX / UI Design; Other.
    Use 'Other' only when none of these fields fit.
+10. THE REPORT MUST NOT ARGUE WITH ITSELF. A line you quote in `strengths` may
+   not also be the target of a weakness or suggestion, and vice versa - decide
+   which side each line belongs on before writing either. Praising a bullet's
+   metrics and then flagging the same bullet as lacking impact destroys the
+   report's credibility in one read.
 
 EXAMPLE OF A BAD SUGGESTION (do NOT do this):
   {
@@ -363,29 +386,39 @@ EXAMPLE OF A GOOD FORMATTING SUGGESTION (no rewrite_hint needed):
   from the CV, not fabricated), explains the underlying mechanism (F-pattern
   scanning), and leaves rewrite_hint empty because the fix is structural.
 
-EXAMPLE OF A GOOD SKILLS SUGGESTION:
+EXAMPLE OF A GOOD SUGGESTION ON A NON-TECHNICAL CV (Turkish CV, so the output
+is Turkish - most CVs here are office, public-sector, retail or student CVs,
+and the software examples above must NOT pull your suggestions toward
+software vocabulary):
   {
-    "category": "skills",
+    "category": "experience",
     "priority": "high",
-    "message": "You list 'leadership' and 'communication' as skills but show no evidence in your bullets - no team size, no cross-functional projects, no presentations. Soft skills without proof read as filler.",
-    "rewrite_hint": "Before: 'Skills: leadership, communication' -> After: Move these into experience bullets, e.g. 'Led [N]-engineer team through [project]' and 'Presented [outcome] to [audience size].'"
+    "message": "'Evrak takip süreçlerine aktif destek verilmesi' cümlesi edilgen ve sahipsiz - işi senin yaptığın belli değil. Ofis ve kamu CV'lerinde bu kalıp, deneyimi görünmez kılan bir numaralı hatadır.",
+    "rewrite_hint": "Before: 'Evrak takip süreçlerine aktif destek verilmesi' -> After: 'Günlük [N] evrakın takibini yürüttüm ve dosyaların gecikmeden işlenmesini sağladım.'"
   }
-  Why good: cites two specific listed skills, names a concrete failure pattern
-  (claims without evidence), and the rewrite_hint shows HOW to fix it with
-  bracket placeholders for the candidate to fill in.
+  Why good: quotes the CV, names the passive-voice failure in the CV's own
+  language, and the rewrite gives the work an owner ("yürüttüm") with one
+  bracket placeholder for the number the CV does not state.
 
 SELF-CHECK BEFORE RESPONDING:
-- Are more than two of your suggestions making the same point about vague or
-  unquantified bullets? (If yes, replace the extras using the COVERAGE list -
-  this is the most common way this output goes wrong.)
+- Group your suggestions by their FIX. Do more than two boil down to "add
+  numbers/evidence", however worded? (If yes, replace the extras using the
+  COVERAGE list - this is the most common way this output goes wrong.)
+- Do any two suggestions target the same bullet or line? (If yes, keep the
+  stronger one and find a different target for the other.)
 - Do at least two suggestions carry a category other than "experience"?
   (If no, you have looked at only one part of the CV.)
+- Does any rewrite drop or replace a figure the CV already states? (If yes,
+  restore the original number verbatim - see rule 5b.)
+- Does any line appear both as a strength and as a weakness/suggestion?
+  (If yes, pick one side - see rule 10.)
 - Did each suggestion reference a SPECIFIC quote, section, skill, role, or
   company from the CV? (If no, rewrite the suggestion.)
 - Did you invent any number, percentage, team size, or metric not in the CV?
   (If yes, replace with a [bracketed] placeholder.)
 - Are strengths and weaknesses exactly 3 items each? (If no, fix the count.)
-- Did you use any banned weak verb? (If yes, swap for a strong action verb.)
+- Did you use any banned weak verb - including Turkish passive nominalizations?
+  (If yes, swap for a first-person action verb.)
 - Are you writing in the same language as the CV? (If no, switch.)"""
 
 
