@@ -315,13 +315,11 @@ const es = {
 
 
     success: {
-      badge: 'MEMBRESÍA PRO ACTIVA',
-      title: '¡Pago exitoso!',
-      body: 'Tu membresía CVision Pro ha sido activada. Ahora puedes disfrutar de todas las funciones premium.',
-      f1: '50 análisis de CV / semana',
-      f2: 'Pack completo de sugerencias IA (todo desbloqueado)',
-      f3: 'Reescritura de puntos con IA',
-      f4: 'Informe completo de análisis IA',
+      title: 'Pago recibido',
+      body: 'Tus créditos están en tu cuenta. No caducan: úsalos cuando quieras.',
+      added: 'Esta compra añadió {{count}} créditos.',
+      waiting: 'Procesando tus créditos, tarda unos segundos...',
+      slow: 'Si el saldo aún no ha cambiado, lo hará en unos minutos. Escríbenos si no ocurre.',
       cta: 'Ir al panel',
     },
 
@@ -480,7 +478,9 @@ const es = {
     subtitle: 'Compra lo que necesites y úsalo cuando quieras. Sin suscripción ni cargo mensual: los créditos comprados no caducan.',
     currentBalance: 'Tu saldo: {{credits}} créditos',
     popular: 'Más elegido',
-    worth: 'Unas {{applications}} candidaturas completas (análisis + informe completo + comparación con la oferta + carta de presentación).',
+    worth_one: 'Alrededor de {{count}} candidatura completa (análisis + informe completo + comparación + carta).',
+    worth_other: 'Alrededor de {{count}} candidaturas completas (análisis + informe completo + comparación + carta).',
+    perCredit: '{{price}} por crédito',
     buy: 'Comprar',
     notOnSale: 'Los paquetes de créditos aún no están a la venta.',
     earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',

@@ -253,19 +253,91 @@ class CheckoutRequest(BaseModel):
     variant_id: str
 
 
+# Prices fetched from Lemon Squeezy, with the moment they were fetched. Lemon
+# is the only place a price is authoritative, but asking it on every page load
+# would put a third-party outage in the way of our own pricing page.
+_price_cache: dict[str, dict] = {}
+_price_cache_at: datetime | None = None
+_PRICE_TTL = timedelta(minutes=10)
+
+
+def _lemon_prices(variant_ids: list[str]) -> dict[str, dict]:
+    """{variant_id: {"price": <minor units>, "currency": "TRY"}} for what we can read.
+
+    Deliberately partial and deliberately silent: a variant we cannot price is
+    left out and the page renders it without one. Showing no price is a smaller
+    problem than showing a number the checkout then contradicts, and a Lemon
+    outage must not take our own pricing page down with it.
+    """
+    global _price_cache_at
+
+    now = datetime.now(timezone.utc)
+    if _price_cache_at and now - _price_cache_at < _PRICE_TTL:
+        return _price_cache
+
+    if not settings.LEMONSQUEEZY_API_KEY:
+        return {}
+
+    prices: dict[str, dict] = {}
+    headers = {
+        "Authorization": f"Bearer {settings.LEMONSQUEEZY_API_KEY}",
+        "Accept": "application/vnd.api+json",
+    }
+
+    try:
+        with httpx.Client(timeout=10) as client:
+            for variant_id in variant_ids:
+                resp = client.get(f"{_LEMON_API_BASE}/variants/{variant_id}", headers=headers)
+                if resp.status_code != 200:
+                    logger.warning(
+                        "Lemon variant %s returned %s while pricing", variant_id, resp.status_code
+                    )
+                    continue
+
+                attrs = (resp.json().get("data") or {}).get("attributes") or {}
+                amount = attrs.get("price")
+                if not isinstance(amount, int) or amount <= 0:
+                    # Newer Lemon products keep the amount on a separate price
+                    # record. Nothing to show rather than something invented.
+                    logger.info("Lemon variant %s exposes no price attribute", variant_id)
+                    continue
+
+                prices[str(variant_id)] = {
+                    "price": amount,
+                    "currency": attrs.get("currency") or "USD",
+                }
+    except httpx.HTTPError as exc:
+        logger.warning("Could not reach Lemon Squeezy for prices: %s", exc)
+        return _price_cache  # last known good, even if stale
+
+    _price_cache.clear()
+    _price_cache.update(prices)
+    _price_cache_at = now
+    return prices
+
+
 @router.get("/packs", summary="Credit packs available for purchase")
 def list_credit_packs():
-    """What is on sale, smallest first.
+    """What is on sale, smallest first, with the price where we can read it.
 
-    The price is not here on purpose: it lives on the Lemon Squeezy variant, so
-    quoting it from our config would give us a second copy to keep in sync and a
-    way to show a number the checkout then contradicts.
+    The price comes from Lemon rather than from our own config so there is only
+    one number: a second copy in an env var is a copy that can disagree with the
+    checkout, and the checkout is the one that takes the money.
     """
     packs = settings.credit_packs
+    ordered = sorted(packs.items(), key=lambda kv: kv[1])
+    prices = _lemon_prices([variant for variant, _ in ordered])
+
     return {
         "packs": [
-            {"variant_id": variant, "credits": credits}
-            for variant, credits in sorted(packs.items(), key=lambda kv: kv[1])
+            {
+                "variant_id": variant,
+                "credits": credits,
+                # None when Lemon could not be read; the card renders priceless.
+                "price": prices.get(variant, {}).get("price"),
+                "currency": prices.get(variant, {}).get("currency"),
+            }
+            for variant, credits in ordered
         ]
     }
 

@@ -315,14 +315,12 @@ const en = {
 
 
     success: {
-      badge: 'PRO MEMBERSHIP ACTIVE',
-      title: 'Payment Successful!',
-      body: 'Your CVision Pro membership has been activated. You can now enjoy all premium features.',
-      f1: '50 CV analyses / week',
-      f2: 'Full AI suggestion pack (all unlocked)',
-      f3: 'AI bullet point rewriting',
-      f4: 'Full AI summary & analysis report',
-      cta: 'Go to Dashboard',
+      title: 'Payment received',
+      body: 'Your credits are in your account. They never expire - spend them whenever.',
+      added: '{{count}} credits added by this purchase.',
+      waiting: 'Processing your credits, this takes a few seconds...',
+      slow: 'If the balance has not moved yet it will within a few minutes. Write to us if it does not.',
+      cta: 'Go to dashboard',
     },
 
     pricing: {
@@ -479,7 +477,9 @@ const en = {
     subtitle: 'Buy what you need, use it whenever. No subscription, no monthly charge — purchased credits never expire.',
     currentBalance: 'Your balance: {{credits}} credits',
     popular: 'Most popular',
-    worth: 'Around {{applications}} full applications (analysis + full report + job match + cover letter).',
+    worth_one: 'About {{count}} full application (analysis + full report + job match + cover letter).',
+    worth_other: 'About {{count}} full applications (analysis + full report + job match + cover letter).',
+    perCredit: '{{price}} per credit',
     buy: 'Buy',
     notOnSale: 'Credit packs are not on sale yet.',
     earnInstead: 'You still get free credits every week, and you can earn more by inviting a friend.',

@@ -315,13 +315,11 @@ const de = {
 
 
     success: {
-      badge: 'PRO-MITGLIEDSCHAFT AKTIV',
-      title: 'Zahlung erfolgreich!',
-      body: 'Deine CVision Pro-Mitgliedschaft wurde aktiviert. Du kannst jetzt alle Premium-Funktionen nutzen.',
-      f1: '50 Lebenslauf-Analysen / Woche',
-      f2: 'Vollständiges KI-Vorschlagspaket (alles freigeschaltet)',
-      f3: 'KI-Umschreibung von Aufzählungspunkten',
-      f4: 'Vollständiger KI-Zusammenfassungs- und Analysebericht',
+      title: 'Zahlung erhalten',
+      body: 'Deine Credits sind auf deinem Konto. Sie verfallen nicht - gib sie aus, wann du willst.',
+      added: 'Dieser Kauf hat {{count}} Credits hinzugefügt.',
+      waiting: 'Deine Credits werden verarbeitet, das dauert ein paar Sekunden...',
+      slow: 'Falls sich das Guthaben noch nicht geändert hat, passiert das in wenigen Minuten. Melde dich sonst bei uns.',
       cta: 'Zum Dashboard',
     },
 
@@ -480,7 +478,9 @@ const de = {
     subtitle: 'Kaufe, was du brauchst, und nutze es, wann du willst. Kein Abo, keine monatliche Zahlung — gekaufte Credits verfallen nie.',
     currentBalance: 'Dein Guthaben: {{credits}} Credits',
     popular: 'Am beliebtesten',
-    worth: 'Etwa {{applications}} vollständige Bewerbungen (Analyse + vollständiger Bericht + Stellenabgleich + Anschreiben).',
+    worth_one: 'Etwa {{count}} vollständige Bewerbung (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
+    worth_other: 'Etwa {{count}} vollständige Bewerbungen (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
+    perCredit: '{{price}} pro Credit',
     buy: 'Kaufen',
     notOnSale: 'Guthaben-Pakete sind noch nicht im Verkauf.',
     earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',

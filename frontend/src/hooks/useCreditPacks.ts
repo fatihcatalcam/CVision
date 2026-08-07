@@ -4,6 +4,32 @@ import api from '../services/api';
 export interface CreditPack {
   variant_id: string;
   credits: number;
+  /** Minor units (kuruş/cents). Null when Lemon Squeezy could not be read. */
+  price: number | null;
+  currency: string | null;
+}
+
+/**
+ * Formats a Lemon Squeezy amount for display.
+ *
+ * Returns null rather than a placeholder when there is no price: a card with no
+ * number is honest, "—" or "0" is not.
+ */
+export function formatPrice(
+  pack: Pick<CreditPack, 'price' | 'currency'>,
+  locale: string,
+): string | null {
+  if (pack.price == null || !pack.currency) return null;
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: pack.currency,
+      maximumFractionDigits: 2,
+    }).format(pack.price / 100);
+  } catch {
+    // An unexpected currency code must not blank the whole page.
+    return `${(pack.price / 100).toFixed(2)} ${pack.currency}`;
+  }
 }
 
 /**

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
-import { useCreditPacks } from '../../hooks/useCreditPacks';
+import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
 import { ArrowLeft, Loader2, Coins, Shield, Lock, Gift } from 'lucide-react';
 
@@ -15,12 +15,13 @@ import { ArrowLeft, Loader2, Coins, Shield, Lock, Gift } from 'lucide-react';
  * stop needing in six weeks. A pack is bought once, used up, and bought again
  * the next time they are looking.
  *
- * No prices are rendered here. They live on the Lemon Squeezy variant, and the
- * checkout is the only place that can state them without risking a number the
- * next screen contradicts.
+ * Prices come from Lemon Squeezy rather than from our own config, so there is
+ * exactly one number: a copy in an env var is a copy that can disagree with the
+ * checkout, and the checkout is the one that takes the money. A pack Lemon
+ * cannot be read for renders without a price rather than with a guess.
  */
 export function PricingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -85,45 +86,74 @@ export function PricingPage() {
             <p className="text-sm text-[#6B6A65] dark:text-[#908d89]">{t('packs.earnInstead')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {packs.map((pack, i) => (
-              <div
-                key={pack.variant_id}
-                className={`surface p-6 flex flex-col ${
-                  i === featuredIndex ? 'ring-2 ring-[#111111] dark:ring-[#e8e7e4]' : ''
-                }`}
-              >
-                {i === featuredIndex && (
-                  <span className="self-start mb-3 px-2 py-0.5 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-[10px] font-bold uppercase tracking-wider">
-                    {t('packs.popular')}
-                  </span>
-                )}
+          /* items-stretch so a card with a badge does not stand taller than its
+             neighbours and knock the row out of line. */
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+            {packs.map((pack, i) => {
+              const price = formatPrice(pack, i18n.language);
+              // What one credit costs here, against the smallest pack. This is
+              // the only thing that makes a bigger pack visibly a better deal,
+              // and it is the reason the middle one gets the badge.
+              const perCredit = pack.price != null
+                ? formatPrice({ price: Math.round(pack.price / pack.credits), currency: pack.currency }, i18n.language)
+                : null;
 
-                <div className="flex items-center gap-2 mb-1">
-                  <Coins className="w-4 h-4 text-[#956400]" />
-                  <span className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4]">
-                    {pack.credits}
-                  </span>
-                  <span className="text-sm text-[#6B6A65] dark:text-[#908d89]">
-                    {t('credits.unit')}
-                  </span>
-                </div>
-
-                <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-6 leading-relaxed">
-                  {t('packs.worth', { applications: Math.floor(pack.credits / 6) })}
-                </p>
-
-                <button
-                  onClick={() => buy(pack.variant_id)}
-                  disabled={loadingVariant !== null}
-                  className="mt-auto w-full py-2.5 rounded-lg bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              return (
+                <div
+                  key={pack.variant_id}
+                  className={`surface p-6 flex flex-col ${
+                    i === featuredIndex ? 'ring-2 ring-[#111111] dark:ring-[#e8e7e4]' : ''
+                  }`}
                 >
-                  {loadingVariant === pack.variant_id
-                    ? <Loader2 className="w-4 h-4 animate-spin" />
-                    : t('packs.buy')}
-                </button>
-              </div>
-            ))}
+                  {/* Reserved whether or not the badge is there, so all three
+                      cards start their content on the same line. */}
+                  <div className="h-6 mb-3">
+                    {i === featuredIndex && (
+                      <span className="px-2 py-0.5 rounded-full bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-[10px] font-bold uppercase tracking-wider">
+                        {t('packs.popular')}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <Coins className="w-4 h-4 text-[#956400]" />
+                    <span className="text-3xl font-black text-[#111111] dark:text-[#e8e7e4]">
+                      {pack.credits}
+                    </span>
+                    <span className="text-sm text-[#6B6A65] dark:text-[#908d89]">
+                      {t('credits.unit')}
+                    </span>
+                  </div>
+
+                  {price && (
+                    <div className="mb-3">
+                      <p className="text-2xl font-bold text-[#111111] dark:text-[#e8e7e4] leading-none">
+                        {price}
+                      </p>
+                      {perCredit && (
+                        <p className="text-[11px] text-[#6B6A65] dark:text-[#908d89] mt-1">
+                          {t('packs.perCredit', { price: perCredit })}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-6 leading-relaxed">
+                    {t('packs.worth', { count: Math.floor(pack.credits / 6) })}
+                  </p>
+
+                  <button
+                    onClick={() => buy(pack.variant_id)}
+                    disabled={loadingVariant !== null}
+                    className="mt-auto w-full py-2.5 rounded-lg bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-bold hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  >
+                    {loadingVariant === pack.variant_id
+                      ? <Loader2 className="w-4 h-4 animate-spin" />
+                      : t('packs.buy')}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
 

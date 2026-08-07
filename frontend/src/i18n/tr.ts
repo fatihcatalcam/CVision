@@ -315,14 +315,12 @@ const tr = {
 
 
     success: {
-      badge: 'PRO ÜYELİK AKTİF',
-      title: 'Ödeme Başarılı!',
-      body: 'CVision Pro üyeliğiniz aktif edildi. Artık tüm premium özelliklerden yararlanabilirsiniz.',
-      f1: '50 CV analizi / hafta',
-      f2: 'Tam AI öneri paketi (tümü açık)',
-      f3: 'AI bullet point yeniden yazma',
-      f4: 'Tam AI özet & analiz raporu',
-      cta: "Dashboard'a Git",
+      title: 'Ödemen alındı',
+      body: 'Kredilerin hesabına eklendi. Süresi dolmaz, istediğin zaman harcarsın.',
+      added: 'Bu satın almayla {{count}} kredi eklendi.',
+      waiting: 'Krediler işleniyor, birkaç saniye sürebilir...',
+      slow: 'Bakiye henüz güncellenmediyse birkaç dakika içinde görünecek. Sorun sürerse bize yaz.',
+      cta: 'Dashboard\'a git',
     },
 
     pricing: {
@@ -479,7 +477,9 @@ const tr = {
     subtitle: 'İhtiyacın kadar al, istediğin zaman kullan. Abonelik yok, aylık ödeme yok — krediler son kullanma tarihi taşımaz.',
     currentBalance: 'Şu anki bakiyen: {{credits}} kredi',
     popular: 'En çok tercih edilen',
-    worth: 'Yaklaşık {{applications}} tam başvuruya yeter (analiz + tam rapor + ilan eşleştirme + ön yazı).',
+    worth_one: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
+    worth_other: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
+    perCredit: 'Kredi başına {{price}}',
     buy: 'Satın al',
     notOnSale: 'Kredi paketleri henüz satışta değil.',
     earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',
