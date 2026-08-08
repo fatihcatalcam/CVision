@@ -65,11 +65,18 @@ export function SuggestionList({ suggestions, activeSuggestionId, onSelectSugges
           >
             <div className="mt-0.5">{icon}</div>
             <div className="flex-1">
-              <p className={`text-sm leading-relaxed ${isActive ? 'text-white' : 'text-[#111111]'}`}>
+              {/* One colour pair for both states. It used to be white when
+                  selected and #111111 otherwise, with no dark variant on
+                  either - so each theme hid one of them: in dark mode the
+                  unselected rows were #111111 text on a #111110 page, and in
+                  light mode the selected row was white on a 10%-tint
+                  background. Selection is already carried by the ring and
+                  border; it does not need to repaint the text. */}
+              <p className="text-sm leading-relaxed text-[#111111] dark:text-[#e8e7e4]">
                 {suggestion.message}
               </p>
               <div className="flex items-center justify-between mt-2">
-                <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 bg-black/20 px-2 py-0.5 rounded">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-[#6B6A65] dark:text-[#908d89] bg-[#F1F1EF] dark:bg-white/[0.06] px-2 py-0.5 rounded">
                   {suggestion.category}
                 </span>
                 {hasSnippets && (

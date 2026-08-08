@@ -179,7 +179,7 @@ export function HistoryPage() {
               </div>
               <div>
                 <p className="text-xs text-[#6B6A65] font-medium">{s.label}</p>
-                <p className="text-xl font-black text-[#111111] stat-number">{s.value}</p>
+                <p className="text-xl font-black text-[#111111] dark:text-[#e8e7e4] stat-number">{s.value}</p>
               </div>
             </Card>
           ))}

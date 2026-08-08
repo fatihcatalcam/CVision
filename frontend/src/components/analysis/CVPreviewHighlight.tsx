@@ -73,7 +73,7 @@ export function CVPreviewHighlight({ cvId, extractedText, activeSnippets }: CVPr
   return (
     <Card className="h-full max-h-[800px] overflow-y-auto border-[#EAEAEA] bg-white backdrop-blur-md sticky top-6">
       <div className="border-b border-[#EAEAEA] pb-4 mb-4 flex justify-between items-center sticky top-0 bg-white z-20">
-        <h3 className="text-lg font-bold text-[#111111] flex items-center gap-2">
+        <h3 className="text-lg font-bold text-[#111111] dark:text-[#e8e7e4] flex items-center gap-2">
           <svg className="w-5 h-5 text-[#1B3A6B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>

@@ -126,7 +126,7 @@ export function PDFViewerModal({
               </svg>
             </div>
             <div>
-              <h2 className="text-[#111111] font-bold text-lg">Original CV Document</h2>
+              <h2 className="text-[#111111] dark:text-[#e8e7e4] font-bold text-lg">Original CV Document</h2>
               <p className="text-[#666666] text-xs">
                 {subtitle ?? 'Press ESC or click outside to close'}
               </p>
