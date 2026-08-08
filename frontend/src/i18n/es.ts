@@ -718,6 +718,7 @@ const es = {
     unlockF2: 'Palabras clave que faltan para tu puesto',
     unlockF3: 'Consejos de reescritura con IA',
     unlockTitle: 'Esto es solo el comienzo',
+    freeBadge: '100% GRATIS',
     lockedItem: 'Sugerencia personalizada',
     freeNote: 'Ver el resto es totalmente gratis: solo crea una cuenta, sin tarjeta de crédito.',
     unlockBody: 'Regístrate gratis para desbloquear tu informe completo: todas las sugerencias de IA, palabras clave que faltan y consejos de reescritura.',

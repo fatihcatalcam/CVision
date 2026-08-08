@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import api from '../../services/api';
-import { Shield, Settings, LogOut, Plus, Sparkles } from 'lucide-react';
+import { Shield, Settings, LogOut, Plus } from 'lucide-react';
 import { ScoreHeroCard } from '../../components/dashboard/ScoreHeroCard';
 import { CareerInsightCard } from '../../components/dashboard/CareerInsightCard';
 import { NextStepCard } from '../../components/dashboard/NextStepCard';
@@ -124,11 +124,11 @@ export function DashboardPage() {
               {user?.full_name}
             </h1>
           </div>
-          {user?.plan_type === 'premium' && (
-            <span className="ml-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-2.5 h-2.5" /> {t('dashboard.proBadge')}
-            </span>
-          )}
+          {/* A "Pro" badge used to sit here for plan_type === 'premium'. The
+              plan stopped deciding anything when credits arrived, so the badge
+              announced a status that buys nothing - and its translation key was
+              removed with the rest of the subscription copy, leaving the raw
+              "dashboard.proBadge" on screen for anyone still flagged premium. */}
         </div>
 
         <div className="flex items-center gap-2">
