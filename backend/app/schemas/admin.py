@@ -53,6 +53,9 @@ class AdminOverviewResponse(BaseModel):
     charset_loss_count: int
     score_distribution: ScoreDistribution
     top_domains: List[DomainStat]
+    # What the AI read the CVs as, against what users picked from the dropdown.
+    # Empty until analyses run with detected_domain stored.
+    detected_domains: List[DomainStat]
     daily_activity: List[DailyActivity]
     recent_activities: List["RecentActivity"]
 

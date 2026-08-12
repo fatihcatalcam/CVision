@@ -106,7 +106,9 @@ def get_overview(db: Session = Depends(get_db)):
     ).count()
     high = db.query(AnalysisResult).filter(AnalysisResult.overall_score >= 80).count()
 
-    # Top domains (top 6)
+    # Top domains (top 6) - what the user SELECTED. "Other" is the uploader's
+    # pre-selected value, so this chart largely measures how many people leave
+    # the dropdown alone.
     domain_rows = (
         db.query(CV.target_domain, func.count(CV.id))
         .filter(CV.target_domain.isnot(None))
@@ -116,6 +118,20 @@ def get_overview(db: Session = Depends(get_db)):
         .all()
     )
     top_domains = [DomainStat(domain=d or "Unknown", count=c) for d, c in domain_rows]
+
+    # And what the AI read the CVs as. Side by side these answer a question
+    # neither can alone: if the detected side spreads across real fields, the
+    # domain list is fine and the default is the problem; if it is also mostly
+    # "Other", the list genuinely does not cover the people showing up.
+    detected_rows = (
+        db.query(AnalysisResult.detected_domain, func.count(AnalysisResult.id))
+        .filter(AnalysisResult.detected_domain.isnot(None))
+        .group_by(AnalysisResult.detected_domain)
+        .order_by(func.count(AnalysisResult.id).desc())
+        .limit(6)
+        .all()
+    )
+    detected_domains = [DomainStat(domain=d, count=c) for d, c in detected_rows]
 
     # Daily activity last 14 days
     recent_analyses = db.query(AnalysisResult.created_at).filter(
@@ -183,6 +199,7 @@ def get_overview(db: Session = Depends(get_db)):
         charset_loss_count=charset_loss_count,
         score_distribution=ScoreDistribution(low=low, medium=medium, high=high),
         top_domains=top_domains,
+        detected_domains=detected_domains,
         daily_activity=daily_activity,
         recent_activities=activities[:10],
     )
@@ -397,6 +414,94 @@ def get_user_credit_ledger(
         }
         for r in rows
     ]
+
+
+@router.get(
+    "/export/analyses.csv",
+    summary="Every analysis as CSV (Admin)",
+    dependencies=[Depends(require_admin)],
+)
+def export_analyses_csv(db: Session = Depends(get_db)):
+    """One row per upload, for looking at the data somewhere other than here.
+
+    The panel answers the questions it was built to answer. This is for the
+    ones it was not: which domains actually show up, where scores cluster, how
+    the selected domain compares to what the AI read, whether failures follow a
+    pattern. A spreadsheet is a better tool for that than any chart shipped in
+    advance.
+
+    Driven by CV so failed uploads appear too - they are usually the
+    interesting rows. No CV text and no PDF: this is for counting, and a file
+    full of people's CVs is not something to hand around casually.
+    """
+    import csv
+    import io
+
+    from fastapi.responses import StreamingResponse
+
+    rows = (
+        db.query(CV)
+        .order_by(CV.uploaded_at.desc(), CV.id.desc())
+        .all()
+    )
+
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow([
+        "cv_id", "uploaded_at", "status",
+        "user_id", "user_email", "is_anonymous",
+        "filename", "file_type", "file_size_bytes",
+        "selected_domain", "detected_domain", "domain_left_at_default",
+        "unlock_requested", "report_unlocked",
+        "overall_score", "ats_score", "keyword_score",
+        "completeness_score", "experience_score",
+        "ai_enhanced", "suggestion_count", "top_role",
+    ])
+
+    for cv in rows:
+        a = cv.analysis_result
+        owner = cv.owner
+        role = ""
+        if a and a.career_recommendations:
+            role = a.career_recommendations[0].role_profile.title
+
+        writer.writerow([
+            cv.id,
+            cv.uploaded_at.isoformat() if cv.uploaded_at else "",
+            cv.status,
+            cv.user_id or "",
+            owner.email if owner else "",
+            "yes" if owner is None else "no",
+            cv.original_filename,
+            cv.file_type,
+            cv.file_size,
+            cv.target_domain or "",
+            (a.detected_domain if a else "") or "",
+            # The uploader pre-selects "Other", so this column separates a real
+            # choice from an untouched dropdown - the difference between "our
+            # domain list is short" and "nobody uses the dropdown".
+            "yes" if (cv.target_domain or "Other") == "Other" else "no",
+            "yes" if cv.unlock_requested else "no",
+            "yes" if (a and a.is_unlocked) else "no",
+            a.overall_score if a else "",
+            a.ats_score if a else "",
+            a.keyword_score if a else "",
+            a.completeness_score if a else "",
+            a.experience_score if a else "",
+            "yes" if (a and a.ai_enhanced) else "no",
+            len(a.ai_suggestions or []) if a else 0,
+            role,
+        ])
+
+    buffer.seek(0)
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f'attachment; filename="cvision-analyses-{stamp}.csv"'
+        },
+    )
 
 
 @router.get(

@@ -321,6 +321,14 @@ class AnalysisService:
                     # regenerate career recommendations within that domain
                     # instead of matching against every profile in the system.
                     detected = (ai_result.get("detected_domain") or "").strip()
+
+                    # Persist it whatever the user selected. It used to be read
+                    # here and dropped, so the field that says what CVs really
+                    # are was recomputed and discarded on every analysis - and
+                    # the HQ chart was left plotting the dropdown default.
+                    if detected in KNOWN_DOMAINS:
+                        analysis.detected_domain = detected
+
                     if (
                         (not cv.target_domain or cv.target_domain == "Other")
                         and detected in KNOWN_DOMAINS

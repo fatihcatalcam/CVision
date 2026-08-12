@@ -6,7 +6,7 @@ import api from '../../services/api';
 import {
   Users, FileText, Activity, TrendingUp, Shield, Trash2,
   ArrowLeft, Crown, User, Loader2, LayoutDashboard, Database,
-  Eye, Search, ScrollText, Coins, X, Gift, AlertTriangle, Type,
+  Eye, Search, ScrollText, Coins, X, Gift, AlertTriangle, Type, Download,
 } from 'lucide-react';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 
@@ -34,6 +34,7 @@ interface AdminOverview {
   charset_loss_count: number;
   score_distribution: { low: number; medium: number; high: number };
   top_domains: { domain: string; count: number }[];
+  detected_domains: { domain: string; count: number }[];
   daily_activity: { date: string; analyses: number; signups: number }[];
   recent_activities: RecentActivity[];
 }
@@ -250,6 +251,7 @@ export function AdminPage() {
   const [viewingCvId, setViewingCvId] = useState<number | null>(null);
   const [viewingCvMeta, setViewingCvMeta] = useState<{ filename: string; user: string } | null>(null);
   const [ledgerFor, setLedgerFor] = useState<UserItem | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   // Search / Filters / paging.
   //
@@ -358,6 +360,28 @@ export function AdminPage() {
     }
   };
 
+  /**
+   * The export goes through the api client, not a plain link: the endpoint is
+   * admin-only and an <a href> carries no Authorization header, so it would
+   * come back 403 with nothing to show for it.
+   */
+  const handleExportCsv = async () => {
+    setExporting(true);
+    try {
+      const res = await api.get('/hq-portal/export/analyses.csv', { responseType: 'blob' });
+      const url = URL.createObjectURL(new Blob([res.data], { type: 'text/csv' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cvision-analyses-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Export failed');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const handleViewCV = async (cvId: number, filename: string, userName: string) => {
     setViewingCvMeta({ filename, user: userName });
     setViewingCvId(cvId);
@@ -371,9 +395,16 @@ export function AdminPage() {
     { name: 'High (≥80)', value: overview.score_distribution.high, fill: '#10b981' },
   ] : [];
 
+  const shorten = (name: string) => (name.length > 18 ? name.slice(0, 16) + '…' : name);
+
   const domainChartData = (overview?.top_domains || []).map(d => ({
-    name: d.domain.length > 20 ? d.domain.slice(0, 18) + '…' : d.domain,
-    count: d.count,
+    name: shorten(d.domain), count: d.count,
+  }));
+
+  // What the AI read the CVs as. Empty until analyses run with the detected
+  // domain stored, which is why the card says so rather than showing nothing.
+  const detectedChartData = (overview?.detected_domains || []).map(d => ({
+    name: shorten(d.domain), count: d.count,
   }));
 
 
@@ -659,23 +690,58 @@ export function AdminPage() {
 
                 {/* Row 3 - Top Domains + Activity Feed */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Two charts, not one. The left is what people PICKED, and
+                      the uploader pre-selects "Other" - so on its own it cannot
+                      tell "nobody touches the dropdown" from "our domain list
+                      is too short". The right is what the AI read the CVs as,
+                      which separates them. */}
                   <Card className="col-span-1 lg:col-span-2 p-6 flex flex-col">
-                    <h2 className="text-sm font-bold text-zinc-300 mb-5">Top Domains</h2>
-                    {domainChartData.length === 0 ? (
-                      <div className="flex-1 flex items-center justify-center text-zinc-500 text-sm">No domain data yet</div>
-                    ) : (
-                      <div className="flex-1 min-h-[200px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={domainChartData} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
-                            <XAxis type="number" stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                            <YAxis type="category" dataKey="name" stroke="#52525b" tick={{ fill: '#71717a', fontSize: 10 }} axisLine={false} tickLine={false} width={120} />
-                            <Tooltip contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '12px' }} />
-                            <Bar dataKey="count" fill="#6366f1" radius={[0, 4, 4, 0]} maxBarSize={24} name="Analyses" />
-                          </BarChart>
-                        </ResponsiveContainer>
+                    <div className="flex items-start justify-between mb-5">
+                      <div>
+                        <h2 className="text-sm font-bold text-zinc-300">Domains</h2>
+                        <p className="text-[11px] text-zinc-500 mt-0.5">
+                          What users selected vs what the AI read the CV as
+                        </p>
                       </div>
-                    )}
+                      <button
+                        onClick={handleExportCsv}
+                        disabled={exporting}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-card-border)] text-zinc-300 hover:bg-zinc-800 disabled:opacity-50 transition-colors whitespace-nowrap"
+                      >
+                        {exporting
+                          ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          : <Download className="w-3.5 h-3.5" />}
+                        Export CSV
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                      {([
+                        { label: 'Selected by user', data: domainChartData, fill: '#6366f1' },
+                        { label: 'Detected by AI', data: detectedChartData, fill: '#10b981' },
+                      ]).map(({ label, data, fill }) => (
+                        <div key={label} className="flex flex-col">
+                          <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">{label}</p>
+                          {data.length === 0 ? (
+                            <div className="flex-1 flex items-center justify-center text-zinc-600 text-xs min-h-[180px]">
+                              {label === 'Detected by AI' ? 'Collected from new analyses onward' : 'No domain data yet'}
+                            </div>
+                          ) : (
+                            <div className="flex-1 min-h-[180px]">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={data} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
+                                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" horizontal={false} />
+                                  <XAxis type="number" stroke="#52525b" tick={{ fill: '#52525b', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                  <YAxis type="category" dataKey="name" stroke="#52525b" tick={{ fill: '#71717a', fontSize: 9 }} axisLine={false} tickLine={false} width={100} />
+                                  <Tooltip contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', fontSize: '12px' }} />
+                                  <Bar dataKey="count" fill={fill} radius={[0, 4, 4, 0]} maxBarSize={20} name="CVs" />
+                                </BarChart>
+                              </ResponsiveContainer>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </Card>
 
                   {/* Activity Feed */}

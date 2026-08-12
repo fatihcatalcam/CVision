@@ -5,7 +5,7 @@ Maps to FR8, FR9, FR20.
 """
 
 from datetime import datetime
-from sqlalchemy import Integer, Float, Text, DateTime, ForeignKey, JSON, Boolean, func
+from sqlalchemy import Integer, Float, String, Text, DateTime, ForeignKey, JSON, Boolean, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -40,6 +40,14 @@ class AnalysisResult(Base):
     ai_summary: Mapped[str | None] = mapped_column(Text, nullable=True)  # AI executive summary
     ai_suggestions: Mapped[list | None] = mapped_column(JSON, nullable=True)  # [{category, priority, message, rewrite_hint}]
     ai_enhanced: Mapped[bool] = mapped_column(Integer, nullable=False, default=0)  # 1 if AI ran successfully
+
+    # What the AI read this CV as, judged from its content rather than the
+    # user's dropdown. Kept because the HQ chart plots the SELECTED domain and
+    # "Other" is the pre-selected value - so a chart full of "Other" cannot tell
+    # "nobody touches the dropdown" apart from "our domain list is too short",
+    # and those need opposite fixes. Null on analyses from before this was
+    # stored, and whenever the AI is unavailable.
+    detected_domain: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     # ATS X-Ray layout analysis - see app/analysis/layout_xray.py for the
     # JSON contract. Null on legacy rows; {"available": False} on TXT uploads.
