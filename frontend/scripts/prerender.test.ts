@@ -56,6 +56,37 @@ describe('the build actually runs the prerender step', () => {
   });
 });
 
+describe('vercel.json', () => {
+  // Vercel validates this file against a closed schema and REJECTS the whole
+  // deploy on an unknown key. A "//" key added as a comment - JSON has none -
+  // failed the build, so a batch of SEO fixes sat unshipped while the live site
+  // still served every old value. Nothing local caught it: the file is valid
+  // JSON and no test read it.
+  const ALLOWED = new Set([
+    'buildCommand', 'cleanUrls', 'crons', 'devCommand', 'framework', 'functions',
+    'git', 'github', 'headers', 'images', 'ignoreCommand', 'installCommand',
+    'outputDirectory', 'public', 'redirects', 'regions', 'rewrites',
+    'trailingSlash',
+  ]);
+
+  it('uses only keys Vercel accepts', () => {
+    const config = JSON.parse(read('vercel.json'));
+    const unknown = Object.keys(config).filter((k) => !ALLOWED.has(k));
+
+    expect(
+      unknown,
+      `Vercel rejects the deploy on unknown top-level keys. JSON has no ` +
+        `comments - put the explanation in the commit message: ${unknown.join(', ')}`,
+    ).toEqual([]);
+  });
+
+  it('normalises trailing slashes', () => {
+    // /try/ and /try both answered 200 with no redirect, which is two URLs for
+    // one page as far as a crawler is concerned.
+    expect(JSON.parse(read('vercel.json')).trailingSlash).toBe(false);
+  });
+});
+
 describe('FAQ structured data', () => {
   it('is generated from the strings the homepage renders', () => {
     const json = faqJsonLd();

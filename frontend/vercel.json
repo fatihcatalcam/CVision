@@ -1,5 +1,4 @@
 {
-  "//": "trailingSlash:false makes /try/ redirect (308) to /try instead of serving the same page at both URLs. Vercel also answered /TRY with a 200, and this normalises that too - every extra spelling of a URL is a separate page to a crawler.",
   "trailingSlash": false,
   "rewrites": [
     {
