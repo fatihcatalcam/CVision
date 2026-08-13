@@ -469,6 +469,15 @@ _LANG_KEYWORDS: dict[str, list[str]] = {
         "diplome", "objectif", "projets", "emploi", "parcours",
         "developpe", "realise", "a propos", "maitrise",
     ],
+    "az": [
+        # Azerbaijani, normalized (the schwa folds to e). Chosen to be
+        # distinctive against Turkish, which is close enough that shared words
+        # would make the two indistinguishable: tr says deneyim/egitim/beceri
+        # where az says tecrube/tehsil/bacariq.
+        "tecrube", "tehsil", "bacariq", "haqqimda", "layihe", "vezife",
+        "telebe", "ixtisas", "nailiyyet", "fealiyyet", "muessise",
+        "sehadetname", "azerbaycan", "hazirda", "bakalavr",
+    ],
     "en": [
         "experience", "education", "skills", "summary", "university",
         "projects", "languages", "employment", "degree", "professional",
@@ -478,15 +487,20 @@ _LANG_KEYWORDS: dict[str, list[str]] = {
 
 LANGUAGE_NAMES: dict[str, str] = {
     "en": "English", "tr": "Turkish", "es": "Spanish",
-    "de": "German", "fr": "French",
+    "de": "German", "fr": "French", "az": "Azerbaijani",
 }
 
 
 def detect_language(text: str) -> str:
     """
-    Heuristically detect the CV's primary language across the five
-    supported UI languages. Returns 'en', 'tr', 'es', 'de' or 'fr'
-    (defaults to 'en' when the signal is weak).
+    Heuristically detect the CV's primary language. Returns one of
+    'en', 'tr', 'es', 'de', 'fr', 'az' - defaulting to 'en' when the
+    signal is weak.
+
+    Azerbaijani is scored separately from Turkish rather than folded into
+    it. They are close, but an Azerbaijani CV answered in Turkish reads as
+    a mistake to the person holding it, and the two differ exactly where a
+    CV does its work: tecrube/tehsil/bacariq against deneyim/egitim/beceri.
     """
     from app.analysis.text_utils import normalize_text
 

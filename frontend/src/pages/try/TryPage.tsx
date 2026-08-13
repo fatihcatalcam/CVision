@@ -121,7 +121,11 @@ export function TryPage() {
           <div>
             <h1 className="font-sans text-3xl tracking-tight mb-2" style={{ color: 'var(--color-foreground)' }}>{t('try.heading')}</h1>
             <p className="text-base mb-8" style={{ color: 'var(--color-muted)' }}>{t('try.sub')}</p>
-            <CVUploader anonymous onUploadSuccess={handleUploaded} />
+            <CVUploader
+              anonymous
+              onUploadSuccess={handleUploaded}
+              onLimitReached={() => navigate('/register?from=try-limit')}
+            />
 
             {/* Below the uploader so it never delays the action, but present in
                 the DOM (and in the prerendered HTML) so this page has something

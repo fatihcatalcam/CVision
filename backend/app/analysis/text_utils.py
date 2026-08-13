@@ -14,6 +14,12 @@ import unicodedata
 # explicit fold. Turkish dotless ı is the critical one.
 _SPECIAL_FOLDS = str.maketrans({
     "ı": "i",   # Turkish dotless i (U+0131) — not NFD-decomposable
+    # Azerbaijani schwa (U+0259). Same class of problem as the dotless i and
+    # just as decisive: it is the most common letter in Azerbaijani, appearing
+    # in "təhsil", "təcrübə", "bacarıqlar", "dillər". Without this fold every
+    # ASCII pattern missed, so an Azerbaijani CV scored 5% completeness with
+    # seven of its eight sections invisible.
+    "ə": "e",
     "ß": "ss",  # German sharp s
     "æ": "ae",
     "œ": "oe",

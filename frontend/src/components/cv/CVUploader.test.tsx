@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { CVUploader } from './CVUploader';
 
 /**
@@ -42,14 +42,55 @@ describe('CVUploader tier choice', () => {
     expect(screen.getByText('uploader.tier.cost:3')).toBeInTheDocument();
   });
 
-  it('starts on Normal, so nobody is charged 3 by simply not choosing', () => {
+  it('starts on Pro, and both prices are on screen before anything is spent', () => {
+    // Deliberate change of default. Normal was preselected and almost nobody
+    // moved off it, then unlocked afterwards anyway - the same 3 credits in two
+    // steps with a locked page in between. A default that charges more is only
+    // defensible while the price is visible without looking for it, so this
+    // asserts the two together: the selection AND the cost beside it.
     render(<CVUploader onUploadSuccess={() => {}} />);
 
     const normal = screen.getByText('uploader.tier.normalTitle').closest('button');
     const pro = screen.getByText('uploader.tier.proTitle').closest('button');
 
-    expect(normal).toHaveAttribute('aria-pressed', 'true');
-    expect(pro).toHaveAttribute('aria-pressed', 'false');
+    expect(pro).toHaveAttribute('aria-pressed', 'true');
+    expect(normal).toHaveAttribute('aria-pressed', 'false');
+
+    expect(screen.getByText('uploader.tier.cost:1')).toBeInTheDocument();
+    expect(screen.getByText('uploader.tier.cost:3')).toBeInTheDocument();
+  });
+
+  it('lets one click take you back to Normal', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event');
+    render(<CVUploader onUploadSuccess={() => {}} />);
+
+    await userEvent.click(screen.getByText('uploader.tier.normalTitle'));
+
+    expect(screen.getByText('uploader.tier.normalTitle').closest('button'))
+      .toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('sends the visitor to signup when the free try is used up', async () => {
+    // A 429 used to raise a toast and leave them on a page whose only button
+    // would keep failing. The caller decides where they go; /try sends them to
+    // the signup that removes the limit.
+    const { default: userEvent } = await import('@testing-library/user-event');
+    const api = (await import('../../services/api')).default as any;
+    api.post.mockRejectedValueOnce({ response: { status: 429 } });
+    const onLimitReached = vi.fn();
+
+    render(
+      <CVUploader anonymous onUploadSuccess={() => {}} onLimitReached={onLimitReached} />,
+    );
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await userEvent.upload(
+      input,
+      new File(['x'], 'cv.pdf', { type: 'application/pdf' }),
+    );
+    await userEvent.click(screen.getByText('uploader.analyzeButton'));
+
+    await waitFor(() => expect(onLimitReached).toHaveBeenCalled());
   });
 
   it('hides the choice on the anonymous /try flow, which has no balance', () => {

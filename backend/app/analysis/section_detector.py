@@ -14,7 +14,8 @@ logger = logging.getLogger("cvision.analysis.section_detector")
 # Section definitions: section_name -> list of keyword patterns.
 # Matched against context.text_normalized (lowercase, diacritics folded to
 # ASCII — see text_utils.normalize_text), so patterns are written in ASCII.
-# Covers all five UI languages: en / tr / es / de / fr.
+# Covers en / tr / es / de / fr / az. Azerbaijani works because its schwa
+# folds to 'e' in normalize_text, so 'tehsil' is what the pattern sees.
 # Turkish is agglutinative — suffix-tolerant stems (\w*) are used so
 # "deneyim", "deneyimi", "deneyimlerim" all match. German section titles are
 # often compounds ("Berufserfahrung"), so those stems are left-unanchored.
@@ -35,6 +36,9 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\buniversitat\w*", r"\babschluss\w*", r"\babitur\b",
         # fr
         r"\bformation\w*", r"\bdiplome\w*", r"\blicence\b", r"\becole\b",
+        # az (schwa folds to e: tehsil, ali tehsil)
+        r"\btehsil\w*", r"\bmekteb\w*", r"\bbakalavr\w*",
+        r"\bmagistr\w*", r"\bixtisas\w*",
     ],
     "experience": [
         # en
@@ -51,6 +55,9 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\btatigkeit\w*",
         # fr ("experience" already covered by en after normalization)
         r"\bprofessionnel\w*", r"\bemploi\w*", r"\bstage\b", r"\bparcours\b",
+        # az
+        r"\bemek\s*faaliyyet\w*", r"\bis\s*yer\w*",
+        r"\bvezife\w*", r"\bcalismis\w*",
     ],
     "skills": [
         # en
@@ -64,6 +71,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\bkenntnisse\b", r"\bfahigkeiten\b", r"\bkompetenzen\b",
         # fr
         r"\bcompetences?\b", r"\bsavoir[-\s]faire\b", r"\boutils\b",
+        # az
+        r"\bbacariq\w*", r"\bkeyfiyyet\w*",
     ],
     "projects": [
         # en
@@ -77,6 +86,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\bprojekte?\b",
         # fr
         r"\bprojets?\b",
+        # az
+        r"\blayihe\w*",
     ],
     "certifications": [
         # en (also covers fr "certification(s)" via prefix)
@@ -88,6 +99,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\bcertificacion\w*", r"\bcertificados?\b",
         # de
         r"\bzertifi\w*", r"\bweiterbildung\w*",
+        # az ("sertifikat" already covered by tr)
+        r"\bsehadetname\w*", r"\bnailiyyet\w*",
     ],
     "summary": [
         # en
@@ -102,6 +115,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\buber\s*mich\b",
         # fr
         r"\ba\s*propos\b", r"\bobjectif\w*",
+        # az (haqqimda with a q, unlike the Turkish hakkimda)
+        r"\bhaqqimda\b", r"\bozum\s*haqqinda\b", r"\bqisa\s*melumat\b",
     ],
     "languages": [
         # en
@@ -115,6 +130,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         r"\bsprach\w*",
         # fr
         r"\blangues?\b",
+        # az ("diller" already covered by tr)
+        r"\bxarici\s*dil\w*", r"\bdil\s*bilik\w*",
     ],
     "references": [
         # en
@@ -126,6 +143,8 @@ SECTION_PATTERNS: dict[str, list[str]] = {
         # de
         r"\breferenzen\b",
         # fr covered by en "references" after normalization (références)
+        # az
+        r"\bistinad\w*", r"\bzemanet\w*",
     ],
 }
 

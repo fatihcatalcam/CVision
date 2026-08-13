@@ -42,9 +42,19 @@ interface CVUploaderProps {
   embedded?: boolean;
   /** When true, uploads via the public /try flow (no auth) and returns a session token. */
   anonymous?: boolean;
+  /**
+   * The anonymous daily allowance is used up (HTTP 429).
+   *
+   * Only the /try flow can hit this, and the toast alone left the visitor on a
+   * page whose one button would keep failing. The caller decides where they go
+   * next - which for /try is the signup that removes the limit.
+   */
+  onLimitReached?: () => void;
 }
 
-export function CVUploader({ onUploadSuccess, embedded = false, anonymous = false }: CVUploaderProps) {
+export function CVUploader({
+  onUploadSuccess, embedded = false, anonymous = false, onLimitReached,
+}: CVUploaderProps) {
   const { t, i18n } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -54,7 +64,13 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
   // Both routes exist because the report can also be unlocked afterwards - this
   // is the same 3 credits, just decided up front by someone who already knows
   // they want the whole thing.
-  const [tier, setTier] = useState<'normal' | 'pro'>('normal');
+  //
+  // Pro is preselected. Normal was the default and almost nobody moved off it,
+  // then unlocked the report afterwards anyway - the same 3 credits spent in
+  // two steps, with a locked page in between. A default that charges more has
+  // to be honest about it, so the price sits on the card AND on the button
+  // ("Analyse my CV - 3 credits"), and switching back is one click.
+  const [tier, setTier] = useState<'normal' | 'pro'>('pro');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (f: File): boolean => {
@@ -106,9 +122,13 @@ export function CVUploader({ onUploadSuccess, embedded = false, anonymous = fals
         onUploadSuccess(response.data.id);
       }
     } catch (error: any) {
-      // Anonymous daily limit reached → nudge to sign up instead of "try again".
+      // Anonymous daily limit reached. Saying so and leaving the visitor on a
+      // page whose only button now fails is a dead end; the toast survives the
+      // navigation (Toaster lives at the app root), so they arrive at signup
+      // still reading why.
       if (anonymous && error.response?.status === 429) {
         toast.error(t('try.rateLimited'));
+        onLimitReached?.();
       } else {
         toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
       }

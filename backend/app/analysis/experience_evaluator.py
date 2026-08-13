@@ -29,6 +29,8 @@ YEARS_PATTERN = re.compile(
 # heute/aktuell, actualidad/presente/actual, aujourd'hui.
 _PRESENT_WORDS = (
     r"present|current|now|today|devam|gunumuz|halen|guncel|suan"
+    # az: davam edir / hazirda / hal-hazirda
+    r"|davam|hazirda"
     r"|heute|aktuell|actualidad|presente|actual|aujourd"
 )
 
@@ -54,14 +56,15 @@ EDUCATION_CONTEXT_PATTERN = re.compile(
     r"|\blise\w*|\bokul\w*|\bmezun\w*|\blisans\w*|\begitim\w*|\bakademi\w*"
     r"|ausbildung|studium|hochschule|universitat|abitur|abschluss"
     r"|educacion|universidad|licenciatura|instituto|bachillerato"
-    r"|formation|diplome|licence|\becole\b",
+    r"|formation|diplome|licence|\becole\b"
+    r"|tehsil\w*|\bbakalavr\w*|\bmagistr\w*|\bmekteb\w*",
     re.IGNORECASE,
 )
 
 # Pattern: "internship", "intern", "staj", "praktikum", "prácticas", "stage"
 INTERNSHIP_PATTERN = re.compile(
     r"\b(?:internship|intern|working\s+student|co-?op|apprentice"
-    r"|staj\w*|praktikum|practicas|stagiaire)\b",
+    r"|staj\w*|praktikum|practicas|stagiaire|praktika\w*)\b",
     re.IGNORECASE,
 )
 
@@ -78,7 +81,8 @@ STUDENT_PATTERN = re.compile(
     r"|ogrenci\w*|lisans\s+ogrenci\w*"
     r"|studentin|studierend\w*|studiere\b"
     r"|estudiante|universitari[oa]"
-    r"|etudiant\w*)\b",
+    r"|etudiant\w*"
+    r"|telebe\w*)\b",
     re.IGNORECASE,
 )
 

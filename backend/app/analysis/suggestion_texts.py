@@ -12,11 +12,11 @@ Keys ending in _tech are used for Software Engineering / Data & Analytics /
 Cybersecurity CVs; _general keys are the field-agnostic wording everyone else
 gets. {count} is a format placeholder.
 
-SUPPORTED_LANGUAGES mirrors the five UI languages. An unknown language falls
+SUPPORTED_LANGUAGES mirrors the UI languages. An unknown language falls
 back to English in the generator, never raising.
 """
 
-SUPPORTED_LANGUAGES = ("en", "tr", "de", "fr", "es")
+SUPPORTED_LANGUAGES = ("en", "tr", "de", "fr", "es", "az")
 
 SUGGESTION_TEXTS: dict[str, dict[str, str]] = {
     "en": {
@@ -627,6 +627,83 @@ SUGGESTION_TEXTS: dict[str, dict[str, str]] = {
         "default_length": (
             "Mantén tu CV en 1-2 páginas. Elimina la información desactualizada o "
             "irrelevante y céntrate en tus experiencias de mayor impacto."
+        ),
+    },
+    "az": {
+        "summary_missing": (
+            "CV-nin ən yuxarısına Xülasə və ya Karyera Məqsədi bölməsi əlavə et. 2-3 cümləlik xülasə işə qəbul mütəxəssisinin profilini tez anlamasına imkan verir və ATS sistemlərinin ilk oxuduğu yerlərdəndir."
+        ),
+        "skills_missing_tech": (
+            "Texniki və şəxsi bacarıqlarını sadalayan ayrıca Bacarıqlar bölməsi əlavə et. ATS-in asan oxuması üçün vergüllə ayrılmış və ya işarəli siyahı formatından istifadə et. İşlətdiyin texnologiyaları, proqramlaşdırma dillərini və alətləri göstər."
+        ),
+        "skills_missing_general": (
+            "Texniki və şəxsi bacarıqlarını sadalayan ayrıca Bacarıqlar bölməsi əlavə et. ATS-in asan oxuması üçün vergüllə ayrılmış və ya işarəli siyahı formatından istifadə et. Sahəndə işlətdiyin alətləri, proqramları və metodları göstər."
+        ),
+        "experience_missing": (
+            "İş Təcrübəsi və ya Praktika bölməsi əlavə et. Tələbə olsan belə praktikaları, yarımştat işləri, könüllü fəaliyyəti və sərbəst layihələri daxil et. Bu formatdan istifadə et: Vəzifə | Şirkət | Tarix aralığı."
+        ),
+        "education_missing": (
+            "Dərəcən, universitetin adı və bitirmə tarixi ilə Təhsil bölməsi əlavə et. Orta balın yüksəkdirsə (məsələn 4.5+) onu da göstər."
+        ),
+        "projects_missing_tech": (
+            "Praktiki təcrübəni göstərmək üçün Layihələr bölməsi əlavə etməyi düşün. Qısa təsvir, işlətdiyin texnologiyalar və varsa GitHub keçidləri ilə 2-3 layihə yaz."
+        ),
+        "projects_missing_general": (
+            "Praktiki təcrübəni göstərmək üçün Layihələr bölməsi əlavə etməyi düşün. Qısa təsvirlər və varsa portfolio, təqdimat videosu ya da dərc olunmuş işlərə keçidlərlə 2-3 layihə yaz."
+        ),
+        "certifications_tech": (
+            "Profilini gücləndirmək üçün uyğun sertifikatları və ya onlayn kursları (məsələn AWS, Google, Coursera, Udemy) əlavə etməyi düşün."
+        ),
+        "certifications_general": (
+            "Profilini gücləndirmək üçün uyğun sertifikatları və ya onlayn kursları (məsələn Coursera, Udemy və ya sahəndə tanınan sertifikatlar) əlavə etməyi düşün."
+        ),
+        "ats_email": (
+            "CV-nin ən yuxarısına e-poçt ünvanını yaz. Bu, işə qəbul mütəxəssisinin səninlə əlaqə saxlaması və ATS-in emal etməsi üçün vacibdir."
+        ),
+        "ats_contact": (
+            "İşə qəbul mütəxəssisi asan çata bilsin deyə CV-nin ən yuxarısına əlaqə məlumatlarını (e-poçt, telefon, LinkedIn) yaz."
+        ),
+        "ats_action_verbs": (
+            "Nailiyyətlərini yazarkən güclü feillərdən istifadə et: 'Hazırladım', 'Tətbiq etdim', 'Dizayn etdim', 'İdarə etdim', 'Təkmilləşdirdim'. 'Məsul idim' və ya 'iştirak etdim' kimi passiv ifadələrdən çəkin."
+        ),
+        "ats_length_short": (
+            "CV-n həddindən qısa görünür. Ən azı bir tam səhifə hədəflə. Təcrübəni konkret nailiyyətlərlə genişləndir, işarəli siyahı işlət və mümkün olduqca nəticələri rəqəmlə göstər."
+        ),
+        "ats_caps": (
+            "TAM BÖYÜK HƏRF istifadəsini azalt. Bunun əvəzinə başlıqlar üçün qalın şrift və ya daha böyük ölçü işlət - ATS sistemləri həddindən çox böyük hərfi səhv oxuya bilər."
+        ),
+        "skills_few_tech": (
+            "Yalnızca {count} tanınan bacarıq aşkarlandı. Daha çox konkret texniki bacarıq əlavə et (məsələn Python, React, SQL, Docker). Rəqabətli profil üçün ən azı 8-12 uyğun bacarıq hədəflə."
+        ),
+        "skills_few_general": (
+            "Yalnızca {count} tanınan bacarıq aşkarlandı. Sahəndə işlətdiyin konkret bacarıqları, alətləri və proqramları daha çox yaz. Rəqabətli profil üçün ən azı 8-12 uyğun bacarıq hədəflə."
+        ),
+        "skills_diversity_tech": (
+            "Bacarıqların az sayda kateqoriyada toplanıb. Fərqli sahələrdən bacarıqlar əlavə edərək genişləndir: proqramlaşdırma dilləri, freymvorklar, verilənlər bazaları, alətlər və şəxsi bacarıqlar."
+        ),
+        "skills_diversity_general": (
+            "Bacarıqların az sayda kateqoriyada toplanıb. Fərqli sahələrdən bacarıqlar əlavə edərək genişləndir: əsas sahə bacarıqları, alətlər və proqramlar, həmçinin köçürülə bilən şəxsi bacarıqlar."
+        ),
+        "quantify_default_tech": (
+            "Təcrübə təsvirlərində nailiyyətlərini rəqəmlə göstər: 'API cavab müddətini 40% yaxşılaşdırdım', '5 nəfərlik komandanı idarə etdim', 'Gündə 1000+ istifadəçiyə xidmət etdim'."
+        ),
+        "quantify_default_general": (
+            "Təcrübə təsvirlərində nailiyyətlərini rəqəmlə göstər: '5 nəfərlik komandanı idarə etdim', '12 layihə təhvil verdim', 'Auditoriyanı 40% böyütdüm'."
+        ),
+        "quantify_highlighted": (
+            "CV-ndə daha çox konkret rəqəm lazımdır. Güclü feillər işlədən, lakin ölçülə bilən məlumat (rəqəm, faiz və ya miqyas) verməyən cümlələri işarələdik. Tam olaraq nəyə nail olduğunu yaz."
+        ),
+        "keywords_missing": (
+            "CV-ndə sahə üzrə standart açar sözlər çatmır. Hədəflədiyin vəzifə üçün iş elanlarını oxu və uyğun terminləri təbii şəkildə əlavə et. Açar sözlər həm ATS sistemlərinə, həm də insan oxuyucuya kömək edir."
+        ),
+        "default_formatting": (
+            "Əvvəldən sona qədər eyni formatı saxla: eyni şrift, düzülmüş tarixlər, vahid işarələr və aydın bölmə başlıqları."
+        ),
+        "default_tailor": (
+            "CV-ni hər müraciət üçün uyğunlaşdır. Açar sözləri dəyiş və həmin vəzifə üçün ən uyğun təcrübəni önə çıxar."
+        ),
+        "default_length": (
+            "CV-ni 1-2 səhifədə saxla. Köhnəlmiş və ya əlaqəsiz məlumatı çıxar, ən təsirli təcrübənə fokuslan."
         ),
     },
 }
