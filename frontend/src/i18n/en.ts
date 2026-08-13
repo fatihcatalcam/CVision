@@ -496,6 +496,14 @@ const en = {
     earnInstead: 'You still get free credits every week, and you can earn more by inviting a friend.',
     freeRoutes: 'You do not have to buy: free credits land every week, and you earn more when someone you invite completes their first analysis.',
     noExpiry: 'Purchased credits never expire',
+    signUpToBuy: 'Sign up to buy',
+    seo: {
+      h2a: 'How much does CVision cost, and how do credits work?',
+      p1: 'There is no subscription. You buy credits and spend only what you use. A Normal CV analysis costs 1 credit, a Pro analysis that unlocks the full report costs 3, and job matching or a cover letter cost 2 each. Purchased credits never expire, so they are still there for your next job search.',
+      p2: 'You get 3 credits when you sign up, which is exactly one Pro analysis. While your balance stays low, 2 more land every week - so you can keep analysing your CV without paying anything.',
+      h2b: 'Why not a subscription?',
+      p3: 'Job hunting is a temporary need. A subscription asks you to commit to something you hope to stop needing in six weeks; a pack is bought once, used up, and bought again next time. Payments are handled by Lemon Squeezy as merchant of record, and your card details are never stored on our servers.',
+    },
   },
 
   credits: {

@@ -83,6 +83,7 @@ const NAV_LINKS: [string, string][] = [
   ['/', 'CVision'],
   ['/try', tr.home.nav.tryFree],
   ['/how-ats-works', tr.home.nav.howAts],
+  ['/pricing', tr.packs.title],
   ['/about', tr.home.nav.about],
   ['/privacy', tr.common.privacy],
   ['/terms', tr.common.terms],
@@ -188,6 +189,27 @@ function summarize(text: string, max = 155): string {
   return `${cut.slice(0, cut.lastIndexOf(' '))}…`;
 }
 
+/**
+ * The pricing page.
+ *
+ * The pack cards are fetched from Lemon Squeezy after mount, so there is
+ * nothing in them for a crawler; packs.seo is the copy that carries the page.
+ * PricingPage renders the same block, which is the rule for everything here -
+ * prerendered text that the mounted app does not also show is text Google
+ * discards when it renders the page for real.
+ */
+function pricingBody(): string {
+  const k = tr.packs as Record<string, unknown>;
+  const seo = k.seo as Record<string, string>;
+  return [
+    h1(String(k.title)),
+    p(String(k.subtitle)),
+    h2(seo.h2a), p(seo.p1), p(seo.p2),
+    h2(seo.h2b), p(seo.p3),
+    p(String(k.freeRoutes)),
+  ].join('');
+}
+
 function tryBody(): string {
   const t = tr.try as Record<string, unknown>;
   const seo = (t.seo ?? {}) as Record<string, string>;
@@ -218,6 +240,12 @@ const ROUTES: Route[] = [
     title: tr.about.metaTitle,
     description: tr.about.metaDescription,
     body: aboutBody(),
+  },
+  {
+    path: '/pricing',
+    title: tr.settings.pricing.metaTitle,
+    description: tr.settings.pricing.metaDescription,
+    body: pricingBody(),
   },
   // Titles here must match what PrivacyPage/TermsPage hand to useSeo, or the
   // tab title would visibly change the moment React mounts.

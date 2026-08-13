@@ -27,9 +27,16 @@ vi.mock('../../services/api', () => ({
 
 vi.mock('../../hooks/useSeo', () => ({ useSeo: vi.fn() }));
 
+let currentUser: { credits: number } | null = { credits: 4 };
 vi.mock('../../context/AuthContext', () => ({
-  useAuth: () => ({ user: { credits: 4 } }),
+  useAuth: () => ({ user: currentUser }),
 }));
+
+const navigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  return { ...actual, useNavigate: () => navigate };
+});
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -59,6 +66,7 @@ const renderPage = () =>
 
 beforeEach(() => {
   vi.clearAllMocks();
+  currentUser = { credits: 4 };
   get.mockResolvedValue({ data: { packs: PACKS } });
   post.mockResolvedValue({ data: { checkoutUrl: 'https://checkout.example/x' } });
 });
@@ -125,5 +133,53 @@ describe('PricingPage', () => {
     expect(await screen.findByText('10')).toBeInTheDocument();
     expect(screen.getByText('packs.buy')).toBeInTheDocument();
     expect(screen.queryByText(/NaN|undefined|0,00/)).not.toBeInTheDocument();
+  });
+});
+
+/**
+ * The logged-out visitor.
+ *
+ * This route lived inside ProtectedRoute until now, so this whole path is new:
+ * nobody could reach the page without a session, and the component had never
+ * had to cope with `user` being null. Making it public without covering that is
+ * how you ship a Buy button that answers 401 to the one person who was ready
+ * to pay.
+ */
+describe('PricingPage, signed out', () => {
+  beforeEach(() => {
+    currentUser = null;
+  });
+
+  it('shows the prices without asking anyone to sign in first', async () => {
+    renderPage();
+
+    await screen.findByText('10');
+    expect(screen.getByText('₺79,99')).toBeInTheDocument();
+    // The balance line is the one thing that needs a session.
+    expect(screen.queryByText(/packs\.currentBalance/)).not.toBeInTheDocument();
+  });
+
+  it('offers signup instead of a checkout it cannot start', async () => {
+    renderPage();
+
+    const buttons = await screen.findAllByText('packs.signUpToBuy');
+    expect(screen.queryByText('packs.buy')).not.toBeInTheDocument();
+
+    await userEvent.click(buttons[1]);
+
+    expect(navigate).toHaveBeenCalledWith('/register');
+    // The important half: no request went out to be refused.
+    expect(post).not.toHaveBeenCalled();
+  });
+
+  it('still explains the credit model when the packs fail to load', async () => {
+    // Someone arriving from a search result gets nothing else to read if the
+    // Lemon Squeezy call is down - the copy is the page, not the cards.
+    get.mockRejectedValue(new Error('lemon down'));
+    renderPage();
+
+    expect(await screen.findByText('packs.seo.h2a')).toBeInTheDocument();
+    expect(screen.getByText('packs.seo.p1')).toBeInTheDocument();
+    expect(screen.getByText('packs.seo.h2b')).toBeInTheDocument();
   });
 });

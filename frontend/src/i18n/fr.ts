@@ -497,6 +497,14 @@ const fr = {
     earnInstead: 'Vous recevez toujours des crédits gratuits chaque semaine, et vous pouvez en gagner en invitant quelqu\'un.',
     freeRoutes: 'Acheter n\'est pas obligatoire : des crédits gratuits arrivent chaque semaine, et vous en gagnez lorsqu\'une personne que vous invitez termine sa première analyse.',
     noExpiry: 'Les crédits achetés n\'expirent jamais',
+    signUpToBuy: 'S\'inscrire pour acheter',
+    seo: {
+      h2a: 'Combien coûte CVision et comment fonctionnent les crédits ?',
+      p1: "Il n'y a pas d'abonnement. Vous achetez des crédits et ne dépensez que ce que vous utilisez. Une analyse Normale coûte 1 crédit, une analyse Pro qui débloque le rapport complet en coûte 3, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Les crédits achetés n'expirent jamais : ils sont encore là pour votre prochaine recherche d'emploi.",
+      p2: "Vous recevez 3 crédits à l'inscription, soit exactement une analyse Pro. Tant que votre solde reste bas, 2 crédits s'ajoutent chaque semaine : vous pouvez donc continuer à analyser votre CV sans rien payer.",
+      h2b: "Pourquoi pas d'abonnement ?",
+      p3: "Chercher un emploi est un besoin temporaire. Un abonnement vous demande de vous engager sur quelque chose dont vous espérez ne plus avoir besoin dans six semaines ; un pack s'achète une fois, s'épuise, et se rachète la fois suivante. Les paiements sont gérés par Lemon Squeezy en tant que revendeur officiel, et vos données bancaires ne sont jamais stockées sur nos serveurs.",
+    },
   },
 
   credits: {

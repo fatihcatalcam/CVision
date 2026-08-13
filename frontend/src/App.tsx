@@ -53,7 +53,6 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/analysis/:id" element={<AnalysisPage />} />
               <Route path="/hq-portal" element={<AdminPage />} />
-              <Route path="/pricing" element={<PricingPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/payment/success" element={<SuccessPage />} />
@@ -62,6 +61,12 @@ function App() {
             </Route>
 
             <Route path="/" element={<HomePage />} />
+            {/* Public on purpose. It used to sit inside ProtectedRoute, so
+                nobody could find out what CVision costs without first creating
+                an account - and robots.txt had to Disallow it, which put the
+                prices out of search too. PricingPage handles the logged-out
+                case: no balance line, and Buy sends them to signup. */}
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/how-ats-works" element={<HowAtsWorksPage />} />
             <Route path="/try" element={<TryPage />} />

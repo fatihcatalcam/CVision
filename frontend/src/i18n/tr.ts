@@ -505,6 +505,17 @@ const tr = {
     earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',
     freeRoutes: 'Kredi almadan da devam edebilirsin: her hafta ücretsiz kredi yükleniyor ve davet ettiğin kişi ilk analizini tamamladığında kredi kazanıyorsun.',
     noExpiry: 'Satın alınan krediler son kullanma tarihi taşımaz',
+    signUpToBuy: 'Kaydol ve satın al',
+    // Copy the prerender script emits into the static /pricing HTML. The page
+    // itself is mostly price cards fetched at runtime, which is nothing for a
+    // crawler to read - and this route was invisible to search until now.
+    seo: {
+      h2a: 'CVision ne kadar? Kredi sistemi nasıl çalışır?',
+      p1: 'CVision\'da abonelik yok. Kredi alırsın, sadece kullandığın kadar harcarsın. Normal CV analizi 1 kredi, tam raporu açan Pro analiz 3 kredi; iş ilanı eşleştirme ve ön yazı oluşturma ikişer kredi tutar. Satın alınan krediler son kullanma tarihi taşımaz, bir sonraki iş aramanda da yerinde durur.',
+      p2: 'Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam olarak bir Pro analize denk geliyor. Bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor, yani hiç ödeme yapmadan da CV\'ni ve özgeçmişini analiz etmeye devam edebilirsin.',
+      h2b: 'Neden abonelik yok?',
+      p3: 'İş aramak geçici bir ihtiyaç. Abonelik, altı hafta sonra bırakmayı umduğun bir şeye bağlanmanı ister; kredi paketi bir kez alınır, biter ve bir dahaki sefere yeniden alınır. Ödemeler Lemon Squeezy üzerinden kayıtlı satıcı (merchant of record) sıfatıyla işlenir; kart bilgilerin bizim sunucularımızda saklanmaz.',
+    },
   },
 
   credits: {

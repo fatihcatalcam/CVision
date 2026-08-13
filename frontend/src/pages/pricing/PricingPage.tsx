@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
@@ -22,11 +22,19 @@ import {
  * exactly one number: a copy in an env var is a copy that can disagree with the
  * checkout, and the checkout is the one that takes the money. A pack Lemon
  * cannot be read for renders without a price rather than with a guess.
+ *
+ * This route is PUBLIC. It sat behind ProtectedRoute, which meant nobody could
+ * see what CVision costs without first creating an account - and robots.txt
+ * had to Disallow it, so the prices were invisible to search as well. Two
+ * things follow from letting logged-out visitors in, and both are handled
+ * below: they have no session to check out with, and they may have arrived
+ * straight from a search result with no history to go "back" to.
  */
 export function PricingPage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useSeo({
     title: t('settings.pricing.metaTitle'),
@@ -39,6 +47,13 @@ export function PricingPage() {
   const [error, setError] = useState<string | null>(null);
 
   const buy = async (variantId: string) => {
+    // No session, no checkout. Sending them to the API anyway would answer 401
+    // and print an error under a price they just decided they wanted, which is
+    // the worst possible moment to stall. Signup is the actual next step.
+    if (!user) {
+      navigate('/register');
+      return;
+    }
     setError(null);
     setLoadingVariant(variantId);
     try {
@@ -63,8 +78,12 @@ export function PricingPage() {
   return (
     <div className="min-h-screen bg-[#FBFBFA] dark:bg-[#111110]">
       <div className="max-w-4xl mx-auto py-16 px-6">
+        {/* react-router labels the first entry in a session "default". Landing
+            here straight from a search result means there is nothing behind us,
+            and navigate(-1) would leave the visitor on a button that does
+            nothing. Home is the honest destination in that case. */}
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => (location.key === 'default' ? navigate('/') : navigate(-1))}
           className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" /> {t('settings.pricing.back')}
@@ -189,7 +208,7 @@ export function PricingPage() {
                   >
                     {loadingVariant === pack.variant_id
                       ? <Loader2 className="w-4 h-4 animate-spin" />
-                      : t('packs.buy')}
+                      : user ? t('packs.buy') : t('packs.signUpToBuy')}
                   </button>
                 </div>
               );
@@ -216,6 +235,29 @@ export function PricingPage() {
             <Shield className="w-3 h-3" /> {t('packs.noExpiry')}
           </span>
         </div>
+
+        {/* Below the packs so it never delays the decision, but in the DOM as
+            well as in the prerendered HTML. The cards above are fetched from
+            Lemon Squeezy at runtime, so without this a crawler sees a heading
+            and nothing else - and this page is only worth making public if
+            there is something on it to read. */}
+        <section className="mt-16 max-w-2xl mx-auto space-y-8">
+          {([
+            ['seo.h2a', ['seo.p1', 'seo.p2']],
+            ['seo.h2b', ['seo.p3']],
+          ] as const).map(([headingKey, bodyKeys]) => (
+            <div key={headingKey} className="space-y-3">
+              <h2 className="text-lg font-semibold tracking-tight text-[#111111] dark:text-[#e8e7e4]">
+                {t(`packs.${headingKey}`)}
+              </h2>
+              {bodyKeys.map((k) => (
+                <p key={k} className="text-sm leading-relaxed text-[#6B6A65] dark:text-[#908d89]">
+                  {t(`packs.${k}`)}
+                </p>
+              ))}
+            </div>
+          ))}
+        </section>
       </div>
     </div>
   );

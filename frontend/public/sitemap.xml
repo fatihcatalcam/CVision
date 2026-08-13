@@ -9,8 +9,9 @@
   crawler to stop trusting the field. The two legal pages carry their own
   "Son güncelleme" date from the page body for exactly that reason.
 
-  Not listed: /pricing, which sits behind ProtectedRoute and is Disallowed in
-  robots.txt. If it is ever made public, it belongs here.
+  prerender.test.ts fails the build if a URL listed here is not prerendered:
+  /privacy and /terms sat in this file for months while serving the homepage's
+  title, H1 and canonical="/" to anything that does not run JS.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -30,6 +31,12 @@
     <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.cvisionapp.com/pricing</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.cvisionapp.com/about</loc>

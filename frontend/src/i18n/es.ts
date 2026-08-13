@@ -497,6 +497,14 @@ const es = {
     earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',
     freeRoutes: 'No hace falta comprar: cada semana llegan créditos gratis y ganas más cuando alguien que invitas completa su primer análisis.',
     noExpiry: 'Los créditos comprados no caducan',
+    signUpToBuy: 'Regístrate para comprar',
+    seo: {
+      h2a: '¿Cuánto cuesta CVision y cómo funcionan los créditos?',
+      p1: 'No hay suscripción. Compras créditos y gastas solo lo que usas. Un análisis Normal cuesta 1 crédito, un análisis Pro que desbloquea el informe completo cuesta 3, y la comparación con una oferta o una carta de presentación cuestan 2 cada una. Los créditos comprados no caducan, así que siguen ahí para tu próxima búsqueda de empleo.',
+      p2: 'Recibes 3 créditos al registrarte, exactamente un análisis Pro. Mientras tu saldo siga bajo, cada semana llegan 2 más, así que puedes seguir analizando tu CV sin pagar nada.',
+      h2b: '¿Por qué no una suscripción?',
+      p3: 'Buscar trabajo es una necesidad temporal. Una suscripción te pide comprometerte con algo que esperas dejar de necesitar en seis semanas; un pack se compra una vez, se agota y se vuelve a comprar la próxima vez. Los pagos los gestiona Lemon Squeezy como comerciante registrado, y los datos de tu tarjeta nunca se guardan en nuestros servidores.',
+    },
   },
 
   credits: {

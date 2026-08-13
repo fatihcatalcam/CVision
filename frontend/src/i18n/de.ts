@@ -497,6 +497,14 @@ const de = {
     earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',
     freeRoutes: 'Kaufen ist nicht nötig: jede Woche kommen kostenlose Credits dazu, und du verdienst mehr, sobald jemand, den du eingeladen hast, seine erste Analyse abschließt.',
     noExpiry: 'Gekaufte Credits verfallen nie',
+    signUpToBuy: 'Registrieren und kaufen',
+    seo: {
+      h2a: 'Was kostet CVision, und wie funktionieren Credits?',
+      p1: 'Es gibt kein Abo. Du kaufst Credits und gibst nur aus, was du nutzt. Eine normale CV-Analyse kostet 1 Credit, eine Pro-Analyse mit vollem Bericht 3, ein Stellenabgleich oder ein Anschreiben je 2. Gekaufte Credits verfallen nie und sind bei der nächsten Jobsuche noch da.',
+      p2: 'Bei der Registrierung bekommst du 3 Credits – genau eine Pro-Analyse. Solange dein Guthaben niedrig bleibt, kommen jede Woche 2 weitere dazu, du kannst deinen Lebenslauf also weiter analysieren, ohne etwas zu zahlen.',
+      h2b: 'Warum kein Abo?',
+      p3: 'Jobsuche ist ein vorübergehender Bedarf. Ein Abo verlangt eine Bindung an etwas, das du in sechs Wochen hoffentlich nicht mehr brauchst; ein Paket kaufst du einmal, verbrauchst es und kaufst beim nächsten Mal wieder. Zahlungen wickelt Lemon Squeezy als Merchant of Record ab; deine Kartendaten liegen nie auf unseren Servern.',
+    },
   },
 
   credits: {
