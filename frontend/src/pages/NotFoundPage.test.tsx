@@ -64,9 +64,26 @@ describe('NotFoundPage', () => {
     expect(robots()?.getAttribute('content')).toBe('noindex, nofollow');
   });
 
-  it('takes the robots tag away again when you leave', () => {
-    // The dangerous half: left behind, it would de-index whatever real page
-    // the visitor navigates to next.
+  it('gives the site-wide robots directive back when you leave', () => {
+    // index.html ships <meta name="robots" content="index, follow">. The first
+    // version of this test asserted the tag was GONE after unmount, which the
+    // implementation duly did - quietly stripping a deliberate site-wide
+    // directive from every page the visitor saw next. Restoring is the
+    // requirement; removing only applies when nothing was there to begin with.
+    const site = document.createElement('meta');
+    site.setAttribute('name', 'robots');
+    site.setAttribute('content', 'index, follow');
+    document.head.appendChild(site);
+
+    const { unmount } = renderPage();
+    expect(robots()?.getAttribute('content')).toBe('noindex, nofollow');
+
+    unmount();
+
+    expect(robots()?.getAttribute('content')).toBe('index, follow');
+  });
+
+  it('removes the tag entirely when the page had none of its own', () => {
     const { unmount } = renderPage();
     expect(robots()).not.toBeNull();
 

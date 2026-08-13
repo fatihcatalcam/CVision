@@ -53,14 +53,25 @@ export function useSeo({ title, description, canonical, noindex }: SeoOptions) {
     if (canonical) setCanonical(canonical);
   }, [title, description, canonical]);
 
-  // Separate effect with a cleanup, because this one has to be undone. The tag
-  // is created on mount and removed on unmount, so it can never outlive the
-  // route that asked for it.
+  // Separate effect with a cleanup, because this one has to be undone.
+  //
+  // It RESTORES rather than removes. index.html ships a site-wide
+  // `<meta name="robots" content="index, follow">`, so deleting the tag on the
+  // way out would strip a deliberate directive from every page the visitor
+  // sees next in the same SPA session. Snapshot what was there, put it back.
   useEffect(() => {
     if (!noindex) return;
+
+    const existing = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const previous = existing?.getAttribute('content') ?? null;
+
     setMetaByName('robots', 'noindex, nofollow');
+
     return () => {
-      document.head.querySelector('meta[name="robots"]')?.remove();
+      const el = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
+      if (!el) return;
+      if (previous === null) el.remove();          // nothing here before us
+      else el.setAttribute('content', previous);   // hand it back unchanged
     };
   }, [noindex]);
 }
