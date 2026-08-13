@@ -67,10 +67,34 @@ const PRERENDER_STYLE =
   '#prerender h2{font-size:1.35rem;line-height:1.3;font-weight:600;margin:2.5rem 0 .75rem}' +
   '#prerender h3{font-size:1.05rem;line-height:1.4;font-weight:600;margin:1.5rem 0 .35rem}' +
   '#prerender p{margin:0 0 1rem;line-height:1.65;color:var(--color-muted)}' +
+  '#prerender nav{display:block;margin:2.5rem 0 0;font-size:.85rem;color:var(--color-muted)}' +
+  '#prerender nav a{color:inherit;text-decoration:none}' +
   '</style>';
 
+/**
+ * The public routes, as real links, in the pre-mount markup.
+ *
+ * The rendered app has these in its footer, so Google finds them either way.
+ * Bing and most AI crawlers do not execute JS, and for them the prerendered
+ * body was a wall of prose with no outbound links at all - every page an
+ * island. These are the same destinations the footer offers, nothing extra.
+ */
+const NAV_LINKS: [string, string][] = [
+  ['/', 'CVision'],
+  ['/try', tr.home.nav.tryFree],
+  ['/how-ats-works', tr.home.nav.howAts],
+  ['/about', tr.home.nav.about],
+  ['/privacy', tr.common.privacy],
+  ['/terms', tr.common.terms],
+];
+
 /** Everything that goes inside <div id="root"> for a prerendered page. */
-const shell = (body: string) => `${PRERENDER_STYLE}<div id="prerender">${body}</div>`;
+const shell = (body: string, self: string) => {
+  const nav = NAV_LINKS.filter(([href]) => href !== self)
+    .map(([href, label]) => `<a href="${href}">${esc(label)}</a>`)
+    .join(' · ');
+  return `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav></div>`;
+};
 
 const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
 const h2 = (s: string) => `<h2>${esc(s)}</h2>`;
@@ -128,6 +152,42 @@ function aboutBody(): string {
   return parts.join('');
 }
 
+/**
+ * The legal pages, walked generically.
+ *
+ * Both blocks are flat maps of `s1Heading`/`s1Body`/`s2AccountTitle`/... in
+ * document order, so the key suffix is enough to pick the tag and no per-page
+ * list has to be maintained alongside the copy. They were the two URLs in the
+ * sitemap that were never prerendered: a crawler asking for /privacy got the
+ * homepage's title, H1 and canonical="/" - the sitemap pointing at a page that
+ * then declared itself a duplicate of the homepage.
+ */
+function legalBody(block: Record<string, unknown>): string {
+  const parts: string[] = [];
+  for (const [key, value] of Object.entries(block)) {
+    if (typeof value !== 'string') continue;
+    if (key.startsWith('meta')) continue;
+    if (key === 'title') parts.push(h1(value));
+    else if (key.endsWith('Heading')) parts.push(h2(value));
+    else if (key.endsWith('Title') || key.endsWith('Name')) parts.push(h3(value));
+    else parts.push(p(value));
+  }
+  return parts.join('');
+}
+
+/**
+ * A meta description taken from the page's own opening paragraph.
+ *
+ * Deliberately derived rather than hand-written: these are priority-0.3 legal
+ * pages, and a description copied by hand is one more string to keep in sync
+ * with the text above it in five locales.
+ */
+function summarize(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  return `${cut.slice(0, cut.lastIndexOf(' '))}…`;
+}
+
 function tryBody(): string {
   const t = tr.try as Record<string, unknown>;
   const seo = (t.seo ?? {}) as Record<string, string>;
@@ -159,7 +219,66 @@ const ROUTES: Route[] = [
     description: tr.about.metaDescription,
     body: aboutBody(),
   },
+  // Titles here must match what PrivacyPage/TermsPage hand to useSeo, or the
+  // tab title would visibly change the moment React mounts.
+  {
+    path: '/privacy',
+    title: `${tr.legal.privacy.title} - CVision`,
+    description: summarize(tr.legal.privacy.s1Body),
+    body: legalBody(tr.legal.privacy),
+  },
+  {
+    path: '/terms',
+    title: `${tr.legal.terms.title} - CVision`,
+    description: summarize(tr.legal.terms.s1Body),
+    body: legalBody(tr.legal.terms),
+  },
 ];
+
+/**
+ * FAQPage structured data, built from the SAME strings the homepage renders.
+ *
+ * It used to be a hand-maintained block in index.html, which is the template
+ * every route here is built from - so all ten questions shipped on /try,
+ * /about, /how-ats-works and every SPA-fallback URL, none of which show a FAQ.
+ * Google asks that FAQ markup match the visible page; that was unbacked markup
+ * on every URL on the site. The hand-kept copy had also drifted twice over:
+ * written in English for a page that renders in Turkish, and still quoting the
+ * retired monthly subscription months after the move to credits.
+ *
+ * Generating it from tr.home.faq means it is injected on the homepage alone and
+ * is, by construction, exactly what a visitor reads there.
+ */
+function faqJsonLd(): string {
+  const faq = tr.home.faq as Record<string, string>;
+  const mainEntity = [];
+  for (let i = 1; faq[`q${i}`]; i++) {
+    mainEntity.push({
+      '@type': 'Question',
+      name: faq[`q${i}`],
+      acceptedAnswer: { '@type': 'Answer', text: faq[`a${i}`] },
+    });
+  }
+  if (!mainEntity.length) {
+    throw new Error('prerender: no FAQ questions found in tr.home.faq');
+  }
+  // Escaping "<" keeps a stray "</script>" in the copy from closing this tag.
+  const json = JSON.stringify(
+    { '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: 'tr', mainEntity },
+    null,
+    2,
+  ).replace(/</g, '\\u003c');
+  return `<script type="application/ld+json">\n${json}\n</script>`;
+}
+
+/**
+ * `String.replace` with a LITERAL replacement.
+ *
+ * Everything substituted here is i18n copy, and a bare `html.replace(re, next)`
+ * reads `$&`, `$1` and friends inside `next` as backreferences. One "$&" in a
+ * Turkish sentence would silently splice the matched tag into the page.
+ */
+const sub = (html: string, re: RegExp, next: string) => html.replace(re, () => next);
 
 /** Replace the first match of `re`, failing loudly if the template changed. */
 function replaceOnce(html: string, re: RegExp, next: string, label: string): string {
@@ -169,7 +288,7 @@ function replaceOnce(html: string, re: RegExp, next: string, label: string): str
         `changed and prerendered pages would silently keep the homepage value.`,
     );
   }
-  return html.replace(re, next);
+  return sub(html, re, next);
 }
 
 function buildPage(template: string, route: Route): string {
@@ -192,17 +311,16 @@ function buildPage(template: string, route: Route): string {
 
   // Social tags: keep them consistent with the page, but do not fail the build
   // if the template ever drops them.
-  html = html
-    .replace(/<meta property="og:title" content="[\s\S]*?"\s*\/?>/, `<meta property="og:title" content="${esc(route.title)}" />`)
-    .replace(/<meta property="og:description" content="[\s\S]*?"\s*\/?>/, `<meta property="og:description" content="${esc(route.description)}" />`)
-    .replace(/<meta property="og:url" content="[\s\S]*?"\s*\/?>/, `<meta property="og:url" content="${url}" />`)
-    .replace(/<meta name="twitter:title" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:title" content="${esc(route.title)}" />`)
-    .replace(/<meta name="twitter:description" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:description" content="${esc(route.description)}" />`);
+  html = sub(html, /<meta property="og:title" content="[\s\S]*?"\s*\/?>/, `<meta property="og:title" content="${esc(route.title)}" />`);
+  html = sub(html, /<meta property="og:description" content="[\s\S]*?"\s*\/?>/, `<meta property="og:description" content="${esc(route.description)}" />`);
+  html = sub(html, /<meta property="og:url" content="[\s\S]*?"\s*\/?>/, `<meta property="og:url" content="${url}" />`);
+  html = sub(html, /<meta name="twitter:title" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:title" content="${esc(route.title)}" />`);
+  html = sub(html, /<meta name="twitter:description" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:description" content="${esc(route.description)}" />`);
 
   html = replaceOnce(
     html,
     /<div id="root"><\/div>/,
-    `<div id="root">${shell(route.body)}</div>`,
+    `<div id="root">${shell(route.body, route.path)}</div>`,
     '#root container',
   );
 
@@ -240,18 +358,29 @@ function main() {
   const guard =
     `<script>if(location.pathname!=='/')document.getElementById('root').textContent=''</script>`;
 
-  fs.writeFileSync(
-    templatePath,
-    replaceOnce(
-      template,
-      /<div id="root"><\/div>/,
-      `<div id="root">${shell(homeBody())}</div>${guard}`,
-      'empty #root container (run vite build again if this file was already prerendered)',
-    ),
-    'utf8',
+  let home = replaceOnce(
+    template,
+    /<div id="root"><\/div>/,
+    `<div id="root">${shell(homeBody(), '/')}</div>${guard}`,
+    'empty #root container (run vite build again if this file was already prerendered)',
   );
-  console.log('prerendered / -> index.html');
+
+  // The FAQ schema goes in HERE and nowhere else. Adding it to index.html by
+  // hand is what put it on every route in the first place, since that file is
+  // the template above and the SPA fallback for everything not prerendered.
+  home = replaceOnce(home, /<\/head>/, `${faqJsonLd()}\n  </head>`, '</head>');
+
+  fs.writeFileSync(templatePath, home, 'utf8');
+  console.log('prerendered / -> index.html (+ FAQPage JSON-LD)');
   console.log(`prerender: ${ROUTES.length + 1} routes written`);
 }
 
-main();
+// This module only DEFINES the build; prerender.run.ts is what executes it.
+//
+// Splitting them is what lets prerender.test.ts import ROUTES and faqJsonLd
+// without writing into dist/ as a side effect of the import. The first attempt
+// guarded `main()` with a process.argv check instead, which silently made the
+// whole step a no-op: under `vite-node scripts/prerender.ts`, argv[1] is
+// vite-node.mjs, not the script, so the build passed and shipped a site with
+// no prerendering at all. An entry point cannot be got wrong that way.
+export { ROUTES, faqJsonLd, main };

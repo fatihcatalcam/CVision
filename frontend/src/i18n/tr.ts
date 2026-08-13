@@ -351,8 +351,14 @@ const tr = {
     },
   },
   home: {
-    metaTitle: 'CVision - AI CV Analizi & ATS Resume Checker',
-    metaDescription: "Yapay zeka destekli CV analizi ve ATS resume checker. CV'ni yükle; anında ATS skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
+    // Leads with the search term rather than the brand. Search Console showed
+    // every ranking query for this site was already the brand name, so the
+    // brand-first title was winning traffic that would have arrived anyway
+    // while "ATS CV analizi" went to competitors. "Özgeçmiş" is here because it
+    // appeared NOWHERE in the product's copy - its single occurrence site-wide
+    // was inside the keywords meta tag, which Google dropped in 2009.
+    metaTitle: 'Ücretsiz ATS CV Analizi ve Özgeçmiş Kontrolü | CVision',
+    metaDescription: "Yapay zeka destekli CV ve özgeçmiş analizi. CV'ni yükle; anında ATS uyumluluk skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
     nav: {
       howItWorks: 'Nasıl çalışır?',
       backToTop: 'Başa dön',
@@ -360,6 +366,10 @@ const tr = {
       faq: 'SSS',
       about: 'Hakkında',
       howAts: 'ATS nasıl çalışır',
+      // Footer link to /try. Every other route into that page is a <button
+      // onClick={navigate}>, so until this existed the site's main conversion
+      // page had no crawlable link pointing at it at all.
+      tryFree: 'Ücretsiz CV analizi',
       dashboard: 'Dashboard',
       signIn: 'Giriş Yap',
       getStarted: 'Ücretsiz Kaydol',
@@ -369,9 +379,9 @@ const tr = {
       rewrite: '3 madde AI ile yeniden yazıldı',
     },
     hero: {
-      label: 'Yapay Zeka CV Analizi ve ATS Testi',
+      label: 'Yapay Zeka CV ve Özgeçmiş Analizi · ATS Testi',
       title: 'CV\'n daha bir insan görmeden eleniyor olabilir',
-      subtitle: 'CVision, CV\'ni ATS uyumluluğu için puanlayan, eksik anahtar kelimeleri bulan ve zayıf maddeleri saniyeler içinde yeniden yazan yapay zeka destekli bir CV analiz aracıdır. İlana göre eşleştir, sana özel ön yazı oluştur.',
+      subtitle: 'CVision, CV\'ni ya da özgeçmişini ATS uyumluluğu için puanlayan, eksik anahtar kelimeleri bulan ve zayıf maddeleri saniyeler içinde yeniden yazan yapay zeka destekli bir CV analiz aracıdır. İlana göre eşleştir, sana özel ön yazı oluştur.',
       ctaDashboard: 'Dashboard\'a Git',
       ctaAnalyze: 'CV\'mi Ücretsiz Analiz Et',
       ctaSignIn: 'Giriş Yap',
@@ -408,11 +418,11 @@ const tr = {
     faq: {
       label: 'Sıkça sorulan sorular',
       q1: 'CVision nedir?',
-      a1: 'CVision, CV\'ni yapay zeka ile analiz eden bir araçtır. ATS uyumluluk skoru verir, zayıf bölümleri işaretler, somut düzeltmeler önerir ve uygun kariyer yollarını gösterir. Her sektör için çalışır ve dünya genelinde kullanılabilir.',
-      q2: 'CVision CV\'mi nasıl puanlar?',
+      a1: 'CVision, CV\'ni veya özgeçmişini yapay zeka ile analiz eden bir araçtır. ATS uyumluluk skoru verir, zayıf bölümleri işaretler, somut düzeltmeler önerir ve uygun kariyer yollarını gösterir. Her sektör için çalışır ve dünya genelinde kullanılabilir.',
+      q2: 'CVision özgeçmişimi nasıl puanlar?',
       a2: 'PDF veya TXT dosyanı yüklersin, yapay zeka saniyeler içinde okur. ATS uyumluluğu, anahtar kelime kapsamı, bütünlük ve deneyim üzerinden puanlar ve her skoru açıklar; böylece neyi değiştireceğini bilirsin.',
       q3: 'CVision ne kadar?',
-      a3: 'Ücretsiz plan 0₺ ve haftada 3 analiz içerir. Pro plan 7 günlük ücretsiz deneme ile başlar, ardından ayda ₺199,99 olup haftada 50 analiz ile tüm yapay zeka özelliklerini içerir. Deneme için kredi kartı gerekmez.',
+      a3: 'Abonelik yok, sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz, bakiyen düşükken de her hafta 2 kredi ekliyoruz. Normal analiz 1 kredi, Pro analiz 3 kredi; iş ilanı eşleştirme ve ön yazı 2\'şer kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin.',
       q4: 'Bir CV analizi ne kadar sürer?',
       a4: '30 saniyenin altında. CV\'ni yüklersin, skor ve geri bildirim otomatik üretilir; elle inceleme veya bekleme yoktur.',
       q5: 'Benim ülkemde çalışıyor musunuz?',
@@ -432,7 +442,7 @@ const tr = {
 
   about: {
     metaTitle: 'CVision Hakkında - Yapay Zeka CV Analizi ve ATS Testi',
-    metaDescription: 'CVision, yapay zeka destekli bir CV analiz aracı ve ATS uyumluluk test aracıdır. Ne yaptığını, kimler için olduğunu ve otomatik eleme sistemlerini geçmene nasıl yardımcı olduğunu öğren.',
+    metaDescription: 'CVision, yapay zeka destekli bir CV ve özgeçmiş analiz aracı ve ATS uyumluluk test aracıdır. Ne yaptığını, kimler için olduğunu ve otomatik eleme sistemlerini geçmene nasıl yardımcı olduğunu öğren.',
     back: '← Ana sayfaya dön',
     title: 'CVision Hakkında',
     definition: 'CVision, yapay zeka destekli bir CV analiz aracı ve ATS (Aday Takip Sistemi) uyumluluk test aracıdır. Bir CV\'yi ATS uyumluluğu için puanlar, eksik anahtar kelimeleri belirler ve yapay zeka ile yazılmış iyileştirme önerileri ile madde işareti yeniden yazımları üretir. CVision ayrıca CV\'ni belirli bir iş ilanıyla eşleştirerek eksik anahtar kelimeleri ortaya çıkarır ve sana özel ön yazılar oluşturur. Tamamen çevrimiçi, kendin kullanabileceğin bir web uygulamasıdır; dünya genelinde İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca olarak sunulur, ücretsiz ve Pro planı vardır. CVision; iş arayanların, öğrencilerin ve profesyonellerin otomatik eleme sistemlerini geçmesine ve daha güçlü, işe alım uzmanına hazır CV\'lerle başvurmasına yardımcı olur.',
@@ -451,8 +461,8 @@ const tr = {
   },
 
   howAts: {
-    metaTitle: "ATS Nasıl Çalışır - CV Taramasını Geçin | CVision",
-    metaDescription: "Başvuru Takip Sistemleri (ATS) CV'nizi nasıl okur ve sıralar? ATS taramasının nasıl işlediğini, ATS puanının ne anlama geldiğini ve nasıl geçileceğini öğrenin.",
+    metaTitle: "ATS Nasıl Çalışır - Özgeçmiş Taramasını Geçin | CVision",
+    metaDescription: "Başvuru Takip Sistemleri (ATS) CV'nizi ve özgeçmişinizi nasıl okur, ayrıştırır ve sıralar? ATS taramasının nasıl işlediğini, ATS puanının ne anlama geldiğini ve nasıl geçileceğini öğrenin.",
     back: "← Ana sayfaya dön",
     title: "ATS, CV'nizi nasıl okur ve sıralar",
     definition: "Başvuru Takip Sistemi (ATS - Applicant Tracking System), işverenlerin iş başvurularını otomatik olarak toplamak, ayrıştırmak ve sıralamak için kullandığı yazılımdır. Çevrimiçi başvurduğunuzda, CV'niz genellikle bir insan görmeden önce bir ATS'ye girer. Sistem metninizi çıkarır, bölümlere ayırır, iş gereksinimleriyle eşleştirir ve ne kadar uygun olduğunuzu puanlar. Temiz ayrıştırılan ve doğru anahtar kelimeleri içeren CV'ler üst sıralara çıkar; yazılımın okuyamadığı CV'ler elenir. CVision bu süreci simüle eder, CV'nize bir ATS uyumluluk puanı verir ve tam olarak neyi düzeltmeniz gerektiğini gösterir.",
@@ -589,7 +599,7 @@ const tr = {
       s5GoogleName: 'Google OAuth',
       s5GoogleDesc: 'İsteğe bağlı Google ile giriş özelliği için. Yalnızca kimlik doğrulama kapsamında ad ve e-posta alınır.',
       s5StripeName: 'Lemon Squeezy',
-      s5StripeDesc: 'Pro plan ödemeleri için; kayıtlı satıcı (merchant of record) sıfatıyla hareket eder. Ödeme bilgileri yalnızca Lemon Squeezy tarafından işlenir; kart numarası sunucularımızda saklanmaz.',
+      s5StripeDesc: 'Kredi paketi ödemeleri için; kayıtlı satıcı (merchant of record) sıfatıyla hareket eder. Ödeme bilgileri yalnızca Lemon Squeezy tarafından işlenir; kart numarası sunucularımızda saklanmaz.',
       s5EmailName: 'Resend',
       s5EmailDesc: 'İşlemsel e-postalar (hoş geldin ve şifre sıfırlama mesajları) için. Yalnızca e-posta adresiniz ve adınız gönderim amacıyla paylaşılır.',
       s5AnalyticsName: 'Google Analytics & Microsoft Clarity',
@@ -695,16 +705,16 @@ const tr = {
     extractedSkills: 'Çıkarılan Beceriler',
   },
   try: {
-    metaTitle: 'Ücretsiz CV Analizi — Kayıt Yok | CVision',
-    metaDescription: 'CV\'ni yükle, anında ATS puanı ve yapay zeka geri bildirimi al — hesap gerekmez.',
+    metaTitle: 'Ücretsiz CV ve Özgeçmiş Analizi — Kayıt Yok | CVision',
+    metaDescription: 'Ücretsiz CV analizi ve özgeçmiş ATS kontrolü. CV\'ni yükle, anında ATS puanı ve yapay zeka geri bildirimi al — hesap gerekmez.',
     heading: 'CV\'ni 30 saniyede analiz et',
     sub: 'Hesap gerekmez. CV\'ni yükle, ATS puanını anında gör.',
     // Copy that gives this page something to rank on, and that the
     // prerender script emits into the static HTML for crawlers.
     seo: {
-      h2a: 'CV analizi nedir, neden gerekli?',
-      p1: 'Büyük şirketlerin çoğu gelen başvuruları önce bir yazılımla eler. Bu yazılıma ATS (Applicant Tracking System / Başvuru Takip Sistemi) denir. CV\'niz bir insana ulaşmadan önce bu sistemden geçer: metniniz çıkarılır, bölümlere ayrılır ve ilanın gereksinimleriyle karşılaştırılır. Tasarım olarak güzel görünen bir CV, bu aşamada bambaşka görünebilir.',
-      p2: 'Ücretsiz CV analizi tam olarak bu aşamada ne olduğunu gösterir. CV\'nizi yüklediğinizde ATS uyumluluk puanınızı, eksik anahtar kelimeleri ve düzeltilmesi gereken biçim sorunlarını saniyeler içinde görürsünüz.',
+      h2a: 'CV analizi ve özgeçmiş ATS kontrolü nedir?',
+      p1: 'Büyük şirketlerin çoğu gelen başvuruları önce bir yazılımla eler. Bu yazılıma ATS (Applicant Tracking System / Başvuru Takip Sistemi) denir. Özgeçmişiniz bir insana ulaşmadan önce bu sistemden geçer: metniniz çıkarılır, bölümlere ayrılır ve ilanın gereksinimleriyle karşılaştırılır. Tasarım olarak güzel görünen bir CV, bu aşamada bambaşka görünebilir.',
+      p2: 'Ücretsiz CV analizi tam olarak bu aşamada ne olduğunu gösterir. CV\'nizi veya özgeçmişinizi yüklediğinizde ATS uyumluluk puanınızı, eksik anahtar kelimeleri ve düzeltilmesi gereken biçim sorunlarını saniyeler içinde görürsünüz.',
       h2b: 'CV\'ler neden eleniyor?',
       p3: 'En sık görülen sebepler teknik: iki sütunlu şablonlarda satırlar birbirine girer, tablolar dağılır, sayfa kenarındaki bantta kalan iletişim bilgileri okunmaz, ya da CV bir tasarım aracından resim olarak dışa aktarıldığı için sistem tek kelime bile okuyamaz.',
       p4: 'Bunların hiçbiri CV\'nize bakınca görünmez, çünkü siz tasarladığınız PDF\'i görürsünüz; sistem ise düz metni. CVision\'ın ATS X-Ray özelliği bu iki görüntüyü yan yana koyar: sizin gördüğünüz CV ve yazılımın gerçekten okuduğu hâli.',

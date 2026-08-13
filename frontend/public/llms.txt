@@ -11,10 +11,32 @@
 
 ## Services and pricing
 
-- Free plan — $0/month: 3 CV analyses per week, ATS compatibility score, keyword analysis, career-path suggestions.
-- Pro plan — ₺199.99/month (billed via [Lemon Squeezy](https://www.lemonsqueezy.com) as merchant of record): 50 CV analyses per week, the full AI suggestion pack (all unlocked), AI bullet-point rewriting, the full AI summary and analysis report, and priority support. Includes a 7-day free trial; no credit card required to start.
-- Job-description (JD) matching: compare a CV against a specific job posting for a match score and keyword gap analysis.
-- AI cover-letter generation: generate a tailored cover letter from a CV and a job description (Pro).
+CVision is credit-based. There is no subscription and no free trial to cancel:
+you buy credits once and spend them as you need them.
+
+- Free to start — a new account is granted 3 credits, which is exactly one full
+  Pro analysis. While the balance stays low it earns 2 more credits every week,
+  so the product stays usable without paying.
+- What things cost, in credits: Normal analysis 1; Pro analysis 3 (the analysis
+  plus unlocking its full report); job-description matching 2; AI cover letter
+  2; AI bullet-point rewrite 1.
+- Extra credits are sold in one-off packs, billed via
+  [Lemon Squeezy](https://www.lemonsqueezy.com) as merchant of record. Pack
+  sizes and current prices are listed on
+  [the pricing page](https://www.cvisionapp.com/pricing) — deliberately not
+  duplicated here, because a price copied into a static file is a price that
+  goes stale.
+
+### What the credits buy
+
+- Normal analysis: ATS compatibility score, keyword and completeness analysis,
+  section-by-section detection, and career-path matches.
+- Pro analysis: everything above plus the full AI suggestion pack, AI
+  bullet-point rewriting, and the complete AI summary report.
+- Job-description (JD) matching: compare a CV against a specific job posting for
+  a match score, missing keywords, and a gap analysis.
+- AI cover-letter generation: a tailored cover letter from a CV and a job
+  description.
 
 ## Key facts
 

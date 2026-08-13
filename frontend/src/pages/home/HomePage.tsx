@@ -256,6 +256,11 @@ export function HomePage() {
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="font-mono font-medium tracking-tight text-sm" style={{ color: 'var(--color-foreground)' }}>CVision</span>
           <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--color-muted)' }}>
+            {/* A real <a>, not a Button. Every other route into /try is a
+                <button onClick={navigate}>, so the main conversion page had no
+                crawlable link anywhere on the site - Google only knew it from
+                the sitemap, and no internal link weight ever reached it. */}
+            <a href="/try" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.tryFree')}</a>
             <a href="/about" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
             <a href="/how-ats-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howAts')}</a>
             <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>

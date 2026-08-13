@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  lastmod is the only field here Google actually reads - it ignores changefreq
+  and priority entirely, and has said so for years. They are kept because Bing
+  and Yandex still look at them.
+
+  Set lastmod to the date the page's CONTENT really changed, never the build
+  date: a sitemap that claims every page changed on every deploy teaches the
+  crawler to stop trusting the field. The two legal pages carry their own
+  "Son güncelleme" date from the page body for exactly that reason.
+
+  Not listed: /pricing, which sits behind ProtectedRoute and is Disallowed in
+  robots.txt. If it is ever made public, it belongs here.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.cvisionapp.com/</loc>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.cvisionapp.com/try</loc>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.cvisionapp.com/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://www.cvisionapp.com/how-ats-works</loc>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.cvisionapp.com/privacy</loc>
+    <loc>https://www.cvisionapp.com/about</loc>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.cvisionapp.com/privacy</loc>
+    <lastmod>2025-05-28</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.cvisionapp.com/terms</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2025-05-28</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 </urlset>
