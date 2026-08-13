@@ -472,6 +472,15 @@ const en = {
     ctaButton: "Check my CV free",
   },
 
+  notFound: {
+    metaTitle: 'Page not found — CVision',
+    heading: 'This page does not exist',
+    body: 'The link may be out of date, or the address mistyped. If you were after one of these, carry on from here.',
+    tryFree: 'Analyse a CV for free',
+    dashboard: 'Back to dashboard',
+    home: 'Home',
+  },
+
   packs: {
     title: 'Credit packs',
     subtitle: 'Buy what you need, use it whenever. No subscription, no monthly charge — purchased credits never expire.',

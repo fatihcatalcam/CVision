@@ -473,6 +473,15 @@ const de = {
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },
 
+  notFound: {
+    metaTitle: 'Seite nicht gefunden — CVision',
+    heading: 'Diese Seite gibt es nicht',
+    body: 'Der Link ist womöglich veraltet oder die Adresse vertippt. Wenn du eines davon gesucht hast, geht es hier weiter.',
+    tryFree: 'Lebenslauf kostenlos analysieren',
+    dashboard: 'Zurück zum Dashboard',
+    home: 'Startseite',
+  },
+
   packs: {
     title: 'Guthaben-Pakete',
     subtitle: 'Kaufe, was du brauchst, und nutze es, wann du willst. Kein Abo, keine monatliche Zahlung — gekaufte Credits verfallen nie.',

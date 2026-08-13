@@ -473,6 +473,15 @@ const es = {
     ctaButton: "Revisar mi CV gratis",
   },
 
+  notFound: {
+    metaTitle: 'Página no encontrada — CVision',
+    heading: 'Esta página no existe',
+    body: 'Puede que el enlace esté desactualizado o que la dirección tenga un error. Si buscabas una de estas, sigue desde aquí.',
+    tryFree: 'Analiza un CV gratis',
+    dashboard: 'Volver al panel',
+    home: 'Inicio',
+  },
+
   packs: {
     title: 'Paquetes de créditos',
     subtitle: 'Compra lo que necesites y úsalo cuando quieras. Sin suscripción ni cargo mensual: los créditos comprados no caducan.',

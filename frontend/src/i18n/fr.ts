@@ -473,6 +473,15 @@ const fr = {
     ctaButton: "Vérifier mon CV gratuitement",
   },
 
+  notFound: {
+    metaTitle: 'Page introuvable — CVision',
+    heading: 'Cette page n\'existe pas',
+    body: 'Le lien est peut-être obsolète, ou l\'adresse mal saisie. Si vous cherchiez l\'un de ces éléments, continuez ici.',
+    tryFree: 'Analyser un CV gratuitement',
+    dashboard: 'Retour au tableau de bord',
+    home: 'Accueil',
+  },
+
   packs: {
     title: 'Packs de crédits',
     subtitle: 'Achetez ce dont vous avez besoin et utilisez-le quand vous voulez. Sans abonnement ni prélèvement mensuel — les crédits achetés n\'expirent jamais.',

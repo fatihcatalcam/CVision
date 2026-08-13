@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 // HomePage is the landing route ("/") and the LCP page — keep it eager so the
 // first paint has no lazy-chunk waterfall. Every other route is code-split so
@@ -66,7 +67,11 @@ function App() {
             <Route path="/try" element={<TryPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* A real 404 rather than a redirect into a protected route.
+                See NotFoundPage: the old catch-all sent a logged-out visitor
+                with a stale link to /dashboard and from there to /login, with
+                nothing explaining why. */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

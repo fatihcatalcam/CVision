@@ -472,6 +472,15 @@ const tr = {
     ctaButton: "CV'mi ücretsiz kontrol et",
   },
 
+  notFound: {
+    metaTitle: 'Sayfa bulunamadı — CVision',
+    heading: 'Bu sayfa yok',
+    body: 'Bağlantı eskimiş olabilir ya da adres yanlış yazılmış olabilir. Aradığın şey aşağıdakilerden biriyse oradan devam edebilirsin.',
+    tryFree: 'Ücretsiz CV analizi yap',
+    dashboard: 'Panele dön',
+    home: 'Ana sayfa',
+  },
+
   packs: {
     title: 'Kredi paketleri',
     subtitle: 'İhtiyacın kadar al, istediğin zaman kullan. Abonelik yok, aylık ödeme yok — krediler son kullanma tarihi taşımaz.',
