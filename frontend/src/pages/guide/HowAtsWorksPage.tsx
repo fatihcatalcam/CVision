@@ -10,7 +10,7 @@ import { ATS_GUIDE_EXTRA } from '../../content/atsGuide';
 import { localizedUrl } from '../../i18n/routes';
 
 export function HowAtsWorksPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { href, go, lang } = useLocalizedNav();
 
   // Was a module-level constant pointing at the Turkish URL. This component
@@ -23,9 +23,17 @@ export function HowAtsWorksPage() {
     description: t('howAts.metaDescription'),
   });
 
-  // The long-form sections exist for the languages that have URLs of their own;
-  // the rest keep the six-section page they already had. See content/atsGuide.
-  const extra = ATS_GUIDE_EXTRA[lang] ?? [];
+  // Keyed on the UI language, NOT the tree.
+  //
+  // Keying it on the tree was wrong and shipped that way for one deploy: the
+  // tree is only ever 'tr' or 'en', so a visitor reading the site in French at
+  // /how-ats-works got French headings above a thousand words of Turkish. The
+  // promise these sections were added under was that the three languages
+  // without URLs keep exactly the page they already had, and only the UI
+  // language can answer that. Under /en the boundary has already pinned the UI
+  // to English, so the two agree there anyway.
+  const uiLang = (i18n.language ?? '').split('-')[0];
+  const extra = ATS_GUIDE_EXTRA[uiLang] ?? [];
 
   // Article JSON-LD for this guide. Injected per-route and removed on unmount so
   // it never lingers on other pages. Kept in the active language.
