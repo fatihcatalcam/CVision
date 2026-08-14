@@ -439,7 +439,7 @@ const en = {
   about: {
     metaTitle: 'About CVision - AI Resume Analyzer & ATS Checker',
     metaDescription: 'CVision is an AI-powered resume analyzer and ATS checker. Learn what it does, who it is for, and how it helps you pass automated resume screening.',
-    back: '← Back to home',
+    back: 'Back to home',
     title: 'About CVision',
     definition: 'CVision is an AI-powered resume analyzer and ATS (Applicant Tracking System) checker. It scores a CV for ATS compatibility, identifies missing keywords, and generates AI-written improvement suggestions and bullet-point rewrites. CVision also matches a CV against a specific job description to reveal keyword gaps and produces tailored cover letters. It is a fully online, self-serve web application available worldwide in English, Turkish, Spanish, German, and French, with a free tier and a Pro plan. CVision helps job seekers, students, and professionals pass automated resume screening and apply with stronger, recruiter-ready CVs.',
     s1Heading: 'What CVision does',
@@ -459,7 +459,7 @@ const en = {
   atsCvHowTo: {
     metaTitle: 'How to Write an ATS-Friendly CV: Step-by-Step Guide | CVision',
     metaDescription: 'How to write an ATS-friendly CV or resume: choosing a template, naming your sections, mirroring the job ad, and writing bullets that get read.',
-    back: '← Back to home',
+    back: 'Back to home',
     title: 'How to write an ATS-friendly CV',
     definition: 'An ATS-friendly CV is one an Applicant Tracking System can read end to end, split into sections, and match against a job ad. You do not have to give up on design; the text just has to stay machine-readable. This guide walks through it in order, from saving the file to writing the bullets.',
     ctaTitle: 'What does your CV score right now?',
@@ -468,7 +468,7 @@ const en = {
   howAts: {
     metaTitle: "How ATS Works - Beat Resume Screening | CVision",
     metaDescription: "How do Applicant Tracking Systems (ATS) read and rank your resume? Learn how ATS screening works, what an ATS score means, and how to pass it.",
-    back: "← Back to home",
+    back: "Back to home",
     title: "How an ATS reads and ranks your resume",
     definition: "An Applicant Tracking System (ATS) is software that employers use to collect, parse, and rank job applications automatically. When you apply online, your resume usually enters an ATS before any person sees it. The system extracts your text, splits it into sections, matches it against the job requirements, and scores how well you fit. Resumes that parse cleanly and contain the right keywords rank higher; resumes the software cannot read are filtered out. CVision simulates this process, gives your CV an ATS compatibility score, and shows exactly what to fix.",
     s1Heading: "What an ATS is",

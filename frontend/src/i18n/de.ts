@@ -436,7 +436,7 @@ const de = {
   about: {
     metaTitle: 'Über CVision - KI Lebenslauf-Analyse & ATS-Checker',
     metaDescription: 'CVision ist ein KI-gestützter Lebenslauf-Analysator und ATS-Checker. Erfahre, was es tut, für wen es ist und wie es dir hilft, automatisches Bewerbungsscreening zu bestehen.',
-    back: '← Zurück zur Startseite',
+    back: 'Zurück zur Startseite',
     title: 'Über CVision',
     definition: 'CVision ist ein KI-gestützter Lebenslauf-Analysator und ATS (Applicant Tracking System)-Checker. Es bewertet einen Lebenslauf auf ATS-Kompatibilität, identifiziert fehlende Keywords und generiert KI-geschriebene Verbesserungsvorschläge und Aufzählungspunkt-Umschreibungen. CVision vergleicht einen Lebenslauf auch mit einer konkreten Stellenbeschreibung, um Keyword-Lücken aufzudecken, und erstellt maßgeschneiderte Anschreiben. Es ist eine vollständig online und selbst nutzbare Webanwendung, die weltweit auf Englisch, Türkisch, Spanisch, Deutsch und Französisch verfügbar ist, mit einem kostenlosen Tarif und einem Pro-Plan.',
     s1Heading: 'Was CVision tut',
@@ -456,7 +456,7 @@ const de = {
   atsCvHowTo: {
     metaTitle: 'ATS-tauglichen Lebenslauf schreiben: Schritt für Schritt | CVision',
     metaDescription: 'Wie schreibt man einen ATS-tauglichen Lebenslauf? Vorlage wählen, Abschnitte richtig benennen, die Stellenanzeige spiegeln und lesbare Stichpunkte formulieren.',
-    back: '← Zurück zur Startseite',
+    back: 'Zurück zur Startseite',
     title: 'Einen ATS-tauglichen Lebenslauf schreiben',
     definition: 'Ein ATS-tauglicher Lebenslauf ist einer, den ein Bewerbermanagementsystem von Anfang bis Ende lesen, in Abschnitte zerlegen und mit einer Stellenanzeige abgleichen kann. Du musst nicht auf Gestaltung verzichten; der Text muss nur maschinenlesbar bleiben. Diese Anleitung geht der Reihe nach vor, vom Speichern der Datei bis zu den Stichpunkten.',
     ctaTitle: 'Wie viele Punkte holt dein Lebenslauf gerade?',
@@ -465,7 +465,7 @@ const de = {
   howAts: {
     metaTitle: "Wie ein ATS funktioniert - Bewerbungsfilter bestehen | CVision",
     metaDescription: "Wie lesen und bewerten Bewerbermanagementsysteme (ATS) deinen Lebenslauf? Erfahre, wie das ATS-Screening funktioniert, was ein ATS-Score bedeutet und wie du ihn bestehst.",
-    back: "← Zurück zur Startseite",
+    back: "Zurück zur Startseite",
     title: "Wie ein ATS deinen Lebenslauf liest und bewertet",
     definition: "Ein Bewerbermanagementsystem (ATS, englisch Applicant Tracking System) ist eine Software, mit der Arbeitgeber Bewerbungen automatisch sammeln, auslesen und bewerten. Wenn du dich online bewirbst, gelangt dein Lebenslauf meist in ein ATS, bevor ihn ein Mensch sieht. Das System extrahiert deinen Text, teilt ihn in Abschnitte, gleicht ihn mit den Stellenanforderungen ab und bewertet, wie gut du passt. Lebensläufe, die sauber ausgelesen werden und die richtigen Schlüsselwörter enthalten, werden höher eingestuft; Lebensläufe, die die Software nicht lesen kann, werden aussortiert. CVision simuliert diesen Ablauf, gibt deinem Lebenslauf einen ATS-Kompatibilitätswert und zeigt dir genau, was du verbessern solltest.",
     s1Heading: "Was ein ATS ist",

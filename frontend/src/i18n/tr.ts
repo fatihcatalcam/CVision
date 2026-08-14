@@ -444,7 +444,7 @@ const tr = {
   about: {
     metaTitle: 'CVision Hakkında - Yapay Zeka CV Analizi ve ATS Testi',
     metaDescription: 'CVision, yapay zeka destekli bir CV ve özgeçmiş analiz aracı ve ATS uyumluluk test aracıdır. Ne yaptığını, kimler için olduğunu ve otomatik eleme sistemlerini geçmene nasıl yardımcı olduğunu öğren.',
-    back: '← Ana sayfaya dön',
+    back: 'Ana sayfaya dön',
     title: 'CVision Hakkında',
     definition: 'CVision, yapay zeka destekli bir CV analiz aracı ve ATS (Aday Takip Sistemi) uyumluluk test aracıdır. Bir CV\'yi ATS uyumluluğu için puanlar, eksik anahtar kelimeleri belirler ve yapay zeka ile yazılmış iyileştirme önerileri ile madde işareti yeniden yazımları üretir. CVision ayrıca CV\'ni belirli bir iş ilanıyla eşleştirerek eksik anahtar kelimeleri ortaya çıkarır ve sana özel ön yazılar oluşturur. Tamamen çevrimiçi, kendin kullanabileceğin bir web uygulamasıdır; dünya genelinde İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca olarak sunulur, ücretsiz ve Pro planı vardır. CVision; iş arayanların, öğrencilerin ve profesyonellerin otomatik eleme sistemlerini geçmesine ve daha güçlü, işe alım uzmanına hazır CV\'lerle başvurmasına yardımcı olur.',
     s1Heading: 'CVision ne yapar?',
@@ -464,7 +464,7 @@ const tr = {
   atsCvHowTo: {
     metaTitle: 'ATS Uyumlu CV Nasıl Hazırlanır? Adım Adım Rehber | CVision',
     metaDescription: 'ATS uyumlu CV ve özgeçmiş nasıl hazırlanır? Şablon seçiminden bölüm başlıklarına, anahtar kelimelerden madde yazımına kadar adım adım rehber.',
-    back: '← Ana sayfaya dön',
+    back: 'Ana sayfaya dön',
     title: 'ATS uyumlu CV nasıl hazırlanır',
     definition: 'ATS uyumlu bir CV, bir Başvuru Takip Sisteminin baştan sona okuyabildiği, bölümlerine ayırabildiği ve iş ilanıyla eşleştirebildiği bir CV demektir. Tasarımdan vazgeçmeniz gerekmez; metnin makine tarafından okunabilir kalması yeterlidir. Bu rehber, dosyayı kaydetmekten madde işaretlerini yazmaya kadar sırayla ne yapmanız gerektiğini anlatır.',
     ctaTitle: "CV'n şu an kaç puan alıyor?",
@@ -473,7 +473,7 @@ const tr = {
   howAts: {
     metaTitle: "ATS Nasıl Çalışır - Özgeçmiş Taramasını Geçin | CVision",
     metaDescription: "Başvuru Takip Sistemleri (ATS) CV'nizi ve özgeçmişinizi nasıl okur, ayrıştırır ve sıralar? ATS taramasının nasıl işlediğini, ATS puanının ne anlama geldiğini ve nasıl geçileceğini öğrenin.",
-    back: "← Ana sayfaya dön",
+    back: "Ana sayfaya dön",
     title: "ATS, CV'nizi nasıl okur ve sıralar",
     definition: "Başvuru Takip Sistemi (ATS - Applicant Tracking System), işverenlerin iş başvurularını otomatik olarak toplamak, ayrıştırmak ve sıralamak için kullandığı yazılımdır. Çevrimiçi başvurduğunuzda, CV'niz genellikle bir insan görmeden önce bir ATS'ye girer. Sistem metninizi çıkarır, bölümlere ayırır, iş gereksinimleriyle eşleştirir ve ne kadar uygun olduğunuzu puanlar. Temiz ayrıştırılan ve doğru anahtar kelimeleri içeren CV'ler üst sıralara çıkar; yazılımın okuyamadığı CV'ler elenir. CVision bu süreci simüle eder, CV'nize bir ATS uyumluluk puanı verir ve tam olarak neyi düzeltmeniz gerektiğini gösterir.",
     s1Heading: "ATS nedir",

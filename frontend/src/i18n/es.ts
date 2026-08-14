@@ -436,7 +436,7 @@ const es = {
   about: {
     metaTitle: 'Sobre CVision - Analizador de CV con IA y verificador ATS',
     metaDescription: 'CVision es un analizador de CV con IA y verificador ATS. Descubre qué hace, para quién es y cómo te ayuda a superar el cribado automático.',
-    back: '← Volver al inicio',
+    back: 'Volver al inicio',
     title: 'Sobre CVision',
     definition: 'CVision es un analizador de CV con IA y verificador ATS (Sistema de Seguimiento de Candidatos). Puntúa un CV para la compatibilidad ATS, identifica palabras clave faltantes y genera sugerencias de mejora y reescrituras de puntos escritas por IA. CVision también compara un CV con una oferta de trabajo específica para revelar carencias de palabras clave y produce cartas de presentación personalizadas. Es una aplicación web completamente en línea y autoservicio, disponible en todo el mundo en inglés, turco, español, alemán y francés, con un nivel gratuito y un plan Pro.',
     s1Heading: 'Qué hace CVision',
@@ -456,7 +456,7 @@ const es = {
   atsCvHowTo: {
     metaTitle: 'Cómo hacer un CV compatible con ATS: guía paso a paso | CVision',
     metaDescription: 'Cómo hacer un CV compatible con ATS: elegir plantilla, nombrar las secciones, reflejar la oferta de empleo y escribir viñetas que se lean.',
-    back: '← Volver al inicio',
+    back: 'Volver al inicio',
     title: 'Cómo hacer un CV compatible con ATS',
     definition: 'Un CV compatible con ATS es aquel que un sistema de seguimiento de candidatos puede leer de principio a fin, dividir en secciones y comparar con una oferta de empleo. No hace falta renunciar al diseño; solo hay que mantener el texto legible por una máquina. Esta guía lo recorre en orden, desde guardar el archivo hasta redactar las viñetas.',
     ctaTitle: '¿Qué puntuación tiene tu CV ahora mismo?',
@@ -465,7 +465,7 @@ const es = {
   howAts: {
     metaTitle: "Cómo funciona un ATS - Supera el filtro de CV | CVision",
     metaDescription: "¿Cómo leen y clasifican tu currículum los sistemas de seguimiento de candidatos (ATS)? Aprende cómo funciona el filtrado ATS, qué significa la puntuación ATS y cómo superarlo.",
-    back: "← Volver al inicio",
+    back: "Volver al inicio",
     title: "Cómo un ATS lee y clasifica tu currículum",
     definition: "Un sistema de seguimiento de candidatos (ATS, por sus siglas en inglés) es un software que las empresas usan para recopilar, analizar y clasificar las candidaturas automáticamente. Cuando te postulas en línea, tu currículum suele entrar en un ATS antes de que lo vea una persona. El sistema extrae tu texto, lo divide en secciones, lo compara con los requisitos del puesto y puntúa tu grado de idoneidad. Los currículums que se analizan con claridad y contienen las palabras clave adecuadas se clasifican más alto; los que el software no puede leer quedan descartados. CVision simula este proceso, da a tu CV una puntuación de compatibilidad ATS y te muestra exactamente qué corregir.",
     s1Heading: "Qué es un ATS",

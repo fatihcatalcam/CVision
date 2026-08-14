@@ -436,7 +436,7 @@ const fr = {
   about: {
     metaTitle: 'À propos de CVision - Analyseur de CV par IA et vérificateur ATS',
     metaDescription: "CVision est un analyseur de CV par IA et un vérificateur ATS. Découvre ce qu'il fait, pour qui il est et comment il t'aide à passer le tri automatique des CV.",
-    back: "← Retour à l'accueil",
+    back: "Retour à l'accueil",
     title: 'À propos de CVision',
     definition: "CVision est un analyseur de CV par IA et un vérificateur ATS (système de suivi des candidatures). Il note un CV pour la compatibilité ATS, identifie les mots-clés manquants et génère des suggestions d'amélioration et des réécritures de puces rédigées par IA. CVision compare aussi un CV à une offre d'emploi spécifique pour révéler les écarts de mots-clés et produit des lettres de motivation sur mesure. C'est une application web entièrement en ligne et en libre-service, disponible dans le monde entier en anglais, turc, espagnol, allemand et français, avec une offre gratuite et un plan Pro.",
     s1Heading: 'Ce que fait CVision',
@@ -456,7 +456,7 @@ const fr = {
   atsCvHowTo: {
     metaTitle: 'Comment faire un CV compatible ATS : guide pas à pas | CVision',
     metaDescription: "Comment faire un CV compatible ATS : choisir un modèle, nommer ses rubriques, reprendre les termes de l'offre et rédiger des puces qui seront lues.",
-    back: "← Retour à l'accueil",
+    back: "Retour à l'accueil",
     title: 'Comment faire un CV compatible ATS',
     definition: "Un CV compatible ATS est un CV qu'un logiciel de suivi des candidatures peut lire de bout en bout, découper en rubriques et comparer à une offre d'emploi. Vous n'avez pas à renoncer au design ; le texte doit simplement rester lisible par une machine. Ce guide suit l'ordre des étapes, de l'enregistrement du fichier à la rédaction des puces.",
     ctaTitle: 'Quel score obtient votre CV en ce moment ?',
@@ -465,7 +465,7 @@ const fr = {
   howAts: {
     metaTitle: "Comment fonctionne un ATS - Réussir le tri des CV | CVision",
     metaDescription: "Comment les systèmes de suivi des candidatures (ATS) lisent-ils et classent-ils votre CV ? Découvrez le fonctionnement du tri ATS, la signification du score ATS et comment le réussir.",
-    back: "← Retour à l'accueil",
+    back: "Retour à l'accueil",
     title: "Comment un ATS lit et classe votre CV",
     definition: "Un système de suivi des candidatures (ATS, de l'anglais Applicant Tracking System) est un logiciel que les employeurs utilisent pour collecter, analyser et classer automatiquement les candidatures. Lorsque vous postulez en ligne, votre CV passe généralement dans un ATS avant qu'une personne ne le voie. Le système extrait votre texte, le découpe en sections, le compare aux exigences du poste et évalue votre adéquation. Les CV analysés proprement et contenant les bons mots-clés sont mieux classés ; ceux que le logiciel ne peut pas lire sont écartés. CVision simule ce processus, attribue à votre CV un score de compatibilité ATS et vous montre exactement quoi corriger.",
     s1Heading: "Qu'est-ce qu'un ATS",
