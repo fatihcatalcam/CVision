@@ -364,6 +364,7 @@ const en = {
       faq: 'FAQ',
       about: 'About',
       howAts: 'How ATS works',
+      atsCvHowTo: 'How to write an ATS-friendly CV',
       tryFree: 'Free CV analysis',
       dashboard: 'Dashboard',
       signIn: 'Sign in',
@@ -455,6 +456,15 @@ const en = {
     ctaButton: 'Analyze my CV free',
   },
 
+  atsCvHowTo: {
+    metaTitle: 'How to Write an ATS-Friendly CV: Step-by-Step Guide | CVision',
+    metaDescription: 'How to write an ATS-friendly CV or resume: choosing a template, naming your sections, mirroring the job ad, and writing bullets that get read.',
+    back: '← Back to home',
+    title: 'How to write an ATS-friendly CV',
+    definition: 'An ATS-friendly CV is one an Applicant Tracking System can read end to end, split into sections, and match against a job ad. You do not have to give up on design; the text just has to stay machine-readable. This guide walks through it in order, from saving the file to writing the bullets.',
+    ctaTitle: 'What does your CV score right now?',
+    ctaButton: 'Check it free',
+  },
   howAts: {
     metaTitle: "How ATS Works - Beat Resume Screening | CVision",
     metaDescription: "How do Applicant Tracking Systems (ATS) read and rank your resume? Learn how ATS screening works, what an ATS score means, and how to pass it.",

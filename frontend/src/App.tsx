@@ -27,6 +27,7 @@ const PrivacyPage = lazy(() => import('./pages/legal/PrivacyPage').then(m => ({ 
 const TermsPage = lazy(() => import('./pages/legal/TermsPage').then(m => ({ default: m.TermsPage })));
 const AboutPage = lazy(() => import('./pages/about/AboutPage').then(m => ({ default: m.AboutPage })));
 const HowAtsWorksPage = lazy(() => import('./pages/guide/HowAtsWorksPage').then(m => ({ default: m.HowAtsWorksPage })));
+const AtsCvHowToPage = lazy(() => import('./pages/guide/AtsCvHowToPage').then(m => ({ default: m.AtsCvHowToPage })));
 const MatchPage = lazy(() => import('./pages/match/MatchPage').then(m => ({ default: m.MatchPage })));
 const TryPage = lazy(() => import('./pages/try/TryPage').then(m => ({ default: m.TryPage })));
 
@@ -70,6 +71,10 @@ function App() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/how-ats-works" element={<HowAtsWorksPage />} />
+            {/* Turkish slug in the Turkish tree, English slug under /en - the
+                slug is the strongest on-page signal a URL carries. See
+                i18n/routes.ts. */}
+            <Route path="/ats-uyumlu-cv-nasil-hazirlanir" element={<AtsCvHowToPage />} />
             <Route path="/try" element={<TryPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
@@ -84,6 +89,7 @@ function App() {
               <Route index element={<HomePage />} />
               <Route path="try" element={<TryPage />} />
               <Route path="how-ats-works" element={<HowAtsWorksPage />} />
+              <Route path="how-to-write-an-ats-friendly-cv" element={<AtsCvHowToPage />} />
               <Route path="pricing" element={<PricingPage />} />
               <Route path="about" element={<AboutPage />} />
               <Route path="privacy" element={<PrivacyPage />} />

@@ -266,6 +266,7 @@ export function HomePage() {
             <a href={href('/try')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.tryFree')}</a>
             <a href={href('/about')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
             <a href={href('/how-ats-works')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howAts')}</a>
+            <a href={href('/ats-uyumlu-cv-nasil-hazirlanir')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.atsCvHowTo')}</a>
             <a href={href('/pricing')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('packs.title')}</a>
             <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
             <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>

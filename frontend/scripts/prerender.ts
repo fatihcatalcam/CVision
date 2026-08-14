@@ -29,6 +29,7 @@ import path from 'node:path';
 import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
 import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
+import { ATS_CV_HOWTO } from '../src/content/atsCvHowTo';
 import {
   SITE,
   URL_LANGUAGES,
@@ -59,6 +60,7 @@ const LASTMOD: Record<string, string> = {
   '/': '2026-08-14',
   '/try': '2026-08-14',
   '/how-ats-works': '2026-08-14',
+  '/ats-uyumlu-cv-nasil-hazirlanir': '2026-08-14',
   '/pricing': '2026-08-14',
   '/about': '2026-08-14',
   '/privacy': '2025-05-28',
@@ -124,6 +126,7 @@ function navHtml(b: Bundle, lang: UrlLanguage, self: string): string {
     ['/', 'CVision'],
     ['/try', b.home.nav.tryFree],
     ['/how-ats-works', b.home.nav.howAts],
+    ['/ats-uyumlu-cv-nasil-hazirlanir', b.home.nav.atsCvHowTo],
     ['/pricing', b.packs.title],
     ['/about', b.home.nav.about],
     ['/privacy', b.common.privacy],
@@ -167,6 +170,20 @@ function homeBody(b: Bundle): string {
   return parts.join('');
 }
 
+/** GuideSection[] -> h2 / intro / h3+body items / outro. */
+function sectionsHtml(sections: { heading: string; intro?: string; items?: { title: string; body: string }[]; outro?: string }[] = []): string {
+  return sections
+    .map((section) =>
+      [
+        h2(section.heading),
+        section.intro ? p(section.intro) : '',
+        ...(section.items ?? []).map((item) => h3(item.title) + p(item.body)),
+        section.outro ? p(section.outro) : '',
+      ].join(''),
+    )
+    .join('');
+}
+
 /**
  * The ATS guide: title, definition, six heading/body sections, then the
  * long-form half from content/atsGuide.
@@ -181,18 +198,7 @@ function guideBody(b: Bundle, lang: UrlLanguage): string {
     .map((i) => h2(g[`s${i}Heading`]) + p(g[`s${i}Body`]))
     .join('');
 
-  const extra = (ATS_GUIDE_EXTRA[lang] ?? [])
-    .map((section) =>
-      [
-        h2(section.heading),
-        section.intro ? p(section.intro) : '',
-        ...(section.items ?? []).map((item) => h3(item.title) + p(item.body)),
-        section.outro ? p(section.outro) : '',
-      ].join(''),
-    )
-    .join('');
-
-  return h1(g.title) + p(g.definition) + sections + extra + h2(g.ctaTitle);
+  return h1(g.title) + p(g.definition) + sections + sectionsHtml(ATS_GUIDE_EXTRA[lang]) + h2(g.ctaTitle);
 }
 
 function aboutBody(b: Bundle): string {
@@ -276,6 +282,12 @@ function tryBody(b: Bundle): string {
   return parts.join('');
 }
 
+/** The how-to guide: title, definition, then the long-form sections. */
+function howToBody(b: Bundle, lang: UrlLanguage): string {
+  const g = b.atsCvHowTo as Record<string, string>;
+  return h1(g.title) + p(g.definition) + sectionsHtml(ATS_CV_HOWTO[lang]) + h2(g.ctaTitle);
+}
+
 /**
  * Every localized route for one language.
  *
@@ -292,6 +304,12 @@ export function routesFor(lang: UrlLanguage): Route[] {
       title: b.howAts.metaTitle,
       description: b.howAts.metaDescription,
       body: guideBody(b, lang),
+    },
+    {
+      path: '/ats-uyumlu-cv-nasil-hazirlanir',
+      title: b.atsCvHowTo.metaTitle,
+      description: b.atsCvHowTo.metaDescription,
+      body: howToBody(b, lang),
     },
     {
       path: '/pricing',

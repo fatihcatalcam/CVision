@@ -51,6 +51,38 @@ describe('splitLangPath', () => {
   });
 });
 
+describe('per-language slugs', () => {
+  const HOWTO = '/ats-uyumlu-cv-nasil-hazirlanir';
+
+  it('gives the how-to guide a different slug in each language', () => {
+    // The slug is the strongest on-page signal a URL carries. Serving
+    // /en/ats-uyumlu-cv-nasil-hazirlanir would spend it on a phrase no English
+    // speaker searches for.
+    expect(localizedPath(HOWTO, 'tr')).toBe(HOWTO);
+    expect(localizedPath(HOWTO, 'en')).toBe('/en/how-to-write-an-ats-friendly-cv');
+  });
+
+  it('resolves either language\'s slug back to the same page', () => {
+    // Everything downstream compares against one id, whichever spelling arrived.
+    expect(splitLangPath('/en/how-to-write-an-ats-friendly-cv')).toEqual({
+      lang: 'en',
+      path: HOWTO,
+    });
+    expect(splitLangPath(HOWTO)).toEqual({ lang: 'tr', path: HOWTO });
+  });
+
+  it('does not resolve a slug belonging to the other language', () => {
+    // /en/ats-uyumlu-cv-nasil-hazirlanir is not a page. It must not quietly
+    // resolve to the how-to guide, or two URLs would serve it.
+    const { path } = splitLangPath('/en/ats-uyumlu-cv-nasil-hazirlanir');
+    expect(path).toBe('/ats-uyumlu-cv-nasil-hazirlanir');
+    expect(isLocalizedPath(path)).toBe(true);
+    // ...but the canonical for that page in English is the English slug, so the
+    // page never advertises the Turkish spelling under /en.
+    expect(localizedUrl(path, 'en')).toContain('/en/how-to-write-an-ats-friendly-cv');
+  });
+});
+
 describe('localizedPath', () => {
   it('leaves the default language unprefixed', () => {
     // Turkish holds the bare paths on purpose: it is the traffic and the

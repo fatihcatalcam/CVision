@@ -361,6 +361,7 @@ const de = {
       faq: 'FAQ',
       about: 'Über uns',
       howAts: 'Wie ein ATS funktioniert',
+      atsCvHowTo: 'ATS-tauglichen Lebenslauf schreiben',
       tryFree: 'Kostenlose CV-Analyse',
       dashboard: 'Dashboard',
       signIn: 'Anmelden',
@@ -452,6 +453,15 @@ const de = {
     ctaButton: 'Lebenslauf kostenlos analysieren',
   },
 
+  atsCvHowTo: {
+    metaTitle: 'ATS-tauglichen Lebenslauf schreiben: Schritt für Schritt | CVision',
+    metaDescription: 'Wie schreibt man einen ATS-tauglichen Lebenslauf? Vorlage wählen, Abschnitte richtig benennen, die Stellenanzeige spiegeln und lesbare Stichpunkte formulieren.',
+    back: '← Zurück zur Startseite',
+    title: 'Einen ATS-tauglichen Lebenslauf schreiben',
+    definition: 'Ein ATS-tauglicher Lebenslauf ist einer, den ein Bewerbermanagementsystem von Anfang bis Ende lesen, in Abschnitte zerlegen und mit einer Stellenanzeige abgleichen kann. Du musst nicht auf Gestaltung verzichten; der Text muss nur maschinenlesbar bleiben. Diese Anleitung geht der Reihe nach vor, vom Speichern der Datei bis zu den Stichpunkten.',
+    ctaTitle: 'Wie viele Punkte holt dein Lebenslauf gerade?',
+    ctaButton: 'Kostenlos prüfen',
+  },
   howAts: {
     metaTitle: "Wie ein ATS funktioniert - Bewerbungsfilter bestehen | CVision",
     metaDescription: "Wie lesen und bewerten Bewerbermanagementsysteme (ATS) deinen Lebenslauf? Erfahre, wie das ATS-Screening funktioniert, was ein ATS-Score bedeutet und wie du ihn bestehst.",

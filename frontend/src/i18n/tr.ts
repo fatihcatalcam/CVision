@@ -366,6 +366,7 @@ const tr = {
       faq: 'SSS',
       about: 'Hakkında',
       howAts: 'ATS nasıl çalışır',
+      atsCvHowTo: 'ATS uyumlu CV nasıl hazırlanır',
       // Footer link to /try. Every other route into that page is a <button
       // onClick={navigate}>, so until this existed the site's main conversion
       // page had no crawlable link pointing at it at all.
@@ -460,6 +461,15 @@ const tr = {
     ctaButton: 'CV\'mi Ücretsiz Analiz Et',
   },
 
+  atsCvHowTo: {
+    metaTitle: 'ATS Uyumlu CV Nasıl Hazırlanır? Adım Adım Rehber | CVision',
+    metaDescription: 'ATS uyumlu CV ve özgeçmiş nasıl hazırlanır? Şablon seçiminden bölüm başlıklarına, anahtar kelimelerden madde yazımına kadar adım adım rehber.',
+    back: '← Ana sayfaya dön',
+    title: 'ATS uyumlu CV nasıl hazırlanır',
+    definition: 'ATS uyumlu bir CV, bir Başvuru Takip Sisteminin baştan sona okuyabildiği, bölümlerine ayırabildiği ve iş ilanıyla eşleştirebildiği bir CV demektir. Tasarımdan vazgeçmeniz gerekmez; metnin makine tarafından okunabilir kalması yeterlidir. Bu rehber, dosyayı kaydetmekten madde işaretlerini yazmaya kadar sırayla ne yapmanız gerektiğini anlatır.',
+    ctaTitle: "CV'n şu an kaç puan alıyor?",
+    ctaButton: 'Ücretsiz kontrol et',
+  },
   howAts: {
     metaTitle: "ATS Nasıl Çalışır - Özgeçmiş Taramasını Geçin | CVision",
     metaDescription: "Başvuru Takip Sistemleri (ATS) CV'nizi ve özgeçmişinizi nasıl okur, ayrıştırır ve sıralar? ATS taramasının nasıl işlediğini, ATS puanının ne anlama geldiğini ve nasıl geçileceğini öğrenin.",

@@ -361,6 +361,7 @@ const fr = {
       faq: 'FAQ',
       about: 'À propos',
       howAts: 'Comment fonctionne un ATS',
+      atsCvHowTo: 'Comment faire un CV compatible ATS',
       tryFree: 'Analyse de CV gratuite',
       dashboard: 'Tableau de bord',
       signIn: 'Connexion',
@@ -452,6 +453,15 @@ const fr = {
     ctaButton: 'Analyser mon CV gratuitement',
   },
 
+  atsCvHowTo: {
+    metaTitle: 'Comment faire un CV compatible ATS : guide pas à pas | CVision',
+    metaDescription: "Comment faire un CV compatible ATS : choisir un modèle, nommer ses rubriques, reprendre les termes de l'offre et rédiger des puces qui seront lues.",
+    back: "← Retour à l'accueil",
+    title: 'Comment faire un CV compatible ATS',
+    definition: "Un CV compatible ATS est un CV qu'un logiciel de suivi des candidatures peut lire de bout en bout, découper en rubriques et comparer à une offre d'emploi. Vous n'avez pas à renoncer au design ; le texte doit simplement rester lisible par une machine. Ce guide suit l'ordre des étapes, de l'enregistrement du fichier à la rédaction des puces.",
+    ctaTitle: 'Quel score obtient votre CV en ce moment ?',
+    ctaButton: 'Vérifier gratuitement',
+  },
   howAts: {
     metaTitle: "Comment fonctionne un ATS - Réussir le tri des CV | CVision",
     metaDescription: "Comment les systèmes de suivi des candidatures (ATS) lisent-ils et classent-ils votre CV ? Découvrez le fonctionnement du tri ATS, la signification du score ATS et comment le réussir.",
