@@ -87,6 +87,61 @@ describe('vercel.json', () => {
   });
 });
 
+describe('robots.txt', () => {
+  const lines = () => read('public/robots.txt').split('\n').map((l) => l.trim());
+
+  it('keeps the group contiguous, with no blank line among the rules', () => {
+    // RFC 9309 - the spec Google wrote - lets blank lines sit inside a group.
+    // The older 1994 draft ends the record at the first blank line, and the
+    // parsers still following it (Python's stdlib robotparser among them) read
+    // this file as having NO rules at all: the blank line after "User-agent: *"
+    // discarded the group, and /dashboard, /hq-portal, /settings and /login
+    // came back crawlable. Comments are safe in both dialects; blank lines are
+    // not. Sitemap is a separate, group-independent directive and may follow a
+    // blank line.
+    const all = lines();
+    const start = all.findIndex((l) => l.toLowerCase().startsWith('user-agent:'));
+    const lastRule = all.reduce(
+      (acc, l, i) => (/^(allow|disallow):/i.test(l) ? i : acc),
+      -1,
+    );
+
+    expect(start, 'no user-agent line').toBeGreaterThanOrEqual(0);
+    expect(lastRule, 'no allow/disallow rules').toBeGreaterThan(start);
+
+    const blanks = all
+      .slice(start, lastRule + 1)
+      .map((l, i) => (l === '' ? start + i + 1 : 0))
+      .filter(Boolean);
+
+    expect(
+      blanks,
+      `blank line(s) inside the User-agent group at line(s) ${blanks.join(', ')}. ` +
+        `Legacy parsers stop reading there and every rule below is lost. ` +
+        `Use a # comment to break the file up instead.`,
+    ).toEqual([]);
+  });
+
+  it('still blocks the private routes and allows the public ones', () => {
+    const all = lines();
+    for (const path of ['/dashboard', '/hq-portal', '/settings', '/login', '/analysis/']) {
+      expect(all, `${path} must stay out of the index`).toContain(`Disallow: ${path}`);
+    }
+    for (const path of ['/try', '/pricing', '/about', '/how-ats-works']) {
+      expect(all, `${path} is public`).toContain(`Allow: ${path}`);
+    }
+    // The one that regressed: /pricing was Disallowed while it sat behind
+    // ProtectedRoute, and making the page public means removing that too.
+    expect(all).not.toContain('Disallow: /pricing');
+  });
+
+  it('points at the sitemap', () => {
+    expect(read('public/robots.txt')).toContain(
+      'Sitemap: https://www.cvisionapp.com/sitemap.xml',
+    );
+  });
+});
+
 describe('FAQ structured data', () => {
   it('is generated from the strings the homepage renders', () => {
     const json = faqJsonLd();
