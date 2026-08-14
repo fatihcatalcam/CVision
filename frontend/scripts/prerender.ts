@@ -28,6 +28,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
+import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
 import {
   SITE,
   URL_LANGUAGES,
@@ -166,13 +167,32 @@ function homeBody(b: Bundle): string {
   return parts.join('');
 }
 
-/** The ATS guide: title, definition, then six heading/body sections. */
-function guideBody(b: Bundle): string {
+/**
+ * The ATS guide: title, definition, six heading/body sections, then the
+ * long-form half from content/atsGuide.
+ *
+ * The extra sections only exist for languages with URLs of their own, which is
+ * why they are looked up by language rather than read off the bundle. See the
+ * header of content/atsGuide.ts.
+ */
+function guideBody(b: Bundle, lang: UrlLanguage): string {
   const g = b.howAts as Record<string, string>;
   const sections = [1, 2, 3, 4, 5, 6]
     .map((i) => h2(g[`s${i}Heading`]) + p(g[`s${i}Body`]))
     .join('');
-  return h1(g.title) + p(g.definition) + sections + h2(g.ctaTitle);
+
+  const extra = (ATS_GUIDE_EXTRA[lang] ?? [])
+    .map((section) =>
+      [
+        h2(section.heading),
+        section.intro ? p(section.intro) : '',
+        ...(section.items ?? []).map((item) => h3(item.title) + p(item.body)),
+        section.outro ? p(section.outro) : '',
+      ].join(''),
+    )
+    .join('');
+
+  return h1(g.title) + p(g.definition) + sections + extra + h2(g.ctaTitle);
 }
 
 function aboutBody(b: Bundle): string {
@@ -271,7 +291,7 @@ export function routesFor(lang: UrlLanguage): Route[] {
       path: '/how-ats-works',
       title: b.howAts.metaTitle,
       description: b.howAts.metaDescription,
-      body: guideBody(b),
+      body: guideBody(b, lang),
     },
     {
       path: '/pricing',

@@ -6,18 +6,26 @@ import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { Button } from '../../components/ui/Button';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
-
-const CANONICAL = 'https://www.cvisionapp.com/how-ats-works';
+import { ATS_GUIDE_EXTRA } from '../../content/atsGuide';
+import { localizedUrl } from '../../i18n/routes';
 
 export function HowAtsWorksPage() {
   const { t } = useTranslation();
-  const { href, go } = useLocalizedNav();
+  const { href, go, lang } = useLocalizedNav();
+
+  // Was a module-level constant pointing at the Turkish URL. This component
+  // renders at /en/how-ats-works too, where that string told Google the
+  // English page was a duplicate of the Turkish one.
+  const canonical = localizedUrl('/how-ats-works', lang);
 
   useSeo({
     title: t('howAts.metaTitle'),
     description: t('howAts.metaDescription'),
-    canonical: CANONICAL,
   });
+
+  // The long-form sections exist for the languages that have URLs of their own;
+  // the rest keep the six-section page they already had. See content/atsGuide.
+  const extra = ATS_GUIDE_EXTRA[lang] ?? [];
 
   // Article JSON-LD for this guide. Injected per-route and removed on unmount so
   // it never lingers on other pages. Kept in the active language.
@@ -31,7 +39,7 @@ export function HowAtsWorksPage() {
       headline: t('howAts.title'),
       description: t('howAts.metaDescription'),
       inLanguage: document.documentElement.lang || 'en',
-      mainEntityOfPage: { '@type': 'WebPage', '@id': CANONICAL },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
       author: { '@type': 'Organization', name: 'CVision' },
       publisher: { '@id': 'https://www.cvisionapp.com/#organization' },
     });
@@ -85,6 +93,38 @@ export function HowAtsWorksPage() {
               <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
                 {t(`howAts.s${i}Body`)}
               </p>
+            </section>
+          ))}
+
+          {/* The long-form half. Same markup as above so the page reads as one
+              article, and the same content the prerender script emits - text
+              only the static HTML shows is text Google throws away when it
+              renders the page for real. */}
+          {extra.map((section) => (
+            <section key={section.heading} className="space-y-3">
+              <h2 className="text-base font-bold uppercase tracking-wider text-[#6B6A65] dark:text-[#908d89]">
+                {section.heading}
+              </h2>
+              {section.intro && (
+                <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
+                  {section.intro}
+                </p>
+              )}
+              {section.items?.map((item) => (
+                <div key={item.title} className="pt-2 space-y-1">
+                  <h3 className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+              {section.outro && (
+                <p className="pt-2 text-sm leading-relaxed text-[#444] dark:text-[#c8c6c3]">
+                  {section.outro}
+                </p>
+              )}
             </section>
           ))}
         </div>

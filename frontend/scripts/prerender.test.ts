@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { routesFor, faqJsonLd, sitemapXml, alternatesHtml } from './prerender';
 import { URL_LANGUAGES, LOCALIZED_PATHS, localizedUrl } from '../src/i18n/routes';
+import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
 import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
 
@@ -250,6 +251,48 @@ describe('sitemap', () => {
 
     expect(urls).toBeGreaterThan(0);
     expect(stamps).toBe(urls);
+  });
+});
+
+describe('the ATS guide', () => {
+  const guide = (lang: 'tr' | 'en') =>
+    routesFor(lang).find((r) => r.path === '/how-ats-works')!;
+
+  it('carries the long-form sections in both URL languages', () => {
+    for (const lang of ['tr', 'en'] as const) {
+      const body = guide(lang).body;
+      for (const section of ATS_GUIDE_EXTRA[lang]!) {
+        expect(body, `${lang} is missing "${section.heading}"`)
+          .toContain(section.heading.replace(/&/g, '&amp;'));
+      }
+    }
+  });
+
+  it('is long enough to be worth ranking', () => {
+    // It was 509 words - thin for a page written specifically to rank, and
+    // Search Console showed it earning zero impressions. This is a floor, not
+    // a target; it only fails if someone deletes most of the article.
+    for (const lang of ['tr', 'en'] as const) {
+      const words = guide(lang).body.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean);
+      expect(words.length, `${lang} guide word count`).toBeGreaterThan(1000);
+    }
+  });
+
+  it('gives the extra sections real headings and subheadings', () => {
+    for (const lang of ['tr', 'en'] as const) {
+      const body = guide(lang).body;
+      expect((body.match(/<h2>/g) ?? []).length, `${lang} h2 count`).toBeGreaterThan(6);
+      expect((body.match(/<h3>/g) ?? []).length, `${lang} h3 count`).toBeGreaterThan(10);
+    }
+  });
+
+  it('leaves the untranslated languages with the page they already had', () => {
+    // Spanish, German and French have no URLs, so nothing here could rank for
+    // them. Falling back to English would replace half their page with a
+    // language they did not ask for; absent is the deliberate answer.
+    for (const lang of ['es', 'de', 'fr']) {
+      expect(ATS_GUIDE_EXTRA[lang]).toBeUndefined();
+    }
   });
 });
 
