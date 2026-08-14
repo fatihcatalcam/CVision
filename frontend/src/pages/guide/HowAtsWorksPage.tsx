@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { Button } from '../../components/ui/Button';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 
 const CANONICAL = 'https://www.cvisionapp.com/how-ats-works';
 
 export function HowAtsWorksPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { href, go } = useLocalizedNav();
 
   useSeo({
     title: t('howAts.metaTitle'),
@@ -49,8 +49,8 @@ export function HowAtsWorksPage() {
         style={{ background: 'color-mix(in srgb, var(--color-background) 95%, transparent)' }}>
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
           <a
-            href="/"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            href={href('/')}
+            onClick={(e) => { e.preventDefault(); go('/'); }}
             className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -94,7 +94,7 @@ export function HowAtsWorksPage() {
           <h2 className="text-xl font-bold text-[#111111] dark:text-[#e8e7e4] tracking-tight">
             {t('howAts.ctaTitle')}
           </h2>
-          <Button size="lg" onClick={() => navigate('/try')}>
+          <Button size="lg" onClick={() => go('/try')}>
             {t('howAts.ctaButton')}
             <ArrowRight className="w-4 h-4" />
           </Button>
@@ -106,8 +106,8 @@ export function HowAtsWorksPage() {
         <div className="max-w-3xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
           <div className="flex items-center gap-5 text-xs text-[#6B6A65] dark:text-[#908d89]">
-            <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
-            <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
+            <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
+            <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>
           </div>
         </div>

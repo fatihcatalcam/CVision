@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  URL_LANGUAGES,
+  localizedPath,
+  splitLangPath,
+  isLocalizedPath,
+  type UrlLanguage,
+} from '../../i18n/routes';
 
 // flagcdn.com serves tiny flag images; Windows browsers don't render flag emojis
 const LANGUAGES = [
@@ -26,6 +34,8 @@ const DROPDOWN_W = 160; // w-40
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   // Anchor the panel to whichever side keeps it inside the viewport
   const [alignLeft, setAlignLeft] = useState(false);
@@ -37,6 +47,37 @@ export function LanguageSwitcher() {
     const rect = ref.current?.getBoundingClientRect();
     if (rect) setAlignLeft(rect.right - DROPDOWN_W < 8);
     setOpen(o => !o);
+  };
+
+  /**
+   * Switching language means changing URL, not just state.
+   *
+   * Turkish and English have URLs of their own now, so picking one on a
+   * translated page has to move the visitor to that page's other address -
+   * otherwise /en/try would sit there rendering Turkish, contradicting its own
+   * canonical and hreflang, and the visitor could never link anyone to what
+   * they are reading.
+   *
+   * Spanish, German and French have no URLs (see i18n/routes.ts), and neither
+   * do the pages behind login. Those still switch in place, which is the whole
+   * behaviour this component used to have.
+   */
+  const choose = (code: string) => {
+    setOpen(false);
+
+    const { path } = splitLangPath(location.pathname);
+    const hasUrls = (URL_LANGUAGES as readonly string[]).includes(code);
+
+    if (hasUrls && isLocalizedPath(path)) {
+      // LanguageBoundary sets the language for /en; for the Turkish tree there
+      // is no boundary, so set it here. Doing both is harmless - i18next
+      // ignores a change to the language it is already on.
+      i18n.changeLanguage(code);
+      navigate(localizedPath(path, code as UrlLanguage));
+      return;
+    }
+
+    i18n.changeLanguage(code);
   };
 
   useEffect(() => {
@@ -75,7 +116,7 @@ export function LanguageSwitcher() {
           {LANGUAGES.map(lang => (
             <button
               key={lang.code}
-              onClick={() => { i18n.changeLanguage(lang.code); setOpen(false); }}
+              onClick={() => choose(lang.code)}
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors text-left
                 ${current.code === lang.code
                   ? 'text-[#111111] dark:text-[#e8e7e4] font-medium bg-[#F7F6F3] dark:bg-white/[0.05]'

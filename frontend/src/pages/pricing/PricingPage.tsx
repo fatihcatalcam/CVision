@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
 import { ArrowLeft, Loader2, Shield, Lock, Gift } from 'lucide-react';
@@ -35,11 +36,11 @@ export function PricingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { go } = useLocalizedNav();
 
   useSeo({
     title: t('settings.pricing.metaTitle'),
     description: t('settings.pricing.metaDescription'),
-    canonical: 'https://www.cvisionapp.com/pricing',
   });
 
   const { packs } = useCreditPacks();
@@ -83,7 +84,7 @@ export function PricingPage() {
             and navigate(-1) would leave the visitor on a button that does
             nothing. Home is the honest destination in that case. */}
         <button
-          onClick={() => (location.key === 'default' ? navigate('/') : navigate(-1))}
+          onClick={() => (location.key === 'default' ? go('/') : navigate(-1))}
           className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" /> {t('settings.pricing.back')}

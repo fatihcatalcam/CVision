@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Lock, ArrowRight, Sparkles, Check, ScanSearch } from 'lucide-react';
 import api from '../../services/api';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { CVUploader } from '../../components/cv/CVUploader';
 import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
@@ -42,6 +43,7 @@ function scoreColor(value: number) {
 export function TryPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { go } = useLocalizedNav();
   const [phase, setPhase] = useState<Phase>('upload');
   const [result, setResult] = useState<AnonResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -51,7 +53,6 @@ export function TryPage() {
   useSeo({
     title: t('try.metaTitle'),
     description: t('try.metaDescription'),
-    canonical: 'https://www.cvisionapp.com/try',
   });
 
   useEffect(() => () => { activeRef.current = false; }, []);
@@ -108,7 +109,7 @@ export function TryPage() {
     <div className="min-h-screen" style={{ background: 'var(--color-background)' }}>
       <header className="sticky top-0 z-50 backdrop-blur-sm border-b" style={{ background: 'color-mix(in srgb, var(--color-background) 95%, transparent)', borderColor: 'var(--color-card-border)' }}>
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
-          <button onClick={() => navigate('/')} className="font-mono font-medium tracking-tight text-base" style={{ color: 'var(--color-foreground)' }}>CVision</button>
+          <button onClick={() => go('/')} className="font-mono font-medium tracking-tight text-base" style={{ color: 'var(--color-foreground)' }}>CVision</button>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />

@@ -1,5 +1,6 @@
 /**
- * Build-time prerendering for the public marketing routes.
+ * Build-time prerendering for the public marketing routes, in every URL
+ * language.
  *
  * The app is a client-rendered SPA: every URL is served the same index.html,
  * whose <title> and <meta description> describe the HOMEPAGE, with an empty
@@ -8,31 +9,63 @@
  * The /how-ats-works guide, written specifically to rank, had zero impressions.
  *
  * This emits dist/<route>/index.html per route with that route's real title,
- * description, canonical, social tags and body copy, plus the homepage's own
- * copy into dist/index.html. The homepage was the one page left out of the
- * first pass, so the site's most-linked URL kept serving an empty <div
- * id="root"> - no H1, no text - to every crawler that asked for it.
+ * description, canonical, hreflang set, social tags and body copy, plus the
+ * homepage's own copy into dist/index.html.
  *
  * Vercel serves static files before applying the SPA rewrite in vercel.json, so
  * a crawler hitting /how-ats-works gets the real page instead of the homepage
  * shell. React then mounts over it as usual (createRoot replaces the container,
  * so there is no hydration mismatch to manage).
  *
- * Copy comes from the SAME i18n resource the React components render, so the
- * static HTML can never drift from what users see. Turkish is prerendered
- * because it is the target market (~80% of traffic; position 1.67 in Turkey);
- * other languages still switch client-side after mount.
+ * Copy comes from the SAME i18n resources the React components render, so the
+ * static HTML can never drift from what users see. Turkish holds the bare paths
+ * (~80% of traffic, position 1.67 in Turkey); English lives under /en. Spanish,
+ * German and French still switch client-side only - see src/i18n/routes.ts for
+ * why they deliberately have no URLs.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import tr from '../src/i18n/tr';
+import en from '../src/i18n/en';
+import {
+  SITE,
+  URL_LANGUAGES,
+  DEFAULT_URL_LANGUAGE,
+  LOCALIZED_PATHS,
+  localizedPath,
+  localizedUrl,
+  type UrlLanguage,
+} from '../src/i18n/routes';
 
-const SITE = 'https://www.cvisionapp.com';
 const DIST = path.resolve(process.cwd(), 'dist');
 
+/** The shape every locale shares; the parity test keeps them identical. */
+type Bundle = typeof tr;
+
+const BUNDLES: Record<UrlLanguage, Bundle> = { tr, en: en as Bundle };
+
+/**
+ * When each page's CONTENT last changed - not when it was last built.
+ *
+ * lastmod is the only field in a sitemap Google reads; changefreq and priority
+ * are ignored outright. Stamping the build date on every page each deploy
+ * teaches the crawler the field means nothing, so these are set by hand and
+ * only when the copy really moves. The legal pages carry the "Son güncelleme"
+ * date printed in their own body.
+ */
+const LASTMOD: Record<string, string> = {
+  '/': '2026-08-14',
+  '/try': '2026-08-14',
+  '/how-ats-works': '2026-08-14',
+  '/pricing': '2026-08-14',
+  '/about': '2026-08-14',
+  '/privacy': '2025-05-28',
+  '/terms': '2025-05-28',
+};
+
 type Route = {
-  /** URL path, also the output directory under dist/. */
+  /** Path within its language, e.g. "/try". "/" is the homepage. */
   path: string;
   title: string;
   description: string;
@@ -71,40 +104,43 @@ const PRERENDER_STYLE =
   '#prerender nav a{color:inherit;text-decoration:none}' +
   '</style>';
 
+const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
+const h2 = (s: string) => `<h2>${esc(s)}</h2>`;
+const h3 = (s: string) => `<h3>${esc(s)}</h3>`;
+const p = (s: string) => `<p>${esc(s)}</p>`;
+
 /**
  * The public routes, as real links, in the pre-mount markup.
  *
  * The rendered app has these in its footer, so Google finds them either way.
  * Bing and most AI crawlers do not execute JS, and for them the prerendered
  * body was a wall of prose with no outbound links at all - every page an
- * island. These are the same destinations the footer offers, nothing extra.
+ * island. Links stay inside their own language tree, so /en never hands a
+ * crawler a Turkish page as the next hop.
  */
-const NAV_LINKS: [string, string][] = [
-  ['/', 'CVision'],
-  ['/try', tr.home.nav.tryFree],
-  ['/how-ats-works', tr.home.nav.howAts],
-  ['/pricing', tr.packs.title],
-  ['/about', tr.home.nav.about],
-  ['/privacy', tr.common.privacy],
-  ['/terms', tr.common.terms],
-];
+function navHtml(b: Bundle, lang: UrlLanguage, self: string): string {
+  const labels: [string, string][] = [
+    ['/', 'CVision'],
+    ['/try', b.home.nav.tryFree],
+    ['/how-ats-works', b.home.nav.howAts],
+    ['/pricing', b.packs.title],
+    ['/about', b.home.nav.about],
+    ['/privacy', b.common.privacy],
+    ['/terms', b.common.terms],
+  ];
+  return labels
+    .filter(([p]) => p !== self)
+    .map(([p, label]) => `<a href="${localizedPath(p, lang)}">${esc(label)}</a>`)
+    .join(' · ');
+}
 
 /** Everything that goes inside <div id="root"> for a prerendered page. */
-const shell = (body: string, self: string) => {
-  const nav = NAV_LINKS.filter(([href]) => href !== self)
-    .map(([href, label]) => `<a href="${href}">${esc(label)}</a>`)
-    .join(' · ');
-  return `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav></div>`;
-};
-
-const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
-const h2 = (s: string) => `<h2>${esc(s)}</h2>`;
-const h3 = (s: string) => `<h3>${esc(s)}</h3>`;
-const p = (s: string) => `<p>${esc(s)}</p>`;
+const shell = (body: string, nav: string) =>
+  `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav></div>`;
 
 /** The homepage: hero, how-it-works, features, and the full FAQ. */
-function homeBody(): string {
-  const h = tr.home;
+function homeBody(b: Bundle): string {
+  const h = b.home;
   const parts = [h1(h.hero.title), p(h.hero.subtitle)];
 
   const steps = h.howItWorks as Record<string, string>;
@@ -119,10 +155,8 @@ function homeBody(): string {
     parts.push(h3(features[`${key}Title`]), p(features[`${key}Desc`]));
   }
 
-  // The FAQ matters most here: the template already ships a FAQPage JSON-LD
-  // block with these exact answers, but the visible copy backing it only
-  // existed after React mounted. Crawlers that check the markup against the
-  // rendered page saw structured data with nothing behind it.
+  // The FAQ matters most here: the FAQPage JSON-LD quotes these exact answers,
+  // and Google asks that the markup match what a visitor can actually read.
   const faq = h.faq as Record<string, string>;
   parts.push(h2(faq.label));
   for (let i = 1; faq[`q${i}`]; i++) {
@@ -133,16 +167,16 @@ function homeBody(): string {
 }
 
 /** The ATS guide: title, definition, then six heading/body sections. */
-function guideBody(): string {
-  const g = tr.howAts as Record<string, string>;
+function guideBody(b: Bundle): string {
+  const g = b.howAts as Record<string, string>;
   const sections = [1, 2, 3, 4, 5, 6]
     .map((i) => h2(g[`s${i}Heading`]) + p(g[`s${i}Body`]))
     .join('');
   return h1(g.title) + p(g.definition) + sections + h2(g.ctaTitle);
 }
 
-function aboutBody(): string {
-  const a = tr.about as Record<string, unknown>;
+function aboutBody(b: Bundle): string {
+  const a = b.about as Record<string, unknown>;
   const parts = [h1(String(a.title))];
   // The About page stores its prose under numbered/limited keys; take every
   // string value that is not meta so the crawler sees the real copy.
@@ -198,8 +232,8 @@ function summarize(text: string, max = 155): string {
  * prerendered text that the mounted app does not also show is text Google
  * discards when it renders the page for real.
  */
-function pricingBody(): string {
-  const k = tr.packs as Record<string, unknown>;
+function pricingBody(b: Bundle): string {
+  const k = b.packs as Record<string, unknown>;
   const seo = k.seo as Record<string, string>;
   return [
     h1(String(k.title)),
@@ -210,8 +244,8 @@ function pricingBody(): string {
   ].join('');
 }
 
-function tryBody(): string {
-  const t = tr.try as Record<string, unknown>;
+function tryBody(b: Bundle): string {
+  const t = b.try as Record<string, unknown>;
   const seo = (t.seo ?? {}) as Record<string, string>;
   const parts = [h1(String(t.heading)), p(String(t.sub))];
   // SEO copy block (added so this page has something to rank on - it was
@@ -222,46 +256,46 @@ function tryBody(): string {
   return parts.join('');
 }
 
-const ROUTES: Route[] = [
-  {
-    path: '/how-ats-works',
-    title: tr.howAts.metaTitle,
-    description: tr.howAts.metaDescription,
-    body: guideBody(),
-  },
-  {
-    path: '/try',
-    title: tr.try.metaTitle,
-    description: tr.try.metaDescription,
-    body: tryBody(),
-  },
-  {
-    path: '/about',
-    title: tr.about.metaTitle,
-    description: tr.about.metaDescription,
-    body: aboutBody(),
-  },
-  {
-    path: '/pricing',
-    title: tr.settings.pricing.metaTitle,
-    description: tr.settings.pricing.metaDescription,
-    body: pricingBody(),
-  },
-  // Titles here must match what PrivacyPage/TermsPage hand to useSeo, or the
-  // tab title would visibly change the moment React mounts.
-  {
-    path: '/privacy',
-    title: `${tr.legal.privacy.title} - CVision`,
-    description: summarize(tr.legal.privacy.s1Body),
-    body: legalBody(tr.legal.privacy),
-  },
-  {
-    path: '/terms',
-    title: `${tr.legal.terms.title} - CVision`,
-    description: summarize(tr.legal.terms.s1Body),
-    body: legalBody(tr.legal.terms),
-  },
-];
+/**
+ * Every localized route for one language.
+ *
+ * Order matches LOCALIZED_PATHS, which is also sitemap order, so the two can
+ * be compared without sorting.
+ */
+export function routesFor(lang: UrlLanguage): Route[] {
+  const b = BUNDLES[lang];
+  return [
+    { path: '/', title: b.home.metaTitle, description: b.home.metaDescription, body: homeBody(b) },
+    { path: '/try', title: b.try.metaTitle, description: b.try.metaDescription, body: tryBody(b) },
+    {
+      path: '/how-ats-works',
+      title: b.howAts.metaTitle,
+      description: b.howAts.metaDescription,
+      body: guideBody(b),
+    },
+    {
+      path: '/pricing',
+      title: b.settings.pricing.metaTitle,
+      description: b.settings.pricing.metaDescription,
+      body: pricingBody(b),
+    },
+    { path: '/about', title: b.about.metaTitle, description: b.about.metaDescription, body: aboutBody(b) },
+    // Titles here must match what PrivacyPage/TermsPage hand to useSeo, or the
+    // tab title would visibly change the moment React mounts.
+    {
+      path: '/privacy',
+      title: `${b.legal.privacy.title} - CVision`,
+      description: summarize(b.legal.privacy.s1Body),
+      body: legalBody(b.legal.privacy),
+    },
+    {
+      path: '/terms',
+      title: `${b.legal.terms.title} - CVision`,
+      description: summarize(b.legal.terms.s1Body),
+      body: legalBody(b.legal.terms),
+    },
+  ];
+}
 
 /**
  * FAQPage structured data, built from the SAME strings the homepage renders.
@@ -274,11 +308,11 @@ const ROUTES: Route[] = [
  * written in English for a page that renders in Turkish, and still quoting the
  * retired monthly subscription months after the move to credits.
  *
- * Generating it from tr.home.faq means it is injected on the homepage alone and
- * is, by construction, exactly what a visitor reads there.
+ * Generating it per language means each homepage carries its own, and each is,
+ * by construction, exactly what a visitor reads there.
  */
-function faqJsonLd(): string {
-  const faq = tr.home.faq as Record<string, string>;
+export function faqJsonLd(lang: UrlLanguage = DEFAULT_URL_LANGUAGE): string {
+  const faq = BUNDLES[lang].home.faq as Record<string, string>;
   const mainEntity = [];
   for (let i = 1; faq[`q${i}`]; i++) {
     mainEntity.push({
@@ -288,15 +322,33 @@ function faqJsonLd(): string {
     });
   }
   if (!mainEntity.length) {
-    throw new Error('prerender: no FAQ questions found in tr.home.faq');
+    throw new Error(`prerender: no FAQ questions found in ${lang}.home.faq`);
   }
   // Escaping "<" keeps a stray "</script>" in the copy from closing this tag.
   const json = JSON.stringify(
-    { '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: 'tr', mainEntity },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: lang, mainEntity },
     null,
     2,
   ).replace(/</g, '\\u003c');
   return `<script type="application/ld+json">\n${json}\n</script>`;
+}
+
+/**
+ * The hreflang set for one path.
+ *
+ * Every page in the set must name every other AND itself, or Google discards
+ * the lot. x-default is what a visitor gets when none of the declared
+ * languages matches theirs; Turkish takes it because it is the default tree.
+ */
+export function alternatesHtml(routePath: string): string {
+  const links = URL_LANGUAGES.map(
+    (lang) =>
+      `<link rel="alternate" hreflang="${lang}" href="${localizedUrl(routePath, lang)}" />`,
+  );
+  links.push(
+    `<link rel="alternate" hreflang="x-default" href="${localizedUrl(routePath, DEFAULT_URL_LANGUAGE)}" />`,
+  );
+  return links.join('\n    ');
 }
 
 /**
@@ -319,8 +371,14 @@ function replaceOnce(html: string, re: RegExp, next: string, label: string): str
   return sub(html, re, next);
 }
 
-function buildPage(template: string, route: Route): string {
-  const url = `${SITE}${route.path}`;
+function buildPage(
+  template: string,
+  route: Route,
+  lang: UrlLanguage,
+  /** Markup appended straight after the #root div. Only the SPA fallback uses it. */
+  afterRoot = '',
+): string {
+  const url = localizedUrl(route.path, lang);
   let html = template;
 
   html = replaceOnce(html, /<title>[\s\S]*?<\/title>/, `<title>${esc(route.title)}</title>`, '<title>');
@@ -333,9 +391,16 @@ function buildPage(template: string, route: Route): string {
   html = replaceOnce(
     html,
     /<link rel="canonical" href="[\s\S]*?"\s*\/?>/,
-    `<link rel="canonical" href="${url}" />`,
+    `<link rel="canonical" href="${url}" />\n    ${alternatesHtml(route.path)}`,
     'canonical',
   );
+
+  // The document language has to match the copy below it. Turkish is what the
+  // template ships; an English page that kept lang="tr" would also run its own
+  // labels through Turkish uppercase rules ("LATEST ANALYSİS").
+  html = sub(html, /<html lang="[^"]*"/, `<html lang="${lang}"`);
+  html = sub(html, /<meta property="og:locale" content="[^"]*"\s*\/?>/,
+    `<meta property="og:locale" content="${lang === 'tr' ? 'tr_TR' : 'en_US'}" />`);
 
   // Social tags: keep them consistent with the page, but do not fail the build
   // if the template ever drops them.
@@ -345,38 +410,93 @@ function buildPage(template: string, route: Route): string {
   html = sub(html, /<meta name="twitter:title" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:title" content="${esc(route.title)}" />`);
   html = sub(html, /<meta name="twitter:description" content="[\s\S]*?"\s*\/?>/, `<meta name="twitter:description" content="${esc(route.description)}" />`);
 
+  // The FAQ schema belongs on the homepage of each tree and nowhere else.
+  if (route.path === '/') {
+    html = replaceOnce(html, /<\/head>/, `${faqJsonLd(lang)}\n  </head>`, '</head>');
+  }
+
   html = replaceOnce(
     html,
     /<div id="root"><\/div>/,
-    `<div id="root">${shell(route.body, route.path)}</div>`,
+    `<div id="root">${shell(route.body, navHtml(BUNDLES[lang], lang, route.path))}</div>${afterRoot}`,
     '#root container',
   );
 
   return html;
 }
 
-function main() {
+/**
+ * sitemap.xml, generated rather than hand-kept.
+ *
+ * The hand-written file had drifted twice: it listed /privacy and /terms while
+ * neither was prerendered, and it carried no lastmod at all. Building it from
+ * the same list the pages are built from makes the first impossible, and
+ * LASTMOD above makes the second deliberate.
+ */
+export function sitemapXml(): string {
+  const urls = URL_LANGUAGES.flatMap((lang) =>
+    LOCALIZED_PATHS.map((routePath) => {
+      const alternates = URL_LANGUAGES.map(
+        (other) =>
+          `    <xhtml:link rel="alternate" hreflang="${other}" href="${localizedUrl(routePath, other)}" />`,
+      ).join('\n');
+      return [
+        '  <url>',
+        `    <loc>${localizedUrl(routePath, lang)}</loc>`,
+        `    <lastmod>${LASTMOD[routePath]}</lastmod>`,
+        alternates,
+        `    <xhtml:link rel="alternate" hreflang="x-default" href="${localizedUrl(routePath, DEFAULT_URL_LANGUAGE)}" />`,
+        '  </url>',
+      ].join('\n');
+    }),
+  );
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!--',
+    '  GENERATED by scripts/prerender.ts. Do not edit by hand.',
+    '',
+    '  lastmod is the only field Google reads here - changefreq and priority are',
+    '  ignored outright - so it is set from a hand-kept map of when each page\'s',
+    '  copy really changed, never from the build date.',
+    '-->',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+    '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    ...urls,
+    '</urlset>',
+    '',
+  ].join('\n');
+}
+
+export function main() {
   const templatePath = path.join(DIST, 'index.html');
   if (!fs.existsSync(templatePath)) {
     throw new Error('prerender: dist/index.html missing - run vite build first.');
   }
   const template = fs.readFileSync(templatePath, 'utf8');
 
-  for (const route of ROUTES) {
-    const outDir = path.join(DIST, route.path.replace(/^\//, ''));
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'index.html'), buildPage(template, route), 'utf8');
-    console.log(`prerendered ${route.path} -> ${path.relative(DIST, outDir)}/index.html`);
+  let written = 0;
+  for (const lang of URL_LANGUAGES) {
+    for (const route of routesFor(lang)) {
+      const urlPath = localizedPath(route.path, lang);
+      const html = buildPage(template, route, lang);
+
+      if (urlPath === '/') {
+        // The Turkish homepage IS dist/index.html - the template every page
+        // above was built from, so it is written last, after the loop.
+        continue;
+      }
+      const outDir = path.join(DIST, urlPath.replace(/^\//, ''));
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf8');
+      written++;
+      console.log(`prerendered ${urlPath}`);
+    }
   }
 
-  // The homepage is written LAST because its output file IS dist/index.html -
-  // the template every page above was built from. Only the body is injected:
-  // the <head> here already describes the homepage, hand-tuned down to the
-  // keywords and JSON-LD, so running it through buildPage would be a downgrade.
+  // Written last because its output file IS the template read above.
   //
-  // This is also the file vercel.json falls back to for every route that is not
-  // prerendered, which is a second reason it has to hold the homepage's copy.
-  // Being the fallback has a cost the three pages above do not pay: on /login,
+  // Being the SPA fallback has a cost the other pages do not pay: on /login,
   // /dashboard and friends this homepage copy would PAINT before React mounts,
   // because the app CSS is render-blocking and lands well before the JS bundle.
   // The inline script below runs synchronously during parse - before first
@@ -386,29 +506,24 @@ function main() {
   const guard =
     `<script>if(location.pathname!=='/')document.getElementById('root').textContent=''</script>`;
 
-  let home = replaceOnce(
-    template,
-    /<div id="root"><\/div>/,
-    `<div id="root">${shell(homeBody(), '/')}</div>${guard}`,
-    'empty #root container (run vite build again if this file was already prerendered)',
+  const home = routesFor(DEFAULT_URL_LANGUAGE)[0];
+  fs.writeFileSync(
+    templatePath,
+    buildPage(template, home, DEFAULT_URL_LANGUAGE, guard),
+    'utf8',
   );
+  written++;
+  console.log('prerendered / (+ FAQPage JSON-LD)');
 
-  // The FAQ schema goes in HERE and nowhere else. Adding it to index.html by
-  // hand is what put it on every route in the first place, since that file is
-  // the template above and the SPA fallback for everything not prerendered.
-  home = replaceOnce(home, /<\/head>/, `${faqJsonLd()}\n  </head>`, '</head>');
-
-  fs.writeFileSync(templatePath, home, 'utf8');
-  console.log('prerendered / -> index.html (+ FAQPage JSON-LD)');
-  console.log(`prerender: ${ROUTES.length + 1} routes written`);
+  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemapXml(), 'utf8');
+  console.log(`prerender: ${written} routes written, sitemap.xml generated`);
 }
 
 // This module only DEFINES the build; prerender.run.ts is what executes it.
 //
-// Splitting them is what lets prerender.test.ts import ROUTES and faqJsonLd
+// Splitting them is what lets prerender.test.ts import routesFor and faqJsonLd
 // without writing into dist/ as a side effect of the import. The first attempt
 // guarded `main()` with a process.argv check instead, which silently made the
 // whole step a no-op: under `vite-node scripts/prerender.ts`, argv[1] is
 // vite-node.mjs, not the script, so the build passed and shipped a site with
 // no prerendering at all. An entry point cannot be got wrong that way.
-export { ROUTES, faqJsonLd, main };

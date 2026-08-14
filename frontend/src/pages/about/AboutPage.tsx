@@ -5,15 +5,16 @@ import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { Button } from '../../components/ui/Button';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 
 export function AboutPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { href, go } = useLocalizedNav();
 
   useSeo({
     title: t('about.metaTitle'),
     description: t('about.metaDescription'),
-    canonical: 'https://www.cvisionapp.com/about',
   });
 
   const sections = [1, 2, 3, 4, 5] as const;
@@ -26,8 +27,8 @@ export function AboutPage() {
         style={{ background: 'color-mix(in srgb, var(--color-background) 95%, transparent)' }}>
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
           <a
-            href="/"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            href={href('/')}
+            onClick={(e) => { e.preventDefault(); go('/'); }}
             className="flex items-center gap-1.5 text-sm text-[#6B6A65] dark:text-[#908d89] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -83,8 +84,8 @@ export function AboutPage() {
         <div className="max-w-3xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
           <div className="flex items-center gap-5 text-xs text-[#6B6A65] dark:text-[#908d89]">
-            <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
-            <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
+            <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
+            <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>
           </div>
         </div>

@@ -22,6 +22,8 @@ Allow: /about
 Allow: /pricing
 Allow: /privacy
 Allow: /terms
+# The English tree. Same pages, /en prefix.
+Allow: /en
 # Private / user pages — do not index
 Disallow: /dashboard
 Disallow: /analysis/

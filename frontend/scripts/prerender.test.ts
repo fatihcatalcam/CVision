@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROUTES, faqJsonLd } from './prerender';
+import { routesFor, faqJsonLd, sitemapXml, alternatesHtml } from './prerender';
+import { URL_LANGUAGES, LOCALIZED_PATHS, localizedUrl } from '../src/i18n/routes';
 import tr from '../src/i18n/tr';
+import en from '../src/i18n/en';
 
 /**
  * Guards on the build step, not the app.
@@ -30,10 +32,16 @@ describe('index.html template', () => {
     expect(read('index.html')).not.toContain('"@type": "FAQPage"');
   });
 
+  it('declares no hreflang of its own', () => {
+    // Same trap: alternates added by hand would ship on every page, each one
+    // claiming to be the homepage's translation. prerender.ts emits them
+    // per route, right after the canonical it also rewrites.
+    expect(read('index.html')).not.toContain('rel="alternate" hreflang');
+  });
+
   it('states the same title and description as tr.ts', () => {
-    // The homepage head is NOT rewritten by buildPage - this file is the
-    // homepage. useSeo then overwrites both from tr.ts on mount, so a drift
-    // here is a title that visibly changes as the page loads.
+    // The homepage head is the Turkish one, and useSeo overwrites both from
+    // tr.ts on mount - a drift here is a title that changes as the page loads.
     const html = read('index.html');
     expect(html).toContain(`<title>${tr.home.metaTitle}</title>`);
     expect(html).toContain(`content="${tr.home.metaDescription}"`);
@@ -124,14 +132,12 @@ describe('robots.txt', () => {
 
   it('still blocks the private routes and allows the public ones', () => {
     const all = lines();
-    for (const path of ['/dashboard', '/hq-portal', '/settings', '/login', '/analysis/']) {
-      expect(all, `${path} must stay out of the index`).toContain(`Disallow: ${path}`);
+    for (const p of ['/dashboard', '/hq-portal', '/settings', '/login', '/analysis/']) {
+      expect(all, `${p} must stay out of the index`).toContain(`Disallow: ${p}`);
     }
-    for (const path of ['/try', '/pricing', '/about', '/how-ats-works']) {
-      expect(all, `${path} is public`).toContain(`Allow: ${path}`);
+    for (const p of ['/try', '/pricing', '/about', '/how-ats-works', '/en']) {
+      expect(all, `${p} is public`).toContain(`Allow: ${p}`);
     }
-    // The one that regressed: /pricing was Disallowed while it sat behind
-    // ProtectedRoute, and making the page public means removing that too.
     expect(all).not.toContain('Disallow: /pricing');
   });
 
@@ -140,62 +146,107 @@ describe('robots.txt', () => {
       'Sitemap: https://www.cvisionapp.com/sitemap.xml',
     );
   });
+
+  it('does not ship a hand-written sitemap beside the generated one', () => {
+    // prerender.ts writes dist/sitemap.xml. A copy in public/ would be emitted
+    // first and then overwritten - or worse, survive and disagree.
+    expect(fs.existsSync(path.join(ROOT, 'public/sitemap.xml'))).toBe(false);
+  });
 });
 
 describe('FAQ structured data', () => {
-  it('is generated from the strings the homepage renders', () => {
-    const json = faqJsonLd();
-    const faq = tr.home.faq as Record<string, string>;
+  it('is generated from the strings that language\'s homepage renders', () => {
+    for (const lang of URL_LANGUAGES) {
+      const json = faqJsonLd(lang);
+      const faq = (lang === 'tr' ? tr : en).home.faq as Record<string, string>;
 
-    expect(json).toContain('"@type": "FAQPage"');
-    // Turkish, because the page it describes renders in Turkish. The old
-    // hand-written block was English on a tr page.
-    expect(json).toContain('"inLanguage": "tr"');
-    expect(json).toContain(JSON.stringify(faq.q1).slice(1, -1));
+      expect(json).toContain('"@type": "FAQPage"');
+      expect(json, `${lang} FAQ must declare its own language`)
+        .toContain(`"inLanguage": "${lang}"`);
+      expect(json).toContain(JSON.stringify(faq.q1).slice(1, -1));
+    }
   });
 
   it('covers every question on the page and invents none', () => {
-    const faq = tr.home.faq as Record<string, string>;
-    const asked = Object.keys(faq).filter((k) => /^q\d+$/.test(k)).length;
-    const answered = (faqJsonLd().match(/"@type": "Question"/g) ?? []).length;
+    for (const lang of URL_LANGUAGES) {
+      const faq = (lang === 'tr' ? tr : en).home.faq as Record<string, string>;
+      const asked = Object.keys(faq).filter((k) => /^q\d+$/.test(k)).length;
+      const answered = (faqJsonLd(lang).match(/"@type": "Question"/g) ?? []).length;
 
-    expect(asked).toBeGreaterThan(0);
-    expect(answered).toBe(asked);
+      expect(asked).toBeGreaterThan(0);
+      expect(answered, `${lang}`).toBe(asked);
+    }
   });
 
   it('quotes no price, so it cannot go stale the way the old block did', () => {
     // The retired ₺199.99/month subscription outlived the product by months in
     // three separate hand-kept copies, and that is what AI search engines were
     // still repeating back. Prices live in Lemon Squeezy; nothing here.
-    expect(faqJsonLd()).not.toMatch(/199[.,]99/);
+    for (const lang of URL_LANGUAGES) {
+      expect(faqJsonLd(lang)).not.toMatch(/199[.,]99/);
+    }
   });
 });
 
-describe('sitemap and prerendering agree', () => {
-  it('prerenders every URL the sitemap advertises', () => {
-    const sitemap = read('public/sitemap.xml');
-    const paths = [...sitemap.matchAll(/<loc>https:\/\/www\.cvisionapp\.com(\/[^<]*)?<\/loc>/g)]
-      .map((m) => m[1] ?? '/')
-      .filter((p) => p !== '/'); // the homepage is written separately, in main()
-
-    expect(paths.length).toBeGreaterThan(0);
-
-    const prerendered = ROUTES.map((r) => r.path);
-    const orphans = paths.filter((p) => !prerendered.includes(p));
-
-    expect(
-      orphans,
-      `in sitemap.xml but never prerendered, so crawlers get the homepage ` +
-        `shell and canonical="/" instead: ${orphans.join(', ')}`,
-    ).toEqual([]);
+describe('hreflang', () => {
+  it('names every language plus x-default, on every page', () => {
+    for (const routePath of LOCALIZED_PATHS) {
+      const html = alternatesHtml(routePath);
+      for (const lang of URL_LANGUAGES) {
+        expect(html, `${routePath} must declare ${lang}`)
+          .toContain(`hreflang="${lang}" href="${localizedUrl(routePath, lang)}"`);
+      }
+      expect(html).toContain('hreflang="x-default"');
+    }
   });
 
-  it('gives every sitemap URL a lastmod', () => {
-    // Google ignores changefreq and priority outright; lastmod is the only
-    // field it reads, and it was missing from all six entries.
-    const sitemap = read('public/sitemap.xml');
-    const urls = (sitemap.match(/<url>/g) ?? []).length;
-    const stamps = (sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) ?? []).length;
+  it('gives both translations of a page the identical set', () => {
+    // Reciprocity is the rule Google actually enforces: if /en/try names /try
+    // but /try does not name /en/try back, the whole set is discarded. Both
+    // pages are built from the same path, so the sets must be character-equal.
+    for (const routePath of LOCALIZED_PATHS) {
+      const set = alternatesHtml(routePath);
+      expect(set).toBe(alternatesHtml(routePath));
+      // And each page's set includes the page itself, which is also required.
+      for (const lang of URL_LANGUAGES) {
+        expect(set).toContain(localizedUrl(routePath, lang));
+      }
+    }
+  });
+});
+
+describe('sitemap', () => {
+  it('lists every localized path in every language', () => {
+    const xml = sitemapXml();
+    for (const lang of URL_LANGUAGES) {
+      for (const routePath of LOCALIZED_PATHS) {
+        expect(xml, `${lang} ${routePath}`)
+          .toContain(`<loc>${localizedUrl(routePath, lang)}</loc>`);
+      }
+    }
+    const count = (xml.match(/<loc>/g) ?? []).length;
+    expect(count).toBe(URL_LANGUAGES.length * LOCALIZED_PATHS.length);
+  });
+
+  it('prerenders every URL it advertises', () => {
+    // The invariant the hand-written file broke: /privacy and /terms were
+    // listed for months while neither was prerendered, so crawlers got the
+    // homepage shell and canonical="/" instead.
+    const xml = sitemapXml();
+    const listed = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+
+    const built = URL_LANGUAGES.flatMap((lang) =>
+      routesFor(lang).map((r) => localizedUrl(r.path, lang)),
+    );
+
+    const orphans = listed.filter((u) => !built.includes(u));
+    expect(orphans, `advertised but never prerendered: ${orphans.join(', ')}`).toEqual([]);
+  });
+
+  it('gives every entry a lastmod', () => {
+    const xml = sitemapXml();
+    const urls = (xml.match(/<url>/g) ?? []).length;
+    const stamps = (xml.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) ?? []).length;
 
     expect(urls).toBeGreaterThan(0);
     expect(stamps).toBe(urls);
@@ -203,19 +254,34 @@ describe('sitemap and prerendering agree', () => {
 });
 
 describe('prerendered routes', () => {
-  it('give each page its own title and description', () => {
-    for (const route of ROUTES) {
-      expect(route.title, `${route.path} title`).toBeTruthy();
-      expect(route.description, `${route.path} description`).toBeTruthy();
-      expect(route.title, `${route.path} still has the homepage title`)
-        .not.toBe(tr.home.metaTitle);
+  it('exist in both language trees, for the same paths', () => {
+    for (const lang of URL_LANGUAGES) {
+      expect(routesFor(lang).map((r) => r.path)).toEqual([...LOCALIZED_PATHS]);
     }
   });
 
-  it('give each page real body copy for crawlers', () => {
-    for (const route of ROUTES) {
-      expect(route.body, `${route.path} body`).toContain('<h1>');
-      expect(route.body.length, `${route.path} body length`).toBeGreaterThan(200);
+  it('give each page its own title, description and body', () => {
+    for (const lang of URL_LANGUAGES) {
+      const routes = routesFor(lang);
+      const home = routes[0];
+      for (const route of routes) {
+        expect(route.title, `${lang} ${route.path} title`).toBeTruthy();
+        expect(route.description, `${lang} ${route.path} description`).toBeTruthy();
+        expect(route.body, `${lang} ${route.path} body`).toContain('<h1>');
+        expect(route.body.length, `${lang} ${route.path} body length`).toBeGreaterThan(200);
+        if (route.path !== '/') {
+          expect(route.title, `${lang} ${route.path} still has the homepage title`)
+            .not.toBe(home.title);
+        }
+      }
     }
+  });
+
+  it('writes each tree in its own language', () => {
+    // The English pages are built from en.ts, not from tr.ts with an /en
+    // prefix bolted on. Comparing the homepage titles is the cheapest proof.
+    expect(routesFor('en')[0].title).toBe(en.home.metaTitle);
+    expect(routesFor('tr')[0].title).toBe(tr.home.metaTitle);
+    expect(routesFor('en')[0].title).not.toBe(routesFor('tr')[0].title);
   });
 });

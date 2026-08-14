@@ -6,9 +6,33 @@ import tr from './tr';
 import es from './es';
 import de from './de';
 import fr from './fr';
+import { splitLangPath, DEFAULT_URL_LANGUAGE } from './routes';
+
+/**
+ * The URL prefix outranks every stored preference.
+ *
+ * /en/try is not "a visitor who likes English" - it is the English URL of that
+ * page, prerendered in English, canonicalised to itself and named in the
+ * hreflang set. Serving a Turkish UI there because localStorage said so is the
+ * exact mismatch hreflang is meant to rule out.
+ *
+ * It returns undefined for the bare Turkish paths rather than 'tr', so those
+ * keep falling through to the stored preference and the browser's languages -
+ * the behaviour that was already there, and the only way /about can still show
+ * a German visitor German.
+ */
+const detector = new LanguageDetector();
+detector.addDetector({
+  name: 'urlPrefix',
+  lookup() {
+    if (typeof window === 'undefined') return undefined;
+    const { lang } = splitLangPath(window.location.pathname);
+    return lang === DEFAULT_URL_LANGUAGE ? undefined : lang;
+  },
+});
 
 i18n
-  .use(LanguageDetector)
+  .use(detector)
   .use(initReactI18next)
   .init({
     resources: {
@@ -21,7 +45,7 @@ i18n
     fallbackLng: 'en',
     defaultNS: 'translation',
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['urlPrefix', 'localStorage', 'navigator'],
       caches: ['localStorage'],
       lookupLocalStorage: 'cvision_lang',
     },

@@ -22,14 +22,13 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
     </noscript>
 
-    <!-- Canonical: fold duplicate hosts (apex, *.vercel.app) into the primary domain -->
+    <!-- Canonical: fold duplicate hosts (apex, *.vercel.app) into the primary
+         domain. scripts/prerender.ts rewrites this per route and appends the
+         hreflang set directly after it, so do not add alternates by hand -
+         they would ship on every page, each one claiming to be the homepage's
+         translation. Turkish holds the bare paths, English lives under /en;
+         see src/i18n/routes.ts. -->
     <link rel="canonical" href="https://www.cvisionapp.com/" />
-    <!-- No hreflang: this SPA serves every language from the SAME URL via
-         client-side detection, so there are no per-language URLs to point at.
-         hreflang requires distinct URLs per language (e.g. /en, /tr) with
-         reciprocal return tags; declaring tr/en/x-default all on "/" was an
-         invalid, self-referential signal that Google ignores. Re-add hreflang
-         only once real per-language routes exist. -->
 
 
     <!-- Primary Meta -->
@@ -51,8 +50,8 @@
          og:image is a purpose-built 1200x630 card, not logo.png. The logo is
          463x277 - below the 1200x630 that summary_large_image asks for - so
          every share was rendering it cropped or shrunk to a small thumbnail.
-         Copy here is Turkish to match the card and <html lang="tr">; the
-         prerendered routes overwrite these per page from the same tr.ts. -->
+         Copy here is Turkish to match the card and the document language; the
+         prerendered routes overwrite these per page from their own locale. -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="CVision - Yapay Zeka CV Analizi ve ATS Kontrolü" />
     <meta property="og:description" content="CV'ni veya özgeçmişini yükle; anında ATS uyumluluk skoru, eksik anahtar kelimeler ve yapay zeka ile yeniden yazım önerileri al. İlana göre eşleştir. Ücretsiz başla." />

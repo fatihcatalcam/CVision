@@ -351,8 +351,12 @@ const en = {
     },
   },
   home: {
-    metaTitle: 'CVision - AI Resume Analyzer & ATS Checker',
-    metaDescription: "Upload your CV for an instant ATS score, keyword-gap analysis, and AI rewrite suggestions. Match it to any job description. Free to start.",
+    // Keyword first, brand last - the same change made to the Turkish title,
+    // and it only started mattering for English when /en became a URL of its
+    // own. Until then every language shared "/" and there was nothing for an
+    // English query to rank.
+    metaTitle: 'Free ATS Resume Checker & AI CV Analysis | CVision',
+    metaDescription: "Upload your resume or CV for an instant ATS compatibility score, missing keywords, and AI rewrite suggestions. Match it to any job description. Free to start.",
     nav: {
       howItWorks: 'How it works',
       backToTop: 'Back to top',
@@ -704,8 +708,8 @@ const en = {
     extractedSkills: 'Extracted Skills',
   },
   try: {
-    metaTitle: 'Free CV Analysis — No Sign-Up | CVision',
-    metaDescription: 'Upload your CV and get an instant ATS score and AI feedback — no account needed.',
+    metaTitle: 'Free Resume & CV Checker — No Sign-Up | CVision',
+    metaDescription: 'Free resume and CV analysis with an ATS compatibility check. Upload your CV and get an instant ATS score and AI feedback — no account needed.',
     heading: 'Analyze your CV in 30 seconds',
     sub: 'No account needed. Upload your CV and see your ATS score instantly.',
     // Copy that gives this page something to rank on, and that the

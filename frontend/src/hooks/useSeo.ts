@@ -1,11 +1,26 @@
 import { useEffect } from 'react';
+import {
+  SITE,
+  URL_LANGUAGES,
+  DEFAULT_URL_LANGUAGE,
+  isLocalizedPath,
+  localizedUrl,
+  splitLangPath,
+} from '../i18n/routes';
 
 interface SeoOptions {
   /** Document title. Falls back to the static index.html title if omitted. */
   title?: string;
   /** Meta description. Updates the existing tag or creates one. */
   description?: string;
-  /** Absolute canonical URL for this route. */
+  /**
+   * Absolute canonical URL. Omit it: the default is derived from the current
+   * pathname, which is the only version that survives a second language tree.
+   * Every page used to hard-code its own string - `.../try` on TryPage - and
+   * those strings are wrong the moment the same component renders at /en/try,
+   * where they would tell Google the English page is a duplicate of the Turkish
+   * one. Pass it only for a page that genuinely canonicalises elsewhere.
+   */
   canonical?: string;
   /**
    * Keep this route out of the index. Needed for the 404 page: Vercel rewrites
@@ -42,6 +57,33 @@ function setCanonical(href: string) {
 }
 
 /**
+ * Point hreflang at this path's translations, or clear it if it has none.
+ *
+ * Clearing matters as much as setting. These tags are static in the
+ * prerendered HTML, so navigating from /try (translated) to /dashboard
+ * (not translated) inside the SPA would otherwise leave /try's alternates
+ * advertised on a page they do not describe.
+ */
+function setAlternates(path: string) {
+  for (const el of document.head.querySelectorAll('link[rel="alternate"][hreflang]')) {
+    el.remove();
+  }
+  if (!isLocalizedPath(path)) return;
+
+  const add = (hreflang: string, href: string) => {
+    const el = document.createElement('link');
+    el.setAttribute('rel', 'alternate');
+    el.setAttribute('hreflang', hreflang);
+    el.setAttribute('href', href);
+    document.head.appendChild(el);
+  };
+
+  for (const lang of URL_LANGUAGES) add(lang, localizedUrl(path, lang));
+  // x-default is what a visitor gets when no declared language matches theirs.
+  add('x-default', localizedUrl(path, DEFAULT_URL_LANGUAGE));
+}
+
+/**
  * Imperatively manage per-route SEO head tags for this client-rendered SPA.
  * Google executes JS and picks up these updates; this keeps the canonical and
  * title accurate as the user navigates between public routes.
@@ -50,7 +92,10 @@ export function useSeo({ title, description, canonical, noindex }: SeoOptions) {
   useEffect(() => {
     if (title) document.title = title;
     if (description) setMetaByName('description', description);
-    if (canonical) setCanonical(canonical);
+
+    const { path } = splitLangPath(window.location.pathname);
+    setCanonical(canonical ?? `${SITE}${window.location.pathname.replace(/\/+$/, '') || '/'}`);
+    setAlternates(path);
   }, [title, description, canonical]);
 
   // Separate effect with a cleanup, because this one has to be undone.

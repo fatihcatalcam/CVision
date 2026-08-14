@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { LanguageBoundary } from './components/LanguageBoundary';
 // HomePage is the landing route ("/") and the LCP page — keep it eager so the
 // first paint has no lazy-chunk waterfall. Every other route is code-split so
 // heavy, auth-only screens (admin + recharts, analysis + PDF viewer, match)
@@ -72,6 +73,22 @@ function App() {
             <Route path="/try" element={<TryPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
+
+            {/* The English tree. Same components, same order, one prefix.
+                Turkish keeps the bare paths because it is ~80% of traffic and
+                holds the rankings; moving it under /tr would ask Google to
+                re-learn every URL for nothing. See i18n/routes.ts.
+                Only the public pages are localized - the app behind login has
+                no SEO stake and no reason to double its URLs. */}
+            <Route path="/en" element={<LanguageBoundary lang="en" />}>
+              <Route index element={<HomePage />} />
+              <Route path="try" element={<TryPage />} />
+              <Route path="how-ats-works" element={<HowAtsWorksPage />} />
+              <Route path="pricing" element={<PricingPage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="privacy" element={<PrivacyPage />} />
+              <Route path="terms" element={<TermsPage />} />
+            </Route>
             {/* A real 404 rather than a redirect into a protected route.
                 See NotFoundPage: the old catch-all sent a logged-out visitor
                 with a stale link to /dashboard and from there to /login, with

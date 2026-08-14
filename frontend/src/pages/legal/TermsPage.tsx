@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 
 export function TermsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { href } = useLocalizedNav();
 
   useSeo({
     title: `${t('legal.terms.title')} - CVision`,
-    canonical: 'https://www.cvisionapp.com/terms',
   });
 
   return (
@@ -152,8 +153,8 @@ export function TermsPage() {
         <div className="max-w-3xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">CVision</span>
           <div className="flex items-center gap-5 text-xs text-[#6B6A65] dark:text-[#908d89]">
-            <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
-            <a href="/terms" className="text-[#1B3A6B] dark:text-[#4a7dd1] font-medium">{t('common.terms')}</a>
+            <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
+            <a href={href('/terms')} className="text-[#1B3A6B] dark:text-[#4a7dd1] font-medium">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>
           </div>
         </div>

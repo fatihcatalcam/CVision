@@ -9,17 +9,20 @@ import { useAuth } from '../../context/AuthContext';
 import { Reveal } from '../../components/ui/Reveal';
 import { HeroMockup } from '../../components/home/HeroMockup';
 import { useSeo } from '../../hooks/useSeo';
+import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 
 export function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // Links must stay in the visitor's language tree: on /en these have to point
+  // at /en/about, not at the Turkish page of the same name.
+  const { href, go } = useLocalizedNav();
   const { isAuthenticated } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useSeo({
     title: t('home.metaTitle'),
     description: t('home.metaDescription'),
-    canonical: 'https://www.cvisionapp.com/',
   });
 
   return (
@@ -43,7 +46,7 @@ export function HomePage() {
             <a href="#how-it-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
             <a href="#faq" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
-            <a href="/about" onClick={(e) => { e.preventDefault(); navigate('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
+            <a href={href('/about')} onClick={(e) => { e.preventDefault(); go('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
           </nav>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
@@ -78,7 +81,7 @@ export function HomePage() {
             <a href="#how-it-works" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
             <a href="#faq" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
-            <a href="/about" onClick={(e) => { e.preventDefault(); setMobileNavOpen(false); navigate('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
+            <a href={href('/about')} onClick={(e) => { e.preventDefault(); setMobileNavOpen(false); go('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
           </nav>
         )}
       </header>
@@ -104,7 +107,7 @@ export function HomePage() {
                 </Button>
               ) : (
                 <>
-                  <Button size="lg" onClick={() => navigate('/try')}>
+                  <Button size="lg" onClick={() => go('/try')}>
                     {t('home.hero.ctaAnalyze')}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -122,7 +125,7 @@ export function HomePage() {
               the accessible name. */}
           <button
             type="button"
-            onClick={() => navigate(isAuthenticated ? '/dashboard' : '/try')}
+            onClick={() => (isAuthenticated ? navigate('/dashboard') : go('/try'))}
             aria-label={isAuthenticated ? t('home.hero.ctaDashboard') : t('home.hero.ctaAnalyze')}
             className="block w-full text-left cursor-pointer bg-transparent border-0 p-0"
           >
@@ -260,12 +263,12 @@ export function HomePage() {
                 <button onClick={navigate}>, so the main conversion page had no
                 crawlable link anywhere on the site - Google only knew it from
                 the sitemap, and no internal link weight ever reached it. */}
-            <a href="/try" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.tryFree')}</a>
-            <a href="/about" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
-            <a href="/how-ats-works" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howAts')}</a>
-            <a href="/pricing" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('packs.title')}</a>
-            <a href="/privacy" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
-            <a href="/terms" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
+            <a href={href('/try')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.tryFree')}</a>
+            <a href={href('/about')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
+            <a href={href('/how-ats-works')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howAts')}</a>
+            <a href={href('/pricing')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('packs.title')}</a>
+            <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
+            <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
             <span>{t('common.copyright')}</span>
           </div>
         </div>
