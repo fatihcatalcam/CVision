@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LanguageBoundary } from './components/LanguageBoundary';
+import { ScrollToTop } from './components/ScrollToTop';
 // HomePage is the landing route ("/") and the LCP page — keep it eager so the
 // first paint has no lazy-chunk waterfall. Every other route is code-split so
 // heavy, auth-only screens (admin + recharts, analysis + PDF viewer, match)
@@ -44,6 +45,9 @@ function App() {
     <ThemeProvider>
     <AuthProvider>
       <BrowserRouter>
+        {/* Nothing resets the window offset inside a SPA, so every route change
+            used to open the next page wherever the last one was scrolled to. */}
+        <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />

@@ -112,6 +112,23 @@ html.dark * {
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Clear the sticky header when jumping to an anchor.
+     Every page header is `sticky top-0` with an h-14 bar, so 56px of the
+     viewport is already covered. Without this the browser scrolls the target
+     to y=0 and the heading you clicked ends up hidden behind the header - the
+     "how it works" and "features" links on the homepage all landed short.
+     scroll-padding-top belongs on the scroll container, so one rule here
+     covers every anchor in the app rather than a class per target.
+     56px header + 1rem of breathing room. */
+  scroll-padding-top: 4.5rem;
+  scroll-behavior: smooth;
+}
+
+/* Smooth scrolling is a preference, not a given. ScrollToTop already passes
+   behavior:'instant' for route changes; this covers the in-page anchors. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
