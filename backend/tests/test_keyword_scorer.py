@@ -143,3 +143,106 @@ def test_the_denominator_is_capped_so_long_profiles_stay_reachable():
     text = " ".join(f"skill{i}" for i in range(10))
 
     assert _score(text, [long_profile]).keyword_score == 100.0
+
+
+# ── the language penalty ──────────────────────────────────────────────────────
+#
+# The 889 keywords across the seeded role profiles are entirely English, and
+# until ai_keywords existed this class looked for them with a word-boundary
+# regex over the raw CV text. A Turkish accountant writing "muhasebe, mizan,
+# mutabakat, vergi, denetim" matched none of "accounting, ledger,
+# reconciliation, tax, audit" and scored a flat zero.
+#
+# Measured on 87 real analyses before the fix: median keyword score 30/100, one
+# CV in seven scoring an exact zero, and 47% matching no role profile at all -
+# which also meant no career recommendation, because the recommender reads
+# these same matches. Software CVs were the exception only because their
+# vocabulary is English wherever it is written.
+
+ACCOUNTANT = {
+    "title": "Accountant",
+    "expected_keywords": [
+        "accounting", "ledger", "reconciliation", "tax", "audit",
+        "balance sheet", "journal", "compliance", "payroll", "invoice",
+    ],
+}
+
+TURKISH_ACCOUNTANT_CV = (
+    "Muhasebe departmaninda calistim. Mizan ve mutabakat islemlerini yuruttum, "
+    "vergi beyannamelerini hazirladim, denetim sureclerine katildim, bordro ve "
+    "fatura kayitlarini tuttum."
+)
+
+
+def _score_with_ai(text: str, profiles: list[dict], ai_keywords):
+    ctx = AnalysisContext(extracted_text=text)
+    KeywordScorer(profiles, ai_keywords).analyze(ctx)
+    return ctx
+
+
+def test_a_turkish_cv_scores_zero_without_the_ai_list():
+    """The behaviour being fixed, pinned so the reason stays visible."""
+    ctx = _score(TURKISH_ACCOUNTANT_CV, [ACCOUNTANT])
+
+    assert ctx.keyword_score == 0.0
+    assert ctx.keyword_matches["Accountant"] == []
+
+
+def test_the_ai_list_lets_the_same_cv_match():
+    ctx = _score_with_ai(
+        TURKISH_ACCOUNTANT_CV,
+        [ACCOUNTANT],
+        ["accounting", "ledger", "reconciliation", "tax", "audit", "payroll"],
+    )
+
+    assert ctx.keyword_score == 60.0
+    assert set(ctx.keyword_matches["Accountant"]) == {
+        "accounting", "ledger", "reconciliation", "tax", "audit", "payroll",
+    }
+
+
+def test_the_two_routes_are_merged_not_replaced():
+    """The regex still counts. It is the reliable half for terms that survive
+    translation - a Turkish CV says "Python" and "SAP" too - so the AI must add
+    to it rather than stand in for it."""
+    ctx = _score_with_ai(
+        "Muhasebe kayitlarini SAP uzerinde tuttum. Compliance raporlari hazirladim.",
+        [ACCOUNTANT],
+        ["accounting", "ledger"],
+    )
+
+    # "compliance" came from the text, the other two only from the AI.
+    assert set(ctx.keyword_matches["Accountant"]) == {
+        "compliance", "accounting", "ledger",
+    }
+
+
+def test_no_ai_list_is_exactly_the_old_behaviour():
+    """None means the AI was unavailable - off, out of quota, API down. The
+    analysis must still run, on the regex alone."""
+    english = "Accounting and ledger reconciliation, tax and audit work."
+
+    assert _score(english, [ACCOUNTANT]).keyword_score == (
+        _score_with_ai(english, [ACCOUNTANT], None).keyword_score
+    )
+
+
+def test_the_ai_cannot_invent_keywords_outside_the_profile():
+    """The model is told to answer only from the vocabulary, but a stray term
+    must not be able to inflate a profile it does not belong to."""
+    ctx = _score_with_ai(
+        TURKISH_ACCOUNTANT_CV,
+        [ACCOUNTANT],
+        ["accounting", "kubernetes", "react", "photosynthesis"],
+    )
+
+    assert ctx.keyword_matches["Accountant"] == ["accounting"]
+    assert ctx.keyword_score == 10.0
+
+
+def test_matching_is_case_insensitive_on_the_ai_side():
+    ctx = _score_with_ai(
+        TURKISH_ACCOUNTANT_CV, [ACCOUNTANT], ["Accounting", "LEDGER", "Tax"]
+    )
+
+    assert set(ctx.keyword_matches["Accountant"]) == {"accounting", "ledger", "tax"}

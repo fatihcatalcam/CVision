@@ -31,6 +31,7 @@ class AnalysisEngine:
         role_profiles: list[dict],
         target_domain: str | None = None,
         ai_skills: list[str] | None = None,
+        ai_keywords: list[str] | None = None,
         language: str | None = None,
     ):
         """
@@ -42,6 +43,9 @@ class AnalysisEngine:
             ai_skills: Canonical skill names the AI read out of the CV in any
                 language, merged with the regex matches. None (AI unavailable)
                 leaves the pipeline at its regex-only behaviour.
+            ai_keywords: The same idea for the role-profile keywords, which are
+                the last English-only signal in the pipeline. Also merged, also
+                optional.
             language: UI language for the rule-based suggestion messages
                 (en/tr/de/fr/es). Unknown or None falls back to English.
         """
@@ -49,7 +53,7 @@ class AnalysisEngine:
             SectionDetector(),
             SkillExtractor(skills_list, ai_skills),
             ATSChecker(),
-            KeywordScorer(role_profiles),
+            KeywordScorer(role_profiles, ai_keywords),
             ExperienceEvaluator(),
             ScoreCalculator(role_profiles),
             SuggestionGenerator(target_domain, language),

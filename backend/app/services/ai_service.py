@@ -660,6 +660,18 @@ class SkillNormalization(BaseModel):
     )
 
 
+class KeywordNormalization(BaseModel):
+    """Canonical role keywords the AI recognised in a CV, in any language."""
+
+    keywords: list[str] = Field(
+        description=(
+            "Role keywords the CV evidences, given ONLY as terms copied "
+            "EXACTLY from the provided vocabulary. Never invent a term, never "
+            "translate one, never return a term absent from the vocabulary."
+        )
+    )
+
+
 def ai_normalize_skills(
     cv_text: str,
     vocabulary: list[str],
@@ -722,6 +734,83 @@ def ai_normalize_skills(
     except Exception as e:
         # Never fail the analysis over this: the regex extractor still runs.
         logger.warning(f"Skill normalization failed ({e}); regex only.")
+        return None
+
+
+def ai_normalize_keywords(
+    cv_text: str,
+    vocabulary: list[str],
+) -> list[str] | None:
+    """Map a CV in ANY language onto canonical English role keywords.
+
+    The sibling of ai_normalize_skills, and it exists for the same reason,
+    found later: the 889 keywords across the role profiles are entirely
+    English, and KeywordScorer looked for them with a word-boundary regex over
+    the raw CV text. So an Accountant profile expected "accounting, ledger,
+    reconciliation, tax, audit" while a Turkish accountant's CV said
+    "muhasebe, mizan, mutabakat, vergi, denetim" and matched nothing at all.
+
+    Measured on 87 real analyses before this existed: the median keyword score
+    was 30/100, one CV in seven scored an exact zero, and 47% matched no role
+    profile whatsoever - so half the users also silently got no career
+    recommendation, since the recommender reads these same matches. Software
+    CVs were the exception only because their vocabulary (python, sql, api) is
+    English wherever it is written.
+
+    A separate call rather than more work bolted onto ai_normalize_skills: the
+    skills path already works, feeds both skills_score and the recommender, and
+    is not worth risking to save a request. Both vocabularies are static
+    prefixes, so both sit where prompt caching can reuse them.
+
+    The caller merges the result with the regex matches rather than replacing
+    them, so a None return (AI off, quota gone, API down, malformed reply)
+    simply leaves the pipeline at its regex-only behaviour.
+
+    Returns:
+        Canonical keywords, or None on any failure. Never raises.
+    """
+    if not is_ai_enabled():
+        return None
+
+    client = _get_client()
+    if client is None:
+        return None
+
+    system_prompt = (
+        "You identify which role-related concepts a CV evidences.\n\n"
+        "VOCABULARY (the ONLY valid answers, copy terms character-for-character):\n"
+        + ", ".join(vocabulary)
+        + "\n\nRules:\n"
+        "1. The CV may be in ANY language. Map what it describes onto the "
+        "vocabulary above. A Turkish CV saying 'mizan ve mutabakat' evidences "
+        "'ledger' and 'reconciliation'. 'Bordro' is 'payroll'.\n"
+        "2. Return a term ONLY if the CV genuinely evidences it. A job title "
+        "alone is not evidence of every concept in that field.\n"
+        "3. Never return a term that is not in the vocabulary, character for "
+        "character. Never invent, translate or pluralise terms.\n"
+        "4. Prefer precision over recall: a wrong keyword inflates the score "
+        "and misroutes the career recommendation."
+    )
+
+    try:
+        response = client.beta.chat.completions.parse(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": cv_text[:12000]},
+            ],
+            response_format=KeywordNormalization,
+            temperature=0,
+        )
+        parsed = response.choices[0].message.parsed
+        if parsed is None:
+            logger.warning("Keyword normalization returned None; regex only.")
+            return None
+        logger.info(f"AI normalized {len(parsed.keywords)} keywords from CV text.")
+        return parsed.keywords
+    except Exception as e:
+        # Never fail the analysis over this: the regex scorer still runs.
+        logger.warning(f"Keyword normalization failed ({e}); regex only.")
         return None
 
 

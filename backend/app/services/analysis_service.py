@@ -24,11 +24,32 @@ from app.services.recommendation_service import RecommendationService
 from app.services.ai_service import (
     ai_enhance_analysis,
     ai_normalize_skills,
+    ai_normalize_keywords,
     is_ai_enabled,
     KNOWN_DOMAINS,
 )
 
 logger = logging.getLogger("cvision.services.analysis")
+
+
+def _keyword_vocabulary(role_profiles: list[dict[str, Any]]) -> list[str]:
+    """Every distinct expected_keyword across the role profiles, sorted.
+
+    This is the vocabulary the AI is allowed to answer from, so it has to be
+    exactly what KeywordScorer will later look for - a term the model returns
+    that no profile expects is a term that can never match, and one it is never
+    shown is a concept it cannot report.
+
+    Sorted so the prompt prefix is byte-identical between requests, which is
+    what lets OpenAI's prompt caching reuse it. Unsorted, a set's iteration
+    order would change the prefix and pay full price on every analysis.
+    """
+    vocab: set[str] = set()
+    for profile in role_profiles:
+        for kw in profile.get("expected_keywords") or []:
+            if isinstance(kw, str) and kw.strip():
+                vocab.add(kw.strip())
+    return sorted(vocab)
 
 
 class AnalysisService:
@@ -157,11 +178,19 @@ class AnalysisService:
         ai_skills = ai_normalize_skills(
             cv.extracted_text, [s["name"] for s in skills_list]
         )
+        # Same treatment for the role keywords - the one signal still read off
+        # the raw text with an English-only regex. Before this, a Turkish
+        # accountant matched none of "accounting, ledger, reconciliation" and
+        # scored zero for keywords AND got no career recommendation, because
+        # the recommender reads these same matches.
+        ai_keywords = ai_normalize_keywords(
+            cv.extracted_text, _keyword_vocabulary(role_profiles)
+        )
 
         # Run the analysis engine
         engine = AnalysisEngine(
             skills_list, role_profiles, cv.target_domain,
-            ai_skills=ai_skills, language=ui_language,
+            ai_skills=ai_skills, ai_keywords=ai_keywords, language=ui_language,
         )
         context: AnalysisContext = engine.run(cv.extracted_text, layout_xray)
 

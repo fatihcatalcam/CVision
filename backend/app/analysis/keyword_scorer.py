@@ -15,13 +15,27 @@ logger = logging.getLogger("cvision.analysis.keyword_scorer")
 class KeywordScorer(BaseAnalyzer):
     """Scores CV text based on keyword overlap with role profiles."""
 
-    def __init__(self, role_profiles: list[dict]):
+    def __init__(
+        self,
+        role_profiles: list[dict],
+        ai_keywords: list[str] | None = None,
+    ):
         """
         Args:
             role_profiles: List of role profile dicts with
                            'title', 'expected_keywords', 'expected_skills'.
+            ai_keywords: Canonical keywords the AI recognised in the CV,
+                whatever language it was written in. Merged with - never
+                replacing - the regex matches: the regex is reliable for terms
+                that survive translation (python, sql, sap), while the AI
+                covers everything else ("mizan" -> "ledger"). None means AI was
+                unavailable, and the result collapses to the regex-only
+                behaviour this class had before.
         """
         self._role_profiles = role_profiles
+        # Lowercased for comparison against the profile keywords, which are
+        # lowercased at match time too.
+        self._ai_keywords = {k.lower() for k in (ai_keywords or [])}
 
     @property
     def name(self) -> str:
@@ -57,8 +71,16 @@ class KeywordScorer(BaseAnalyzer):
             
             profile_matches = []
             for kw in profile_keywords:
-                escaped = re.escape(kw.lower())
-                if re.search(rf"\b{escaped}\b", text_lower):
+                lowered = kw.lower()
+                # Either route counts. The regex reads the CV as written; the
+                # AI list carries the same concept expressed in another
+                # language, which is the only way a Turkish or Azerbaijani CV
+                # can match an English vocabulary at all.
+                escaped = re.escape(lowered)
+                if (
+                    lowered in self._ai_keywords
+                    or re.search(rf"\b{escaped}\b", text_lower)
+                ):
                     profile_matches.append(kw)
                     matched_total_unique.add(kw)
             
