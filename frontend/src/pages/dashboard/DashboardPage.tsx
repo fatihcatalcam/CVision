@@ -10,6 +10,7 @@ import { ScoreHeroCard } from '../../components/dashboard/ScoreHeroCard';
 import { CareerInsightCard } from '../../components/dashboard/CareerInsightCard';
 import { NextStepCard } from '../../components/dashboard/NextStepCard';
 import { CreditCard } from '../../components/dashboard/CreditCard';
+import { MobileCreditBar } from '../../components/dashboard/MobileCreditBar';
 import { RecentAnalysesList } from '../../components/dashboard/RecentAnalysesList';
 import { CVUploader } from '../../components/cv/CVUploader';
 import { UploadModal } from '../../components/dashboard/UploadModal';
@@ -158,6 +159,13 @@ export function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* The balance, above the fold on phones. The sidebar card that
+          carries it on desktop stacks about three cards down once the
+          grid collapses to one column. */}
+      {!isLoading && (
+        <MobileCreditBar credits={user?.credits ?? 0} />
+      )}
 
       {/* Main content */}
       {isLoading ? (

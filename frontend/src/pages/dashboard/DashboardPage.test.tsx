@@ -87,3 +87,60 @@ describe('Dashboard with no analyses yet', () => {
     expect(screen.queryByText('credits.buyCta')).not.toBeInTheDocument();
   });
 });
+
+/**
+ * The balance on a phone.
+ *
+ * CreditCard sits in the right-hand column, which is beside the main card on
+ * desktop and underneath it below `lg` - behind the career and next-step cards
+ * too, so about three cards down. Reported from the app: you had to scroll to
+ * find the one number that decides whether you can run anything.
+ */
+describe('the balance on small screens', () => {
+  it('appears before the main card, not below it', async () => {
+    renderDashboard();
+    await screen.findByText('credits.label');
+
+    const bar = screen.queryByTestId('mobile-credit-bar');
+    const firstRun = screen.getByText('dashboard.firstRun.title');
+
+    expect(bar, 'no mobile-only credit row found').not.toBeNull();
+    // DOCUMENT_POSITION_FOLLOWING: the main card comes after the bar.
+    expect(bar!.compareDocumentPosition(firstRun) & Node.DOCUMENT_POSITION_FOLLOWING)
+      .toBeTruthy();
+  });
+
+  it('states the balance itself, not just a link to it', async () => {
+    renderDashboard();
+    await screen.findByText('credits.label');
+
+    const bar = screen.getByTestId('mobile-credit-bar');
+
+    expect(within(bar).getByText('3')).toBeInTheDocument();
+    expect(within(bar).getByText('credits.unit')).toBeInTheDocument();
+  });
+
+  it('stays out of the desktop layout, where the sidebar card is already visible', async () => {
+    renderDashboard();
+    await screen.findByText('credits.label');
+
+    // The class is the whole mechanism: without it the row would duplicate the
+    // sidebar card on every screen.
+    // The class is the whole mechanism: without it the row would duplicate
+    // the sidebar card on every screen.
+    expect(screen.getByTestId('mobile-credit-bar').className).toContain('lg:hidden');
+  });
+
+  it('offers the referral, not a checkout, while no pack is on sale', async () => {
+    // Same rule the sidebar card follows. The first version of this row
+    // pointed at /pricing unconditionally and the existing dashboard test
+    // caught it.
+    renderDashboard();
+    await screen.findByText('credits.label');
+
+    const bar = screen.getByTestId('mobile-credit-bar');
+
+    expect(within(bar).getByText('credits.inviteCta')).toBeInTheDocument();
+    expect(within(bar).queryByText('credits.buyCta')).not.toBeInTheDocument();
+  });
+});
