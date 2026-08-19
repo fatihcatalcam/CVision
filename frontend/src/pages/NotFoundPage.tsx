@@ -32,7 +32,7 @@ export function NotFoundPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-[#FBFBFA] dark:bg-[#111110]">
-      <div className="w-full max-w-md text-center animate-in slide-up">
+      <div className="w-full max-w-md text-center animate-in">
 
         <p className="font-mono text-6xl font-black text-[#EAEAEA] dark:text-white/[0.12] mb-4 select-none">
           404

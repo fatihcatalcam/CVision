@@ -413,7 +413,7 @@ export function AdminPage() {
     : 0;
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 animate-in slide-up">
+    <div className="w-full max-w-[1400px] mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 animate-in">
       
       {/* Sidebar Navigation */}
       <div className="w-full md:w-64 flex-shrink-0 flex flex-col gap-2">
@@ -492,7 +492,7 @@ export function AdminPage() {
             <Loader2 className="w-10 h-10 animate-spin text-[var(--color-primary)] opacity-50" />
           </div>
         ) : (
-          <div className="animate-in fade-in duration-300">
+          <div className="animate-in">
             {/* TAB: DASHBOARD */}
             {activeTab === 'dashboard' && (
               <div className="space-y-6">

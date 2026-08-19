@@ -6,7 +6,7 @@ export function CancelPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="text-center max-w-md animate-in slide-up">
+      <div className="text-center max-w-md animate-in">
         {/* Cancel Icon */}
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/10 border border-red-500/20 mb-6">
           <XCircle className="w-10 h-10 text-red-400" />

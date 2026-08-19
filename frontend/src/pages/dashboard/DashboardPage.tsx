@@ -111,7 +111,7 @@ export function DashboardPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up flex-1">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in flex-1">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-10">

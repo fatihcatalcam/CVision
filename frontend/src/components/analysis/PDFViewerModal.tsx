@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import api from '../../services/api';
+import { ModalShell } from '../ui/ModalShell';
 
 interface Snippet {
   text: string;
@@ -89,33 +89,18 @@ export function PDFViewerModal({
     return () => { if (pdfUrl) window.URL.revokeObjectURL(pdfUrl); };
   }, [pdfUrl]);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose();
-  }, [onClose]);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, handleKeyDown]);
-
-  if (!isOpen) return null;
-
-  return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
-        onClick={onClose}
-      />
-
-      {/* Modal Container */}
-      <div className="relative z-10 w-[95vw] h-[92vh] max-w-[1400px] bg-white border border-[#EAEAEA] rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+  // Escape and the body scroll lock used to live here - this was the only one
+  // of the six modals that had them. ModalShell owns both now, along with the
+  // exit animation this one never had either.
+  return (
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      label="Original CV Document"
+      containerClassName="fixed inset-0 z-[9999] flex items-center justify-center"
+      scrimClassName="bg-black/80 backdrop-blur-md"
+      panelClassName="w-[95vw] h-[92vh] max-w-[1400px] bg-white border border-[#EAEAEA] rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden"
+    >
 
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#EAEAEA] bg-[#F7F6F3] shrink-0">
@@ -183,8 +168,6 @@ export function PDFViewerModal({
             />
           )}
         </div>
-      </div>
-    </div>,
-    document.body
+    </ModalShell>
   );
 }

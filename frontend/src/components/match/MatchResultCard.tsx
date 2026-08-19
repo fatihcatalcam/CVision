@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import type { MatchResponse, GapItem } from '../../services/matchApi';
+import { Collapse } from '../ui/Collapse';
 
 interface MatchResultCardProps {
   match: MatchResponse;
@@ -44,11 +45,11 @@ function GapCard({ gap }: { gap: GapItem }) {
           ? <ChevronUp className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-muted)' }} />
           : <ChevronDown className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-muted)' }} />}
       </button>
-      {open && (
+      <Collapse open={open}>
         <div className="px-3 pb-3 text-sm leading-relaxed" style={{ color: 'var(--color-muted)', background: 'var(--color-background)' }}>
           {gap.suggestion}
         </div>
-      )}
+      </Collapse>
     </div>
   );
 }

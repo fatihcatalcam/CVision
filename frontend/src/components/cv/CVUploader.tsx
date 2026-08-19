@@ -261,7 +261,7 @@ export function CVUploader({
           </div>
         </div>
       ) : (
-        <div className="space-y-4 animate-in scale-in">
+        <div className="space-y-4 animate-in">
           {/* File preview */}
           <div className="flex items-center gap-3 p-4 bg-[#F7F6F3] dark:bg-[#1c1c1a] rounded-xl border border-[#346538]/20 dark:border-[#346538]/30">
             <div className="p-2.5 bg-[#EDF3EC] text-[#346538] rounded-lg flex-shrink-0">

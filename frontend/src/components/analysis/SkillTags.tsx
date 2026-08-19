@@ -31,7 +31,7 @@ export function SkillTags({ skills }: SkillTagsProps) {
         return (
           <span 
             key={`${skill.skill_name}-${index}`}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border ${colorClasses} animate-in fade-in transition-all hover:scale-105 cursor-default flex items-center gap-1.5`}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium border ${colorClasses} animate-in transition-all hover:scale-105 cursor-default flex items-center gap-1.5`}
             title={`Confidence: ${(skill.confidence_score * 100).toFixed(0)}%`}
           >
             {skill.skill_name}

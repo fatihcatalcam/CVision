@@ -62,7 +62,7 @@ export function SuccessPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--color-background)' }}>
-      <div className="text-center max-w-md w-full animate-in slide-up">
+      <div className="text-center max-w-md w-full animate-in">
 
         <div className="flex justify-center mb-5">
           <div className="w-20 h-20 rounded-full bg-[#EDF3EC] border border-[#346538]/20 flex items-center justify-center">

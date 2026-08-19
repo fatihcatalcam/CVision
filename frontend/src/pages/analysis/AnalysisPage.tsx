@@ -17,6 +17,7 @@ import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 import { AtsXraySection, type LayoutXray } from '../../components/analysis/AtsXraySection';
 import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
 import { JDInputModal } from '../../components/match/JDInputModal';
+import { Collapse } from '../../components/ui/Collapse';
 import { MatchResultCard } from '../../components/match/MatchResultCard';
 import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
@@ -155,7 +156,7 @@ function AISuggestionCard(
           : <ChevronDown className="w-4 h-4 text-[#6B6A65] flex-shrink-0 mt-1" />)}
       </button>
 
-      {expanded && hasRewrite && (
+      <Collapse open={expanded && hasRewrite}>
         <div className="border-t border-[#EAEAEA] bg-[#F7F7F5] dark:bg-white/[0.03] p-4 space-y-3">
           {beforeText ? (
             <>
@@ -194,7 +195,7 @@ function AISuggestionCard(
             </div>
           )}
         </div>
-      )}
+      </Collapse>
     </div>
   );
 }
@@ -394,7 +395,7 @@ export function AnalysisPage() {
 
   return (
     <>
-      <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in fade-in duration-500 delay-150">
+      <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in delay-150">
 
         {/* Back */}
         <button
@@ -630,23 +631,23 @@ export function AnalysisPage() {
         </div>
       </div>
 
-      {showJDModal && data?.cv_id && (
-        <JDInputModal
-          cvId={data.cv_id}
-          onClose={() => setShowJDModal(false)}
-          onMatchComplete={(match, jdId) => {
-            setMatchResult(match);
-            setMatchJdId(jdId);
-            setShowJDModal(false);
-          }}
-        />
-      )}
-      {coverLetterContent && (
-        <CoverLetterModal
-          content={coverLetterContent}
-          onClose={() => setCoverLetterContent(null)}
-        />
-      )}
+      {/* `isOpen` rather than a `&&`, so closing has a tree left to animate. */}
+      <JDInputModal
+        isOpen={showJDModal && !!data?.cv_id}
+        cvId={data?.cv_id ?? ''}
+        onClose={() => setShowJDModal(false)}
+        onMatchComplete={(match, jdId) => {
+          setMatchResult(match);
+          setMatchJdId(jdId);
+          setShowJDModal(false);
+        }}
+      />
+      {/* Rendered unconditionally so it can animate out; `content: null` is
+          what closes it. A `&&` here would rip the tree out mid-exit. */}
+      <CoverLetterModal
+        content={coverLetterContent}
+        onClose={() => setCoverLetterContent(null)}
+      />
       <PDFViewerModal
         isOpen={isPdfModalOpen}
         onClose={() => setIsPdfModalOpen(false)}

@@ -283,9 +283,8 @@ export function MatchPage() {
         </div>
       </div>
 
-      {coverLetterContent && (
-        <CoverLetterModal content={coverLetterContent} onClose={() => setCoverLetterContent(null)} />
-      )}
+      {/* Unconditional so the exit animation has a tree to run on. */}
+      <CoverLetterModal content={coverLetterContent} onClose={() => setCoverLetterContent(null)} />
     </div>
   );
 }

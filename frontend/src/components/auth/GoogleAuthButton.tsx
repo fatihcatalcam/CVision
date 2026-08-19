@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { ModalShell } from '../ui/ModalShell';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { claimPendingAnalysis } from '../../services/anonymousAnalysis';
@@ -126,12 +127,12 @@ function GoogleAuthButtonInner() {
       </button>
 
       {/* Name collection modal */}
-      {showModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-          onClick={(e) => { if (e.target === e.currentTarget) handleCancel(); }}
-        >
-          <div className="w-full max-w-md bg-white dark:bg-[#141413] rounded-2xl shadow-2xl border border-[#EAEAEA] dark:border-white/[0.07] p-8 animate-in fade-in zoom-in-95 duration-200">
+      <ModalShell
+        isOpen={showModal}
+        onClose={handleCancel}
+        label={t('auth.google.nameModal.title')}
+        panelClassName="w-full max-w-md bg-white dark:bg-[#141413] rounded-2xl shadow-2xl border border-[#EAEAEA] dark:border-white/[0.07] p-8"
+      >
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div>
@@ -145,6 +146,7 @@ function GoogleAuthButtonInner() {
               <button
                 type="button"
                 onClick={handleCancel}
+                aria-label={t('common.close')}
                 className="p-1.5 rounded-lg text-[#A09D9A] hover:text-[#111111] dark:hover:text-[#e8e7e4] hover:bg-[#F5F5F5] dark:hover:bg-white/[0.06] transition-colors -mt-1 -mr-1"
               >
                 <X className="w-4 h-4" />
@@ -190,9 +192,7 @@ function GoogleAuthButtonInner() {
                 {t('auth.google.nameModal.back')}
               </button>
             </form>
-          </div>
-        </div>
-      )}
+      </ModalShell>
     </>
   );
 }

@@ -7,6 +7,7 @@ import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { ArrowRight, Brain, BarChart3, FileText, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Reveal } from '../../components/ui/Reveal';
+import { Collapse } from '../../components/ui/Collapse';
 import { HeroMockup } from '../../components/home/HeroMockup';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
@@ -76,14 +77,14 @@ export function HomePage() {
         </div>
 
         {/* Mobile nav panel */}
-        {mobileNavOpen && (
-          <nav className="md:hidden border-t px-6 py-4 flex flex-col gap-4 text-sm" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-muted)', background: 'var(--color-background)' }}>
+        <Collapse open={mobileNavOpen} className="md:hidden">
+          <nav className="border-t px-6 py-4 flex flex-col gap-4 text-sm" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-muted)', background: 'var(--color-background)' }}>
             <a href="#how-it-works" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howItWorks')}</a>
             <a href="#features" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.features')}</a>
             <a href="#faq" onClick={() => setMobileNavOpen(false)} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.faq')}</a>
             <a href={href('/about')} onClick={(e) => { e.preventDefault(); setMobileNavOpen(false); go('/about'); }} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
           </nav>
-        )}
+        </Collapse>
       </header>
 
       <main>

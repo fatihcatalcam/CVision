@@ -179,7 +179,7 @@ export function SettingsPage() {
   const saveBtnCls = 'flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#1B3A6B] dark:bg-[#4a7dd1] text-white text-sm font-bold transition-all hover:bg-[#122a52] dark:hover:bg-[#3a6dc1] disabled:opacity-40 disabled:cursor-not-allowed';
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 animate-in slide-up">
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 animate-in">
 
       <button
         onClick={() => navigate('/dashboard')}

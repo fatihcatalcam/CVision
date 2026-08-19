@@ -139,7 +139,7 @@ export function HistoryPage() {
   const bestScore = Math.max(...items.filter(i => i.overall_score !== null).map(i => i.overall_score!), 0);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in slide-up">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8 animate-in">
 
       {/* Header */}
       <div className="mb-8">

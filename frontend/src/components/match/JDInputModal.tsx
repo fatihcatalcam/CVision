@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Link, FileText, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { ModalShell } from '../ui/ModalShell';
 import { fetchUrlText, saveJD, createMatch, type MatchResponse } from '../../services/matchApi';
 
 interface JDInputModalProps {
+  isOpen: boolean;
   cvId: string;
   onClose: () => void;
   onMatchComplete: (match: MatchResponse, jdId: string) => void;
@@ -12,7 +14,7 @@ interface JDInputModalProps {
 
 type Tab = 'url' | 'text';
 
-export function JDInputModal({ cvId, onClose, onMatchComplete }: JDInputModalProps) {
+export function JDInputModal({ isOpen, cvId, onClose, onMatchComplete }: JDInputModalProps) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('url');
   const [url, setUrl] = useState('');
@@ -64,12 +66,17 @@ export function JDInputModal({ cvId, onClose, onMatchComplete }: JDInputModalPro
   const canSubmit = tab === 'url' ? !!fetchedText : text.trim().length >= 50;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
-      <div className="w-full max-w-lg rounded-[var(--radius-lg)] shadow-xl" style={{ background: 'var(--color-card)', border: '1px solid var(--color-card-border)' }}>
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      label={t('match.modalTitle')}
+      scrimClassName="bg-black/50"
+      panelClassName="w-full max-w-lg rounded-[var(--radius-lg)] shadow-xl bg-[var(--color-card)] border border-[var(--color-card-border)]"
+    >
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--color-card-border)' }}>
           <h2 className="font-semibold text-base" style={{ color: 'var(--color-foreground)' }}>{t('match.modalTitle')}</h2>
-          <button onClick={onClose} className="p-1 rounded hover:bg-[#F1F1EF] dark:hover:bg-white/[0.06] transition-colors">
+          <button onClick={onClose} aria-label={t('common.close')} className="p-1 rounded hover:bg-[#F1F1EF] dark:hover:bg-white/[0.06] transition-colors">
             <X className="w-4 h-4" style={{ color: 'var(--color-muted)' }} />
           </button>
         </div>
@@ -157,7 +164,6 @@ export function JDInputModal({ cvId, onClose, onMatchComplete }: JDInputModalPro
             {t('match.matchButton')}
           </Button>
         </div>
-      </div>
-    </div>
+    </ModalShell>
   );
 }
