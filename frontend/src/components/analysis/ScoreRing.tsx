@@ -1,5 +1,7 @@
 
 
+import { useState, useEffect } from 'react';
+
 interface ScoreRingProps {
   score: number;
   label: string;
@@ -7,12 +9,40 @@ interface ScoreRingProps {
   colorClass?: string;
 }
 
+/**
+ * A CSS transition only fires when a value *changes*. This ring is mounted by
+ * AnalysisPage behind `data!`, i.e. only once the scores have loaded, so it
+ * used to render with its final strokeDashoffset already in place - and the
+ * `duration-1000` on the circle never ran a single frame. The payoff of the
+ * whole flow appeared fully drawn, instantly.
+ *
+ * So: paint one frame empty, then hand the real offset over on the next frame
+ * and let the existing transition sweep it. If the score later changes while
+ * mounted, `drawn` stays true and the transition runs from the value currently
+ * on screen, which is the behaviour you want anyway.
+ */
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function ScoreRing({ 
   score, 
   label, 
   size = 120, 
   colorClass = 'text-[var(--color-primary)]' 
 }: ScoreRingProps) {
+  // Reduced motion skips the sweep entirely rather than doing it instantly -
+  // seeding `true` means the final offset is in the very first paint, so there
+  // is no one-frame flash of an empty ring on the way there.
+  const [drawn, setDrawn] = useState(prefersReducedMotion);
+
+  useEffect(() => {
+    if (drawn) return;
+    const id = requestAnimationFrame(() => setDrawn(true));
+    return () => cancelAnimationFrame(id);
+  }, [drawn]);
+
   const safeScore = isNaN(score) ? 0 : score;
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
@@ -57,7 +87,7 @@ export function ScoreRing({
             className={`${finalColorClass} transition-all duration-1000 ease-out`}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
-            strokeDashoffset={score === 0 ? circumference : offset}
+            strokeDashoffset={drawn ? offset : circumference}
             strokeLinecap="round"
             stroke="currentColor"
             fill="transparent"
