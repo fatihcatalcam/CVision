@@ -25,14 +25,26 @@ export function AnalyzingScreen({ progress, heading, message, steps, footer }: A
       {/* Animated ring */}
       <div className="flex justify-center mb-8">
         <div className="relative w-20 h-20">
+          {/* `stroke` is an SVG presentation attribute, so a `dark:` class can
+              never reach it - a hardcoded hex here is invisible to the theme.
+              Both circles used to be literals (#EAEAEA track, #111111 progress),
+              which inverted the ring in dark mode: the empty track rendered
+              near-white on the #111110 page while the filled arc rendered
+              near-black, so progress read as a dark gap eating a bright ring.
+              currentColor + the theme tokens is the same idiom ScoreRing uses. */}
           <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="34" fill="none" stroke="#EAEAEA" strokeWidth="6" />
             <circle
-              cx="40" cy="40" r="34" fill="none" stroke="#111111" strokeWidth="6"
+              cx="40" cy="40" r="34" fill="none" strokeWidth="6"
+              stroke="currentColor"
+              className="text-[var(--color-card-border)]"
+            />
+            <circle
+              cx="40" cy="40" r="34" fill="none" strokeWidth="6"
+              stroke="currentColor"
               strokeLinecap="round"
               strokeDasharray="213.6"
               strokeDashoffset={213.6 - (213.6 * Math.min(progress, 100)) / 100}
-              className="transition-all duration-300 ease-out"
+              className="text-[var(--color-foreground)] transition-all duration-300 ease-out"
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -49,12 +61,15 @@ export function AnalyzingScreen({ progress, heading, message, steps, footer }: A
         <div className="space-y-3 text-left mb-6">
           {steps.map((step) => (
             <div key={step.label} className="flex items-center gap-3">
+              {/* Same theme blindness the ring had: #EAEAEA pending dots render
+                  brighter on the dark page than the #346538 "done" ones, so the
+                  list reads backwards. These tokens already flip per theme. */}
               <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
                 progress >= step.threshold
-                  ? 'bg-[#346538]'
+                  ? 'bg-[var(--color-success)]'
                   : progress >= step.threshold - 15
-                  ? 'bg-[#956400] animate-pulse'
-                  : 'bg-[#EAEAEA] border border-[#BDBDBD]'
+                  ? 'bg-[var(--color-warning)] animate-pulse'
+                  : 'bg-[var(--color-card-border)] border border-[var(--color-muted-foreground)]'
               }`}>
                 {progress >= step.threshold && (
                   <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -63,7 +78,11 @@ export function AnalyzingScreen({ progress, heading, message, steps, footer }: A
                 )}
               </div>
               <span className={`text-xs font-medium transition-colors ${
-                progress >= step.threshold ? 'text-[#346538]' : progress >= step.threshold - 15 ? 'text-[#956400]' : 'text-[#BDBDBD]'
+                progress >= step.threshold
+                  ? 'text-[var(--color-success)]'
+                  : progress >= step.threshold - 15
+                  ? 'text-[var(--color-warning)]'
+                  : 'text-[var(--color-muted-foreground)]'
               }`}>{step.label}</span>
             </div>
           ))}
