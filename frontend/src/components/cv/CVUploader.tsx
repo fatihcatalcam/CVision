@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { saveAnonToken } from '../../services/anonymousAnalysis';
 import { ANALYSIS_COST, UNLOCK_COST } from '../../constants/credits';
+import { isOutOfCredits } from '../../utils/outOfCredits';
 
 // Domain values are always sent to the backend in English - do not change these
 const DOMAIN_VALUES = [
@@ -50,10 +51,17 @@ interface CVUploaderProps {
    * next - which for /try is the signup that removes the limit.
    */
   onLimitReached?: () => void;
+  /**
+   * The account cannot afford this upload (HTTP 402), with what it would have
+   * cost. The signed-in counterpart of onLimitReached, and a callback for the
+   * same reason: where someone goes to top up is the page's business, and this
+   * component renders without a router in its own tests.
+   */
+  onOutOfCredits?: (cost: number) => void;
 }
 
 export function CVUploader({
-  onUploadSuccess, embedded = false, anonymous = false, onLimitReached,
+  onUploadSuccess, embedded = false, anonymous = false, onLimitReached, onOutOfCredits,
 }: CVUploaderProps) {
   const { t, i18n } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
@@ -129,6 +137,13 @@ export function CVUploader({
       if (anonymous && error.response?.status === 429) {
         toast.error(t('try.rateLimited'));
         onLimitReached?.();
+      } else if (!anonymous && isOutOfCredits(error)) {
+        // The backend's sentence is English and offers nothing to click. The
+        // caller shows the way to more credits; without one, at least say it
+        // in the user's language.
+        const cost = tier === 'pro' ? ANALYSIS_COST + UNLOCK_COST : ANALYSIS_COST;
+        if (onOutOfCredits) onOutOfCredits(cost);
+        else toast.error(t('credits.notEnough', { count: cost }));
       } else {
         toast.error(error.response?.data?.detail || error.response?.data?.message || t('uploader.errorUpload'));
       }

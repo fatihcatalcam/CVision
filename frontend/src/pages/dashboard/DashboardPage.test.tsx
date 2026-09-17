@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { render, screen, within, waitFor } from '@testing-library/react';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { DashboardPage } from './DashboardPage';
 
 /**
@@ -142,5 +142,33 @@ describe('the balance on small screens', () => {
 
     expect(within(bar).getByText('credits.inviteCta')).toBeInTheDocument();
     expect(within(bar).queryByText('credits.buyCta')).not.toBeInTheDocument();
+  });
+});
+
+describe('Dashboard opened with ?upload=1', () => {
+  // Where "Upload a different file" lands after an unreadable CV. A plain
+  // dashboard would leave them looking for the upload button.
+  it('opens the upload dialog straight away, and drops the flag', async () => {
+    let search = '';
+    function LocationProbe() {
+      search = useLocation().search;
+      return null;
+    }
+    render(
+      <MemoryRouter initialEntries={['/dashboard?upload=1']}>
+        <DashboardPage />
+        <LocationProbe />
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole('dialog', { name: 'dashboard.uploadModal.title' })).toBeInTheDocument();
+    // Consumed, so a reload or Back does not keep reopening it.
+    await waitFor(() => expect(search).toBe(''));
+  });
+
+  it('stays closed without it', async () => {
+    renderDashboard();
+    expect(await screen.findByText('dashboard.firstRun.title')).toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

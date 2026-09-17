@@ -1,4 +1,5 @@
 import { StrictMode } from 'react'
+import { createPortal } from 'react-dom'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
@@ -20,26 +21,32 @@ createRoot(document.getElementById('root')!).render(
     <>
       <App />
       <Analytics />
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: '#FFFFFF',
-            color: '#111111',
-            border: '1px solid #EAEAEA',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
-            boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-          },
-          success: {
-            iconTheme: { primary: '#346538', secondary: '#EDF3EC' },
-          },
-          error: {
-            iconTheme: { primary: '#9F2F2D', secondary: '#FDEBEC' },
-          },
-        }}
-      />
+      {/* Portaled out of #root: ModalShell marks #root inert while a dialog is
+          open, and a toast inside it - like the "Buy credits" one raised by a
+          refused upload in the upload dialog - would be visible but dead. */}
+      {createPortal(
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#FFFFFF',
+              color: '#111111',
+              border: '1px solid #EAEAEA',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+            },
+            success: {
+              iconTheme: { primary: '#346538', secondary: '#EDF3EC' },
+            },
+            error: {
+              iconTheme: { primary: '#9F2F2D', secondary: '#FDEBEC' },
+            },
+          }}
+        />,
+        document.body,
+      )}
     </>
   </StrictMode>,
 )

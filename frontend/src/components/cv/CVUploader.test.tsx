@@ -100,3 +100,39 @@ describe('CVUploader tier choice', () => {
     expect(screen.queryByText('uploader.tier.proTitle')).not.toBeInTheDocument();
   });
 });
+
+describe('CVUploader when the balance is short', () => {
+  async function submit(props: Partial<Parameters<typeof CVUploader>[0]> = {}, pickNormal = false) {
+    const { default: userEvent } = await import('@testing-library/user-event');
+    const api = (await import('../../services/api')).default as any;
+    api.post.mockRejectedValueOnce({
+      response: { status: 402, data: { detail: 'Not enough credits: this costs 3, you have 1.' } },
+    });
+    render(<CVUploader onUploadSuccess={() => {}} {...props} />);
+    if (pickNormal) await userEvent.click(screen.getByText('uploader.tier.normalTitle'));
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await userEvent.upload(input, new File(['x'], 'cv.pdf', { type: 'application/pdf' }));
+    await userEvent.click(screen.getByText(/uploader\.analyzeButton/));
+  }
+
+  it('hands the refusal to the page with the price of what was chosen', async () => {
+    // Pro is preselected: analysis plus unlock.
+    const onOutOfCredits = vi.fn();
+    await submit({ onOutOfCredits });
+    await waitFor(() => expect(onOutOfCredits).toHaveBeenCalledWith(3));
+  });
+
+  it('quotes the Normal price when Normal was picked', async () => {
+    const onOutOfCredits = vi.fn();
+    await submit({ onOutOfCredits }, true);
+    await waitFor(() => expect(onOutOfCredits).toHaveBeenCalledWith(1));
+  });
+
+  it('never treats a refused /try upload as a credit problem', async () => {
+    // Anonymous uploads spend no credits; a 402 there is not ours to explain.
+    const onOutOfCredits = vi.fn();
+    await submit({ anonymous: true, onOutOfCredits });
+    await new Promise((r) => setTimeout(r, 50));
+    expect(onOutOfCredits).not.toHaveBeenCalled();
+  });
+});

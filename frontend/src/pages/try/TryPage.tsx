@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Lock, ArrowRight, Sparkles, Check, ScanSearch } from 'lucide-react';
 import api from '../../services/api';
+import { clearAnonToken } from '../../services/anonymousAnalysis';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { CVUploader } from '../../components/cv/CVUploader';
 import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
+import { ImagePdfHelp } from '../../components/analysis/ImagePdfHelp';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 
@@ -47,6 +49,9 @@ export function TryPage() {
   const [phase, setPhase] = useState<Phase>('upload');
   const [result, setResult] = useState<AnonResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  // An unreadable file gets its own screen rather than an error sentence -
+  // it is the most common way /try fails, and it is fixable.
+  const [imagePdf, setImagePdf] = useState(false);
   const [progress, setProgress] = useState(0);
   const activeRef = useRef(true);
 
@@ -55,7 +60,14 @@ export function TryPage() {
     description: t('try.metaDescription'),
   });
 
-  useEffect(() => () => { activeRef.current = false; }, []);
+  // Set on mount as well as cleared on unmount. StrictMode runs this effect
+  // twice in development - mount, unmount, mount - and with only the cleanup
+  // the flag stayed false, so the status poll returned before its first
+  // request and /try never finished locally. Production mounts once.
+  useEffect(() => {
+    activeRef.current = true;
+    return () => { activeRef.current = false; };
+  }, []);
 
   // Animated progress while the anonymous analysis runs (mirrors AnalysisPage).
   useEffect(() => {
@@ -74,6 +86,7 @@ export function TryPage() {
 
   const handleUploaded = (sessionToken: string) => {
     setProgress(0);
+    setImagePdf(false);
     setPhase('processing');
     const startTime = Date.now();
     const timeout = 60000;
@@ -87,7 +100,15 @@ export function TryPage() {
       }
       try {
         const { data: status } = await api.get(`/public/analysis/${sessionToken}/status`);
-        if (status.status === 'failed_no_text') { setErrorMsg(t('try.errorImagePdf')); setPhase('error'); return; }
+        if (status.status === 'failed_no_text') {
+          // Nothing here is worth carrying into a new account. Left in place,
+          // the token made signup claim the failed upload and open the new
+          // account on this same error screen.
+          clearAnonToken();
+          setImagePdf(true);
+          setPhase('error');
+          return;
+        }
         if (status.status === 'failed') { setErrorMsg(t('try.errorGeneric')); setPhase('error'); return; }
         if (status.status === 'completed') {
           const { data } = await api.get(`/public/analysis/${sessionToken}/results`);
@@ -169,7 +190,30 @@ export function TryPage() {
           </div>
         )}
 
-        {phase === 'error' && (
+        {phase === 'error' && imagePdf && (
+          <div className="py-12">
+            <ImagePdfHelp
+              // Failed uploads do not count against the anonymous daily
+              // allowance (count_recent_anon_by_ip skips them), so this path
+              // stays open even for someone who has retried a few times.
+              onUploadOther={() => { setImagePdf(false); setPhase('upload'); setResult(null); }}
+              secondary={
+                <div className="mt-6 pt-5 border-t text-center" style={{ borderColor: 'var(--color-card-border)' }}>
+                  <p className="text-xs mb-3" style={{ color: 'var(--color-muted)' }}>{t('imagePdf.signupHint')}</p>
+                  <button
+                    onClick={() => navigate('/register?from=try-image-pdf')}
+                    className="inline-flex items-center gap-1.5 min-h-11 px-4 text-sm font-semibold rounded-xl hover:bg-[var(--color-accent)] transition-colors"
+                    style={{ color: 'var(--color-foreground)' }}
+                  >
+                    {t('imagePdf.signupCta')} <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              }
+            />
+          </div>
+        )}
+
+        {phase === 'error' && !imagePdf && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <p className="text-base mb-6" style={{ color: 'var(--color-foreground)' }}>{errorMsg || t('try.errorGeneric')}</p>
             <button onClick={() => { setPhase('upload'); setResult(null); }} className="px-4 py-2 rounded-xl text-sm font-medium bg-[#111111] text-white hover:bg-[#2a2a2a] transition-colors">

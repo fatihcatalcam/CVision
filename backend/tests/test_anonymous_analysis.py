@@ -5,6 +5,8 @@ IP rate limiting, and cleanup of unclaimed rows.
 
 from datetime import datetime, timezone, timedelta
 
+import pytest
+
 from app.models.cv import CV
 from app.models.analysis import AnalysisResult
 from app.utils.hashids import encode_id
@@ -332,3 +334,51 @@ def test_claimed_cv_is_fully_unlocked(client, db_session, make_user, auth_header
     # Every AI suggestion is unlocked now (first analysis for this user).
     assert all(s["is_locked"] is False for s in body["ai_suggestions"])
     assert body["is_summary_locked"] is False
+
+
+@pytest.mark.parametrize("status", ["failed_no_text", "failed"])
+def test_a_failed_upload_is_not_claimed(db_session, make_user, status):
+    """Signing up after a failed /try upload used to claim that failure.
+
+    The new account then opened straight onto the analysis page's error
+    screen - and for an image-only PDF, one that says a credit was refunded
+    although the visitor never spent one. /try now also drops its token when
+    it sees the failure, but the rule belongs here too: any other signup path
+    with a stale token would hit the same thing.
+    """
+    from app.services.anonymous_service import AnonymousService
+
+    token = f"tok_failed_{status}"
+    cv = CV(
+        user_id=None, original_filename="scan.pdf", stored_filename=f"{token}.pdf",
+        file_path=f"/nonexistent/{token}.pdf", file_type="pdf", file_size=10,
+        status=status, session_token=token, client_ip="203.0.113.40",
+    )
+    db_session.add(cv)
+    db_session.commit()
+    db_session.refresh(cv)
+
+    user = make_user(email=f"after-{status}@test.com")
+    assert AnonymousService.claim(db_session, token=token, user=user) is None
+
+    db_session.refresh(cv)
+    assert cv.user_id is None
+
+
+def test_a_pending_upload_can_still_be_claimed(db_session, make_user):
+    """Only failures are excluded: someone who signs up while their /try
+    analysis is still running must not lose it."""
+    from app.services.anonymous_service import AnonymousService
+
+    cv = CV(
+        user_id=None, original_filename="p.pdf", stored_filename="p-stored.pdf",
+        file_path="/nonexistent/p-stored.pdf", file_type="pdf", file_size=10,
+        status="processing", session_token="tok_pending_claim", client_ip="203.0.113.41",
+    )
+    db_session.add(cv)
+    db_session.commit()
+
+    user = make_user(email="pending-claim@test.com")
+    claimed = AnonymousService.claim(db_session, token="tok_pending_claim", user=user)
+    assert claimed is not None
+    assert claimed.user_id == user.id

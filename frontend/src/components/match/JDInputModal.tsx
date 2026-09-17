@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { X, Link, FileText, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ModalShell } from '../ui/ModalShell';
+import { isOutOfCredits } from '../../utils/outOfCredits';
 import { fetchUrlText, saveJD, createMatch, type MatchResponse } from '../../services/matchApi';
 
 interface JDInputModalProps {
@@ -10,11 +11,13 @@ interface JDInputModalProps {
   cvId: string;
   onClose: () => void;
   onMatchComplete: (match: MatchResponse, jdId: string) => void;
+  /** The match was refused for lack of credits (HTTP 402). */
+  onOutOfCredits?: () => void;
 }
 
 type Tab = 'url' | 'text';
 
-export function JDInputModal({ isOpen, cvId, onClose, onMatchComplete }: JDInputModalProps) {
+export function JDInputModal({ isOpen, cvId, onClose, onMatchComplete, onOutOfCredits }: JDInputModalProps) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('url');
   const [url, setUrl] = useState('');
@@ -57,7 +60,10 @@ export function JDInputModal({ isOpen, cvId, onClose, onMatchComplete }: JDInput
       const match = await createMatch(cvId, jd.id);
       onMatchComplete(match, jd.id);
     } catch (err: any) {
-      setError(err?.response?.data?.message || t('match.matchError'));
+      // A refusal for credits is not a form error: the pasted ad is fine and
+      // stays put, and the caller offers the way to more credits.
+      if (isOutOfCredits(err) && onOutOfCredits) onOutOfCredits();
+      else setError(err?.response?.data?.message || t('match.matchError'));
     } finally {
       setIsMatching(false);
     }

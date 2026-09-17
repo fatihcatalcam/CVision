@@ -1,7 +1,10 @@
 import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CVUploader } from '../cv/CVUploader';
 import { ModalShell } from '../ui/ModalShell';
+import { useAuth } from '../../context/AuthContext';
+import { notifyOutOfCredits } from '../../utils/outOfCredits';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -11,6 +14,8 @@ interface UploadModalProps {
 
 export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { refreshUser } = useAuth();
 
   return (
     <ModalShell
@@ -35,6 +40,12 @@ export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalPro
       <div className="p-6">
         <CVUploader
           embedded
+          // The dialog stays open: someone short of a Pro upload may still
+          // afford a Normal one, and the tier switch is right there.
+          onOutOfCredits={(cost) => {
+            void refreshUser();
+            void notifyOutOfCredits({ t, navigate, cost });
+          }}
           onUploadSuccess={(cvId) => {
             onClose();
             onUploadSuccess(cvId);

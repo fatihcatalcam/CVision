@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
@@ -76,7 +76,19 @@ export function DashboardPage() {
   const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  // `?upload=1` opens straight into the upload dialog. The analysis page sends
+  // people here after an unreadable file with "Upload a different file" - a
+  // button that landed on the plain dashboard would make them hunt for it.
+  const [showUploadModal, setShowUploadModal] = useState(() => searchParams.get('upload') === '1');
+
+  // Consume the flag, so a reload or Back does not keep reopening the dialog.
+  useEffect(() => {
+    if (!searchParams.has('upload')) return;
+    const next = new URLSearchParams(searchParams);
+    next.delete('upload');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [recentItems, setRecentItems] = useState<HistoryItem[]>([]);
   useEffect(() => {

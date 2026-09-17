@@ -11,7 +11,8 @@ import {
   fetchUrlText, saveJD, createMatch, createCoverLetter,
   type MatchResponse,
 } from '../../services/matchApi';
-import { MATCH_COST } from '../../constants/credits';
+import { MATCH_COST, COVER_LETTER_COST } from '../../constants/credits';
+import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
 
 interface CVOption {
   id: string;
@@ -23,7 +24,7 @@ type Tab = 'url' | 'text';
 export function MatchPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const [cvs, setCvs] = useState<CVOption[]>([]);
   const [selectedCvId, setSelectedCvId] = useState<string>('');
@@ -68,6 +69,12 @@ export function MatchPage() {
     }
   };
 
+  // Both paid actions here land on this when the balance falls short.
+  const handleOutOfCredits = (cost: number) => {
+    void refreshUser();
+    void notifyOutOfCredits({ t, navigate, cost });
+  };
+
   const handleMatch = async () => {
     const rawText = tab === 'url' ? fetchedText : text.trim();
     if (!rawText || rawText.length < 50) { setError(t('match.textTooShort')); return; }
@@ -80,8 +87,12 @@ export function MatchPage() {
       setMatchResult(match);
       setMatchJdId(jd.id);
     } catch (err: unknown) {
-      const axiosErr = err as { response?: { data?: { message?: string } } };
-      setError(axiosErr?.response?.data?.message || t('match.matchError'));
+      if (isOutOfCredits(err)) {
+        handleOutOfCredits(MATCH_COST);
+      } else {
+        const axiosErr = err as { response?: { data?: { message?: string } } };
+        setError(axiosErr?.response?.data?.message || t('match.matchError'));
+      }
     } finally {
       setIsMatching(false);
     }
@@ -93,8 +104,10 @@ export function MatchPage() {
     try {
       const letter = await createCoverLetter(selectedCvId, matchJdId);
       setCoverLetterContent(letter.content);
-    } catch {
-      // silent - user can retry
+    } catch (err) {
+      // Other failures stay silent - the button comes back and can be retried.
+      // A refusal for credits cannot be retried into success, so say so.
+      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST);
     } finally {
       setIsGeneratingCoverLetter(false);
     }

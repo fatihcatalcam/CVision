@@ -28,6 +28,7 @@ import { AnalysisPage } from './AnalysisPage';
 
 const post = vi.fn();
 const get = vi.fn();
+const navigateSpy = vi.fn();
 
 vi.mock('../../services/api', () => ({
   default: {
@@ -38,7 +39,7 @@ vi.mock('../../services/api', () => ({
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
-  return { ...actual, useParams: () => ({ id: 'abc123' }), useNavigate: () => vi.fn() };
+  return { ...actual, useParams: () => ({ id: 'abc123' }), useNavigate: () => navigateSpy };
 });
 
 const refreshUser = vi.fn().mockResolvedValue(undefined);
@@ -165,5 +166,53 @@ describe('AnalysisPage unlock flow', () => {
     expect(await screen.findByText(/^"Old wording"$/)).toBeInTheDocument();
     expect(screen.getByText(/^"New wording"$/)).toBeInTheDocument();
     expect(screen.queryByText(/->/)).not.toBeInTheDocument();
+  });
+});
+
+describe('AnalysisPage when credits run out', () => {
+  it('explains a refused unlock in the page language and refreshes the balance', async () => {
+    const toast = (await import('react-hot-toast')).default as unknown as { error: ReturnType<typeof vi.fn> };
+    get.mockImplementation((url: string) =>
+      url.startsWith('/payment/packs')
+        ? Promise.resolve({ data: { packs: [] } })
+        : Promise.resolve({ data: lockedReport }),
+    );
+    post.mockRejectedValue({
+      response: { status: 402, data: { detail: 'Not enough credits: unlocking costs 2, you have 1.' } },
+    });
+    renderPage();
+
+    await userEvent.click((await screen.findAllByText('analysis.unlockCta:2'))[0]);
+
+    await waitFor(() => expect(refreshUser).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(expect.any(Function), expect.objectContaining({ id: 'out-of-credits' })),
+    );
+    // The backend sentence is not what the user reads any more.
+    expect(toast.error).not.toHaveBeenCalledWith(expect.stringContaining('Not enough credits'));
+  });
+});
+
+describe('AnalysisPage with an unreadable CV', () => {
+  beforeEach(() => {
+    get.mockImplementation((url: string) =>
+      url.endsWith('/results')
+        ? Promise.reject({ response: { status: 404 } })
+        : Promise.resolve({ data: { status: 'failed_no_text' } }),
+    );
+  });
+
+  it('shows the fix, tells a signed-in user their credits came back', async () => {
+    renderPage();
+
+    expect(await screen.findByTestId('image-pdf-help')).toBeInTheDocument();
+    expect(screen.getByText('imagePdf.refunded')).toBeInTheDocument();
+  });
+
+  it('opens the upload dialog on the dashboard for the next file', async () => {
+    renderPage();
+
+    await userEvent.click(await screen.findByRole('button', { name: 'imagePdf.uploadOther' }));
+    expect(navigateSpy).toHaveBeenCalledWith('/dashboard?upload=1');
   });
 });

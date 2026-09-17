@@ -90,6 +90,11 @@ class AnonymousService:
             db.query(CV)
             .filter(CV.session_token == token)
             .filter(CV.user_id.is_(None))
+            # A failed upload has nothing to hand over. Claiming one opened the
+            # brand-new account on the analysis page's error screen - and, for
+            # an image-only PDF, told the user a credit was refunded that they
+            # had never spent. Same rule as count_recent_anon_by_ip.
+            .filter(~CV.status.like("failed%"))
             .first()
         )
         if cv is None:

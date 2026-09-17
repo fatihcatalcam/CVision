@@ -16,12 +16,14 @@ import { RoleMatcher } from '../../components/analysis/RoleMatcher';
 import { PDFViewerModal } from '../../components/analysis/PDFViewerModal';
 import { AtsXraySection, type LayoutXray } from '../../components/analysis/AtsXraySection';
 import { AnalyzingScreen } from '../../components/analysis/AnalyzingScreen';
+import { ImagePdfHelp } from '../../components/analysis/ImagePdfHelp';
 import { JDInputModal } from '../../components/match/JDInputModal';
 import { Collapse } from '../../components/ui/Collapse';
 import { MatchResultCard } from '../../components/match/MatchResultCard';
 import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
-import { MATCH_COST } from '../../constants/credits';
+import { MATCH_COST, COVER_LETTER_COST } from '../../constants/credits';
+import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
 import { parseRewriteHint } from '../../utils/rewriteHint';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -212,6 +214,7 @@ export function AnalysisPage() {
   const [loadingMsg, setLoadingMsg] = useState(() => t('analysis.loadingInit'));
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [imagePdf, setImagePdf] = useState(false);
   const [activeSuggestion, setActiveSuggestion] = useState<any | null>(null);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'classic'>('ai');
@@ -225,6 +228,14 @@ export function AnalysisPage() {
   // Buying the full report. The server returns the unlocked payload, so the page
   // swaps to it in place rather than refetching - and refreshUser pulls the new
   // balance so the header does not keep showing what the user had a moment ago.
+  // Every paid action on this page ends up here when the balance falls short:
+  // pull the real balance so the numbers on screen stop lying, and offer the
+  // way to more credits in the user's language.
+  const handleOutOfCredits = (cost: number) => {
+    void refreshUser();
+    void notifyOutOfCredits({ t, navigate, cost });
+  };
+
   const handleUnlock = async () => {
     if (!id || isUnlocking) return;
     setIsUnlocking(true);
@@ -234,9 +245,13 @@ export function AnalysisPage() {
       await refreshUser();
       toast.success(t('analysis.unlockedToast'));
     } catch (err: any) {
-      toast.error(
-        err.response?.data?.detail || err.response?.data?.message || t('analysis.unlockFailed')
-      );
+      if (isOutOfCredits(err)) {
+        handleOutOfCredits(UNLOCK_COST);
+      } else {
+        toast.error(
+          err.response?.data?.detail || err.response?.data?.message || t('analysis.unlockFailed')
+        );
+      }
     } finally {
       setIsUnlocking(false);
     }
@@ -290,7 +305,7 @@ export function AnalysisPage() {
         try {
           const { data: status } = await api.get(`/analysis/${id}/status`);
           if (status.status === 'failed_no_text') {
-            if (active) setError(t('analysis.errorImagePdf'));
+            if (active) setImagePdf(true);
             return;
           }
           if (status.status === 'failed') {
@@ -322,6 +337,29 @@ export function AnalysisPage() {
     init();
     return () => { active = false; };
   }, [id]);
+
+  // Before the loading screen, which would otherwise keep spinning: this is a
+  // finished outcome, not an error message, and it has its own way forward.
+  if (imagePdf) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg">
+          <ImagePdfHelp
+            refunded
+            onUploadOther={() => navigate('/dashboard?upload=1')}
+            secondary={
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="mt-3 w-full h-11 rounded-xl text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-accent)] transition-colors"
+              >
+                {t('common.backToDashboard')}
+              </button>
+            }
+          />
+        </Card>
+      </div>
+    );
+  }
 
   // Loading screen (only for new analyses being processed)
   if (!data && !error && isNewAnalysis) {
@@ -380,7 +418,10 @@ export function AnalysisPage() {
       const letter = await createCoverLetter(data.cv_id, matchJdId);
       setCoverLetterContent(letter.content);
     } catch (err) {
-      console.error('Cover letter generation failed', err);
+      // This used to be the only branch, so a refusal for credits just stopped
+      // the spinner and said nothing at all.
+      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST);
+      else console.error('Cover letter generation failed', err);
     } finally {
       setIsGeneratingCoverLetter(false);
     }
@@ -636,6 +677,7 @@ export function AnalysisPage() {
         isOpen={showJDModal && !!data?.cv_id}
         cvId={data?.cv_id ?? ''}
         onClose={() => setShowJDModal(false)}
+        onOutOfCredits={() => handleOutOfCredits(MATCH_COST)}
         onMatchComplete={(match, jdId) => {
           setMatchResult(match);
           setMatchJdId(jdId);
