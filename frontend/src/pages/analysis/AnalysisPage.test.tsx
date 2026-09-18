@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { AnalysisPage } from './AnalysisPage';
+import { onOutOfCredits } from '../../utils/outOfCredits';
 
 /**
  * The unlock flow: the most expensive screen in the product to get wrong.
@@ -170,13 +171,10 @@ describe('AnalysisPage unlock flow', () => {
 });
 
 describe('AnalysisPage when credits run out', () => {
-  it('explains a refused unlock in the page language and refreshes the balance', async () => {
-    const toast = (await import('react-hot-toast')).default as unknown as { error: ReturnType<typeof vi.fn> };
-    get.mockImplementation((url: string) =>
-      url.startsWith('/payment/packs')
-        ? Promise.resolve({ data: { packs: [] } })
-        : Promise.resolve({ data: lockedReport }),
-    );
+  it('raises the credits dialog for the unlock price and refreshes the balance', async () => {
+    const raised = vi.fn();
+    const stop = onOutOfCredits(raised);
+    get.mockResolvedValue({ data: lockedReport });
     post.mockRejectedValue({
       response: { status: 402, data: { detail: 'Not enough credits: unlocking costs 2, you have 1.' } },
     });
@@ -184,12 +182,12 @@ describe('AnalysisPage when credits run out', () => {
 
     await userEvent.click((await screen.findAllByText('analysis.unlockCta:2'))[0]);
 
+    // The dialog is mounted once in App; this is the wiring that reaches it.
+    await waitFor(() => expect(raised).toHaveBeenCalledWith(2));
     await waitFor(() => expect(refreshUser).toHaveBeenCalled());
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(expect.any(Function), expect.objectContaining({ id: 'out-of-credits' })),
-    );
-    // The backend sentence is not what the user reads any more.
-    expect(toast.error).not.toHaveBeenCalledWith(expect.stringContaining('Not enough credits'));
+    // And the report stays shut rather than pretending the purchase worked.
+    expect(screen.queryByText('The second tip')).not.toBeInTheDocument();
+    stop();
   });
 });
 

@@ -540,6 +540,7 @@ const tr = {
     buyCta: 'Kredi al',
     notEnough_one: 'Bu işlem {{count}} kredi gerektiriyor, bakiyen yetmiyor.',
     notEnough_other: 'Bu işlem {{count}} kredi gerektiriyor, bakiyen yetmiyor.',
+    notEnoughTitle: 'Kredin yetmiyor',
   },
   imagePdf: {
     title: 'Bu CV\'nin içinde okunabilir metin yok',

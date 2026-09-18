@@ -72,7 +72,7 @@ export function MatchPage() {
   // Both paid actions here land on this when the balance falls short.
   const handleOutOfCredits = (cost: number) => {
     void refreshUser();
-    void notifyOutOfCredits({ t, navigate, cost });
+    notifyOutOfCredits(cost);
   };
 
   const handleMatch = async () => {

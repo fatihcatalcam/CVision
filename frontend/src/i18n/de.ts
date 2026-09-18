@@ -529,6 +529,7 @@ const de = {
     buyCta: 'Credits kaufen',
     notEnough_one: 'Dafür brauchst du {{count}} Credit, dein Guthaben reicht nicht.',
     notEnough_other: 'Dafür brauchst du {{count}} Credits, dein Guthaben reicht nicht.',
+    notEnoughTitle: 'Nicht genug Credits',
   },
   imagePdf: {
     title: 'Dieser Lebenslauf enthält keinen lesbaren Text',

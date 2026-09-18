@@ -233,7 +233,7 @@ export function AnalysisPage() {
   // way to more credits in the user's language.
   const handleOutOfCredits = (cost: number) => {
     void refreshUser();
-    void notifyOutOfCredits({ t, navigate, cost });
+    notifyOutOfCredits(cost);
   };
 
   const handleUnlock = async () => {

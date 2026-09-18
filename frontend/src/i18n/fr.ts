@@ -529,6 +529,7 @@ const fr = {
     buyCta: 'Acheter des crédits',
     notEnough_one: 'Cette action nécessite {{count}} crédit et votre solde est insuffisant.',
     notEnough_other: 'Cette action nécessite {{count}} crédits et votre solde est insuffisant.',
+    notEnoughTitle: 'Crédits insuffisants',
   },
   imagePdf: {
     title: 'Ce CV ne contient aucun texte lisible',

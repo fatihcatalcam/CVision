@@ -5,6 +5,10 @@ import { createPortal } from 'react-dom';
 /** Must match the exit duration of .modal-panel / .modal-scrim in index.css. */
 const EXIT_MS = 150;
 
+/** How many shells are open, so stacked dialogs release the page only once. */
+let openShells = 0;
+let overflowBeforeFirst = '';
+
 interface ModalShellProps {
   isOpen: boolean;
   onClose: () => void;
@@ -77,13 +81,19 @@ export function ModalShell({
     };
     document.addEventListener('keydown', onKeyDown);
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    // Everything outside the portal stops being reachable, which is what makes
-    // this a real dialog rather than a panel drawn on top of a live page.
+    // Counted, because dialogs stack: the out-of-credits one opens on top of
+    // the upload one. Taken per-shell, closing the upper dialog handed the page
+    // behind both of them back its scrollbar and its focusability while the
+    // lower one was still open.
     const root = document.getElementById('root');
-    root?.setAttribute('inert', '');
+    if (openShells === 0) {
+      overflowBeforeFirst = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      // Everything outside the portal stops being reachable, which is what
+      // makes this a real dialog rather than a panel drawn on a live page.
+      root?.setAttribute('inert', '');
+    }
+    openShells += 1;
 
     // Don't steal focus from a child that asked for it. React's autoFocus has
     // already run by the time this effect fires, so focusing the panel here
@@ -99,8 +109,11 @@ export function ModalShell({
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      root?.removeAttribute('inert');
+      openShells -= 1;
+      if (openShells === 0) {
+        document.body.style.overflow = overflowBeforeFirst;
+        root?.removeAttribute('inert');
+      }
       // Hand focus back to whatever opened this, so keyboard users are not
       // dumped at the top of the document.
       returnFocusTo.current?.focus?.();

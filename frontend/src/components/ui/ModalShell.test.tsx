@@ -118,3 +118,53 @@ describe('ModalShell', () => {
     expect(screen.getByLabelText('full name')).toHaveFocus();
   });
 });
+
+describe('ModalShell stacking', () => {
+  it('keeps the page locked while a dialog is still open underneath', async () => {
+    // The out-of-credits dialog opens on top of the upload one. Releasing the
+    // page per-shell handed the page behind both of them its scrollbar and its
+    // focusability back the moment the upper dialog closed.
+    vi.useFakeTimers();
+    const { rerender } = render(
+      <>
+        <Fixture open />
+        <ModalShell isOpen onClose={() => {}} label="On top">
+          <p>upper</p>
+        </ModalShell>
+      </>,
+    );
+
+    expect(document.getElementById('root')).toHaveAttribute('inert');
+    expect(document.body.style.overflow).toBe('hidden');
+
+    // Close only the upper one.
+    rerender(
+      <>
+        <Fixture open />
+        <ModalShell isOpen={false} onClose={() => {}} label="On top">
+          <p>upper</p>
+        </ModalShell>
+      </>,
+    );
+    await act(async () => { vi.advanceTimersByTime(200); });
+
+    expect(screen.queryByText('upper')).not.toBeInTheDocument();
+    expect(document.getElementById('root')).toHaveAttribute('inert');
+    expect(document.body.style.overflow).toBe('hidden');
+
+    // Now the last one.
+    rerender(
+      <>
+        <Fixture open={false} />
+        <ModalShell isOpen={false} onClose={() => {}} label="On top">
+          <p>upper</p>
+        </ModalShell>
+      </>,
+    );
+    await act(async () => { vi.advanceTimersByTime(200); });
+
+    expect(document.getElementById('root')).not.toHaveAttribute('inert');
+    expect(document.body.style.overflow).toBe('');
+    vi.useRealTimers();
+  });
+});

@@ -532,6 +532,7 @@ const en = {
     buyCta: 'Buy credits',
     notEnough_one: 'This needs {{count}} credit and your balance is too low.',
     notEnough_other: 'This needs {{count}} credits and your balance is too low.',
+    notEnoughTitle: 'Not enough credits',
   },
   imagePdf: {
     title: 'This CV has no readable text',
