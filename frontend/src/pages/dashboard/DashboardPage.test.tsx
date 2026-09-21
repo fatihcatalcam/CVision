@@ -75,9 +75,10 @@ describe('Dashboard with no analyses yet', () => {
     const creditCard = (await screen.findByText('credits.label')).closest('.surface')!;
     expect(within(creditCard as HTMLElement).getByText('3')).toBeInTheDocument();
 
-    // And the tier choice states what each one costs before anything is spent.
-    expect(screen.getByText('uploader.tier.normalTitle')).toBeInTheDocument();
-    expect(screen.getByText('uploader.tier.proTitle')).toBeInTheDocument();
+    // And the uploader states what an analysis costs and buys before anything
+    // is spent. This file's `t` ignores interpolation, hence the bare key.
+    expect(screen.getByText('credits.cost')).toBeInTheDocument();
+    expect(screen.getByText('uploader.included')).toBeInTheDocument();
   });
 
   it('does not send anyone to a checkout while no pack is on sale', async () => {

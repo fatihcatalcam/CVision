@@ -43,7 +43,6 @@ async def upload_cv(
     file: UploadFile = File(..., description="CV file (PDF only, max 5MB)"),
     target_domain: str = Form("Software Engineering", description="Target profession domain (e.g., Software Engineering or Industrial Engineering)"),
     ui_language: str = Form("en", description="UI language for localized suggestions (en/tr/de/fr/es)"),
-    tier: str = Form("normal", description="'normal' (analysis only) or 'pro' (analysis + unlocked report)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -58,8 +57,13 @@ async def upload_cv(
     **Status lifecycle**: pending → processing → completed / failed
     """
     # The upload_cv service validates, saves, and creates the record quickly
+    # Every analysis is the full report. The Normal/Pro choice is gone: almost
+    # nobody moved off the default, and the ones who did unlocked afterwards
+    # anyway - the same credits spent in two steps with a locked page in
+    # between. A `tier` field from an older cached client is ignored rather
+    # than honoured; the price is the server's to decide.
     cv = await CVService.upload_cv(
-        file, target_domain, current_user, db, unlock=(tier == "pro")
+        file, target_domain, current_user, db, unlock=True
     )
     
     # Delegate parsing and analysis to background task

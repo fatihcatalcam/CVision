@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Coins, Gift, ChevronRight, ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCreditPacks } from '../../hooks/useCreditPacks';
+import { FULL_ANALYSIS_COST } from '../../constants/credits';
 
 interface CreditCardProps {
   credits: number;
@@ -44,7 +45,7 @@ export function CreditCard({ credits, weekly, cap }: CreditCardProps) {
       </div>
 
       <p className="text-[11px] leading-relaxed text-[#6B6A65] dark:text-[#908d89]">
-        {credits >= cap ? t('credits.weeklyPaused', { cap }) : t('credits.weekly', { weekly })}
+        {credits >= cap ? t('credits.weeklyPaused', { cap }) : t('credits.weekly', { weekly, analysis: FULL_ANALYSIS_COST })}
       </p>
 
       {low && (

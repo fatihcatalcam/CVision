@@ -160,13 +160,7 @@ const es = {
 
   uploader: {
     analyzeButtonCost: 'Analizar mi CV ({{cost}} créditos)',
-    tier: {
-      normalTitle: 'Normal',
-      proTitle: 'Pro',
-      normalDesc: 'Puntuación ATS, palabras clave que faltan y la primera sugerencia. Puedes desbloquear el informe completo más tarde.',
-      proDesc: 'El informe completo desde el principio: todas las sugerencias, el resumen con IA y el ATS X-Ray.',
-      cost: '{{cost}} créditos',
-    },
+    included: 'El informe completo: todas las sugerencias de IA, tu puntuación ATS, las palabras clave que faltan y el ATS X-Ray.',
     step1: 'Subir archivo',
     step2: 'Seleccionar sector',
     step3: 'Analizar',
@@ -251,8 +245,7 @@ const es = {
     credits: {
       title: 'Créditos',
       subtitle: 'Tu saldo y lo que cuesta cada cosa',
-      priceAnalysis: 'Análisis Normal',
-      pricePro: 'Análisis Pro',
+      priceAnalysis: 'Análisis de CV',
       priceMatch: 'Comparación con la oferta',
       priceCoverLetter: 'Carta de presentación',
     },
@@ -522,7 +515,7 @@ const es = {
     unit: 'créditos',
     cost: '{{cost}} créditos',
     costSuffix: '· {{cost}} créditos',
-    weekly: '+{{weekly}} créditos cada semana. Un análisis cuesta 1; desbloquear el informe completo, 2.',
+    weekly: '+{{weekly}} créditos cada semana. Un análisis de CV cuesta {{analysis}}.',
     weeklyPaused: 'Los créditos semanales están en pausa mientras tu saldo sea de {{cap}} o más.',
     low: 'Te quedan pocos. Puedes ganar créditos gratis invitando a alguien.',
     inviteCta: 'Invitar a un amigo',

@@ -8,7 +8,7 @@ import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
 import { ArrowLeft, Loader2, Shield, Lock, Gift } from 'lucide-react';
 import {
-  ANALYSIS_COST, UNLOCK_COST, MATCH_COST, COVER_LETTER_COST,
+  FULL_ANALYSIS_COST, FULL_APPLICATION_COST, MATCH_COST, COVER_LETTER_COST,
 } from '../../constants/credits';
 
 /**
@@ -109,8 +109,7 @@ export function PricingPage() {
             nothing on its own to someone seeing the page for the first time. */}
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10 py-3 px-5 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07]">
           {[
-            { label: t('settings.credits.priceAnalysis'), cost: ANALYSIS_COST },
-            { label: t('settings.credits.pricePro'), cost: ANALYSIS_COST + UNLOCK_COST },
+            { label: t('settings.credits.priceAnalysis'), cost: FULL_ANALYSIS_COST },
             { label: t('settings.credits.priceMatch'), cost: MATCH_COST },
             { label: t('settings.credits.priceCoverLetter'), cost: COVER_LETTER_COST },
           ].map(({ label, cost }) => (
@@ -195,7 +194,7 @@ export function PricingPage() {
                   )}
 
                   <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-6 leading-relaxed">
-                    {t('packs.worth', { count: Math.floor(pack.credits / 6) })}
+                    {t('packs.worth', { count: Math.floor(pack.credits / FULL_APPLICATION_COST) })}
                   </p>
 
                   <button

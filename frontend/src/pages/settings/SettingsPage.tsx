@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useCreditPacks } from '../../hooks/useCreditPacks';
 import {
-  ANALYSIS_COST, UNLOCK_COST, MATCH_COST, COVER_LETTER_COST, WEEKLY_CREDITS,
+  FULL_ANALYSIS_COST, MATCH_COST, COVER_LETTER_COST, WEEKLY_CREDITS,
 } from '../../constants/credits';
 
 function SectionHeader({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
@@ -425,8 +425,7 @@ export function SettingsPage() {
 
               <div className="space-y-1.5">
                 {[
-                  { label: t('settings.credits.priceAnalysis'), cost: ANALYSIS_COST },
-                  { label: t('settings.credits.pricePro'), cost: ANALYSIS_COST + UNLOCK_COST },
+                  { label: t('settings.credits.priceAnalysis'), cost: FULL_ANALYSIS_COST },
                   { label: t('settings.credits.priceMatch'), cost: MATCH_COST },
                   { label: t('settings.credits.priceCoverLetter'), cost: COVER_LETTER_COST },
                 ].map(({ label, cost }) => (

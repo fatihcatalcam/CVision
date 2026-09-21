@@ -27,47 +27,34 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-describe('CVUploader tier choice', () => {
-  it('offers Normal and Pro before a file is picked', () => {
+describe('CVUploader price', () => {
+  it('states the one price before a file is picked', () => {
+    // There is no Normal/Pro choice any more: almost nobody moved off the
+    // default, and those who did unlocked the report afterwards anyway - the
+    // same credits in two steps with a locked page in between. The price is
+    // still on screen before anything is committed, which is what the choice
+    // was really carrying.
     render(<CVUploader onUploadSuccess={() => {}} />);
 
-    expect(screen.getByText('uploader.tier.normalTitle')).toBeInTheDocument();
-    expect(screen.getByText('uploader.tier.proTitle')).toBeInTheDocument();
+    expect(screen.getByText('credits.cost:3')).toBeInTheDocument();
+    expect(screen.getByText('uploader.included')).toBeInTheDocument();
   });
 
-  it('prices them 1 and 3, so the cost is known before committing a file', () => {
+  it('offers nothing to choose between', () => {
     render(<CVUploader onUploadSuccess={() => {}} />);
 
-    expect(screen.getByText('uploader.tier.cost:1')).toBeInTheDocument();
-    expect(screen.getByText('uploader.tier.cost:3')).toBeInTheDocument();
+    expect(screen.queryByText(/uploader\.tier/)).not.toBeInTheDocument();
+    expect(screen.queryByText('credits.cost:1')).not.toBeInTheDocument();
   });
 
-  it('starts on Pro, and both prices are on screen before anything is spent', () => {
-    // Deliberate change of default. Normal was preselected and almost nobody
-    // moved off it, then unlocked afterwards anyway - the same 3 credits in two
-    // steps with a locked page in between. A default that charges more is only
-    // defensible while the price is visible without looking for it, so this
-    // asserts the two together: the selection AND the cost beside it.
-    render(<CVUploader onUploadSuccess={() => {}} />);
-
-    const normal = screen.getByText('uploader.tier.normalTitle').closest('button');
-    const pro = screen.getByText('uploader.tier.proTitle').closest('button');
-
-    expect(pro).toHaveAttribute('aria-pressed', 'true');
-    expect(normal).toHaveAttribute('aria-pressed', 'false');
-
-    expect(screen.getByText('uploader.tier.cost:1')).toBeInTheDocument();
-    expect(screen.getByText('uploader.tier.cost:3')).toBeInTheDocument();
-  });
-
-  it('lets one click take you back to Normal', async () => {
+  it('quotes the same price on the button', async () => {
     const { default: userEvent } = await import('@testing-library/user-event');
     render(<CVUploader onUploadSuccess={() => {}} />);
 
-    await userEvent.click(screen.getByText('uploader.tier.normalTitle'));
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await userEvent.upload(input, new File(['x'], 'cv.pdf', { type: 'application/pdf' }));
 
-    expect(screen.getByText('uploader.tier.normalTitle').closest('button'))
-      .toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('uploader.analyzeButtonCost:3')).toBeInTheDocument();
   });
 
   it('sends the visitor to signup when the free try is used up', async () => {
@@ -93,39 +80,31 @@ describe('CVUploader tier choice', () => {
     await waitFor(() => expect(onLimitReached).toHaveBeenCalled());
   });
 
-  it('hides the choice on the anonymous /try flow, which has no balance', () => {
+  it('quotes no price on the anonymous /try flow, which spends nothing', () => {
     render(<CVUploader anonymous onUploadSuccess={() => {}} />);
 
-    expect(screen.queryByText('uploader.tier.normalTitle')).not.toBeInTheDocument();
-    expect(screen.queryByText('uploader.tier.proTitle')).not.toBeInTheDocument();
+    expect(screen.queryByText('credits.cost:3')).not.toBeInTheDocument();
+    expect(screen.queryByText('uploader.included')).not.toBeInTheDocument();
   });
 });
 
 describe('CVUploader when the balance is short', () => {
-  async function submit(props: Partial<Parameters<typeof CVUploader>[0]> = {}, pickNormal = false) {
+  async function submit(props: Partial<Parameters<typeof CVUploader>[0]> = {}) {
     const { default: userEvent } = await import('@testing-library/user-event');
     const api = (await import('../../services/api')).default as any;
     api.post.mockRejectedValueOnce({
       response: { status: 402, data: { detail: 'Not enough credits: this costs 3, you have 1.' } },
     });
     render(<CVUploader onUploadSuccess={() => {}} {...props} />);
-    if (pickNormal) await userEvent.click(screen.getByText('uploader.tier.normalTitle'));
     const input = document.querySelector('input[type="file"]') as HTMLInputElement;
     await userEvent.upload(input, new File(['x'], 'cv.pdf', { type: 'application/pdf' }));
     await userEvent.click(screen.getByText(/uploader\.analyzeButton/));
   }
 
-  it('hands the refusal to the page with the price of what was chosen', async () => {
-    // Pro is preselected: analysis plus unlock.
+  it('hands the refusal to the page with the price of an analysis', async () => {
     const onOutOfCredits = vi.fn();
     await submit({ onOutOfCredits });
     await waitFor(() => expect(onOutOfCredits).toHaveBeenCalledWith(3));
-  });
-
-  it('quotes the Normal price when Normal was picked', async () => {
-    const onOutOfCredits = vi.fn();
-    await submit({ onOutOfCredits }, true);
-    await waitFor(() => expect(onOutOfCredits).toHaveBeenCalledWith(1));
   });
 
   it('never treats a refused /try upload as a credit problem', async () => {

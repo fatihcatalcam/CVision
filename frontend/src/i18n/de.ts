@@ -160,13 +160,7 @@ const de = {
 
   uploader: {
     analyzeButtonCost: 'Lebenslauf analysieren ({{cost}} Credits)',
-    tier: {
-      normalTitle: 'Normal',
-      proTitle: 'Pro',
-      normalDesc: 'ATS-Score, fehlende Schlüsselwörter und der erste Hinweis. Den vollständigen Bericht kannst du später freischalten.',
-      proDesc: 'Der vollständige Bericht von Anfang an: alle Hinweise, die KI-Zusammenfassung und das ATS-Röntgenbild.',
-      cost: '{{cost}} Credits',
-    },
+    included: 'Der vollständige Bericht: alle KI-Vorschläge, dein ATS-Score, die fehlenden Keywords und das ATS-Röntgenbild.',
     step1: 'Datei hochladen',
     step2: 'Branche wählen',
     step3: 'Analysieren',
@@ -251,8 +245,7 @@ const de = {
     credits: {
       title: 'Credits',
       subtitle: 'Dein Guthaben und was was kostet',
-      priceAnalysis: 'Normale Analyse',
-      pricePro: 'Pro-Analyse',
+      priceAnalysis: 'Lebenslauf-Analyse',
       priceMatch: 'Abgleich mit Stellenanzeige',
       priceCoverLetter: 'Anschreiben',
     },
@@ -522,7 +515,7 @@ const de = {
     unit: 'Credits',
     cost: '{{cost}} Credits',
     costSuffix: '· {{cost}} Credits',
-    weekly: '+{{weekly}} Credits pro Woche. Eine Analyse kostet 1, den vollständigen Bericht freizuschalten 2.',
+    weekly: 'Jede Woche +{{weekly}} Credits. Eine Lebenslauf-Analyse kostet {{analysis}}.',
     weeklyPaused: 'Die wöchentlichen Credits pausieren, solange dein Guthaben bei {{cap}} oder darüber liegt.',
     low: 'Dein Guthaben wird knapp. Lade jemanden ein und verdiene kostenlose Credits.',
     inviteCta: 'Freunde einladen',

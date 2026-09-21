@@ -160,13 +160,7 @@ const en = {
 
   uploader: {
     analyzeButtonCost: 'Analyse my CV ({{cost}} credits)',
-    tier: {
-      normalTitle: 'Normal',
-      proTitle: 'Pro',
-      normalDesc: 'ATS score, missing keywords and the first suggestion. You can unlock the full report later.',
-      proDesc: 'The full report from the start: every suggestion, the AI summary and the ATS X-Ray.',
-      cost: '{{cost}} credits',
-    },
+    included: 'The full report: every AI suggestion, your ATS score, the missing keywords and the ATS X-Ray.',
     step1: 'Upload File',
     step2: 'Select Domain',
     step3: 'Analyze',
@@ -251,8 +245,7 @@ const en = {
     credits: {
       title: 'Credits',
       subtitle: 'Your balance and what each thing costs',
-      priceAnalysis: 'Normal analysis',
-      pricePro: 'Pro analysis',
+      priceAnalysis: 'CV analysis',
       priceMatch: 'Job ad match',
       priceCoverLetter: 'Cover letter',
     },
@@ -525,7 +518,7 @@ const en = {
     unit: 'credits',
     cost: '{{cost}} credits',
     costSuffix: '· {{cost}} credits',
-    weekly: '+{{weekly}} credits every week. An analysis costs 1, unlocking the full report 2.',
+    weekly: '+{{weekly}} credits every week. One CV analysis costs {{analysis}}.',
     weeklyPaused: 'Weekly credits are paused while your balance is {{cap}} or above.',
     low: 'Running low. You can earn free credits by inviting a friend.',
     inviteCta: 'Invite a friend',

@@ -16,9 +16,7 @@ import { onOutOfCredits } from '../../utils/outOfCredits';
  *
  * It can open on top of another dialog - the upload one, most often, since
  * that is where an upload gets refused - so it sits above them on z-index and
- * leaves that dialog open underneath. The tier switch in the upload dialog is
- * still the right answer for someone who can afford a Normal analysis but not
- * a Pro one.
+ * leaves that dialog open underneath, with the chosen file still in it.
  */
 export function OutOfCreditsDialog() {
   const { t } = useTranslation();

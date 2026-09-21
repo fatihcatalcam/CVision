@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { saveAnonToken } from '../../services/anonymousAnalysis';
-import { ANALYSIS_COST, UNLOCK_COST } from '../../constants/credits';
+import { FULL_ANALYSIS_COST } from '../../constants/credits';
 import { isOutOfCredits } from '../../utils/outOfCredits';
 
 // Domain values are always sent to the backend in English - do not change these
@@ -68,17 +68,6 @@ export function CVUploader({
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState('Other');
-  // Normal buys the analysis; Pro buys it with the full report already open.
-  // Both routes exist because the report can also be unlocked afterwards - this
-  // is the same 3 credits, just decided up front by someone who already knows
-  // they want the whole thing.
-  //
-  // Pro is preselected. Normal was the default and almost nobody moved off it,
-  // then unlocked the report afterwards anyway - the same 3 credits spent in
-  // two steps, with a locked page in between. A default that charges more has
-  // to be honest about it, so the price sits on the card AND on the button
-  // ("Analyse my CV - 3 credits"), and switching back is one click.
-  const [tier, setTier] = useState<'normal' | 'pro'>('pro');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (f: File): boolean => {
@@ -118,7 +107,6 @@ export function CVUploader({
     // the site in. i18n.language can carry a region (e.g. "en-US"); the backend
     // only knows the base code, and unknown values fall back to English there.
     formData.append('ui_language', i18n.language.split('-')[0]);
-    if (!anonymous) formData.append('tier', tier);
     try {
       const endpoint = anonymous ? '/public/analyze' : '/cvs/upload';
       const response = await api.post(endpoint, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -141,7 +129,7 @@ export function CVUploader({
         // The backend's sentence is English and offers nothing to click. The
         // caller shows the way to more credits; without one, at least say it
         // in the user's language.
-        const cost = tier === 'pro' ? ANALYSIS_COST + UNLOCK_COST : ANALYSIS_COST;
+        const cost = FULL_ANALYSIS_COST;
         if (onOutOfCredits) onOutOfCredits(cost);
         else toast.error(t('credits.notEnough', { count: cost }));
       } else {
@@ -202,41 +190,20 @@ export function CVUploader({
         </div>
       </div>
 
-      {/* Tier choice, shown before the file is picked rather than after. The
-          price is the first thing worth knowing about an analysis, and the
-          version that only appeared once a file was selected read as if there
-          were no choice at all. Anonymous /try has no balance to spend, so it
-          never appears there. */}
+      {/* What an analysis is and what it costs, stated before the file is
+          picked. This replaces a Normal/Pro choice: almost nobody moved off
+          the default, and those who did unlocked the report afterwards anyway
+          - the same credits in two steps with a locked page in between. There
+          is one analysis now, so there is nothing to choose, only something to
+          know. Anonymous /try spends no credits, so it never appears there. */}
       {!anonymous && (
-        <div className="grid grid-cols-2 gap-2 mb-5">
-          {([
-            { key: 'normal' as const, cost: ANALYSIS_COST },
-            { key: 'pro' as const, cost: ANALYSIS_COST + UNLOCK_COST },
-          ]).map(({ key, cost }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setTier(key)}
-              aria-pressed={tier === key}
-              className={`text-left p-3 rounded-xl border transition-all ${
-                tier === key
-                  ? 'border-[#111111] dark:border-[#e8e7e4] bg-[#F7F6F3] dark:bg-[#272725]'
-                  : 'border-[#8A8985] dark:border-white/[0.36] hover:bg-[#F7F6F3] dark:hover:bg-[#272725]'
-              }`}
-            >
-              <span className="flex items-center justify-between gap-2 mb-0.5">
-                <span className="text-sm font-bold text-[#111111] dark:text-[#e8e7e4]">
-                  {t(`uploader.tier.${key}Title`)}
-                </span>
-                <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap">
-                  {t('uploader.tier.cost', { cost })}
-                </span>
-              </span>
-              <span className="block text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
-                {t(`uploader.tier.${key}Desc`)}
-              </span>
-            </button>
-          ))}
+        <div className="flex items-start gap-3 mb-5 p-3 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-[#F7F6F3] dark:bg-[#272725]">
+          <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap shrink-0 mt-0.5">
+            {t('credits.cost', { cost: FULL_ANALYSIS_COST })}
+          </span>
+          <span className="text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
+            {t('uploader.included')}
+          </span>
         </div>
       )}
 
@@ -326,9 +293,7 @@ export function CVUploader({
                 <Sparkles className="w-4 h-4" />
                 {anonymous
                   ? t('uploader.analyzeButton')
-                  : t('uploader.analyzeButtonCost', {
-                      cost: tier === 'pro' ? ANALYSIS_COST + UNLOCK_COST : ANALYSIS_COST,
-                    })}
+                  : t('uploader.analyzeButtonCost', { cost: FULL_ANALYSIS_COST })}
               </>
             )}
           </button>

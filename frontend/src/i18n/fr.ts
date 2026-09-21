@@ -160,13 +160,7 @@ const fr = {
 
   uploader: {
     analyzeButtonCost: 'Analyser mon CV ({{cost}} crédits)',
-    tier: {
-      normalTitle: 'Normal',
-      proTitle: 'Pro',
-      normalDesc: 'Score ATS, mots-clés manquants et le premier conseil. Vous pourrez débloquer le rapport complet plus tard.',
-      proDesc: 'Le rapport complet dès le départ : tous les conseils, le résumé IA et la radio ATS.',
-      cost: '{{cost}} crédits',
-    },
+    included: 'Le rapport complet : toutes les suggestions IA, votre score ATS, les mots-clés manquants et la radiographie ATS.',
     step1: 'Télécharger le fichier',
     step2: 'Choisir le secteur',
     step3: 'Analyser',
@@ -251,8 +245,7 @@ const fr = {
     credits: {
       title: 'Crédits',
       subtitle: 'Votre solde et le coût de chaque action',
-      priceAnalysis: 'Analyse Normale',
-      pricePro: 'Analyse Pro',
+      priceAnalysis: 'Analyse de CV',
       priceMatch: 'Comparaison avec l\'offre',
       priceCoverLetter: 'Lettre de motivation',
     },
@@ -522,7 +515,7 @@ const fr = {
     unit: 'crédits',
     cost: '{{cost}} crédits',
     costSuffix: '· {{cost}} crédits',
-    weekly: '+{{weekly}} crédits chaque semaine. Une analyse coûte 1, débloquer le rapport complet 2.',
+    weekly: '+{{weekly}} crédits chaque semaine. Une analyse de CV coûte {{analysis}}.',
     weeklyPaused: 'Les crédits hebdomadaires sont en pause tant que votre solde atteint {{cap}} ou plus.',
     low: 'Votre solde baisse. Invitez quelqu\'un pour gagner des crédits gratuits.',
     inviteCta: 'Inviter un ami',

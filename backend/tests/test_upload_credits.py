@@ -196,7 +196,12 @@ def test_an_anonymous_failure_refunds_nobody(db_session):
     assert db_session.get(CV, cv.id).status == "failed_no_text"
 
 
-# ── the Pro tier ──────────────────────────────────────────────────────────────
+# ── the full analysis ─────────────────────────────────────────────────────────
+# `unlock=True` is the only path the upload endpoint takes now; the service
+# still accepts `unlock=False`, and the test below it covers that default,
+# because the flag is what the background task reads to decide whether the
+# report lands open. The ledger reason stays "spend_analysis_pro": renaming it
+# would split one spend into two names across the existing history.
 
 def _upload_pro(user, db) -> CV:
     return asyncio.run(
@@ -280,3 +285,41 @@ def test_a_failed_pro_analysis_refunds_the_whole_price(
     CVService._mark_failed(db_session, cv.id, "failed_no_text")
 
     assert _balance(db_session, user.id) == 5
+
+
+# ── the endpoint ──────────────────────────────────────────────────────────────
+
+def test_the_endpoint_always_buys_the_full_report(
+    client, make_user, auth_headers, db_session, stub_save_file, monkeypatch
+):
+    """There is one analysis now, and it includes the report.
+
+    The Normal/Pro choice is gone from the uploader. The server does not take
+    the client's word for the price either: this posts `tier=normal`, the way a
+    browser holding the old JavaScript would, and expects to be charged for the
+    full analysis anyway. Honouring it would let a stale tab keep buying the
+    cheap tier indefinitely.
+    """
+    # TestClient runs background tasks inline, and this stub PDF has no text -
+    # the analysis would fail and refund, hiding the charge under test.
+    monkeypatch.setattr(
+        CVService, "process_analysis_background", staticmethod(lambda *a, **k: None)
+    )
+    user = make_user(email="always-full@test.com")
+    CreditService.grant(db_session, user, 5, "grant_signup")
+
+    resp = client.post(
+        "/cvs/upload",
+        headers=auth_headers(user),
+        files={"file": ("resume.pdf", b"%PDF-1.4 fake cv bytes", "application/pdf")},
+        data={"target_domain": "Software Engineering", "tier": "normal"},
+    )
+
+    assert resp.status_code in (200, 201), resp.text
+    db_session.expire_all()
+
+    expected = settings.CREDIT_ANALYSIS + settings.CREDIT_UNLOCK
+    assert _balance(db_session, user.id) == 5 - expected
+
+    cv = db_session.query(CV).filter(CV.user_id == user.id).one()
+    assert cv.unlock_requested is True, "the report must land already open"

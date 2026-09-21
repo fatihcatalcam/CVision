@@ -160,13 +160,7 @@ const tr = {
 
   uploader: {
     analyzeButtonCost: 'CV\'mi Analiz Et ({{cost}} kredi)',
-    tier: {
-      normalTitle: 'Normal',
-      proTitle: 'Pro',
-      normalDesc: 'ATS skoru, eksik anahtar kelimeler ve ilk öneri. Tam raporu sonradan da açabilirsin.',
-      proDesc: 'Tam rapor baştan açık: tüm öneriler, yapay zeka özeti ve ATS X-Ray.',
-      cost: '{{cost}} kredi',
-    },
+    included: 'Tam rapor: tüm yapay zeka önerileri, ATS skoru, eksik anahtar kelimeler ve ATS X-Ray.',
     step1: 'Dosya Yükle',
     step2: 'Alan Seç',
     step3: 'Analiz Et',
@@ -251,8 +245,7 @@ const tr = {
     credits: {
       title: 'Krediler',
       subtitle: 'Bakiyen ve neyin kaça mal olduğu',
-      priceAnalysis: 'Normal analiz',
-      pricePro: 'Pro analiz',
+      priceAnalysis: 'CV analizi',
       priceMatch: 'İş ilanı eşleştirme',
       priceCoverLetter: 'Ön yazı',
     },
@@ -533,7 +526,7 @@ const tr = {
     unit: 'kredi',
     cost: '{{cost}} kredi',
     costSuffix: '· {{cost}} kredi',
-    weekly: 'Her hafta +{{weekly}} kredi. Analiz 1, tam raporu açmak 2 kredi.',
+    weekly: 'Her hafta +{{weekly}} kredi. Bir CV analizi {{analysis}} kredi.',
     weeklyPaused: 'Bakiyen {{cap}} kredi ve üzerinde olduğu için haftalık kredi duraklatıldı.',
     low: 'Kredin azalıyor. Arkadaşını davet ederek ücretsiz kredi kazanabilirsin.',
     inviteCta: 'Arkadaşını davet et',

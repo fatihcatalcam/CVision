@@ -38,8 +38,8 @@ export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalPro
       <div className="p-6">
         <CVUploader
           embedded
-          // The dialog stays open: someone short of a Pro upload may still
-          // afford a Normal one, and the tier switch is right there.
+          // The dialog stays open rather than closing behind the refusal:
+          // the file they picked is still there if they top up and retry.
           onOutOfCredits={(cost) => {
             void refreshUser();
             notifyOutOfCredits(cost);
