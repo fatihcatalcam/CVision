@@ -197,11 +197,18 @@ export function CVUploader({
           is one analysis now, so there is nothing to choose, only something to
           know. Anonymous /try spends no credits, so it never appears there. */}
       {!anonymous && (
-        <div className="flex items-start gap-3 mb-5 p-3 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-[#F7F6F3] dark:bg-[#272725]">
-          <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap shrink-0 mt-0.5">
+        /* items-baseline, not items-start with a nudge: the price is mono and
+           the sentence is sans, so their glyphs sit differently inside the same
+           box and a hand-tuned margin only looked straight at one font size.
+           Sharing a baseline is what actually lines two runs of text up, and it
+           keeps the price level with the FIRST line when the sentence wraps on
+           a narrow screen. Both at one size for the same reason - the price
+           earns its emphasis from weight and colour, not from being bigger. */
+        <div className="flex items-baseline gap-3 mb-5 p-3 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] bg-[#F7F6F3] dark:bg-[#272725]">
+          <span className="text-xs font-mono font-bold text-[#956400] whitespace-nowrap shrink-0">
             {t('credits.cost', { cost: FULL_ANALYSIS_COST })}
           </span>
-          <span className="text-[11px] leading-snug text-[#6B6A65] dark:text-[#908d89]">
+          <span className="text-xs leading-snug text-[#6B6A65] dark:text-[#908d89]">
             {t('uploader.included')}
           </span>
         </div>
