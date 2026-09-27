@@ -110,7 +110,7 @@ const fr = {
   dashboard: {
     firstRun: {
       title: 'Lancez votre première analyse',
-      subtext: 'Une analyse Normale coûte 1 crédit, la Pro en coûte 3. Vous avez reçu 3 crédits à l\'inscription : exactement une analyse Pro.',
+      subtext: "Une analyse coûte 3 crédits et inclut le rapport complet. Vous avez reçu 3 crédits à l'inscription : exactement une analyse.",
     },
     greeting: {
       morning: 'Bonjour',
@@ -145,13 +145,6 @@ const fr = {
     label: 'Prochaine étape',
   },
 
-  quota: {
-    proLabel: 'Analyses Pro',
-    freeLabel: 'Analyses gratuites',
-    remaining: '/ {{quota}} restantes',
-    resetsIn: 'Réinitialisation dans',
-    upgradePro: 'Passer à Pro',
-  },
 
   recent: {
     title: 'Analyses récentes',
@@ -318,7 +311,7 @@ const fr = {
 
     pricing: {
       metaTitle: 'Crédits CVision — Ne payez que ce que vous utilisez',
-      metaDescription: 'Sans abonnement. Achetez des crédits une fois et dépensez-les quand vous en avez besoin. Une analyse Normale coûte 1 crédit, une Pro 3, une comparaison avec une offre 2.',
+      metaDescription: 'Sans abonnement. Achetez des crédits une fois et dépensez-les quand vous en avez besoin. Une analyse de CV coûte 3 crédits et inclut le rapport complet, une comparaison avec une offre 2.',
       back: 'Retour',
       footerNote: 'Paiement sécurisé · Sans abonnement',
       errorInit: 'Le paiement n\'a pas pu être lancé. Veuillez réessayer.',
@@ -408,7 +401,7 @@ const fr = {
       q2: 'Comment CVision note-t-il mon CV ?',
       a2: "Tu télécharges un fichier PDF ou TXT et l'IA le lit en quelques secondes. Elle note la compatibilité ATS, la couverture des mots-clés, la complétude et l'expérience, puis explique chaque score pour que tu saches quoi changer.",
       q3: 'Combien coûte CVision ?',
-      a3: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Vous recevez 3 crédits à l'inscription, puis 2 de plus chaque semaine tant que votre solde est bas. Une analyse Normale coûte 1 crédit et une analyse Pro 3 ; la comparaison avec une offre et la lettre de motivation coûtent 2 chacune. Des packs de crédits sont disponibles sur la page tarifs.",
+      a3: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Vous recevez 3 crédits à l'inscription, puis 2 de plus chaque semaine tant que votre solde est bas. Une analyse de CV coûte 3 crédits et inclut le rapport complet ; la comparaison avec une offre et la lettre de motivation coûtent 2 chacune. Des packs de crédits sont disponibles sur la page tarifs.",
       q4: "Combien de temps dure une analyse de CV ?",
       a4: 'Moins de 30 secondes. Tu télécharges ton CV et le score et les retours sont générés automatiquement, sans revue manuelle ni attente.',
       q5: 'Fonctionnez-vous dans mon pays ?',
@@ -431,15 +424,15 @@ const fr = {
     metaDescription: "CVision est un analyseur de CV par IA et un vérificateur ATS. Découvre ce qu'il fait, pour qui il est et comment il t'aide à passer le tri automatique des CV.",
     back: "Retour à l'accueil",
     title: 'À propos de CVision',
-    definition: "CVision est un analyseur de CV par IA et un vérificateur ATS (système de suivi des candidatures). Il note un CV pour la compatibilité ATS, identifie les mots-clés manquants et génère des suggestions d'amélioration et des réécritures de puces rédigées par IA. CVision compare aussi un CV à une offre d'emploi spécifique pour révéler les écarts de mots-clés et produit des lettres de motivation sur mesure. C'est une application web entièrement en ligne et en libre-service, disponible dans le monde entier en anglais, turc, espagnol, allemand et français, avec une offre gratuite et un plan Pro.",
+    definition: "CVision est un analyseur de CV par IA et un vérificateur ATS (système de suivi des candidatures). Il note un CV pour la compatibilité ATS, identifie les mots-clés manquants et génère des suggestions d'amélioration et des réécritures de puces rédigées par IA. CVision compare aussi un CV à une offre d'emploi spécifique pour révéler les écarts de mots-clés et produit des lettres de motivation sur mesure. C'est une application web entièrement en ligne et en libre-service, disponible dans le monde entier en anglais, turc, espagnol, allemand et français. Il n'y a pas d'abonnement : un nouveau compte démarre avec des crédits offerts, et d'autres s'achètent en packs ponctuels.",
     s1Heading: 'Ce que fait CVision',
-    s1Body: "Tu télécharges un CV en PDF ou TXT, et l'IA le lit en quelques secondes. Elle renvoie un score de compatibilité ATS avec des sous-scores pour les mots-clés, la complétude et l'expérience, explique chaque score et indique les sections exactes à corriger. Elle réécrit ensuite les puces faibles, suggère des parcours professionnels correspondants et — sur le plan Pro — compare ton CV à une offre d'emploi spécifique et génère une lettre de motivation sur mesure.",
+    s1Body: "Tu télécharges un CV en PDF ou TXT, et l'IA le lit en quelques secondes. Elle renvoie un score de compatibilité ATS avec des sous-scores pour les mots-clés, la complétude et l'expérience, explique chaque score et indique les sections exactes à corriger. Elle réécrit ensuite les puces faibles, suggère des parcours professionnels correspondants et compare ton CV à une offre d'emploi spécifique pour générer une lettre de motivation sur mesure.",
     s2Heading: 'Pour qui est CVision',
     s2Body: "Les chercheurs d'emploi, étudiants, jeunes diplômés et professionnels en activité de tout secteur qui veulent un CV plus solide et compatible ATS, et des retours clairs et exploitables. CVision prend en charge 24 secteurs et adapte sa notation aux standards de chacun.",
     s3Heading: 'Ce qui différencie CVision',
     s3Body: "La plupart des vérificateurs de CV s'arrêtent à un score. CVision te dit exactement quoi corriger et réécrit tes puces avec l'IA, pour que tu puisses agir en quelques secondes au lieu de deviner. Il boucle aussi la boucle que la plupart des outils sautent : compare ton CV à une vraie offre d'emploi, vois les mots-clés manquants et génère une lettre de motivation sur mesure — le tout au même endroit.",
     s4Heading: 'Tarifs',
-    s4Body: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Un nouveau compte reçoit 3 crédits, soit exactement une analyse Pro complète, puis 2 de plus chaque semaine tant que le solde reste bas. Une analyse Normale coûte 1 crédit, une analyse Pro 3, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Des packs de crédits sont disponibles sur la page tarifs. Aucune carte n'est requise pour commencer.",
+    s4Body: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Un nouveau compte reçoit 3 crédits, soit exactement une analyse complète, puis 2 de plus chaque semaine tant que le solde reste bas. Une analyse de CV coûte 3 crédits et inclut le rapport complet, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Des packs de crédits sont disponibles sur la page tarifs. Aucune carte n'est requise pour commencer.",
     s5Heading: 'Disponibilité et langues',
     s5Body: "CVision fonctionne entièrement en ligne et est disponible dans tous les pays. L'interface est proposée en anglais, turc, espagnol, allemand et français. Les paiements sont traités en toute sécurité par Lemon Squeezy en tant que commerçant officiel. Opéré depuis la Turquie, au service de clients dans le monde entier.",
     ctaTitle: 'Prêt à renforcer ton CV ?',
@@ -472,7 +465,7 @@ const fr = {
     s5Heading: "Comment réussir le tri ATS",
     s5Body: "Utilisez une mise en page sur une seule colonne avec des titres de section standard (Expérience, Formation, Compétences). Enregistrez en PDF sauf si un fichier TXT est demandé. Reprenez exactement les mots-clés et compétences de l'offre, orthographiés tels qu'ils apparaissent. Évitez le texte dans les images, les tableaux et les en-têtes et pieds de page. Ajoutez des résultats mesurables dans vos puces et gardez des intitulés de poste et des dates cohérents. Testez ensuite le résultat sur l'offre précise avant de postuler.",
     s6Heading: "Comment CVision vérifie votre CV",
-    s6Body: "CVision fait passer votre CV par le même type d'analyse et de correspondance de mots-clés qu'un ATS, adapté à 24 secteurs et disponible en cinq langues. Il renvoie un score de compatibilité ATS avec des sous-scores, signale les mots-clés manquants et les sections faibles ou absentes, réécrit les puces faibles avec l'IA et — dans le forfait Pro — compare votre CV à une offre précise et rédige une lettre de motivation sur mesure. Vous voyez exactement ce qu'un ATS pénaliserait, et comment le corriger, en quelques secondes.",
+    s6Body: "CVision fait passer votre CV par le même type d'analyse et de correspondance de mots-clés qu'un ATS, adapté à 24 secteurs et disponible en cinq langues. Il renvoie un score de compatibilité ATS avec des sous-scores, signale les mots-clés manquants et les sections faibles ou absentes, réécrit les puces faibles avec l'IA et compare votre CV à une offre précise pour rédiger une lettre de motivation sur mesure. Vous voyez exactement ce qu'un ATS pénaliserait, et comment le corriger, en quelques secondes.",
     ctaTitle: "Découvrez le score de votre CV",
     ctaButton: "Vérifier mon CV gratuitement",
   },
@@ -503,8 +496,8 @@ const fr = {
     signUpToBuy: 'S\'inscrire pour acheter',
     seo: {
       h2a: 'Combien coûte CVision et comment fonctionnent les crédits ?',
-      p1: "Il n'y a pas d'abonnement. Vous achetez des crédits et ne dépensez que ce que vous utilisez. Une analyse Normale coûte 1 crédit, une analyse Pro qui débloque le rapport complet en coûte 3, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Les crédits achetés n'expirent jamais : ils sont encore là pour votre prochaine recherche d'emploi.",
-      p2: "Vous recevez 3 crédits à l'inscription, soit exactement une analyse Pro. Tant que votre solde reste bas, 2 crédits s'ajoutent chaque semaine : vous pouvez donc continuer à analyser votre CV sans rien payer.",
+      p1: "Il n'y a pas d'abonnement. Vous achetez des crédits et ne dépensez que ce que vous utilisez. Une analyse de CV coûte 3 crédits et inclut le rapport complet, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Les crédits achetés n'expirent jamais : ils sont encore là pour votre prochaine recherche d'emploi.",
+      p2: "Vous recevez 3 crédits à l'inscription, soit exactement une analyse. Tant que votre solde reste bas, 2 crédits s'ajoutent chaque semaine : vous pouvez donc continuer à analyser votre CV sans rien payer.",
       h2b: "Pourquoi pas d'abonnement ?",
       p3: "Chercher un emploi est un besoin temporaire. Un abonnement vous demande de vous engager sur quelque chose dont vous espérez ne plus avoir besoin dans six semaines ; un pack s'achète une fois, s'épuise, et se rachète la fois suivante. Les paiements sont gérés par Lemon Squeezy en tant que revendeur officiel, et vos données bancaires ne sont jamais stockées sur nos serveurs.",
     },
@@ -618,7 +611,7 @@ const fr = {
       s5GoogleName: 'Google OAuth',
       s5GoogleDesc: "pour la fonction optionnelle de connexion avec Google. Seuls le nom et l'e-mail sont obtenus dans le cadre de l'authentification.",
       s5StripeName: 'Lemon Squeezy',
-      s5StripeDesc: 'pour les paiements du plan Pro, en tant que commerçant officiel (merchant of record). Les informations de paiement sont traitées uniquement par Lemon Squeezy ; les numéros de carte ne sont pas stockés sur nos serveurs.',
+      s5StripeDesc: 'pour les paiements de packs de crédits, en tant que commerçant officiel (merchant of record). Les informations de paiement sont traitées uniquement par Lemon Squeezy ; les numéros de carte ne sont pas stockés sur nos serveurs.',
       s5EmailName: 'Resend',
       s5EmailDesc: 'pour les e-mails transactionnels (messages de bienvenue et de réinitialisation de mot de passe). Seuls ton adresse e-mail et ton nom sont partagés à des fins de livraison.',
       s5AnalyticsName: 'Google Analytics & Microsoft Clarity',

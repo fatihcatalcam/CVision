@@ -18,6 +18,13 @@ import path from 'node:path';
  * the price, on the trial, and on the weekly-quota wording in all five
  * languages at once.
  *
+ * A fourth time, and this one was live for six days: removing the Normal/Pro
+ * tiers from the uploader left every page that quoted them still quoting them -
+ * /pricing, the FAQ, About, the llms.txt fed to AI crawlers and, worst, the
+ * JSON-LD offer block that tells Google what the product costs. The patterns
+ * below now also cover the two tiers and the "Pro plan" they were named after,
+ * because the tier names outlived the subscription that introduced them.
+ *
  * If a real subscription ever comes back, delete this file - do not weaken it.
  */
 
@@ -35,6 +42,18 @@ const RETIRED: { pattern: RegExp; why: string }[] = [
   { pattern: /(3|50) (Lebenslauf-)?Analysen pro Woche/i, why: 'the retired weekly quota' },
   { pattern: /(3|50) análisis (de CV )?por semana/i, why: 'the retired weekly quota' },
   { pattern: /(3|50) analyses (de CV )?par semaine/i, why: 'the retired weekly quota' },
+  // The plan the tiers were named after. "Pro" on its own is too common to
+  // ban, so each language's word for the plan is spelled out.
+  { pattern: /\bPro[- ](plan|Plan|Tarif)\b/, why: 'the retired Pro plan' },
+  { pattern: /\b(plan|forfait|plano) Pro\b/i, why: 'the retired Pro plan' },
+  { pattern: /\bPro plan[ıi]\b/i, why: 'the retired Pro plan' },
+  // The Normal/Pro split itself: one analysis now, and it includes the report.
+  { pattern: /\b(Normal|Pro) (CV )?analysis\b/i, why: 'the removed Normal/Pro tiers' },
+  { pattern: /\b(Normal|Pro) (CV )?analiz/i, why: 'the removed Normal/Pro tiers' },
+  // Accent-tolerant: the locales are accented, but a hand-typed line may not be.
+  { pattern: /\ban[áa]lisis (Normal|Pro)\b/i, why: 'the removed Normal/Pro tiers' },
+  { pattern: /\b(normale Analyse|Pro-Analyse)/i, why: 'the removed Normal/Pro tiers' },
+  { pattern: /\banalyse (Normale|Pro)\b/i, why: 'the removed Normal/Pro tiers' },
 ];
 
 function walk(dir: string, out: string[] = []): string[] {

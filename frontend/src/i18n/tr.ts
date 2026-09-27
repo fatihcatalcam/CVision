@@ -110,7 +110,7 @@ const tr = {
   dashboard: {
     firstRun: {
       title: 'İlk analizini yap',
-      subtext: 'Normal analiz 1 kredi, Pro analiz 3. Kayıt olurken 3 kredi verdik - tam olarak bir Pro analiz eder.',
+      subtext: 'Analiz 3 kredi ve tam raporu içeriyor. Kayıt olurken 3 kredi verdik — tam olarak bir analiz eder.',
     },
     greeting: {
       morning: 'Günaydın',
@@ -145,13 +145,6 @@ const tr = {
     label: 'Sıradaki Adım',
   },
 
-  quota: {
-    proLabel: 'Pro Analiz Hakkı',
-    freeLabel: 'Ücretsiz Analiz Hakkı',
-    remaining: '/ {{quota}} kalan',
-    resetsIn: 'Yenileme:',
-    upgradePro: 'Pro\'ya Geç',
-  },
 
   recent: {
     title: 'Son Analizler',
@@ -318,7 +311,7 @@ const tr = {
 
     pricing: {
       metaTitle: 'CVision Kredi Paketleri — Sadece Kullandığın Kadar',
-      metaDescription: 'Abonelik yok. Krediyi bir kez alırsın, ihtiyacın oldukça harcarsın. Normal analiz 1 kredi, Pro analiz 3, iş ilanı eşleştirme 2.',
+      metaDescription: 'Abonelik yok. Krediyi bir kez alırsın, ihtiyacın oldukça harcarsın. CV analizi 3 kredi ve tam raporu içerir, iş ilanı eşleştirme 2.',
       back: 'Geri',
       footerNote: 'Güvenli ödeme · Abonelik yok',
       errorInit: 'Ödeme başlatılamadı. Lütfen tekrar deneyin.',
@@ -416,7 +409,7 @@ const tr = {
       q2: 'CVision özgeçmişimi nasıl puanlar?',
       a2: 'PDF veya TXT dosyanı yüklersin, yapay zeka saniyeler içinde okur. ATS uyumluluğu, anahtar kelime kapsamı, bütünlük ve deneyim üzerinden puanlar ve her skoru açıklar; böylece neyi değiştireceğini bilirsin.',
       q3: 'CVision ne kadar?',
-      a3: 'Abonelik yok, sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz, bakiyen düşükken de her hafta 2 kredi ekliyoruz. Normal analiz 1 kredi, Pro analiz 3 kredi; iş ilanı eşleştirme ve ön yazı 2\'şer kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin.',
+      a3: "Abonelik yok, sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz, bakiyen düşükken de her hafta 2 kredi ekliyoruz. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı 2'şer kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin.",
       q4: 'Bir CV analizi ne kadar sürer?',
       a4: '30 saniyenin altında. CV\'ni yüklersin, skor ve geri bildirim otomatik üretilir; elle inceleme veya bekleme yoktur.',
       q5: 'Benim ülkemde çalışıyor musunuz?',
@@ -439,15 +432,15 @@ const tr = {
     metaDescription: 'CVision, yapay zeka destekli bir CV ve özgeçmiş analiz aracı ve ATS uyumluluk test aracıdır. Ne yaptığını, kimler için olduğunu ve otomatik eleme sistemlerini geçmene nasıl yardımcı olduğunu öğren.',
     back: 'Ana sayfaya dön',
     title: 'CVision Hakkında',
-    definition: 'CVision, yapay zeka destekli bir CV analiz aracı ve ATS (Aday Takip Sistemi) uyumluluk test aracıdır. Bir CV\'yi ATS uyumluluğu için puanlar, eksik anahtar kelimeleri belirler ve yapay zeka ile yazılmış iyileştirme önerileri ile madde işareti yeniden yazımları üretir. CVision ayrıca CV\'ni belirli bir iş ilanıyla eşleştirerek eksik anahtar kelimeleri ortaya çıkarır ve sana özel ön yazılar oluşturur. Tamamen çevrimiçi, kendin kullanabileceğin bir web uygulamasıdır; dünya genelinde İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca olarak sunulur, ücretsiz ve Pro planı vardır. CVision; iş arayanların, öğrencilerin ve profesyonellerin otomatik eleme sistemlerini geçmesine ve daha güçlü, işe alım uzmanına hazır CV\'lerle başvurmasına yardımcı olur.',
+    definition: "CVision, yapay zeka destekli bir CV analiz aracı ve ATS (Aday Takip Sistemi) uyumluluk test aracıdır. Bir CV'yi ATS uyumluluğu için puanlar, eksik anahtar kelimeleri belirler ve yapay zeka ile yazılmış iyileştirme önerileri ile madde işareti yeniden yazımları üretir. CVision ayrıca CV'ni belirli bir iş ilanıyla eşleştirerek eksik anahtar kelimeleri ortaya çıkarır ve sana özel ön yazılar oluşturur. Tamamen çevrimiçi, kendin kullanabileceğin bir web uygulamasıdır; dünya genelinde İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca olarak sunulur. Abonelik yoktur: yeni hesaplar ücretsiz kredilerle başlar, daha fazlası tek seferlik paketlerle alınır. CVision; iş arayanların, öğrencilerin ve profesyonellerin otomatik eleme sistemlerini geçmesine ve daha güçlü, işe alım uzmanına hazır CV'lerle başvurmasına yardımcı olur.",
     s1Heading: 'CVision ne yapar?',
-    s1Body: 'CV\'ni PDF veya TXT olarak yüklersin, yapay zeka saniyeler içinde okur. Anahtar kelime, bütünlük ve deneyim alt skorlarıyla birlikte bir ATS uyumluluk skoru döndürür, her skoru açıklar ve düzeltilmesi gereken bölümleri tam olarak gösterir. Ardından zayıf madde işaretlerini yeniden yazar, uygun kariyer yollarını önerir ve Pro planında CV\'ni belirli bir iş ilanıyla eşleştirip sana özel bir ön yazı oluşturur.',
+    s1Body: "CV'ni PDF veya TXT olarak yüklersin, yapay zeka saniyeler içinde okur. Anahtar kelime, bütünlük ve deneyim alt skorlarıyla birlikte bir ATS uyumluluk skoru döndürür, her skoru açıklar ve düzeltilmesi gereken bölümleri tam olarak gösterir. Ardından zayıf madde işaretlerini yeniden yazar, uygun kariyer yollarını önerir ve CV'ni belirli bir iş ilanıyla eşleştirip sana özel bir ön yazı oluşturur.",
     s2Heading: 'CVision kimler için?',
     s2Body: 'Daha güçlü, ATS uyumlu bir CV ve net, uygulanabilir geri bildirim isteyen her sektörden iş arayanlar, öğrenciler, yeni mezunlar ve çalışan profesyoneller. CVision 24 sektör alanını destekler ve puanlamasını her birinin standartlarına göre uyarlar.',
     s3Heading: 'CVision\'ı farklı kılan ne?',
     s3Body: 'Çoğu CV kontrol aracı sadece skor verir. CVision tam olarak neyi düzeltmen gerektiğini söyler ve madde işaretlerini yapay zeka ile yeniden yazar; böylece tahmin etmek yerine geri bildirime saniyeler içinde göre hareket edebilirsin. Ayrıca çoğu aracın atladığı döngüyü kapatır: CV\'ni gerçek bir iş ilanıyla eşleştir, eksik anahtar kelimeleri gör ve sana özel bir ön yazı oluştur — hepsi tek yerde.',
     s4Heading: 'Fiyatlandırma',
-    s4Body: 'Abonelik yok; sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz — bu tam bir Pro analize denk gelir — ve bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor. Normal analiz 1 kredi, Pro analiz 3 kredi; iş ilanı eşleştirme ve ön yazı oluşturma ise 2 kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin. Başlamak için kart bilgisi gerekmez.',
+    s4Body: 'Abonelik yok; sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz — bu tam bir analize denk gelir — ve bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı oluşturma ise 2 kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin. Başlamak için kart bilgisi gerekmez.',
     s5Heading: 'Erişilebilirlik ve diller',
     s5Body: 'CVision tamamen çevrimiçi çalışır ve her ülkede kullanılabilir. Arayüz İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca sunulur. Ödemeler, kayıtlı satıcı sıfatıyla Lemon Squeezy tarafından güvenle işlenir. Türkiye\'den işletilir, dünya genelinde hizmet verir.',
     ctaTitle: 'CV\'ni güçlendirmeye hazır mısın?',
@@ -480,7 +473,7 @@ const tr = {
     s5Heading: "ATS taramasını nasıl geçersiniz",
     s5Body: "Standart bölüm başlıklarıyla (Deneyim, Eğitim, Beceriler) tek sütunlu bir düzen kullanın. TXT dosyası istenmediği sürece PDF olarak kaydedin. İş ilanındaki anahtar kelimeleri ve becerileri, göründükleri şekliyle birebir yansıtın. Görsel içindeki metinlerden, tablolardan ve üst/alt bilgilerden kaçının. Madde işaretlerinize ölçülebilir sonuçlar ekleyin ve iş unvanları ile tarihleri tutarlı tutun. Ardından başvurmadan önce sonucu ilgili iş ilanına karşı test edin.",
     s6Heading: "CVision CV'nizi nasıl kontrol eder",
-    s6Body: "CVision, CV'nizi bir ATS'nin kullandığı türden ayrıştırma ve anahtar kelime eşleştirmesinden geçirir; bu, 24 sektör alanına uyarlanmıştır ve beş dilde kullanılabilir. Alt puanlarla birlikte bir ATS uyumluluk puanı verir, eksik anahtar kelimeleri ve zayıf veya olmayan bölümleri işaretler, zayıf madde işaretlerini yapay zekâ ile yeniden yazar ve — Pro planında — CV'nizi belirli bir iş ilanıyla eşleştirip size özel bir ön yazı hazırlar. Bir ATS'nin neyi cezalandıracağını ve bunu nasıl düzelteceğinizi saniyeler içinde görürsünüz.",
+    s6Body: "CVision, CV'nizi bir ATS'nin kullandığı türden ayrıştırma ve anahtar kelime eşleştirmesinden geçirir; bu, 24 sektör alanına uyarlanmıştır ve beş dilde kullanılabilir. Alt puanlarla birlikte bir ATS uyumluluk puanı verir, eksik anahtar kelimeleri ve zayıf veya olmayan bölümleri işaretler, zayıf madde işaretlerini yapay zekâ ile yeniden yazar ve CV'nizi belirli bir iş ilanıyla eşleştirip size özel bir ön yazı hazırlar. Bir ATS'nin neyi cezalandıracağını ve bunu nasıl düzelteceğinizi saniyeler içinde görürsünüz.",
     ctaTitle: "CV'niz kaç puan alıyor görün",
     ctaButton: "CV'mi ücretsiz kontrol et",
   },
@@ -514,8 +507,8 @@ const tr = {
     // crawler to read - and this route was invisible to search until now.
     seo: {
       h2a: 'CVision ne kadar? Kredi sistemi nasıl çalışır?',
-      p1: 'CVision\'da abonelik yok. Kredi alırsın, sadece kullandığın kadar harcarsın. Normal CV analizi 1 kredi, tam raporu açan Pro analiz 3 kredi; iş ilanı eşleştirme ve ön yazı oluşturma ikişer kredi tutar. Satın alınan krediler son kullanma tarihi taşımaz, bir sonraki iş aramanda da yerinde durur.',
-      p2: 'Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam olarak bir Pro analize denk geliyor. Bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor, yani hiç ödeme yapmadan da CV\'ni ve özgeçmişini analiz etmeye devam edebilirsin.',
+      p1: "CVision'da abonelik yok. Kredi alırsın, sadece kullandığın kadar harcarsın. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı oluşturma ikişer kredi tutar. Satın alınan krediler son kullanma tarihi taşımaz, bir sonraki iş aramanda da yerinde durur.",
+      p2: "Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam olarak bir analize denk geliyor. Bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor, yani hiç ödeme yapmadan da CV'ni ve özgeçmişini analiz etmeye devam edebilirsin.",
       h2b: 'Neden abonelik yok?',
       p3: 'İş aramak geçici bir ihtiyaç. Abonelik, altı hafta sonra bırakmayı umduğun bir şeye bağlanmanı ister; kredi paketi bir kez alınır, biter ve bir dahaki sefere yeniden alınır. Ödemeler Lemon Squeezy üzerinden kayıtlı satıcı (merchant of record) sıfatıyla işlenir; kart bilgilerin bizim sunucularımızda saklanmaz.',
     },

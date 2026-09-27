@@ -15,11 +15,10 @@ CVision is credit-based. There is no subscription and no free trial to cancel:
 you buy credits once and spend them as you need them.
 
 - Free to start — a new account is granted 3 credits, which is exactly one full
-  Pro analysis. While the balance stays low it earns 2 more credits every week,
+  analysis. While the balance stays low it earns 2 more credits every week,
   so the product stays usable without paying.
-- What things cost, in credits: Normal analysis 1; Pro analysis 3 (the analysis
-  plus unlocking its full report); job-description matching 2; AI cover letter
-  2; AI bullet-point rewrite 1.
+- What things cost, in credits: CV analysis 3, which includes the full report;
+  job-description matching 2; AI cover letter 2.
 - Extra credits are sold in one-off packs, billed via
   [Lemon Squeezy](https://www.lemonsqueezy.com) as merchant of record. Pack
   sizes and current prices are listed on
@@ -29,10 +28,10 @@ you buy credits once and spend them as you need them.
 
 ### What the credits buy
 
-- Normal analysis: ATS compatibility score, keyword and completeness analysis,
-  section-by-section detection, and career-path matches.
-- Pro analysis: everything above plus the full AI suggestion pack, AI
-  bullet-point rewriting, and the complete AI summary report.
+- CV analysis: ATS compatibility score, keyword and completeness analysis,
+  section-by-section detection, career-path matches, the full AI suggestion
+  pack, AI bullet-point rewriting, the ATS X-Ray, and the complete AI summary
+  report. There is one analysis and it includes all of it.
 - Job-description (JD) matching: compare a CV against a specific job posting for
   a match score, missing keywords, and a gap analysis.
 - AI cover-letter generation: a tailored cover letter from a CV and a job

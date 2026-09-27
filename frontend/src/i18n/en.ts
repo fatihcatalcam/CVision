@@ -110,7 +110,7 @@ const en = {
   dashboard: {
     firstRun: {
       title: 'Start your first analysis',
-      subtext: 'A Normal analysis costs 1 credit, Pro costs 3. We gave you 3 credits when you signed up - exactly one Pro analysis.',
+      subtext: 'An analysis costs 3 credits and includes the full report. We gave you 3 credits when you signed up - exactly one analysis.',
     },
     greeting: {
       morning: 'Good morning',
@@ -145,13 +145,6 @@ const en = {
     label: 'Next Step',
   },
 
-  quota: {
-    proLabel: 'Pro Analyses',
-    freeLabel: 'Free Analyses',
-    remaining: '/ {{quota}} remaining',
-    resetsIn: 'Resets in',
-    upgradePro: 'Upgrade to Pro',
-  },
 
   recent: {
     title: 'Recent Analyses',
@@ -318,7 +311,7 @@ const en = {
 
     pricing: {
       metaTitle: 'CVision Credits — Pay Only For What You Use',
-      metaDescription: 'No subscription. Buy credits once and spend them when you need them. A Normal analysis costs 1 credit, a Pro analysis 3, a job ad match 2.',
+      metaDescription: 'No subscription. Buy credits once and spend them when you need them. A CV analysis costs 3 credits and includes the full report, a job ad match 2.',
       back: 'Back',
       footerNote: 'Secure checkout · No subscription',
       errorInit: 'Payment could not be initiated. Please try again.',
@@ -411,7 +404,7 @@ const en = {
       q2: 'How does CVision score my CV?',
       a2: 'You upload a PDF or TXT file and the AI reads it in seconds. It scores ATS compatibility, keyword coverage, completeness, and experience, then explains each score so you know what to change.',
       q3: 'How much does CVision cost?',
-      a3: 'There is no subscription; you pay for what you use. You get 3 credits when you sign up, plus 2 more every week while your balance is low. A Normal analysis costs 1 credit and a Pro analysis 3, while job matching and cover letters cost 2 each. Credit packs are on the pricing page if you need more.',
+      a3: 'There is no subscription; you pay for what you use. You get 3 credits when you sign up, plus 2 more every week while your balance is low. A CV analysis costs 3 credits and includes the full report, while job matching and cover letters cost 2 each. Credit packs are on the pricing page if you need more.',
       q4: 'How long does a CV analysis take?',
       a4: 'Under 30 seconds. You upload your CV and the score and feedback are generated automatically, with no manual review or waiting.',
       q5: 'Do you work in my country?',
@@ -434,15 +427,15 @@ const en = {
     metaDescription: 'CVision is an AI-powered resume analyzer and ATS checker. Learn what it does, who it is for, and how it helps you pass automated resume screening.',
     back: 'Back to home',
     title: 'About CVision',
-    definition: 'CVision is an AI-powered resume analyzer and ATS (Applicant Tracking System) checker. It scores a CV for ATS compatibility, identifies missing keywords, and generates AI-written improvement suggestions and bullet-point rewrites. CVision also matches a CV against a specific job description to reveal keyword gaps and produces tailored cover letters. It is a fully online, self-serve web application available worldwide in English, Turkish, Spanish, German, and French, with a free tier and a Pro plan. CVision helps job seekers, students, and professionals pass automated resume screening and apply with stronger, recruiter-ready CVs.',
+    definition: 'CVision is an AI-powered resume analyzer and ATS (Applicant Tracking System) checker. It scores a CV for ATS compatibility, identifies missing keywords, and generates AI-written improvement suggestions and bullet-point rewrites. CVision also matches a CV against a specific job description to reveal keyword gaps and produces tailored cover letters. It is a fully online, self-serve web application available worldwide in English, Turkish, Spanish, German, and French. There is no subscription: a new account starts with free credits, and more are bought in one-off packs. CVision helps job seekers, students, and professionals pass automated resume screening and apply with stronger, recruiter-ready CVs.',
     s1Heading: 'What CVision does',
-    s1Body: 'You upload a CV as a PDF or TXT file, and the AI reads it in seconds. It returns an ATS compatibility score with sub-scores for keywords, completeness, and experience, explains each score, and points out the exact sections to fix. It then rewrites weak bullet points, suggests matching career paths, and — on the Pro plan — matches your CV to a specific job description and generates a tailored cover letter.',
+    s1Body: 'You upload a CV as a PDF or TXT file, and the AI reads it in seconds. It returns an ATS compatibility score with sub-scores for keywords, completeness, and experience, explains each score, and points out the exact sections to fix. It then rewrites weak bullet points, suggests matching career paths, and matches your CV to a specific job description to generate a tailored cover letter.',
     s2Heading: 'Who CVision is for',
     s2Body: 'Job seekers, students, recent graduates, and working professionals in any industry who want a stronger, ATS-friendly CV and clear, actionable feedback. CVision supports 24 industry domains and adapts its scoring to the standards of each one.',
     s3Heading: 'What makes CVision different',
     s3Body: 'Most resume checkers stop at a score. CVision tells you exactly what to fix and rewrites your bullet points with AI, so you can act on the feedback in seconds instead of guessing. It also closes the loop most tools skip: match your CV against a real job description, see the missing keywords, and generate a tailored cover letter — all in one place.',
     s4Heading: 'Pricing',
-    s4Body: 'There is no subscription; you pay for what you use. A new account gets 3 credits — exactly one full Pro analysis — and earns 2 more every week while the balance stays low. A Normal analysis costs 1 credit, a Pro analysis 3, and job matching or a cover letter 2 each. Credit packs are on the pricing page when you need more. No card details are needed to start.',
+    s4Body: 'There is no subscription; you pay for what you use. A new account gets 3 credits — exactly one full analysis — and earns 2 more every week while the balance stays low. A CV analysis costs 3 credits and includes the full report, and job matching or a cover letter 2 each. Credit packs are on the pricing page when you need more. No card details are needed to start.',
     s5Heading: 'Availability and languages',
     s5Body: 'CVision runs entirely online and is available in every country. The interface is offered in English, Turkish, Spanish, German, and French. Payments are processed securely by Lemon Squeezy as merchant of record. Operated from Turkey, serving customers globally.',
     ctaTitle: 'Ready to strengthen your CV?',
@@ -475,7 +468,7 @@ const en = {
     s5Heading: "How to pass ATS screening",
     s5Body: "Use a single-column layout with standard section headings (Experience, Education, Skills). Save as PDF unless a TXT file is requested. Mirror the exact keywords and skills from the job description, spelled the way they appear. Avoid text inside images, tables, and headers or footers. Include measurable results in your bullet points and keep job titles and dates consistent. Then test the result against the specific job before you apply.",
     s6Heading: "How CVision checks your CV",
-    s6Body: "CVision runs your CV through the same kind of parsing and keyword matching an ATS uses, adapted to 24 industry domains and available in five languages. It returns an ATS compatibility score with sub-scores, flags missing keywords and weak or absent sections, rewrites weak bullet points with AI, and — on the Pro plan — matches your CV against a specific job description and writes a tailored cover letter. You see exactly what an ATS would penalize, and how to fix it, in seconds.",
+    s6Body: 'CVision runs your CV through the same kind of parsing and keyword matching an ATS uses, adapted to 24 industry domains and available in five languages. It returns an ATS compatibility score with sub-scores, flags missing keywords and weak or absent sections, rewrites weak bullet points with AI, and matches your CV against a specific job description to write a tailored cover letter. You see exactly what an ATS would penalize, and how to fix it, in seconds.',
     ctaTitle: "See how your CV scores",
     ctaButton: "Check my CV free",
   },
@@ -506,8 +499,8 @@ const en = {
     signUpToBuy: 'Sign up to buy',
     seo: {
       h2a: 'How much does CVision cost, and how do credits work?',
-      p1: 'There is no subscription. You buy credits and spend only what you use. A Normal CV analysis costs 1 credit, a Pro analysis that unlocks the full report costs 3, and job matching or a cover letter cost 2 each. Purchased credits never expire, so they are still there for your next job search.',
-      p2: 'You get 3 credits when you sign up, which is exactly one Pro analysis. While your balance stays low, 2 more land every week - so you can keep analysing your CV without paying anything.',
+      p1: 'There is no subscription. You buy credits and spend only what you use. A CV analysis costs 3 credits and includes the full report, and job matching or a cover letter cost 2 each. Purchased credits never expire, so they are still there for your next job search.',
+      p2: 'You get 3 credits when you sign up, which is exactly one analysis. While your balance stays low, 2 more land every week - so you can keep analysing your CV without paying anything.',
       h2b: 'Why not a subscription?',
       p3: 'Job hunting is a temporary need. A subscription asks you to commit to something you hope to stop needing in six weeks; a pack is bought once, used up, and bought again next time. Payments are handled by Lemon Squeezy as merchant of record, and your card details are never stored on our servers.',
     },
@@ -621,7 +614,7 @@ const en = {
       s5GoogleName: 'Google OAuth',
       s5GoogleDesc: 'for the optional Sign in with Google feature. Only name and email are obtained within the authentication scope.',
       s5StripeName: 'Lemon Squeezy',
-      s5StripeDesc: 'for Pro plan payments, acting as merchant of record. Payment information is processed by Lemon Squeezy only; card numbers are not stored on our servers.',
+      s5StripeDesc: 'for credit-pack payments, acting as merchant of record. Payment information is processed by Lemon Squeezy only; card numbers are not stored on our servers.',
       s5EmailName: 'Resend',
       s5EmailDesc: 'for transactional emails (welcome and password reset messages). Only your email address and name are shared for delivery purposes.',
       s5AnalyticsName: 'Google Analytics & Microsoft Clarity',

@@ -110,7 +110,7 @@ const de = {
   dashboard: {
     firstRun: {
       title: 'Starte deine erste Analyse',
-      subtext: 'Eine normale Analyse kostet 1 Credit, Pro kostet 3. Bei der Anmeldung hast du 3 Credits bekommen - genau eine Pro-Analyse.',
+      subtext: 'Eine Analyse kostet 3 Credits und enthält den vollen Bericht. Bei der Anmeldung hast du 3 Credits bekommen - genau eine Analyse.',
     },
     greeting: {
       morning: 'Guten Morgen',
@@ -145,13 +145,6 @@ const de = {
     label: 'Nächster Schritt',
   },
 
-  quota: {
-    proLabel: 'Pro-Analysen',
-    freeLabel: 'Kostenlose Analysen',
-    remaining: '/ {{quota}} verbleibend',
-    resetsIn: 'Zurücksetzen in',
-    upgradePro: 'Auf Pro upgraden',
-  },
 
   recent: {
     title: 'Letzte Analysen',
@@ -318,7 +311,7 @@ const de = {
 
     pricing: {
       metaTitle: 'CVision Credits — Zahle nur, was du nutzt',
-      metaDescription: 'Kein Abo. Credits einmal kaufen und ausgeben, wenn du sie brauchst. Eine normale Analyse kostet 1 Credit, eine Pro-Analyse 3, ein Abgleich mit einer Stellenanzeige 2.',
+      metaDescription: 'Kein Abo. Credits einmal kaufen und ausgeben, wenn du sie brauchst. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Abgleich mit einer Stellenanzeige 2.',
       back: 'Zurück',
       footerNote: 'Sichere Zahlung · Kein Abo',
       errorInit: 'Die Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.',
@@ -408,7 +401,7 @@ const de = {
       q2: 'Wie bewertet CVision meinen Lebenslauf?',
       a2: 'Du lädst eine PDF- oder TXT-Datei hoch und die KI liest sie in Sekunden. Sie bewertet ATS-Kompatibilität, Keyword-Abdeckung, Vollständigkeit und Erfahrung, und erklärt jeden Score, damit du weißt, was du ändern solltest.',
       q3: 'Was kostet CVision?',
-      a3: 'Es gibt kein Abo – du zahlst nur, was du nutzt. Bei der Registrierung bekommst du 3 Credits und jede Woche 2 weitere, solange dein Guthaben niedrig ist. Eine normale Analyse kostet 1 Credit, eine Pro-Analyse 3; Stellenabgleich und Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite.',
+      a3: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Bei der Registrierung bekommst du 3 Credits und jede Woche 2 weitere, solange dein Guthaben niedrig ist. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht; Stellenabgleich und Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite.',
       q4: 'Wie lange dauert eine Lebenslauf-Analyse?',
       a4: 'Unter 30 Sekunden. Du lädst deinen Lebenslauf hoch und der Score sowie das Feedback werden automatisch generiert, ohne manuelle Überprüfung oder Wartezeit.',
       q5: 'Funktioniert es in meinem Land?',
@@ -431,15 +424,15 @@ const de = {
     metaDescription: 'CVision ist ein KI-gestützter Lebenslauf-Analysator und ATS-Checker. Erfahre, was es tut, für wen es ist und wie es dir hilft, automatisches Bewerbungsscreening zu bestehen.',
     back: 'Zurück zur Startseite',
     title: 'Über CVision',
-    definition: 'CVision ist ein KI-gestützter Lebenslauf-Analysator und ATS (Applicant Tracking System)-Checker. Es bewertet einen Lebenslauf auf ATS-Kompatibilität, identifiziert fehlende Keywords und generiert KI-geschriebene Verbesserungsvorschläge und Aufzählungspunkt-Umschreibungen. CVision vergleicht einen Lebenslauf auch mit einer konkreten Stellenbeschreibung, um Keyword-Lücken aufzudecken, und erstellt maßgeschneiderte Anschreiben. Es ist eine vollständig online und selbst nutzbare Webanwendung, die weltweit auf Englisch, Türkisch, Spanisch, Deutsch und Französisch verfügbar ist, mit einem kostenlosen Tarif und einem Pro-Plan.',
+    definition: 'CVision ist ein KI-gestützter Lebenslauf-Analysator und ATS (Applicant Tracking System)-Checker. Es bewertet einen Lebenslauf auf ATS-Kompatibilität, identifiziert fehlende Keywords und generiert KI-geschriebene Verbesserungsvorschläge und Aufzählungspunkt-Umschreibungen. CVision vergleicht einen Lebenslauf auch mit einer konkreten Stellenbeschreibung, um Keyword-Lücken aufzudecken, und erstellt maßgeschneiderte Anschreiben. Es ist eine vollständig online und selbst nutzbare Webanwendung, die weltweit auf Englisch, Türkisch, Spanisch, Deutsch und Französisch verfügbar ist. Es gibt kein Abo: Ein neues Konto startet mit kostenlosen Credits, weitere gibt es in einmaligen Paketen.',
     s1Heading: 'Was CVision tut',
-    s1Body: 'Du lädst einen Lebenslauf als PDF oder TXT hoch und die KI liest ihn in Sekunden. Sie gibt einen ATS-Kompatibilitätsscore mit Teilscores für Keywords, Vollständigkeit und Erfahrung zurück, erklärt jeden Score und zeigt genau die zu korrigierenden Abschnitte. Dann schreibt sie schwache Aufzählungspunkte um, schlägt passende Karrierewege vor und im Pro-Plan vergleicht deinen Lebenslauf mit einer konkreten Stellenbeschreibung und generiert ein maßgeschneidertes Anschreiben.',
+    s1Body: 'Du lädst einen Lebenslauf als PDF oder TXT hoch und die KI liest ihn in Sekunden. Sie gibt einen ATS-Kompatibilitätsscore mit Teilscores für Keywords, Vollständigkeit und Erfahrung zurück, erklärt jeden Score und zeigt genau die zu korrigierenden Abschnitte. Dann schreibt sie schwache Aufzählungspunkte um, schlägt passende Karrierewege vor und gleicht deinen Lebenslauf mit einer konkreten Stellenbeschreibung ab, um ein maßgeschneidertes Anschreiben zu generieren.',
     s2Heading: 'Für wen CVision ist',
     s2Body: 'Jobsuchende, Studierende, Berufseinsteiger und Berufstätige in jeder Branche, die einen stärkeren, ATS-freundlichen Lebenslauf und klares, umsetzbares Feedback möchten. CVision unterstützt 24 Branchenfelder und passt seine Bewertung an die Standards jedes einzelnen an.',
     s3Heading: 'Was CVision unterscheidet',
     s3Body: 'Die meisten Lebenslauf-Checker bleiben bei einem Score stehen. CVision sagt dir genau, was du beheben musst, und schreibt deine Aufzählungspunkte mit KI um, sodass du in Sekunden handeln kannst. Es schließt auch die Lücke, die die meisten Tools überspringen: Vergleiche deinen Lebenslauf mit einer echten Stellenausschreibung, sieh die fehlenden Keywords und generiere ein maßgeschneidertes Anschreiben, alles an einem Ort.',
     s4Heading: 'Preise',
-    s4Body: 'Es gibt kein Abo – du zahlst nur, was du nutzt. Ein neues Konto bekommt 3 Credits, genau eine vollständige Pro-Analyse, und jede Woche 2 weitere, solange das Guthaben niedrig bleibt. Eine normale Analyse kostet 1 Credit, eine Pro-Analyse 3, ein Stellenabgleich oder ein Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite. Für den Start sind keine Kartendaten nötig.',
+    s4Body: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Ein neues Konto bekommt 3 Credits, genau eine vollständige Analyse, und jede Woche 2 weitere, solange das Guthaben niedrig bleibt. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Stellenabgleich oder ein Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite. Für den Start sind keine Kartendaten nötig.',
     s5Heading: 'Verfügbarkeit und Sprachen',
     s5Body: 'CVision läuft vollständig online und ist in jedem Land verfügbar. Die Oberfläche wird auf Englisch, Türkisch, Spanisch, Deutsch und Französisch angeboten. Zahlungen werden sicher über Lemon Squeezy als eingetragenem Händler abgewickelt. Betrieben aus der Türkei, mit Kunden weltweit.',
     ctaTitle: 'Bereit, deinen Lebenslauf zu stärken?',
@@ -472,7 +465,7 @@ const de = {
     s5Heading: "Wie du das ATS-Screening bestehst",
     s5Body: "Verwende ein einspaltiges Layout mit Standardüberschriften (Erfahrung, Ausbildung, Kenntnisse). Speichere als PDF, sofern keine TXT-Datei verlangt wird. Übernimm die genauen Schlüsselwörter und Fähigkeiten aus der Stellenanzeige, so wie sie dort stehen. Vermeide Text in Bildern, Tabellen sowie Kopf- und Fußzeilen. Nimm messbare Ergebnisse in deine Stichpunkte auf und halte Jobtitel und Daten einheitlich. Teste das Ergebnis dann gegen die konkrete Stelle, bevor du dich bewirbst.",
     s6Heading: "Wie CVision deinen Lebenslauf prüft",
-    s6Body: "CVision lässt deinen Lebenslauf durch dieselbe Art von Auslesung und Schlüsselwortabgleich laufen wie ein ATS – angepasst an 24 Branchen und in fünf Sprachen verfügbar. Es liefert einen ATS-Kompatibilitätswert mit Teilwerten, markiert fehlende Schlüsselwörter sowie schwache oder fehlende Abschnitte, schreibt schwache Stichpunkte mit KI um und – im Pro-Tarif – gleicht deinen Lebenslauf mit einer konkreten Stellenanzeige ab und verfasst ein passendes Anschreiben. Du siehst in Sekunden genau, was ein ATS abstrafen würde und wie du es behebst.",
+    s6Body: 'CVision lässt deinen Lebenslauf durch dieselbe Art von Auslesung und Schlüsselwortabgleich laufen wie ein ATS — angepasst an 24 Branchen und in fünf Sprachen verfügbar. Es liefert einen ATS-Kompatibilitätswert mit Teilwerten, markiert fehlende Schlüsselwörter sowie schwache oder fehlende Abschnitte, schreibt schwache Stichpunkte mit KI um und gleicht deinen Lebenslauf mit einer konkreten Stellenanzeige ab, um ein passendes Anschreiben zu verfassen. Du siehst in Sekunden genau, was ein ATS abstrafen würde und wie du es behebst.',
     ctaTitle: "Sieh, wie dein Lebenslauf abschneidet",
     ctaButton: "Meinen Lebenslauf kostenlos prüfen",
   },
@@ -503,8 +496,8 @@ const de = {
     signUpToBuy: 'Registrieren und kaufen',
     seo: {
       h2a: 'Was kostet CVision, und wie funktionieren Credits?',
-      p1: 'Es gibt kein Abo. Du kaufst Credits und gibst nur aus, was du nutzt. Eine normale CV-Analyse kostet 1 Credit, eine Pro-Analyse mit vollem Bericht 3, ein Stellenabgleich oder ein Anschreiben je 2. Gekaufte Credits verfallen nie und sind bei der nächsten Jobsuche noch da.',
-      p2: 'Bei der Registrierung bekommst du 3 Credits – genau eine Pro-Analyse. Solange dein Guthaben niedrig bleibt, kommen jede Woche 2 weitere dazu, du kannst deinen Lebenslauf also weiter analysieren, ohne etwas zu zahlen.',
+      p1: 'Es gibt kein Abo. Du kaufst Credits und gibst nur aus, was du nutzt. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Stellenabgleich oder ein Anschreiben je 2. Gekaufte Credits verfallen nie und sind bei der nächsten Jobsuche noch da.',
+      p2: 'Bei der Registrierung bekommst du 3 Credits — genau eine Analyse. Solange dein Guthaben niedrig bleibt, kommen jede Woche 2 weitere dazu, du kannst deinen Lebenslauf also weiter analysieren, ohne etwas zu zahlen.',
       h2b: 'Warum kein Abo?',
       p3: 'Jobsuche ist ein vorübergehender Bedarf. Ein Abo verlangt eine Bindung an etwas, das du in sechs Wochen hoffentlich nicht mehr brauchst; ein Paket kaufst du einmal, verbrauchst es und kaufst beim nächsten Mal wieder. Zahlungen wickelt Lemon Squeezy als Merchant of Record ab; deine Kartendaten liegen nie auf unseren Servern.',
     },
@@ -618,7 +611,7 @@ const de = {
       s5GoogleName: 'Google OAuth',
       s5GoogleDesc: 'für die optionale "Mit Google anmelden"-Funktion. Nur Name und E-Mail werden im Authentifizierungsumfang abgerufen.',
       s5StripeName: 'Lemon Squeezy',
-      s5StripeDesc: 'für Pro-Plan-Zahlungen, als eingetragener Händler (Merchant of Record). Zahlungsinformationen werden ausschließlich von Lemon Squeezy verarbeitet; Kartennummern werden nicht auf unseren Servern gespeichert.',
+      s5StripeDesc: 'für Credit-Paket-Zahlungen, als eingetragener Händler (Merchant of Record). Zahlungsinformationen werden ausschließlich von Lemon Squeezy verarbeitet; Kartennummern werden nicht auf unseren Servern gespeichert.',
       s5EmailName: 'Resend',
       s5EmailDesc: 'für Transaktions-E-Mails (Willkommens- und Passwort-Zurücksetzungs-Nachrichten). Nur deine E-Mail-Adresse und dein Name werden zu Zustellzwecken geteilt.',
       s5AnalyticsName: 'Google Analytics & Microsoft Clarity',

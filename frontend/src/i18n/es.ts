@@ -110,7 +110,7 @@ const es = {
   dashboard: {
     firstRun: {
       title: 'Empieza tu primer análisis',
-      subtext: 'Un análisis Normal cuesta 1 crédito y el Pro cuesta 3. Te dimos 3 créditos al registrarte: exactamente un análisis Pro.',
+      subtext: 'Un análisis cuesta 3 créditos e incluye el informe completo. Te dimos 3 créditos al registrarte: exactamente un análisis.',
     },
     greeting: {
       morning: 'Buenos días',
@@ -145,13 +145,6 @@ const es = {
     label: 'Próximo paso',
   },
 
-  quota: {
-    proLabel: 'Análisis Pro',
-    freeLabel: 'Análisis gratuitos',
-    remaining: '/ {{quota}} restantes',
-    resetsIn: 'Se reinicia en',
-    upgradePro: 'Actualizar a Pro',
-  },
 
   recent: {
     title: 'Análisis recientes',
@@ -318,7 +311,7 @@ const es = {
 
     pricing: {
       metaTitle: 'Créditos de CVision — Paga solo lo que uses',
-      metaDescription: 'Sin suscripción. Compras créditos una vez y los gastas cuando los necesitas. Un análisis Normal cuesta 1 crédito, uno Pro 3, y la comparación con una oferta 2.',
+      metaDescription: 'Sin suscripción. Compras créditos una vez y los gastas cuando los necesitas. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta 2.',
       back: 'Volver',
       footerNote: 'Pago seguro · Sin suscripción',
       errorInit: 'No se pudo iniciar el pago. Inténtalo de nuevo.',
@@ -408,7 +401,7 @@ const es = {
       q2: '¿Cómo puntúa CVision mi CV?',
       a2: 'Subes un PDF o TXT y la IA lo lee en segundos. Puntúa compatibilidad ATS, cobertura de palabras clave, completitud y experiencia, y explica cada puntuación para que sepas qué cambiar.',
       q3: '¿Cuánto cuesta CVision?',
-      a3: 'No hay suscripción: pagas solo por lo que usas. Recibes 3 créditos al registrarte y 2 más cada semana mientras tu saldo sea bajo. Un análisis Normal cuesta 1 crédito y uno Pro 3; la comparación con una oferta y la carta de presentación cuestan 2 cada una. Si necesitas más, hay packs de créditos en la página de precios.',
+      a3: 'No hay suscripción: pagas solo por lo que usas. Recibes 3 créditos al registrarte y 2 más cada semana mientras tu saldo sea bajo. Un análisis de CV cuesta 3 créditos e incluye el informe completo; la comparación con una oferta y la carta de presentación cuestan 2 cada una. Si necesitas más, hay packs de créditos en la página de precios.',
       q4: '¿Cuánto tarda un análisis de CV?',
       a4: 'Menos de 30 segundos. Subes tu CV y la puntuación y los comentarios se generan automáticamente, sin revisión manual ni esperas.',
       q5: '¿Funciona en mi país?',
@@ -431,15 +424,15 @@ const es = {
     metaDescription: 'CVision es un analizador de CV con IA y verificador ATS. Descubre qué hace, para quién es y cómo te ayuda a superar el cribado automático.',
     back: 'Volver al inicio',
     title: 'Sobre CVision',
-    definition: 'CVision es un analizador de CV con IA y verificador ATS (Sistema de Seguimiento de Candidatos). Puntúa un CV para la compatibilidad ATS, identifica palabras clave faltantes y genera sugerencias de mejora y reescrituras de puntos escritas por IA. CVision también compara un CV con una oferta de trabajo específica para revelar carencias de palabras clave y produce cartas de presentación personalizadas. Es una aplicación web completamente en línea y autoservicio, disponible en todo el mundo en inglés, turco, español, alemán y francés, con un nivel gratuito y un plan Pro.',
+    definition: 'CVision es un analizador de CV con IA y verificador ATS (Sistema de Seguimiento de Candidatos). Puntúa un CV para la compatibilidad ATS, identifica palabras clave faltantes y genera sugerencias de mejora y reescrituras de puntos escritas por IA. CVision también compara un CV con una oferta de trabajo específica para revelar carencias de palabras clave y produce cartas de presentación personalizadas. Es una aplicación web completamente en línea y autoservicio, disponible en todo el mundo en inglés, turco, español, alemán y francés. No hay suscripción: una cuenta nueva empieza con créditos gratuitos y se pueden comprar más en packs puntuales.',
     s1Heading: 'Qué hace CVision',
-    s1Body: 'Subes un CV en PDF o TXT y la IA lo lee en segundos. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones para palabras clave, completitud y experiencia, explica cada puntuación e indica las secciones exactas a corregir. Luego reescribe puntos débiles, sugiere trayectorias profesionales y, en el plan Pro, compara tu CV con una oferta de trabajo específica y genera una carta de presentación personalizada.',
+    s1Body: 'Subes un CV en PDF o TXT y la IA lo lee en segundos. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones para palabras clave, completitud y experiencia, explica cada puntuación e indica las secciones exactas a corregir. Luego reescribe puntos débiles, sugiere trayectorias profesionales y compara tu CV con una oferta de trabajo específica para generar una carta de presentación personalizada.',
     s2Heading: 'Para quién es CVision',
     s2Body: 'Candidatos, estudiantes, recién graduados y profesionales en activo de cualquier sector que quieran un CV más sólido y compatible con ATS, y comentarios claros y accionables. CVision admite 24 sectores y adapta su puntuación a los estándares de cada uno.',
     s3Heading: 'Qué diferencia a CVision',
     s3Body: 'La mayoría de los verificadores de CV se detienen en una puntuación. CVision te dice exactamente qué corregir y reescribe tus puntos con IA, para que puedas actuar en segundos. También cierra el ciclo que la mayoría de las herramientas omiten: compara tu CV con una oferta real, ve las palabras clave faltantes y genera una carta de presentación personalizada, todo en un solo lugar.',
     s4Heading: 'Precios',
-    s4Body: 'No hay suscripción: pagas solo por lo que usas. Una cuenta nueva recibe 3 créditos, exactamente un análisis Pro completo, y suma 2 más cada semana mientras el saldo siga bajo. Un análisis Normal cuesta 1 crédito, uno Pro 3, y la comparación con una oferta o una carta de presentación 2 cada una. Si necesitas más, hay packs de créditos en la página de precios. No hace falta tarjeta para empezar.',
+    s4Body: 'No hay suscripción: pagas solo por lo que usas. Una cuenta nueva recibe 3 créditos, exactamente un análisis completo, y suma 2 más cada semana mientras el saldo siga bajo. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta o una carta de presentación 2 cada una. Si necesitas más, hay packs de créditos en la página de precios. No hace falta tarjeta para empezar.',
     s5Heading: 'Disponibilidad e idiomas',
     s5Body: 'CVision funciona completamente en línea y está disponible en todos los países. La interfaz está disponible en inglés, turco, español, alemán y francés. Los pagos se procesan de forma segura por Lemon Squeezy como comerciante registrado. Operado desde Turquía, con clientes en todo el mundo.',
     ctaTitle: '¿Listo para fortalecer tu CV?',
@@ -472,7 +465,7 @@ const es = {
     s5Heading: "Cómo superar el filtrado ATS",
     s5Body: "Usa un diseño de una sola columna con encabezados de sección estándar (Experiencia, Formación, Habilidades). Guarda en PDF salvo que se pida un archivo TXT. Refleja exactamente las palabras clave y habilidades de la oferta, escritas tal como aparecen. Evita el texto dentro de imágenes, las tablas y los encabezados y pies de página. Incluye resultados medibles en tus viñetas y mantén coherentes los puestos y las fechas. Luego prueba el resultado con la oferta concreta antes de postularte.",
     s6Heading: "Cómo revisa tu CV CVision",
-    s6Body: "CVision procesa tu CV con el mismo tipo de análisis y coincidencia de palabras clave que usa un ATS, adaptado a 24 sectores y disponible en cinco idiomas. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones, señala las palabras clave que faltan y las secciones débiles o ausentes, reescribe las viñetas flojas con IA y —en el plan Pro— compara tu CV con una oferta concreta y redacta una carta de presentación a medida. Ves exactamente qué penalizaría un ATS, y cómo corregirlo, en segundos.",
+    s6Body: 'CVision procesa tu CV con el mismo tipo de análisis y coincidencia de palabras clave que usa un ATS, adaptado a 24 sectores y disponible en cinco idiomas. Devuelve una puntuación de compatibilidad ATS con subpuntuaciones, señala las palabras clave que faltan y las secciones débiles o ausentes, reescribe las viñetas flojas con IA y compara tu CV con una oferta concreta para redactar una carta de presentación a medida. Ves exactamente qué penalizaría un ATS, y cómo corregirlo, en segundos.',
     ctaTitle: "Descubre qué puntuación tiene tu CV",
     ctaButton: "Revisar mi CV gratis",
   },
@@ -503,8 +496,8 @@ const es = {
     signUpToBuy: 'Regístrate para comprar',
     seo: {
       h2a: '¿Cuánto cuesta CVision y cómo funcionan los créditos?',
-      p1: 'No hay suscripción. Compras créditos y gastas solo lo que usas. Un análisis Normal cuesta 1 crédito, un análisis Pro que desbloquea el informe completo cuesta 3, y la comparación con una oferta o una carta de presentación cuestan 2 cada una. Los créditos comprados no caducan, así que siguen ahí para tu próxima búsqueda de empleo.',
-      p2: 'Recibes 3 créditos al registrarte, exactamente un análisis Pro. Mientras tu saldo siga bajo, cada semana llegan 2 más, así que puedes seguir analizando tu CV sin pagar nada.',
+      p1: 'No hay suscripción. Compras créditos y gastas solo lo que usas. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta o una carta de presentación cuestan 2 cada una. Los créditos comprados no caducan, así que siguen ahí para tu próxima búsqueda de empleo.',
+      p2: 'Recibes 3 créditos al registrarte, exactamente un análisis. Mientras tu saldo siga bajo, cada semana llegan 2 más, así que puedes seguir analizando tu CV sin pagar nada.',
       h2b: '¿Por qué no una suscripción?',
       p3: 'Buscar trabajo es una necesidad temporal. Una suscripción te pide comprometerte con algo que esperas dejar de necesitar en seis semanas; un pack se compra una vez, se agota y se vuelve a comprar la próxima vez. Los pagos los gestiona Lemon Squeezy como comerciante registrado, y los datos de tu tarjeta nunca se guardan en nuestros servidores.',
     },
@@ -618,7 +611,7 @@ const es = {
       s5GoogleName: 'Google OAuth',
       s5GoogleDesc: 'para la función opcional de inicio de sesión con Google. Solo se obtienen nombre y correo en el ámbito de autenticación.',
       s5StripeName: 'Lemon Squeezy',
-      s5StripeDesc: 'para los pagos del plan Pro, actuando como comerciante registrado (merchant of record). La información de pago es procesada únicamente por Lemon Squeezy; los números de tarjeta no se almacenan en nuestros servidores.',
+      s5StripeDesc: 'para los pagos de packs de créditos, actuando como comerciante registrado (merchant of record). La información de pago es procesada únicamente por Lemon Squeezy; los números de tarjeta no se almacenan en nuestros servidores.',
       s5EmailName: 'Resend',
       s5EmailDesc: 'para correos transaccionales (mensajes de bienvenida y restablecimiento de contraseña). Solo se comparten tu dirección de correo y tu nombre con fines de entrega.',
       s5AnalyticsName: 'Google Analytics & Microsoft Clarity',
