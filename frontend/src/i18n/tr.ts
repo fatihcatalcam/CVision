@@ -710,6 +710,10 @@ const tr = {
     aiEnhanced: 'AI Destekli',
     reportMeta: 'Rapor #{{id}} • CVision AI tarafından işlendi',
     viewOriginalCv: 'Orijinal CV\'yi Gör',
+    nextStep: {
+      label: 'Sıradaki adım',
+      reanalyse: 'Önerileri uygula, sonra yeniden analiz et',
+    },
     overallScore: 'Genel Puan',
     atsCompat: 'ATS Uyumluluğu',
     keywordRelevance: 'Anahtar Kelime Uyumu',

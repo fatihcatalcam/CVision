@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
   ArrowLeft, Zap, FileText,
-  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock,
+  Sparkles, ArrowRight, ChevronDown, ChevronUp, Copy, Check, Lock, RefreshCw,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
@@ -22,7 +22,7 @@ import { Collapse } from '../../components/ui/Collapse';
 import { MatchResultCard } from '../../components/match/MatchResultCard';
 import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
-import { MATCH_COST, COVER_LETTER_COST } from '../../constants/credits';
+import { MATCH_COST, COVER_LETTER_COST, FULL_ANALYSIS_COST } from '../../constants/credits';
 import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
 import { parseRewriteHint } from '../../utils/rewriteHint';
 
@@ -460,9 +460,12 @@ export function AnalysisPage() {
             </div>
             <p className="text-[#6B6A65] text-sm">{t('analysis.reportMeta', { id: data!.id })}</p>
           </div>
+          {/* Secondary on purpose: it opens the file the user just uploaded,
+              so it is the least informative action on the page and must not
+              be the loudest. The primary action is the next step below. */}
           <button
             onClick={() => setIsPdfModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-[#111111] text-white font-semibold text-sm hover:bg-[#2a2a2a] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-[var(--radius-md)] bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] border border-[#8A8985] dark:border-white/[0.36] font-semibold text-sm hover:bg-[#F7F6F3] dark:hover:bg-[#272725] transition-colors"
           >
             <FileText className="w-4 h-4" />
             {t('analysis.viewOriginalCv')}
@@ -515,6 +518,62 @@ export function AnalysisPage() {
               )}
             </Card>
           )}
+
+          {/* Next step. This sat at the very bottom, under the career matches
+              and the skill tags, where a reader who stops after the summary
+              never reaches it. Matching is the one feature needed once per
+              application rather than once per job search, so it is the
+              primary action; re-analysing is the loop the report exists to
+              start, so it is offered here, before the suggestions, as the
+              plan they are read against. A match result opens in place,
+              under the button that asked for it. */}
+          <div className="surface p-6 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] dark:text-[#908d89] mb-2">
+              {t('analysis.nextStep.label')}
+            </p>
+
+            {matchResult ? (
+              <>
+                <MatchResultCard
+                  match={matchResult}
+                  onGenerateCoverLetter={handleGenerateCoverLetter}
+                  isGeneratingCoverLetter={isGeneratingCoverLetter}
+                />
+                <button
+                  onClick={() => setShowJDModal(true)}
+                  className="mt-4 text-sm underline text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
+                >
+                  {t('match.tryAnotherJD')}
+                </button>
+              </>
+            ) : (
+              <p className="text-sm text-[#6B6A65] dark:text-[#908d89] mb-4">{t('match.sectionDesc')}</p>
+            )}
+
+            <div className={`flex flex-wrap gap-3 ${matchResult ? 'mt-4' : ''}`}>
+              {!matchResult && (
+                <button
+                  onClick={() => setShowJDModal(true)}
+                  className="px-4 py-2.5 flex items-center gap-2 bg-[#111111] dark:bg-[#e8e7e4] text-white dark:text-[#111111] text-sm font-semibold rounded-[var(--radius-md)] hover:bg-[#2a2a2a] dark:hover:bg-[#f2f1ee] active:scale-[0.98] transition-all"
+                >
+                  {t('match.openModal')}
+                  <span className="font-mono font-bold whitespace-nowrap text-[#f0c761] dark:text-[#956400]">
+                    {t('credits.costSuffix', { cost: MATCH_COST })}
+                  </span>
+                </button>
+              )}
+              <button
+                onClick={() => navigate('/dashboard?upload=1')}
+                className="px-4 py-2.5 flex items-center gap-2 text-left bg-white dark:bg-[#1c1c1a] text-[#111111] dark:text-[#e8e7e4] border border-[#8A8985] dark:border-white/[0.36] text-sm font-semibold rounded-[var(--radius-md)] hover:bg-[#F7F6F3] dark:hover:bg-[#272725] active:scale-[0.98] transition-all"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                {t('analysis.nextStep.reanalyse')}
+                <span className="font-mono font-bold whitespace-nowrap text-[#956400] dark:text-[#c4890a]">
+                  {t('credits.costSuffix', { cost: FULL_ANALYSIS_COST })}
+                </span>
+              </button>
+            </div>
+          </div>
 
           {/* Strengths & Weaknesses */}
           {(data!.strengths.length > 0 || data!.weaknesses.length > 0) && (
@@ -633,40 +692,6 @@ export function AnalysisPage() {
               <h3 className="font-sans text-xl tracking-tight text-[#111111] dark:text-[#e8e7e4] mb-4">{t('analysis.extractedSkills')}</h3>
               <SkillTags skills={data!.extracted_skills} />
             </Card>
-          </div>
-
-          {/* JD Match Section */}
-          <div className="surface p-6 rounded-xl border border-[#EAEAEA] dark:border-white/[0.07] relative overflow-hidden">
-            {matchResult ? (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-4">{t('match.sectionLabel')}</p>
-                <MatchResultCard
-                  match={matchResult}
-                  onGenerateCoverLetter={handleGenerateCoverLetter}
-                  isGeneratingCoverLetter={isGeneratingCoverLetter}
-                />
-                <button
-                  onClick={() => setShowJDModal(true)}
-                  className="mt-4 text-sm underline text-[#6B6A65] hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
-                >
-                  {t('match.tryAnotherJD')}
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#6B6A65] mb-2">{t('match.sectionLabel')}</p>
-                <p className="text-sm text-[#6B6A65] mb-4">{t('match.sectionDesc')}</p>
-                <button
-                  onClick={() => setShowJDModal(true)}
-                  className="px-4 py-2 flex items-center gap-2 bg-[#111111] text-white text-sm font-medium rounded-[var(--radius-md)] hover:bg-[#2a2a2a] transition-colors"
-                >
-                  {t('match.openModal')}
-                  <span className="font-mono font-bold text-[#f0c761]">
-                    {t('credits.costSuffix', { cost: MATCH_COST })}
-                  </span>
-                </button>
-              </>
-            )}
           </div>
 
         </div>

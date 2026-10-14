@@ -699,6 +699,10 @@ const es = {
     aiEnhanced: 'Mejorado con IA',
     reportMeta: 'Informe #{{id}} • Procesado por CVision AI',
     viewOriginalCv: 'Ver CV original',
+    nextStep: {
+      label: 'Siguiente paso',
+      reanalyse: 'Aplica las sugerencias y vuelve a analizar',
+    },
     overallScore: 'Puntuación general',
     atsCompat: 'Compatibilidad ATS',
     keywordRelevance: 'Relevancia de palabras clave',

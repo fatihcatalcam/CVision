@@ -214,3 +214,38 @@ describe('AnalysisPage with an unreadable CV', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/dashboard?upload=1');
   });
 });
+
+/**
+ * What the report offers once it has been read.
+ *
+ * The job-ad match was the last thing on the page, below the career matches and
+ * the skill tags, and the loudest button on the screen opened the CV the user
+ * had just uploaded. Matching is the one feature a job seeker needs once per
+ * application rather than once per search, so it is the one worth seeing - and
+ * "fix it, then run it again" is the loop the whole product exists for, yet it
+ * had no button at all.
+ */
+describe('AnalysisPage next step', () => {
+  it('offers matching a job ad before the suggestions, not after them', async () => {
+    get.mockResolvedValue({ data: unlockedReport });
+    renderPage();
+
+    const match = await screen.findByRole('button', { name: /match\.openModal/ });
+    const suggestion = await screen.findByText('The free one');
+
+    expect(
+      match.compareDocumentPosition(suggestion) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  it('sends a re-analysis to the upload dialog, priced', async () => {
+    get.mockResolvedValue({ data: unlockedReport });
+    renderPage();
+
+    const again = await screen.findByRole('button', { name: /analysis\.nextStep\.reanalyse/ });
+    expect(again).toHaveTextContent('credits.costSuffix:3');
+
+    await userEvent.click(again);
+    expect(navigateSpy).toHaveBeenCalledWith('/dashboard?upload=1');
+  });
+});

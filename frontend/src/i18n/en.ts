@@ -702,6 +702,10 @@ const en = {
     aiEnhanced: 'AI Enhanced',
     reportMeta: 'Report #{{id}} • Processed by CVision AI',
     viewOriginalCv: 'View Original CV',
+    nextStep: {
+      label: 'Next step',
+      reanalyse: 'Apply the suggestions, then re-analyse',
+    },
     overallScore: 'Overall Score',
     atsCompat: 'ATS Compatibility',
     keywordRelevance: 'Keyword Relevance',

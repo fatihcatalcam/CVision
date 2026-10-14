@@ -699,6 +699,10 @@ const de = {
     aiEnhanced: 'KI-gestützt',
     reportMeta: 'Bericht #{{id}} • Verarbeitet von CVision AI',
     viewOriginalCv: 'Original-CV ansehen',
+    nextStep: {
+      label: 'Nächster Schritt',
+      reanalyse: 'Vorschläge umsetzen, dann neu analysieren',
+    },
     overallScore: 'Gesamtpunktzahl',
     atsCompat: 'ATS-Kompatibilität',
     keywordRelevance: 'Keyword-Relevanz',
