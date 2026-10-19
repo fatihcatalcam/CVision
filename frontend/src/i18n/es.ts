@@ -493,7 +493,6 @@ const es = {
     buy: 'Comprar',
     notOnSale: 'Los paquetes de créditos aún no están a la venta.',
     earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',
-    freeRoutes: 'No hace falta comprar: cada semana llegan créditos gratis y ganas más cuando alguien que invitas completa su primer análisis.',
     noExpiry: 'Los créditos comprados no caducan',
     signUpToBuy: 'Regístrate para comprar',
     seo: {

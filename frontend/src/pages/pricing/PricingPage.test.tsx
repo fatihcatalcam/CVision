@@ -220,3 +220,26 @@ describe('PricingPage with a pack smaller than an application', () => {
     expect(card).toHaveTextContent('30');
   });
 });
+
+/**
+ * The page that sells credits was arguing against buying them. Directly under
+ * the packs - the moment of decision - a highlighted box read "you can keep
+ * going without buying credits: free credits arrive every week". The same
+ * facts stay on the page, in the explanation of how credits work further down;
+ * what goes is the callout placed between the buyer and the buy button.
+ */
+describe('PricingPage at the moment of decision', () => {
+  it('does not advertise the free alternative right under the packs', async () => {
+    renderPage();
+    await screen.findByText('10');
+
+    expect(screen.queryByText('packs.freeRoutes')).not.toBeInTheDocument();
+  });
+
+  it('still explains the weekly credits where the credit model is explained', async () => {
+    renderPage();
+    await screen.findByText('10');
+
+    expect(screen.getByText('packs.seo.p2')).toBeInTheDocument();
+  });
+});

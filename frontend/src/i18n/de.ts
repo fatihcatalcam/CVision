@@ -493,7 +493,6 @@ const de = {
     buy: 'Kaufen',
     notOnSale: 'Guthaben-Pakete sind noch nicht im Verkauf.',
     earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',
-    freeRoutes: 'Kaufen ist nicht nötig: jede Woche kommen kostenlose Credits dazu, und du verdienst mehr, sobald jemand, den du eingeladen hast, seine erste Analyse abschließt.',
     noExpiry: 'Gekaufte Credits verfallen nie',
     signUpToBuy: 'Registrieren und kaufen',
     seo: {

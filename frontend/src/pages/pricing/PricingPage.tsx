@@ -6,7 +6,7 @@ import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
 import api from '../../services/api';
-import { ArrowLeft, Loader2, Shield, Lock, Gift } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield, Lock } from 'lucide-react';
 import {
   FULL_ANALYSIS_COST, FULL_APPLICATION_COST, MATCH_COST, COVER_LETTER_COST,
 } from '../../constants/credits';
@@ -230,14 +230,12 @@ export function PricingPage() {
           <p className="mt-6 text-center text-sm text-[#9F2F2D] dark:text-[#d4524f]">{error}</p>
         )}
 
-        <div className="mt-10 surface p-5 flex items-start gap-3">
-          <Gift className="w-4 h-4 text-[#956400] flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-[#6B6A65] dark:text-[#908d89] leading-relaxed">
-            {t('packs.freeRoutes')}
-          </p>
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-6 text-xs text-[#6B6A65] dark:text-[#908d89]">
+        {/* A highlighted "you can keep going without buying" box used to sit
+            here, between the packs and everything else - the page that sells
+            credits arguing against buying them at the moment of decision. The
+            weekly credits are still explained below, where the credit model
+            is; this spot is for the guarantees that make buying feel safe. */}
+        <div className="mt-10 flex items-center justify-center gap-6 text-xs text-[#6B6A65] dark:text-[#908d89]">
           <span className="flex items-center gap-1.5">
             <Lock className="w-3 h-3" /> {t('settings.pricing.footerNote')}
           </span>

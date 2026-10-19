@@ -501,7 +501,6 @@ const tr = {
     buy: 'Satın al',
     notOnSale: 'Kredi paketleri henüz satışta değil.',
     earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',
-    freeRoutes: 'Kredi almadan da devam edebilirsin: her hafta ücretsiz kredi yükleniyor ve davet ettiğin kişi ilk analizini tamamladığında kredi kazanıyorsun.',
     noExpiry: 'Satın alınan krediler son kullanma tarihi taşımaz',
     signUpToBuy: 'Kaydol ve satın al',
     // Copy the prerender script emits into the static /pricing HTML. The page
