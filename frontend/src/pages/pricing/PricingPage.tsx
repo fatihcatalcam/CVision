@@ -66,9 +66,12 @@ export function PricingPage() {
     }
   };
 
-  // The middle pack is the one worth steering people to: big enough to cover a
-  // real search, small enough not to need thinking about.
-  const featuredIndex = packs && packs.length === 3 ? 1 : -1;
+  // The pack worth steering people to is the second largest: big enough to
+  // cover a real search, small enough not to need thinking about. With three
+  // packs that is the middle one. It used to be hard-coded as "index 1 when
+  // there are exactly three", so adding a small entry pack in front silently
+  // dropped the badge altogether.
+  const featuredIndex = packs && packs.length >= 3 ? packs.length - 2 : -1;
 
   // Per-credit cost of the smallest pack - the reference every other pack's
   // saving is measured against. Packs arrive sorted smallest first.
@@ -132,7 +135,9 @@ export function PricingPage() {
         ) : (
           /* items-stretch so a card with a badge does not stand taller than its
              neighbours and knock the row out of line. */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+          <div className={`grid grid-cols-1 gap-5 items-stretch ${
+            packs.length >= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'
+          }`}>
             {packs.map((pack, i) => {
               const featured = i === featuredIndex;
               const price = formatPrice(pack, i18n.language);
@@ -194,7 +199,12 @@ export function PricingPage() {
                   )}
 
                   <p className="text-xs text-[#6B6A65] dark:text-[#908d89] mb-6 leading-relaxed">
-                    {t('packs.worth', { count: Math.floor(pack.credits / FULL_APPLICATION_COST) })}
+                    {/* A pack below one full application is bought for one
+                        more analysis, so it is described in those - in
+                        applications it would read "about 0". */}
+                    {pack.credits >= FULL_APPLICATION_COST
+                      ? t('packs.worth', { count: Math.floor(pack.credits / FULL_APPLICATION_COST) })
+                      : t('packs.worthAnalyses', { count: Math.floor(pack.credits / FULL_ANALYSIS_COST) })}
                   </p>
 
                   <button

@@ -489,6 +489,8 @@ const en = {
     popular: 'Most popular',
     worth_one: 'About {{count}} full application (analysis + full report + job match + cover letter).',
     worth_other: 'About {{count}} full applications (analysis + full report + job match + cover letter).',
+    worthAnalyses_one: 'One CV analysis with the full report - to check your CV again after editing it.',
+    worthAnalyses_other: '{{count}} CV analyses with the full report.',
     perCredit: '{{price}} per credit',
     saving: 'Save {{percent}}%',
     buy: 'Buy',

@@ -183,3 +183,40 @@ describe('PricingPage, signed out', () => {
     expect(screen.getByText('packs.seo.h2b')).toBeInTheDocument();
   });
 });
+
+/**
+ * A pack smaller than one full application.
+ *
+ * Every pack used to cover at least one application (analysis, report, job
+ * match, cover letter - 7 credits), so the card described itself in those.
+ * A 3-credit pack exists for the person who wants one more analysis and will
+ * not pay for ten credits to get it; described in applications it would read
+ * "about 0", and adding it as a fourth pack also dropped the "most popular"
+ * badge, which was only drawn when there were exactly three.
+ */
+describe('PricingPage with a pack smaller than an application', () => {
+  const WITH_SMALL = [
+    { variant_id: '000', credits: 3, price: 2999, currency: 'TRY' },
+    ...PACKS,
+  ];
+
+  beforeEach(() => {
+    get.mockResolvedValue({ data: { packs: WITH_SMALL } });
+  });
+
+  it('describes it in analyses rather than as zero applications', async () => {
+    renderPage();
+    await screen.findByText('3');
+
+    expect(screen.queryByText('packs.worth:0')).not.toBeInTheDocument();
+    expect(screen.getByText('packs.worthAnalyses:1')).toBeInTheDocument();
+  });
+
+  it('still features the pack that covers a real search', async () => {
+    renderPage();
+
+    const badge = await screen.findByText('packs.popular');
+    const card = badge.parentElement as HTMLElement;
+    expect(card).toHaveTextContent('30');
+  });
+});

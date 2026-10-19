@@ -494,6 +494,8 @@ const tr = {
     popular: 'En çok tercih edilen',
     worth_one: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
     worth_other: 'Yaklaşık {{count}} tam başvuru (analiz + tam rapor + ilan eşleştirme + ön yazı).',
+    worthAnalyses_one: "Tam raporlu bir CV analizi - düzenledikten sonra CV'ni tekrar kontrol etmek için.",
+    worthAnalyses_other: 'Tam raporlu {{count}} CV analizi.',
     perCredit: 'Kredi başına {{price}}',
     saving: '%{{percent}} tasarruf',
     buy: 'Satın al',

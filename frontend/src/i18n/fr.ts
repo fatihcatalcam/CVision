@@ -486,6 +486,8 @@ const fr = {
     popular: 'Le plus choisi',
     worth_one: 'Environ {{count}} candidature complète (analyse + rapport complet + comparaison + lettre).',
     worth_other: 'Environ {{count}} candidatures complètes (analyse + rapport complet + comparaison + lettre).',
+    worthAnalyses_one: "Une analyse de CV avec le rapport complet, pour revérifier votre CV après l'avoir modifié.",
+    worthAnalyses_other: '{{count}} analyses de CV avec le rapport complet.',
     perCredit: '{{price}} par crédit',
     saving: '{{percent}}% d\'economie',
     buy: 'Acheter',

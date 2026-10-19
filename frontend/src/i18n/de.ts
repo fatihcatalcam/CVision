@@ -486,6 +486,8 @@ const de = {
     popular: 'Am beliebtesten',
     worth_one: 'Etwa {{count}} vollständige Bewerbung (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
     worth_other: 'Etwa {{count}} vollständige Bewerbungen (Analyse + vollständiger Bericht + Abgleich + Anschreiben).',
+    worthAnalyses_one: 'Eine CV-Analyse mit vollem Bericht - um deinen Lebenslauf nach dem Bearbeiten erneut zu prüfen.',
+    worthAnalyses_other: '{{count}} CV-Analysen mit vollem Bericht.',
     perCredit: '{{price}} pro Credit',
     saving: '{{percent}}% sparen',
     buy: 'Kaufen',
