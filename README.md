@@ -1,88 +1,114 @@
-# 🚀 CVision: AI-Powered CV Analyzer and Career Recommendation Platform
+# CVision
 
-The project I'm currently working on: **CVision**
+**AI-powered CV analysis and ATS check.** Upload a CV and see how an applicant
+tracking system reads it, what it scores, and what to fix before you apply.
 
-CVision is a SaaS-based platform designed to help students, graduates, and job seekers analyze and improve their CVs before applying for internships and jobs.
+Live at **[cvisionapp.com](https://www.cvisionapp.com)**. Try it without an account.
 
----
-
-## 🎯 Key Features:
-
-* Users can register and securely log in to the platform
-* Users can upload CV files in **PDF or TXT format**
-* The system extracts and analyzes CV content automatically
-* Provides a **CV score** based on multiple evaluation criteria
-* Detects key sections such as education, experience, and skills
-* Evaluates **ATS (Applicant Tracking System) compatibility**
-* Generates **personalized improvement suggestions**
-* Recommends suitable **career roles** based on user profiles
-* Supports **multi-user SaaS architecture** with data isolation
-* Includes **analysis history and status tracking (pending → processing → completed)**
+![CVision home page](assets/screenshots/home.png)
 
 ---
 
-## 🧠 How It Works:
+## What it does
 
-1. User uploads a CV
-2. The system extracts text from the file
-3. A rule-based analysis engine evaluates:
+- **Free check without signing up.** Upload a PDF on `/try` and get a score and
+  the first suggestion in about 30 seconds.
+- **Score out of 100.** The score combines five parts: section completeness, relevant
+  skills, ATS compatibility, keywords for the target field, and experience.
+- **ATS X-Ray.** Shows the plain text a parser pulls out of the PDF. Image-only
+  pages and multi-column layouts that come out jumbled or empty are flagged.
+- **Prioritized suggestions.** AI-written, ordered by what matters most for
+  this CV.
+- **Bullet rewrites.** Weak bullets come back stronger. CVision never invents a
+  number; it leaves a placeholder like `[N]` for you to fill in.
+- **Job match.** Paste a job posting or its URL to get a match rate, the skills
+  the CV is missing, and a tailored cover letter.
+- **Career suggestions.** Roles that fit the profile.
+- **Five languages.** Turkish, English, German, Spanish and French.
 
-   * CV structure
-   * keyword relevance
-   * skills and experience
-4. The system computes a score and generates suggestions
-5. Career recommendations are generated based on predefined role profiles
+| Analysis result | On mobile |
+|---|---|
+| ![Analysis result](assets/screenshots/result.png) | <img src="assets/screenshots/result-mobile.png" alt="Analysis result on mobile" width="260"> |
 
----
-
-## ⚙️ Technologies Used:
-
-* **Backend:** Python (FastAPI)
-* **Frontend:** React + TypeScript + Vite
-* **Database:** SQLite (development) / PostgreSQL (scalable option)
-* **ORM:** SQLAlchemy + Alembic
-* **File Processing:** PyMuPDF (PDF parsing)
-* **Authentication:** JWT-based authentication
-* **Architecture:** Modular SaaS architecture (routers, services, analysis modules)
-
----
-
-## 🏗️ System Architecture:
-
-* **Frontend (React):** User interface and API interaction
-* **Backend (FastAPI):** Handles requests, authentication, and business logic
-* **Analysis Engine:** Modular rule-based CV evaluation system
-* **Database:** Stores users, CVs, and analysis results
+The screenshots use an invented demo CV. The scores and the suggestion are what
+CVision actually produced for it.
 
 ---
 
-## 🔄 SaaS Capabilities:
+## How the score works
 
-* Multi-user system with strict **user data isolation**
-* Background processing for CV analysis
-* Real-time **analysis status tracking**
-* Scalable and modular backend design
-* API-based communication between components
+The overall score is a weighted average:
 
----
+| Part | Weight | What it measures |
+|---|---|---|
+| Completeness | 25% | Summary, experience, education, skills and other sections |
+| Skills | 25% | Skills relevant to the target role, with a capped bonus for the rest |
+| ATS | 20% | 10 checks: contact details, length, action verbs, single column, machine-readable text and more |
+| Keywords | 15% | Terms expected in the target field |
+| Experience | 15% | Depth of work experience |
 
-## 🌱 Future Improvements:
-
-* AI/LLM-based advanced CV feedback
-* Cloud storage integration (e.g., AWS S3)
-* Real-time updates (WebSocket support)
-* Advanced analytics dashboard
-* Resume comparison feature
-
----
-
-## 💡 Project Goal:
-
-CVision aims to provide an **accessible, explainable, and scalable solution** for CV evaluation, combining software engineering principles with a real-world problem in recruitment and career preparation.
+The rule-based engine calculates every score; the language model never sets one.
+The model helps the engine recognize skills and keywords written in different
+ways. It also writes the summary and suggestions, rewrites bullets and drafts
+cover letters.
 
 ---
 
-## 📄 License
+## How it works
+
+1. The PDF is uploaded and processed in the background
+   (`pending → processing → completed`).
+2. PyMuPDF extracts the text and checks for image-only pages and column
+   interleaving.
+3. The analysis engine detects sections, runs the ATS checks, and matches skills
+   and keywords against role profiles.
+4. OpenAI adds the summary, suggestions and rewrites.
+5. Results are stored per user. Anonymous `/try` results can be claimed after
+   signing up.
+
+---
+
+## Tech stack
+
+**Backend:** Python 3.11, FastAPI, SQLAlchemy and Alembic, PostgreSQL
+(Supabase; SQLite for local development), PyMuPDF, OpenAI, trafilatura (job
+posting URLs), slowapi (rate limiting), JWT and Google sign-in, Resend (email),
+Sentry.
+
+**Frontend:** React 19, TypeScript, Vite, Tailwind CSS 4, i18next, React Router.
+Public pages are prerendered at build time for SEO.
+
+**Hosting:** Vercel (frontend), Render (API), Supabase (database).
+Payments run on Lemon Squeezy with a credit system: new accounts get 3 credits
+(one full analysis), every account gets 2 more each week, and credit packs can
+be bought.
+
+---
+
+## Running locally
+
+Backend (API on port 8001):
+
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env        # SQLite by default; add OPENAI_API_KEY for AI features
+uvicorn app.main:app --reload --port 8001
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev                 # VITE_API_URL defaults to http://localhost:8001
+```
+
+Tests: `pytest` in `backend/`, `npm test` in `frontend/`.
+
+---
+
+## License
 
 Copyright (C) 2026 Fatih Çatalçam
 
