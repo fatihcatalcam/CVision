@@ -85,29 +85,6 @@ be bought.
 
 ---
 
-## Running locally
-
-Backend (API on port 8001):
-
-```bash
-cd backend
-pip install -r requirements.txt
-cp .env.example .env        # SQLite by default; add OPENAI_API_KEY for AI features
-uvicorn app.main:app --reload --port 8001
-```
-
-Frontend:
-
-```bash
-cd frontend
-npm install
-npm run dev                 # VITE_API_URL defaults to http://localhost:8001
-```
-
-Tests: `pytest` in `backend/`, `npm test` in `frontend/`.
-
----
-
 ## License
 
 Copyright (C) 2026 Fatih Çatalçam
