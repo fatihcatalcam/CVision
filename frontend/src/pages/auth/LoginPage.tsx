@@ -32,6 +32,13 @@ export function LoginPage() {
       toast.success(t('auth.login.successToast'));
       navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
     } catch (error: any) {
+      // Right password, address never confirmed: the backend has a code on its
+      // way (or still valid), so go and enter it.
+      if (error.response?.data?.message === 'email_not_verified') {
+        toast(t('auth.login.notVerified'));
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
       toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.login.errorToast'));
     } finally {
       setIsLoading(false);

@@ -41,30 +41,33 @@ def _age_the_clock(db, user, days: int):
 
 # ── signup ────────────────────────────────────────────────────────────────────
 
-def test_registration_grants_the_opening_balance(client, db_session):
+def _sign_up_and_verify(client, db_session, email):
+    """An email signup is only opened once its address is confirmed."""
     resp = client.post(
         "/auth/register",
-        json={"full_name": "New Person", "email": "opening@test.com",
-              "password": "Passw0rd!"},
+        json={"full_name": "New Person", "email": email, "password": "Passw0rd!"},
     )
-
     assert resp.status_code == 201
-    user = db_session.query(User).filter(User.email == "opening@test.com").one()
+    code = db_session.query(User).filter(User.email == email).one().verify_code
+    assert client.post("/auth/verify-email", json={"email": email, "code": code}).status_code == 200
+    db_session.expire_all()
+    return db_session.query(User).filter(User.email == email).one()
+
+
+def test_verifying_the_signup_grants_the_opening_balance(client, db_session):
+    user = _sign_up_and_verify(client, db_session, "opening@test.com")
+
     assert user.credits == settings.CREDIT_SIGNUP
     rows = _ledger(db_session, user.id)
     assert [r.reason for r in rows] == ["grant_signup"]
 
 
-def test_registration_starts_the_weekly_clock(client, db_session):
+def test_verifying_the_signup_starts_the_weekly_clock(client, db_session):
     """Without this the very first /auth/me would see a null timestamp, read it
     as "never granted" and hand out a weekly grant on day one - so a new account
     would open at 5 credits, not 3."""
-    client.post(
-        "/auth/register",
-        json={"full_name": "Clock", "email": "clock@test.com", "password": "Passw0rd!"},
-    )
+    user = _sign_up_and_verify(client, db_session, "clock@test.com")
 
-    user = db_session.query(User).filter(User.email == "clock@test.com").one()
     assert user.credits_granted_at is not None
 
 

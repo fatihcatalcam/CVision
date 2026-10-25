@@ -26,6 +26,7 @@ precedence over the values in the real `.env`, so production credentials in
 """
 
 import os
+from datetime import datetime, timezone
 
 # ── 1. Load .env.test (if present) and resolve the test database URL ─────────
 try:
@@ -240,6 +241,10 @@ def make_user(db_session):
         plan_type: str = "free",
         **extra,
     ) -> "User":
+        # A ready-made account is a verified one, like every account that
+        # existed before email verification. Pass email_verified_at=None for
+        # a signup still waiting on its code.
+        extra.setdefault("email_verified_at", datetime.now(timezone.utc))
         user = User(
             full_name=full_name,
             email=email,

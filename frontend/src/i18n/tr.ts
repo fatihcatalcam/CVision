@@ -34,6 +34,7 @@ const tr = {
       createFree: 'Ücretsiz oluştur',
       successToast: 'Tekrar hoş geldin!',
       errorToast: 'Geçersiz kimlik bilgileri',
+      notVerified: 'Önce e-postanı doğrulaman gerekiyor. Kodu e-postana gönderdik.',
     },
 
     register: {
@@ -63,6 +64,7 @@ const tr = {
       signIn: 'Giriş yap',
       successToast: 'Hesap oluşturuldu! Giriş yapabilirsin.',
       errorToast: 'Kayıt başarısız',
+      disposableEmail: 'Geçici e-posta adresleriyle kayıt olunamıyor. Lütfen kendi e-posta adresini kullan.',
     },
 
     forgotPassword: {
@@ -93,6 +95,24 @@ const tr = {
       codeErrorToast: 'Geçersiz kod. Lütfen tekrar dene.',
       updateSuccessToast: 'Şifre güncellendi! Artık giriş yapabilirsin.',
       updateErrorToast: 'Şifre güncellenemedi. Lütfen tekrar dene.',
+    },
+
+    verifyEmail: {
+      title: 'E-postanı doğrula',
+      codeInfo: '6 haneli kodu şu adrese gönderdik:',
+      codeLabel: 'Doğrulama kodu',
+      verifyButton: 'Doğrula ve Devam Et',
+      spamNote: 'E-postayı göremiyorsan spam klasörünü kontrol et.',
+      resend: 'Kodu tekrar gönder',
+      resendIn: '{{seconds}} sn sonra tekrar gönderebilirsin',
+      resentToast: 'Yeni kod e-postana gönderildi.',
+      wrongEmail: 'E-posta adresi yanlış mı?',
+      signUpAgain: 'Tekrar kayıt ol',
+      successToast: 'E-postan doğrulandı. Hoş geldin!',
+      invalidCode: 'Kod hatalı. Lütfen tekrar dene.',
+      codeExpired: 'Kodun süresi doldu. Yeni kod iste.',
+      tooManyAttempts: 'Çok fazla hatalı deneme. Yeni kod iste.',
+      errorToast: 'Bir sorun oluştu. Lütfen tekrar dene.',
     },
 
     google: {

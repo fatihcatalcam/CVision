@@ -34,6 +34,7 @@ const de = {
       createFree: 'Kostenlos erstellen',
       successToast: 'Willkommen zurück!',
       errorToast: 'Ungültige Anmeldedaten',
+      notVerified: 'Bitte bestätige zuerst deine E-Mail-Adresse. Wir haben dir den Code geschickt.',
     },
 
     register: {
@@ -63,6 +64,7 @@ const de = {
       signIn: 'Anmelden',
       successToast: 'Konto erstellt! Bitte anmelden.',
       errorToast: 'Registrierung fehlgeschlagen',
+      disposableEmail: 'Wegwerf-E-Mail-Adressen sind nicht erlaubt. Bitte registriere dich mit deiner eigenen E-Mail-Adresse.',
     },
 
     forgotPassword: {
@@ -93,6 +95,24 @@ const de = {
       codeErrorToast: 'Ungültiger Code. Bitte versuche es erneut.',
       updateSuccessToast: 'Passwort aktualisiert! Du kannst dich jetzt anmelden.',
       updateErrorToast: 'Fehler beim Aktualisieren des Passworts. Bitte versuche es erneut.',
+    },
+
+    verifyEmail: {
+      title: 'E-Mail bestätigen',
+      codeInfo: 'Wir haben einen 6-stelligen Code gesendet an',
+      codeLabel: 'Bestätigungscode',
+      verifyButton: 'Bestätigen und weiter',
+      spamNote: 'Keine E-Mail erhalten? Sieh im Spam-Ordner nach.',
+      resend: 'Code erneut senden',
+      resendIn: 'Erneut senden in {{seconds}} s',
+      resentToast: 'Ein neuer Code ist unterwegs.',
+      wrongEmail: 'Falsche E-Mail-Adresse?',
+      signUpAgain: 'Neu registrieren',
+      successToast: 'E-Mail bestätigt. Willkommen!',
+      invalidCode: 'Der Code ist falsch. Bitte versuche es erneut.',
+      codeExpired: 'Der Code ist abgelaufen. Fordere einen neuen an.',
+      tooManyAttempts: 'Zu viele Fehlversuche. Fordere einen neuen Code an.',
+      errorToast: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
     },
 
     google: {

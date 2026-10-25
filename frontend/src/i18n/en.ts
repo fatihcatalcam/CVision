@@ -34,6 +34,7 @@ const en = {
       createFree: 'Create one free',
       successToast: 'Welcome back!',
       errorToast: 'Invalid credentials',
+      notVerified: "Please verify your email first. We've sent the code to your inbox.",
     },
 
     register: {
@@ -63,6 +64,7 @@ const en = {
       signIn: 'Sign in',
       successToast: 'Account created! Please sign in.',
       errorToast: 'Registration failed',
+      disposableEmail: "Temporary email addresses can't be used. Please sign up with your own email.",
     },
 
     forgotPassword: {
@@ -93,6 +95,24 @@ const en = {
       codeErrorToast: 'Invalid code. Please try again.',
       updateSuccessToast: 'Password updated! You can now sign in.',
       updateErrorToast: 'Failed to update password. Please try again.',
+    },
+
+    verifyEmail: {
+      title: 'Verify your email',
+      codeInfo: 'We sent a 6-digit code to',
+      codeLabel: 'Verification code',
+      verifyButton: 'Verify and Continue',
+      spamNote: "Can't find the email? Check your spam folder.",
+      resend: 'Resend code',
+      resendIn: 'You can resend in {{seconds}}s',
+      resentToast: 'A new code is on its way.',
+      wrongEmail: 'Wrong email address?',
+      signUpAgain: 'Sign up again',
+      successToast: 'Email verified. Welcome!',
+      invalidCode: "That code isn't right. Please try again.",
+      codeExpired: 'This code has expired. Request a new one.',
+      tooManyAttempts: 'Too many wrong attempts. Request a new code.',
+      errorToast: 'Something went wrong. Please try again.',
     },
 
     google: {

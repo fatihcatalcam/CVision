@@ -93,6 +93,22 @@ def send_reset_password_email(
     return _send(to_email, subject, html)
 
 
+def send_verification_email(
+    to_email: str, code: str, full_name: str, language: str | None = None
+) -> bool:
+    """Send the signup verification code in the user's language."""
+    if not settings.RESEND_API_KEY:
+        logger.warning(
+            "Resend API key not configured - skipping email send. Verification code: %s", code
+        )
+        return False
+
+    subject, html = email_templates.verify_email(
+        code, full_name.strip().split()[0], language
+    )
+    return _send(to_email, subject, html)
+
+
 def send_welcome_email(to_email: str, full_name: str, language: str | None = None) -> None:
     """Send the founder's welcome letter in the user's language."""
     if not settings.RESEND_API_KEY:

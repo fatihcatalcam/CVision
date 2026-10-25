@@ -7,8 +7,6 @@ import { Loader2, Eye, EyeOff, ArrowRight, Check, X } from 'lucide-react';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
-import { useAuth } from '../../context/AuthContext';
-import { claimPendingAnalysis } from '../../services/anonymousAnalysis';
 
 const inputCls = 'w-full bg-white dark:bg-[#1c1c1a] border border-[#EAEAEA] dark:border-white/[0.07] rounded-xl h-12 px-4 text-[#111111] dark:text-[#e8e7e4] placeholder:text-[#A09D9A] dark:placeholder:text-[#6a6764] focus:outline-none focus:border-[#1B3A6B] dark:focus:border-[#4a7dd1] focus:ring-2 focus:ring-[#EEF2F8] dark:focus:ring-[#4a7dd1]/20 transition-all';
 
@@ -65,7 +63,6 @@ export function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
   // Invite code from the link the visitor followed (/register?ref=CODE). An
   // unknown code is ignored by the server rather than rejected, so a mangled
   // link costs the referrer their reward but never blocks the signup.
@@ -103,28 +100,20 @@ export function RegisterPage() {
         referral_code: referralCode || undefined,
       });
     } catch (error: any) {
-      toast.error(error.response?.data?.detail?.[0]?.msg || error.response?.data?.detail || t('auth.register.errorToast'));
+      toast.error(
+        error.response?.data?.message === 'disposable_email'
+          ? t('auth.register.disposableEmail')
+          : t('auth.register.errorToast')
+      );
       setIsLoading(false);
       return;
     }
 
-    // Account created. Auto sign-in and claim any pending /try analysis so the
-    // user lands straight on their now-unlocked report instead of being bounced
-    // to a second login form (which is where most drop off). Mirrors LoginPage.
-    try {
-      const { data } = await api.post('/auth/login', { email, password });
-      login(data.access_token, data.user);
-      const claimedId = await claimPendingAnalysis();
-      toast.success(t('auth.register.successToast'));
-      navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
-    } catch {
-      // Registration succeeded but auto sign-in hiccuped — send them to log in
-      // manually rather than implying the account wasn't created.
-      toast.success(t('auth.register.successToast'));
-      navigate('/login');
-    } finally {
-      setIsLoading(false);
-    }
+    // Account created but not open: it signs in only once the code mailed to
+    // the address is entered. The verify screen does the sign-in and claims any
+    // pending /try analysis, which used to happen right here.
+    setIsLoading(false);
+    navigate(`/verify-email?email=${encodeURIComponent(email)}`);
   };
 
   return (

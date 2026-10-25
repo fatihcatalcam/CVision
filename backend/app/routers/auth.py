@@ -1,7 +1,9 @@
 """
 Authentication router - handles user registration, login, and profile management.
 Endpoints:
-    POST  /auth/register          - Create a new user
+    POST  /auth/register          - Create a new user (unverified; mails a code)
+    POST  /auth/verify-email      - Confirm the address with the code, sign in
+    POST  /auth/resend-verification - Mail a new verification code
     POST  /auth/login             - Authenticate and receive JWT
     GET   /auth/me                - Get current user profile
     PATCH /auth/me                - Update display name
@@ -13,6 +15,7 @@ Endpoints:
 
 import re
 import logging
+import secrets
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Request
 from pydantic import BaseModel, Field, field_validator
@@ -25,13 +28,19 @@ from app.auth.hashing import hash_password, verify_password
 from app.auth.jwt_handler import create_access_token
 from app.limiter import limiter
 from app.config import settings
-from app.services.email_service import send_welcome_email
+from app.auth.email_checks import is_disposable
+from app.services.email_service import send_verification_email, send_welcome_email
 
 logger = logging.getLogger("cvision.routers.auth")
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 MAX_RESET_ATTEMPTS = 5
+MAX_VERIFY_ATTEMPTS = 5
+VERIFY_CODE_TTL = timedelta(minutes=30)
+# A new code at most once a minute, so the resend button cannot be used to
+# fire mail at somebody else's inbox.
+VERIFY_RESEND_COOLDOWN = timedelta(seconds=60)
 
 
 class ForgotPasswordRequest(BaseModel):
@@ -87,38 +96,54 @@ class PasswordChangeRequest(BaseModel):
     summary="Register a new user",
 )
 @limiter.limit("5/minute")
-def register(request: Request, background_tasks: BackgroundTasks, user_data: UserRegister, db: Session = Depends(get_db)):
-    existing = db.query(User).filter(User.email == user_data.email).first()
-    if existing:
+def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
+    """Create the account unverified and mail it a code.
+
+    Nothing is granted here - no credits, no welcome mail. Those wait for the
+    code (see _open_verified_account), so an address nobody can read never gets
+    anything.
+    """
+    if is_disposable(user_data.email):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="disposable_email")
+
+    user = db.query(User).filter(User.email == user_data.email).first()
+    if user and (user.email_verified_at is not None or user.google_id):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="A user with this email already exists",
         )
 
-    new_user = User(
-        full_name=user_data.full_name,
-        email=user_data.email,
-        password_hash=hash_password(user_data.password),
-        role="user",
-        language=user_data.language,
-    )
-    db.add(new_user)
+    if user:
+        # Signed up before but never confirmed. Whoever does it now takes the
+        # address over, password included: otherwise anyone could squat an
+        # address by signing up with it and leave its owner locked out, and the
+        # squatter's password would survive the owner's verification.
+        user.full_name = user_data.full_name
+        user.password_hash = hash_password(user_data.password)
+        user.language = user_data.language
+        user.referred_by_id = None
+    else:
+        user = User(
+            full_name=user_data.full_name,
+            email=user_data.email,
+            password_hash=hash_password(user_data.password),
+            role="user",
+            language=user_data.language,
+        )
+        db.add(user)
     db.commit()
-    db.refresh(new_user)
-
-    from app.services.credit_service import CreditService
-
-    CreditService.open_account(db, new_user)
+    db.refresh(user)
 
     from app.services.referral_service import ReferralService
 
-    ReferralService.attach_inviter(db, new_user, user_data.referral_code)
+    ReferralService.attach_inviter(db, user, user_data.referral_code)
 
-    background_tasks.add_task(
-        send_welcome_email, new_user.email, new_user.full_name, new_user.language
-    )
-
-    return new_user
+    # Signing up again within the minute keeps the code already in the inbox
+    # rather than mailing another, or repeated signups would get around the
+    # resend cooldown.
+    if _may_send_code(user):
+        _issue_verify_code(db, user)
+    return user
 
 
 @router.post(
@@ -137,12 +162,112 @@ def login(request: Request, credentials: UserLogin, db: Session = Depends(get_db
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    # Checked after the password, so this answer is only ever given to someone
+    # who already knows it - it never confirms to a stranger that an address
+    # has signed up.
+    if user.email_verified_at is None:
+        now = datetime.utcnow()
+        if not user.verify_code or not user.verify_code_expires_at or user.verify_code_expires_at < now:
+            _issue_verify_code(db, user)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="email_not_verified")
+
     access_token = create_access_token(data={"sub": str(user.id)})
 
     return TokenResponse(
         access_token=access_token,
         user=UserResponse.model_validate(user),
     )
+
+
+# ---- Email verification ----
+
+class VerifyEmailRequest(BaseModel):
+    email: str
+    code: str
+
+
+class ResendVerificationRequest(BaseModel):
+    email: str
+
+
+def _issue_verify_code(db: Session, user: User) -> None:
+    """Give the account a fresh code - new expiry, attempts back to zero - and mail it."""
+    code = f"{secrets.randbelow(1_000_000):06d}"
+    now = datetime.utcnow()
+    user.verify_code = code
+    user.verify_code_expires_at = now + VERIFY_CODE_TTL
+    user.verify_code_sent_at = now
+    user.verify_code_attempts = 0
+    db.commit()
+    send_verification_email(user.email, code, user.full_name, user.language)
+
+
+def _may_send_code(user: User) -> bool:
+    """Whether a minute has passed since the last code was mailed."""
+    sent = user.verify_code_sent_at
+    return sent is None or datetime.utcnow() - sent >= VERIFY_RESEND_COOLDOWN
+
+
+def _open_verified_account(db: Session, user: User) -> bool:
+    """Mark the address proven and give the account its opening credits.
+
+    Returns whether this call did it. Every way of proving the address - the
+    code, a password reset, Google - goes through here, and only the first one
+    to arrive opens the account, so the credits can never be granted twice.
+    """
+    if user.email_verified_at is not None:
+        return False
+    user.email_verified_at = datetime.now(timezone.utc)
+    user.verify_code = None
+    user.verify_code_expires_at = None
+    user.verify_code_attempts = 0
+    db.commit()
+
+    from app.services.credit_service import CreditService
+
+    CreditService.open_account(db, user)
+    return True
+
+
+@router.post("/verify-email", response_model=TokenResponse, summary="Confirm the address and sign in")
+@limiter.limit("10/minute")
+def verify_email(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    body: VerifyEmailRequest,
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user or user.email_verified_at is not None or not user.verify_code:
+        raise HTTPException(status_code=400, detail="invalid_code")
+
+    if user.verify_code_attempts >= MAX_VERIFY_ATTEMPTS:
+        raise HTTPException(status_code=429, detail="too_many_attempts")
+
+    if not user.verify_code_expires_at or user.verify_code_expires_at < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="code_expired")
+
+    if not secrets.compare_digest(user.verify_code, body.code.strip()):
+        user.verify_code_attempts += 1
+        db.commit()
+        raise HTTPException(status_code=400, detail="invalid_code")
+
+    _open_verified_account(db, user)
+    background_tasks.add_task(send_welcome_email, user.email, user.full_name, user.language)
+
+    token = create_access_token(data={"sub": str(user.id)})
+    return TokenResponse(access_token=token, user=UserResponse.model_validate(user))
+
+
+@router.post("/resend-verification", summary="Mail a new verification code")
+@limiter.limit("3/minute")
+def resend_verification(request: Request, body: ResendVerificationRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if user and user.email_verified_at is None and user.password_hash and _may_send_code(user):
+        _issue_verify_code(db, user)
+    # The same answer whatever the address is, so this cannot be used to find
+    # out who has an account.
+    return {"message": "If that address is waiting for a code, a new one has been sent."}
 
 
 @router.get(
@@ -352,7 +477,12 @@ def verify_reset_code(request: Request, body: VerifyResetCodeRequest, db: Sessio
 
 @router.post("/reset-password", summary="Set new password after code verification")
 @limiter.limit("5/minute")
-def reset_password(request: Request, body: ResetPasswordRequest, db: Session = Depends(get_db)):
+def reset_password(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    body: ResetPasswordRequest,
+    db: Session = Depends(get_db),
+):
     from app.auth.hashing import check_password_history, update_password_history
 
     user = db.query(User).filter(User.email == body.email).first()
@@ -381,6 +511,12 @@ def reset_password(request: Request, body: ResetPasswordRequest, db: Session = D
     user.reset_code_expires_at = None
     user.reset_code_attempts = 0
     db.commit()
+
+    # The reset code went to the inbox, so this proves the address as well as
+    # the code from signup would have - and it replaced whatever password was
+    # typed at signup.
+    if _open_verified_account(db, user):
+        background_tasks.add_task(send_welcome_email, user.email, user.full_name, user.language)
 
     return {"message": "Password updated successfully. Please log in with your new password."}
 
@@ -438,6 +574,16 @@ def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends
     user = db.query(User).filter(User.email == email).first()
 
     if user:
+        if not user.google_id and user.email_verified_at is None:
+            # An email signup that never entered its code. Google has just
+            # proven the address, so the account becomes a Google account. The
+            # password goes: whoever chose it never showed they own the inbox.
+            user.google_id = google_id
+            user.password_hash = None
+            db.commit()
+            _open_verified_account(db, user)
+            token = create_access_token(data={"sub": str(user.id)})
+            return TokenResponse(access_token=token, user=UserResponse.model_validate(user))
         if not user.google_id:
             # Existing email/password account
             raise HTTPException(
@@ -460,6 +606,8 @@ def google_auth(request: Request, body: GoogleAuthRequest, db: Session = Depends
         password_hash=None,
         google_id=google_id,
         role="user",
+        # Google only hands over addresses it has verified (checked above).
+        email_verified_at=datetime.now(timezone.utc),
     )
     db.add(new_user)
     db.commit()

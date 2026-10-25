@@ -53,6 +53,16 @@ class User(Base):
     referral_rewarded_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+    # Email ownership. An email/password signup stays NULL until the 6-digit
+    # code it was mailed is entered, and cannot log in until then. Google
+    # accounts and every account older than this column are verified.
+    email_verified_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    verify_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    verify_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    verify_code_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    verify_code_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     reset_code: Mapped[str | None] = mapped_column(String(10), nullable=True)
     reset_code_expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     reset_code_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)

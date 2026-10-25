@@ -235,6 +235,63 @@ def welcome(first_name: str, language: str | None) -> tuple[str, str]:
     return WELCOME_SUBJECT[lang], _shell(content, WELCOME_PREHEADER[lang])
 
 
+# ── Email verification ────────────────────────────────────────────────────────
+
+VERIFY_SUBJECT = {
+    "en": "CVision - Your verification code",
+    "tr": "CVision - Doğrulama kodun",
+}
+
+_VERIFY_COPY = {
+    "tr": {
+        "preheader": "Kodun 30 dakika geçerli.",
+        "heading": "E-postanı doğrula",
+        "greeting": "Merhaba",
+        "intro": (
+            "CVision hesabını açmak için aşağıdaki kodu kayıt ekranına gir. "
+            "Kod <strong>30 dakika</strong> geçerlidir."
+        ),
+        "disclaimer": "CVision'a sen kayıt olmadıysan bu e-postayı dikkate alma.",
+    },
+    "en": {
+        "preheader": "Your code is valid for 30 minutes.",
+        "heading": "Verify your email",
+        "greeting": "Hi",
+        "intro": (
+            "Enter the code below on the sign-up screen to open your CVision account. "
+            "It is valid for <strong>30 minutes</strong>."
+        ),
+        "disclaimer": "If you did not sign up for CVision, ignore this email.",
+    },
+}
+
+
+def verify_email(code: str, first_name: str, language: str | None) -> tuple[str, str]:
+    """Return (subject, html) for the signup verification mail."""
+    lang = resolve(language)
+    c = _VERIFY_COPY[lang]
+    content = (
+        f'<h1 style="margin:0 0 12px; font-size:20px; line-height:1.3; font-weight:700; '
+        f'color:{FOREGROUND};">{c["heading"]}</h1>'
+        + _p(f'{c["greeting"]} <strong>{first_name}</strong>,')
+        + _p(c["intro"])
+        + _code_box(code)
+        + f'<p style="margin:0; font-size:13px; line-height:1.6; color:{MUTED};">{c["disclaimer"]}</p>'
+    )
+    return VERIFY_SUBJECT[lang], _shell(content, c["preheader"], width=480)
+
+
+def _code_box(code: str) -> str:
+    return (
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
+        f'style="margin:0 0 20px;"><tr><td align="center" style="background-color:{SUBTLE}; '
+        f'border:1px solid {BORDER}; border-radius:8px; padding:22px;">'
+        f'<span style="font-family:{FONT_MONO}; font-size:32px; font-weight:700; '
+        f'letter-spacing:10px; color:{INK};">{code}</span>'
+        f'</td></tr></table>'
+    )
+
+
 # ── Password reset ────────────────────────────────────────────────────────────
 
 RESET_SUBJECT = {
@@ -275,21 +332,12 @@ def reset_password(code: str, first_name: str, language: str | None) -> tuple[st
     lang = resolve(language)
     c = _RESET_COPY[lang]
 
-    code_box = (
-        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" '
-        f'style="margin:0 0 20px;"><tr><td align="center" style="background-color:{SUBTLE}; '
-        f'border:1px solid {BORDER}; border-radius:8px; padding:22px;">'
-        f'<span style="font-family:{FONT_MONO}; font-size:32px; font-weight:700; '
-        f'letter-spacing:10px; color:{INK};">{code}</span>'
-        f'</td></tr></table>'
-    )
-
     content = (
         f'<h1 style="margin:0 0 12px; font-size:20px; line-height:1.3; font-weight:700; '
         f'color:{FOREGROUND};">{c["heading"]}</h1>'
         + _p(f'{c["greeting"]} <strong>{first_name}</strong>,')
         + _p(c["intro"])
-        + code_box
+        + _code_box(code)
         + f'<p style="margin:0; font-size:13px; line-height:1.6; color:{MUTED};">{c["disclaimer"]}</p>'
     )
     return RESET_SUBJECT[lang], _shell(content, c["preheader"], width=480)

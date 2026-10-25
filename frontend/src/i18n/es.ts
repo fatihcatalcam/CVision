@@ -34,6 +34,7 @@ const es = {
       createFree: 'Crea una gratis',
       successToast: '¡Bienvenido de nuevo!',
       errorToast: 'Credenciales incorrectas',
+      notVerified: 'Primero verifica tu correo. Te hemos enviado el código.',
     },
 
     register: {
@@ -63,6 +64,7 @@ const es = {
       signIn: 'Iniciar sesión',
       successToast: '¡Cuenta creada! Por favor, inicia sesión.',
       errorToast: 'Error al registrarse',
+      disposableEmail: 'No se permiten correos temporales. Regístrate con tu propio correo.',
     },
 
     forgotPassword: {
@@ -93,6 +95,24 @@ const es = {
       codeErrorToast: 'Código inválido. Inténtalo de nuevo.',
       updateSuccessToast: '¡Contraseña actualizada! Ya puedes iniciar sesión.',
       updateErrorToast: 'Error al actualizar la contraseña. Inténtalo de nuevo.',
+    },
+
+    verifyEmail: {
+      title: 'Verifica tu correo',
+      codeInfo: 'Enviamos un código de 6 dígitos a',
+      codeLabel: 'Código de verificación',
+      verifyButton: 'Verificar y continuar',
+      spamNote: '¿No ves el correo? Revisa la carpeta de spam.',
+      resend: 'Reenviar código',
+      resendIn: 'Puedes reenviarlo en {{seconds}} s',
+      resentToast: 'Te enviamos un código nuevo.',
+      wrongEmail: '¿Correo equivocado?',
+      signUpAgain: 'Registrarte de nuevo',
+      successToast: 'Correo verificado. ¡Bienvenido!',
+      invalidCode: 'El código no es correcto. Inténtalo de nuevo.',
+      codeExpired: 'El código ha caducado. Solicita uno nuevo.',
+      tooManyAttempts: 'Demasiados intentos fallidos. Solicita un código nuevo.',
+      errorToast: 'Algo salió mal. Inténtalo de nuevo.',
     },
 
     google: {
