@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { Button } from '../../components/ui/Button';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
+import { DeveloperCredit } from '../../components/ui/DeveloperCredit';
+import { DEVELOPER_URL } from '../../constants/developer';
 
 export function AboutPage() {
   const { t } = useTranslation();
@@ -52,6 +54,21 @@ export function AboutPage() {
           <p className="text-base leading-relaxed text-[#444] dark:text-[#c8c6c3]">
             {t('about.definition')}
           </p>
+          <p className="mt-4 text-sm text-[#6B6A65] dark:text-[#908d89]">
+            <Trans
+              i18nKey="about.builtBy"
+              components={{
+                author: (
+                  <a
+                    href={DEVELOPER_URL}
+                    target="_blank"
+                    rel="noopener"
+                    className="font-medium text-[#111111] dark:text-[#e8e7e4] underline underline-offset-2"
+                  />
+                ),
+              }}
+            />
+          </p>
         </div>
 
         <div className="space-y-10">
@@ -89,6 +106,7 @@ export function AboutPage() {
             <span>{t('common.copyright')}</span>
           </div>
         </div>
+        <DeveloperCredit className="max-w-3xl mx-auto px-6 pb-5 -mt-2 text-center sm:text-left" />
       </footer>
 
     </div>

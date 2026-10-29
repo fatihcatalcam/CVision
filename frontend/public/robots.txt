@@ -18,10 +18,14 @@ User-agent: *
 Allow: /$
 Allow: /try
 Allow: /how-ats-works
+Allow: /ats-uyumlu-cv-nasil-hazirlanir
 Allow: /about
 Allow: /pricing
 Allow: /privacy
 Allow: /terms
+# Plain-text files for AI systems: product summary and live prices.
+Allow: /llms.txt
+Allow: /pricing.md
 # The English tree. Same pages, /en prefix.
 Allow: /en
 # Private / user pages — do not index
@@ -35,5 +39,6 @@ Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
+Disallow: /verify-email
 
 Sitemap: https://www.cvisionapp.com/sitemap.xml

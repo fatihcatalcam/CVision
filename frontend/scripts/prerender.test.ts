@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { routesFor, faqJsonLd, sitemapXml, alternatesHtml } from './prerender';
+import { routesFor, faqJsonLd, sitemapXml, alternatesHtml, buildPage } from './prerender';
+import { DEVELOPER_URL } from '../src/constants/developer';
 import { URL_LANGUAGES, LOCALIZED_PATHS, localizedUrl } from '../src/i18n/routes';
 import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
 import tr from '../src/i18n/tr';
@@ -326,5 +327,53 @@ describe('prerendered routes', () => {
     expect(routesFor('en')[0].title).toBe(en.home.metaTitle);
     expect(routesFor('tr')[0].title).toBe(tr.home.metaTitle);
     expect(routesFor('en')[0].title).not.toBe(routesFor('tr')[0].title);
+  });
+});
+
+describe('developer credit', () => {
+  // The app renders the credit in React; crawlers that do not run JS only ever
+  // see the prerendered markup, so the link has to be in it.
+  const href = `href="${DEVELOPER_URL.replace(/&/g, '&amp;')}"`;
+
+  it.each(URL_LANGUAGES)('is a followed link on every prerendered %s page', (lang) => {
+    for (const route of routesFor(lang)) {
+      const html = buildPage(read('index.html'), route, lang);
+      expect(html, route.path).toContain(`<a ${href} target="_blank" rel="noopener">Çatalçam Yazılım</a>`);
+      expect(html, route.path).not.toContain('nofollow');
+    }
+  });
+
+  it.each(URL_LANGUAGES)('links the name in the %s About sentence, not the raw tag', (lang) => {
+    const about = routesFor(lang).find((r) => r.path === '/about')!;
+    expect(about.body).toContain(`<a ${href} target="_blank" rel="noopener">Fatih Çatalçam</a>`);
+    // p() escapes markup, so the <author> tag would otherwise print as text.
+    expect(about.body).not.toContain('author&gt;');
+  });
+});
+
+describe('guide Article schema', () => {
+  // ArticlePage adds it in the browser only, so crawlers that do not run JS
+  // never saw an author or a date. The prerender writes it into <head>.
+  const guides = ['/how-ats-works', '/ats-uyumlu-cv-nasil-hazirlanir'];
+
+  it.each(URL_LANGUAGES)('is in the static head of every %s guide, with author and dates', (lang) => {
+    for (const route of routesFor(lang).filter((r) => guides.includes(r.path))) {
+      const html = buildPage(read('index.html'), route, lang);
+      const head = html.slice(0, html.indexOf('</head>'));
+      const match = /<script type="application\/ld\+json" data-page="[^"]+">([\s\S]*?)<\/script>/.exec(head);
+      expect(match, route.path).not.toBeNull();
+      const article = JSON.parse(match![1]);
+      expect(article['@type']).toBe('Article');
+      expect(article.url).toBe(localizedUrl(route.path, lang));
+      expect(article.author).toMatchObject({ '@type': 'Person', name: 'Fatih Çatalçam' });
+      expect(article.datePublished).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(article.dateModified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it('stays off every other page', () => {
+    for (const route of routesFor('tr').filter((r) => !guides.includes(r.path))) {
+      expect(buildPage(read('index.html'), route, 'tr'), route.path).not.toContain('"@type": "Article"');
+    }
   });
 });

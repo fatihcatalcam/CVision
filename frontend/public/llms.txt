@@ -1,13 +1,36 @@
 # CVision
 
-> [CVision](https://www.cvisionapp.com) is an AI-powered CV and resume analyzer and ATS checker. Upload a CV to get an instant ATS compatibility score, keyword-gap analysis, section-by-section feedback, AI rewrite suggestions, and matching career paths. It also matches a CV against a specific job description and generates tailored cover letters. Fully online and self-serve, available worldwide. Founded by Fatih Çatalçam.
+> [CVision](https://www.cvisionapp.com) is an AI-powered CV and resume analyzer and ATS checker. Upload a CV as a PDF to get an ATS compatibility score out of 100, keyword-gap analysis, section-by-section feedback, AI rewrites of weak bullet points, and matching career paths. It also matches a CV against a specific job posting and writes a tailored cover letter. Fully online and self-serve, available worldwide. Built by [Fatih Çatalçam](https://www.catalcamyazilim.online) (Çatalçam Yazılım).
+
+Last updated: 2026-10-30
 
 ## Product
 
 - [Home](https://www.cvisionapp.com) — what CVision does, how it works, and FAQ.
-- [Try it free (no signup)](https://www.cvisionapp.com/try) — upload a CV and get an ATS score plus one improvement suggestion without creating an account.
-- [About](https://www.cvisionapp.com/about) — the product and the founder.
-- [How ATS works](https://www.cvisionapp.com/how-ats-works) — guide to how Applicant Tracking Systems read, parse, and rank resumes, what an ATS score measures, and how to pass automated screening.
+- [Try it free (no signup)](https://www.cvisionapp.com/try) — upload a CV and get an ATS score plus one improvement suggestion without creating an account. One free analysis per day this way.
+- [Pricing](https://www.cvisionapp.com/pricing) — credit packs and what each action costs. Plain-text version with current prices: [pricing.md](https://www.cvisionapp.com/pricing.md).
+- [About](https://www.cvisionapp.com/about) — the product and who built it.
+
+## Guides
+
+- [How ATS works](https://www.cvisionapp.com/how-ats-works) ([English](https://www.cvisionapp.com/en/how-ats-works)) — how Applicant Tracking Systems read, parse and rank resumes, what an ATS score measures, and how to pass automated screening.
+- [ATS uyumlu CV nasıl hazırlanır](https://www.cvisionapp.com/ats-uyumlu-cv-nasil-hazirlanir) ([English: How to write an ATS-friendly CV](https://www.cvisionapp.com/en/how-to-write-an-ats-friendly-cv)) — step by step: file format, section headings, keywords, bullet points, and how to test the result.
+
+Turkish pages live at the bare paths; English pages live under `/en`. The interface is also available in Spanish, German and French, without separate URLs.
+
+## How the score works
+
+The overall score is out of 100 and is a weighted average of five parts:
+
+- Completeness, 25%: whether the summary, experience, education, skills and other sections are present.
+- Skills, 25%: how many skills relevant to the target role the CV shows.
+- ATS compatibility, 20%: 10 checks, including contact details, length, action verbs, a single-column layout, and text that is machine-readable rather than an image.
+- Keywords, 15%: the terms expected in the target field.
+- Experience, 15%: depth of work experience.
+
+A rule-based engine calculates every score; the language model never sets one. The model (OpenAI GPT) helps recognise skills and keywords written in different ways, and writes the summary, the prioritised suggestions, the bullet rewrites and cover letters. Rewrites never invent numbers: where a figure is missing they leave a placeholder such as [N] for the user to fill in.
+
+The ATS X-Ray shows the plain text a parser extracts from the PDF. A scanned or image-only PDF yields no text at all, and the X-Ray shows that before the user applies anywhere.
 
 ## Services and pricing
 
@@ -15,16 +38,14 @@ CVision is credit-based. There is no subscription and no free trial to cancel:
 you buy credits once and spend them as you need them.
 
 - Free to start — a new account is granted 3 credits, which is exactly one full
-  analysis. While the balance stays low it earns 2 more credits every week,
-  so the product stays usable without paying.
+  analysis. Every week the account earns 2 more credits while its balance is
+  under 12, so the product stays usable without paying.
 - What things cost, in credits: CV analysis 3, which includes the full report;
   job-description matching 2; AI cover letter 2.
 - Extra credits are sold in one-off packs, billed via
-  [Lemon Squeezy](https://www.lemonsqueezy.com) as merchant of record. Pack
-  sizes and current prices are listed on
-  [the pricing page](https://www.cvisionapp.com/pricing) — deliberately not
-  duplicated here, because a price copied into a static file is a price that
-  goes stale.
+  [Lemon Squeezy](https://www.lemonsqueezy.com) as merchant of record. Current
+  pack sizes and prices: [pricing.md](https://www.cvisionapp.com/pricing.md),
+  generated from the live packs so it never goes stale.
 
 ### What the credits buy
 
@@ -32,16 +53,17 @@ you buy credits once and spend them as you need them.
   section-by-section detection, career-path matches, the full AI suggestion
   pack, AI bullet-point rewriting, the ATS X-Ray, and the complete AI summary
   report. There is one analysis and it includes all of it.
-- Job-description (JD) matching: compare a CV against a specific job posting for
-  a match score, missing keywords, and a gap analysis.
+- Job-description (JD) matching: compare a CV against a specific job posting,
+  pasted as text or as a link, for a match score, missing keywords, and a gap
+  analysis.
 - AI cover-letter generation: a tailored cover letter from a CV and a job
   description.
 
 ## Key facts
 
-- AI analysis powered by large language models (OpenAI GPT).
-- Accepts PDF and TXT resume uploads, up to 5MB.
-- ATS compatibility scoring plus sub-scores for keywords, completeness, and experience.
+- Accepts PDF resumes only, up to 5MB. The PDF needs selectable text; a scan or a PDF exported as an image cannot be read.
+- 24 target fields to choose from, plus automatic detection.
+- Sign up with Google, or with an email address confirmed by a one-time code.
 - Interface languages: English, Turkish, Spanish, German, and French.
 - Works in every country; nothing to install, everything runs in the browser.
 

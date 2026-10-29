@@ -9,6 +9,8 @@ import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { localizedUrl } from '../../i18n/routes';
 import type { GuideSection } from '../../content/atsGuide';
+import { DeveloperCredit } from '../../components/ui/DeveloperCredit';
+import { articleSchema } from '../../seo/articleSchema';
 
 /**
  * The chrome and body layout shared by the long-form guides.
@@ -96,21 +98,20 @@ export function ArticlePage({ path, ns, slug, content, children, intro }: Articl
   const sections = content[uiLang] ?? [];
 
   // Article JSON-LD, injected per route and removed on unmount so it never
-  // lingers on another page.
+  // lingers on another page. A guide loaded directly already carries the
+  // prerendered copy (with its dates) in <head>; adding a second would give
+  // the page two Articles, so this only fills in after client-side navigation.
   useEffect(() => {
+    if (document.head.querySelector(`script[data-page="${slug}"]`)) return;
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.setAttribute('data-page', slug);
-    script.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Article',
+    script.textContent = JSON.stringify(articleSchema({
       headline: t(`${ns}.title`),
       description: t(`${ns}.metaDescription`),
-      inLanguage: document.documentElement.lang || 'en',
-      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-      author: { '@type': 'Organization', name: 'CVision' },
-      publisher: { '@id': 'https://www.cvisionapp.com/#organization' },
-    });
+      url: canonical,
+      lang: document.documentElement.lang || 'en',
+    }));
     document.head.appendChild(script);
     return () => { script.remove(); };
   }, [t, ns, slug, canonical]);
@@ -179,6 +180,7 @@ export function ArticlePage({ path, ns, slug, content, children, intro }: Articl
             <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>
           </div>
         </div>
+        <DeveloperCredit className="max-w-3xl mx-auto px-6 pb-5 -mt-2 text-center sm:text-left" />
       </footer>
 
     </div>

@@ -2,6 +2,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/pricing.md",
+      "destination": "https://cvision-p4ny.onrender.com/payment/pricing.md"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

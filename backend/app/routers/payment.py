@@ -21,7 +21,7 @@ from datetime import datetime, timezone, timedelta
 import httpx
 import iyzipay
 from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -357,6 +357,65 @@ def list_credit_packs():
             for variant, credits in ordered
         ]
     }
+
+
+@router.get(
+    "/pricing.md",
+    response_class=PlainTextResponse,
+    summary="Live prices as Markdown, for AI agents",
+)
+def pricing_markdown():
+    """The pricing page as plain Markdown, served at cvisionapp.com/pricing.md.
+
+    The pricing page fills its prices in after it loads, so crawlers and agents
+    that do not run JS saw packs without a price, and llms.txt deliberately
+    quotes none. This is built per request from list_credit_packs - the same
+    packs and Lemon prices the checkout uses - so it cannot go stale.
+    """
+    analysis = settings.CREDIT_ANALYSIS + settings.CREDIT_UNLOCK
+    rows = []
+    for pack in list_credit_packs()["packs"]:
+        if pack["price"] is None:
+            price = "shown at checkout"
+        else:
+            price = f"{pack['price'] / 100:.2f} {pack['currency']}"
+        rows.append(f"| {pack['credits']} | {price} |")
+
+    lines = [
+        "# Pricing - CVision",
+        "",
+        "Source: https://www.cvisionapp.com/pricing - generated from the live prices on every request.",
+        "",
+        "No subscription and no trial to cancel. Credits are bought once and spent as needed;",
+        "purchased credits never expire. Payments are handled by Lemon Squeezy as merchant of record.",
+        "",
+        "## Free",
+        "",
+        "- Without an account: one free analysis per day at https://www.cvisionapp.com/try",
+        "  (score and the first suggestion).",
+        f"- A new account starts with {settings.CREDIT_SIGNUP} free credits, enough for one full analysis.",
+        f"- Every week an account earns {settings.CREDIT_WEEKLY} more credits while its balance is",
+        f"  under {settings.CREDIT_WEEKLY_CAP}.",
+        "",
+        "## What each action costs",
+        "",
+        f"- CV analysis, full report included: {analysis} credits",
+        f"- Job-description matching: {settings.CREDIT_MATCH} credits",
+        f"- AI cover letter: {settings.CREDIT_COVER_LETTER} credits",
+        "",
+        "## Credit packs",
+        "",
+        "| Credits | Price |",
+        "|---|---|",
+        *rows,
+        "",
+    ]
+    return PlainTextResponse(
+        "\n".join(lines),
+        media_type="text/markdown; charset=utf-8",
+        # Lemon prices are cached for an hour upstream anyway.
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
 
 
 @router.post("/lemon/create-checkout")

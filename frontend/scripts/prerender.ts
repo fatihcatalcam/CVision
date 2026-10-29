@@ -30,6 +30,8 @@ import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
 import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
 import { ATS_CV_HOWTO } from '../src/content/atsCvHowTo';
+import { DEVELOPER_NAME, DEVELOPER_URL } from '../src/constants/developer';
+import { articleSchema } from '../src/seo/articleSchema';
 import {
   SITE,
   URL_LANGUAGES,
@@ -57,12 +59,12 @@ const BUNDLES: Record<UrlLanguage, Bundle> = { tr, en: en as Bundle };
  * date printed in their own body.
  */
 const LASTMOD: Record<string, string> = {
-  '/': '2026-08-14',
+  '/': '2026-10-30',
   '/try': '2026-08-14',
   '/how-ats-works': '2026-08-14',
   '/ats-uyumlu-cv-nasil-hazirlanir': '2026-08-14',
   '/pricing': '2026-08-14',
-  '/about': '2026-08-14',
+  '/about': '2026-10-30',
   '/privacy': '2025-05-28',
   '/terms': '2025-05-28',
 };
@@ -138,9 +140,20 @@ function navHtml(b: Bundle, lang: UrlLanguage, self: string): string {
     .join(' · ');
 }
 
+/** A link to the developer, as the app's credit renders it - followed, new tab. */
+const developerLink = (text: string) =>
+  `<a href="${esc(DEVELOPER_URL)}" target="_blank" rel="noopener">${esc(text)}</a>`;
+
+/**
+ * The footer credit. The app renders it in React, which crawlers that do not
+ * run JS never see, so it is written into the static markup as well.
+ */
+const creditHtml = (b: Bundle) =>
+  `<p>${esc(b.common.developer)}: ${developerLink(DEVELOPER_NAME)}</p>`;
+
 /** Everything that goes inside <div id="root"> for a prerendered page. */
-const shell = (body: string, nav: string) =>
-  `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav></div>`;
+const shell = (body: string, nav: string, credit: string) =>
+  `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav>${credit}</div>`;
 
 /** The homepage: hero, how-it-works, features, and the full FAQ. */
 function homeBody(b: Bundle): string {
@@ -201,14 +214,24 @@ function guideBody(b: Bundle, lang: UrlLanguage): string {
   return h1(g.title) + p(g.definition) + sections + sectionsHtml(ATS_GUIDE_EXTRA[lang]) + h2(g.ctaTitle);
 }
 
+/** "CVision, <author>Fatih Çatalçam</author> ..." with the name as a link. */
+function builtByHtml(copy: string): string {
+  const m = /^(.*)<author>(.*)<\/author>(.*)$/.exec(copy);
+  if (!m) throw new Error(`about.builtBy has no <author> tag: ${copy}`);
+  return `<p>${esc(m[1])}${developerLink(m[2])}${esc(m[3])}</p>`;
+}
+
 function aboutBody(b: Bundle): string {
   const a = b.about as Record<string, unknown>;
   const parts = [h1(String(a.title))];
   // The About page stores its prose under numbered/limited keys; take every
   // string value that is not meta so the crawler sees the real copy.
   for (const [key, value] of Object.entries(a)) {
-    if (key.startsWith('meta') || key === 'title') continue;
+    if (key.startsWith('meta') || key === 'title' || key === 'builtBy') continue;
     if (typeof value === 'string' && value.length > 40) parts.push(p(value));
+    // Right under the definition, where the page shows it. It carries a
+    // <author> tag for the link, which p() would escape into visible text.
+    if (key === 'definition') parts.push(builtByHtml(String(a.builtBy)));
   }
   return parts.join('');
 }
@@ -372,6 +395,42 @@ export function faqJsonLd(lang: UrlLanguage = DEFAULT_URL_LANGUAGE): string {
 }
 
 /**
+ * The long-form guides: which i18n block holds their title, the data-page id
+ * ArticlePage uses for the same script, and when each first went live.
+ */
+const ARTICLES: Record<string, { ns: 'howAts' | 'atsCvHowTo'; slug: string; published: string }> = {
+  '/how-ats-works': { ns: 'howAts', slug: 'how-ats-works', published: '2026-07-14' },
+  '/ats-uyumlu-cv-nasil-hazirlanir': { ns: 'atsCvHowTo', slug: 'ats-cv-how-to', published: '2026-08-14' },
+};
+
+/**
+ * Article structured data for a guide, or null for any other page.
+ *
+ * ArticlePage only adds this once React has mounted, so crawlers that do not
+ * run JS never saw it - and it named no author and carried no dates. Here it
+ * is in the static <head>, with the author and with dateModified from the same
+ * LASTMOD the sitemap uses.
+ */
+export function articleJsonLd(routePath: string, lang: UrlLanguage): string | null {
+  const article = ARTICLES[routePath];
+  if (!article) return null;
+  const copy = BUNDLES[lang][article.ns] as Record<string, string>;
+  const json = JSON.stringify(
+    articleSchema({
+      headline: copy.title,
+      description: copy.metaDescription,
+      url: localizedUrl(routePath, lang),
+      lang,
+      published: article.published,
+      modified: LASTMOD[routePath],
+    }),
+    null,
+    2,
+  ).replace(/</g, '\\u003c');
+  return `<script type="application/ld+json" data-page="${article.slug}">\n${json}\n</script>`;
+}
+
+/**
  * The hreflang set for one path.
  *
  * Every page in the set must name every other AND itself, or Google discards
@@ -409,7 +468,7 @@ function replaceOnce(html: string, re: RegExp, next: string, label: string): str
   return sub(html, re, next);
 }
 
-function buildPage(
+export function buildPage(
   template: string,
   route: Route,
   lang: UrlLanguage,
@@ -453,10 +512,15 @@ function buildPage(
     html = replaceOnce(html, /<\/head>/, `${faqJsonLd(lang)}\n  </head>`, '</head>');
   }
 
+  const article = articleJsonLd(route.path, lang);
+  if (article) {
+    html = replaceOnce(html, /<\/head>/, `${article}\n  </head>`, '</head>');
+  }
+
   html = replaceOnce(
     html,
     /<div id="root"><\/div>/,
-    `<div id="root">${shell(route.body, navHtml(BUNDLES[lang], lang, route.path))}</div>${afterRoot}`,
+    `<div id="root">${shell(route.body, navHtml(BUNDLES[lang], lang, route.path), creditHtml(BUNDLES[lang]))}</div>${afterRoot}`,
     '#root container',
   );
 

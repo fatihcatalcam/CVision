@@ -5,6 +5,7 @@ import { ThemeToggle } from '../../components/ui/ThemeToggle';
 import { LanguageSwitcher } from '../../components/ui/LanguageSwitcher';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
+import { DeveloperCredit } from '../../components/ui/DeveloperCredit';
 
 export function PrivacyPage() {
   const { t } = useTranslation();
@@ -176,6 +177,7 @@ export function PrivacyPage() {
             <span>{t('common.copyright')}</span>
           </div>
         </div>
+        <DeveloperCredit className="max-w-3xl mx-auto px-6 pb-5 -mt-2 text-center sm:text-left" />
       </footer>
 
     </div>

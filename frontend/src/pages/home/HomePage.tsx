@@ -11,6 +11,7 @@ import { Collapse } from '../../components/ui/Collapse';
 import { HeroMockup } from '../../components/home/HeroMockup';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
+import { DeveloperCredit } from '../../components/ui/DeveloperCredit';
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -259,7 +260,9 @@ export function HomePage() {
       <footer className="border-t" style={{ borderColor: 'var(--color-card-border)', background: 'var(--color-card)' }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="font-mono font-medium tracking-tight text-sm" style={{ color: 'var(--color-foreground)' }}>CVision</span>
-          <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--color-muted)' }}>
+          {/* Wraps: seven links do not fit one line on a phone, and unwrapped
+              they pushed the whole page 66px wider than a 390px screen. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs" style={{ color: 'var(--color-muted)' }}>
             {/* A real <a>, not a Button. Every other route into /try is a
                 <button onClick={navigate}>, so the main conversion page had no
                 crawlable link anywhere on the site - Google only knew it from
@@ -274,6 +277,7 @@ export function HomePage() {
             <span>{t('common.copyright')}</span>
           </div>
         </div>
+        <DeveloperCredit className="max-w-5xl mx-auto px-6 pb-8 -mt-4 text-center sm:text-left" />
       </footer>
 
     </div>
