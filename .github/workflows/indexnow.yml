@@ -1,0 +1,36 @@
+name: IndexNow
+
+# Tells Bing which pages changed, after they are live.
+#
+# Vercel reports every production deploy back to GitHub as a deployment, so
+# this waits for that instead of running on push: on push the new pages are
+# not served yet, and the engines would read the old ones. See
+# frontend/scripts/indexnow.mjs for which pages it names.
+on:
+  deployment_status:
+  # Manual run, e.g. to submit every page after a site-wide change.
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Submit every page in the sitemap, not only recently changed ones
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Submit changed pages
+        working-directory: frontend
+        run: node scripts/indexnow.mjs ${{ inputs.all && '--all' || '' }}
