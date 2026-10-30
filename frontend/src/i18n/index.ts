@@ -17,9 +17,8 @@ import { splitLangPath, DEFAULT_URL_LANGUAGE } from './routes';
  * exact mismatch hreflang is meant to rule out.
  *
  * It returns undefined for the bare Turkish paths rather than 'tr', so those
- * keep falling through to the stored preference and the browser's languages -
- * the behaviour that was already there, and the only way /about can still show
- * a German visitor German.
+ * keep falling through to the stored preference and then bareNavigator below -
+ * the only way /about can still show a German visitor German.
  */
 const detector = new LanguageDetector();
 detector.addDetector({
@@ -28,6 +27,36 @@ detector.addDetector({
     if (typeof window === 'undefined') return undefined;
     const { lang } = splitLangPath(window.location.pathname);
     return lang === DEFAULT_URL_LANGUAGE ? undefined : lang;
+  },
+});
+
+/**
+ * The language for a bare (Turkish) path when nothing has been stored yet.
+ *
+ * The bare paths ARE the Turkish pages: prerendered in Turkish, and named as
+ * the Turkish alternates in every hreflang set. Following the browser's
+ * English here gave each of them an English title and description once the
+ * app mounted - and search engines render with an English browser and empty
+ * storage. Bing then reported /about, /pricing and the CV guide as duplicates
+ * of their own /en pages, title for title.
+ *
+ * English has URLs of its own, so it never takes over a Turkish page. Spanish,
+ * German and French have none (see routes.ts), so a visitor whose browser asks
+ * for one of them still gets it, as before.
+ */
+export function bareLanguage(browserLanguages: readonly string[]): 'tr' | 'es' | 'de' | 'fr' {
+  for (const tag of browserLanguages) {
+    const base = tag.split('-')[0].toLowerCase();
+    if (base === 'tr' || base === 'es' || base === 'de' || base === 'fr') return base;
+  }
+  return 'tr';
+}
+
+detector.addDetector({
+  name: 'bareNavigator',
+  lookup() {
+    if (typeof navigator === 'undefined') return undefined;
+    return bareLanguage(navigator.languages?.length ? navigator.languages : [navigator.language]);
   },
 });
 
@@ -45,7 +74,7 @@ i18n
     fallbackLng: 'en',
     defaultNS: 'translation',
     detection: {
-      order: ['urlPrefix', 'localStorage', 'navigator'],
+      order: ['urlPrefix', 'localStorage', 'bareNavigator'],
       caches: ['localStorage'],
       lookupLocalStorage: 'cvision_lang',
     },

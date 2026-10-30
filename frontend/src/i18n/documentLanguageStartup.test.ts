@@ -11,15 +11,18 @@ import { describe, it, expect, vi } from 'vitest';
  */
 
 // Runs before the import below. This is what the prerendered HTML ships.
+// A visitor who chose English earlier: on a bare path an English browser alone
+// no longer switches away from Turkish (see bareLanguage in ./index).
 vi.hoisted(() => {
   document.documentElement.lang = 'tr';
+  localStorage.setItem('cvision_lang', 'en');
 });
 
 describe('<html lang> on first load', () => {
   it('is corrected even though no change event ever fires', async () => {
     const { default: i18n } = await import('./index');
 
-    // jsdom reports an English navigator, so the detected language is not tr.
+    // The stored choice is English, so the detected language is not tr.
     expect(i18n.language.split('-')[0]).not.toBe('tr');
     // Nothing called changeLanguage: only the startup path can have fixed this.
     expect(document.documentElement.lang).toBe(i18n.language.split('-')[0]);
