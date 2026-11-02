@@ -10,7 +10,7 @@ prompt in the engine's verified findings. Pure functions — no OpenAI calls.
 
 from app.services.ai_service import (
     _build_user_prompt,
-    _smart_truncate,
+    _cv_excerpt,
     detect_language,
     language_name,
 )
@@ -70,7 +70,7 @@ def test_language_name_mapping():
     assert language_name("xx") == "English"  # unknown → safe default
 
 
-# ── _smart_truncate: experience anchors in all languages ────────────────────
+# ── _cv_excerpt: experience anchors in all languages ────────────────────
 
 def _long_cv(header: str, exp_marker: str) -> str:
     filler = "Lorem ipsum dolor sit amet. " * 100  # ~2800 chars of noise
@@ -82,14 +82,14 @@ def _long_cv(header: str, exp_marker: str) -> str:
 
 def test_truncate_keeps_german_experience_section():
     cv = _long_cv("Max Mustermann\nmax@example.com", "Berufserfahrung")
-    out = _smart_truncate(cv, max_chars=4000)
+    out, _ = _cv_excerpt(cv, max_chars=4000)
     assert "berufserfahrung" in out.lower()
     assert "[...]" in out  # anchored, not plain-truncated
 
 
 def test_truncate_keeps_spanish_experience_section():
     cv = _long_cv("Ana García\nana@example.com", "Experiencia laboral")
-    out = _smart_truncate(cv, max_chars=4000)
+    out, _ = _cv_excerpt(cv, max_chars=4000)
     assert "experiencia laboral" in out.lower()
 
 

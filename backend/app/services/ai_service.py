@@ -542,19 +542,48 @@ def language_name(lang: str) -> str:
     return LANGUAGE_NAMES.get(lang, "English")
 
 
-def _smart_truncate(cv_text: str, max_chars: int = 4000) -> str:
+# Characters of CV text sent with a prompt. A dense two-page CV is about 8,000.
+# This was 4,000 (3,000 for matching and cover letters), which cut an ordinary
+# one-page CV in two places mid-word; the model then reported the cuts as
+# flaws in the CV. 12,000 is what the skill and keyword calls already send.
+CV_PROMPT_MAX_CHARS = 12000
+
+# Goes before the CV in any prompt whose CV text was shortened. Without it the
+# model cannot tell our cut from the candidate's text and blames the CV.
+CV_SHORTENED_NOTE = (
+    "NOTE: This CV is longer than the text below, so we shortened it before it "
+    "reached you: lines are left out where you see [...], and the text stops "
+    "before the CV does. That is our cut, not the candidate's. Never describe "
+    "any part of the CV as truncated, cut off, incomplete or missing because "
+    "of it, and do not suggest adding sections that may sit in the part left out."
+)
+
+
+def _up_to_line(text: str, limit: int) -> str:
+    """The longest start of `text` within `limit` that ends at a line break,
+    or failing that at a space - never in the middle of a word."""
+    cut = text.rfind("\n", 0, limit + 1)
+    if cut <= 0:
+        cut = text.rfind(" ", 0, limit + 1)
+    return text[:cut] if cut > 0 else text[:limit]
+
+
+def _cv_excerpt(cv_text: str, max_chars: int = CV_PROMPT_MAX_CHARS) -> tuple[str, bool]:
     """
-    Smarter truncation than `cv_text[:N]`:
-    - Always keep the first 500 chars (header / contact / summary).
-    - If the experience section is found later, anchor the body there so that
-      middle-of-CV experience is not silently dropped.
-    - Falls back to plain truncation only if no anchor is found.
+    The CV text to put in a prompt, and whether it had to be shortened.
+
+    A CV within `max_chars` goes whole. A longer one keeps its opening lines
+    (header / contact / summary) and, if the experience section starts later,
+    continues from that heading so middle-of-CV experience is not silently
+    dropped. Every cut falls between lines. Callers add CV_SHORTENED_NOTE
+    when the second value is True.
     """
     if len(cv_text) <= max_chars:
-        return cv_text
+        return cv_text, False
 
-    header = cv_text[:500]
-    body_budget = max_chars - len(header) - 50  # 50 chars for the separator
+    header = _up_to_line(cv_text, 500)
+    separator = "\n\n[...]\n\n"
+    body_budget = max_chars - len(header) - len(separator)
     lower = cv_text.lower()
 
     # Order matters: longer/more-specific markers first so that "work experience"
@@ -572,13 +601,21 @@ def _smart_truncate(cv_text: str, max_chars: int = 4000) -> str:
     ]
     for marker in anchor_markers:
         idx = lower.find(marker)
-        if idx > 500:
+        if idx > len(header):
             # Back up to the start of that line so the section heading is intact.
             line_start = cv_text.rfind("\n", 0, idx) + 1
-            anchor = line_start if line_start > 500 else idx
-            return f"{header}\n\n[...]\n\n{cv_text[anchor:anchor + body_budget]}"
+            body = _up_to_line(cv_text[line_start:], body_budget)
+            return f"{header}{separator}{body}", True
 
-    return cv_text[:max_chars]
+    return _up_to_line(cv_text, max_chars), True
+
+
+def _cv_block(cv_text: str, label: str) -> str:
+    """The CV as it goes into a prompt: `label`, the quoted text, and the
+    shortening note first when the text had to be cut."""
+    excerpt, shortened = _cv_excerpt(cv_text)
+    note = f"{CV_SHORTENED_NOTE}\n\n" if shortened else ""
+    return f"{note}{label}:\n\"\"\"\n{excerpt}\n\"\"\""
 
 
 def _build_system_prompt(target_domain: str | None) -> str:
@@ -603,7 +640,6 @@ def _build_user_prompt(
     missing_sections: list[str] | None = None,
 ) -> str:
     """Dynamic user prompt: CV body + scores + matched roles + existing issues."""
-    cv_preview = _smart_truncate(cv_text, max_chars=4000)
 
     score_context = (
         f"Overall: {scores.get('overall_score', 0):.0f}%, "
@@ -636,7 +672,7 @@ def _build_user_prompt(
 
     # Ground the model in what the deterministic engine actually found, so
     # suggestions reference verified facts instead of re-deriving (or
-    # hallucinating) them from the truncated CV text.
+    # hallucinating) them from the CV text.
     findings_lines: list[str] = []
     if extracted_skills:
         findings_lines.append(
@@ -655,7 +691,7 @@ def _build_user_prompt(
     return (
         f"Analyze this CV and produce the structured output.\n\n"
         f"CV LANGUAGE: {lang_name} (write all natural-language fields in {lang_name})\n\n"
-        f"CV TEXT:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
+        f"{_cv_block(cv_text, 'CV TEXT')}\n\n"
         f"SCORING DATA:\n{score_context}\n"
         f"{role_context}\n\n"
         f"{findings_context}"
@@ -1074,12 +1110,11 @@ def ai_match_cv_jd(cv_text: str, jd_text: str) -> dict:
 
     lang = detect_language(cv_text)
     lang_name = language_name(lang)
-    cv_preview = _smart_truncate(cv_text, max_chars=3000)
     jd_preview = jd_text[:2000]
 
     user_prompt = (
         f"CV LANGUAGE: {lang_name} — write summary, descriptions and suggestions in {lang_name}.\n\n"
-        f"CV TEXT:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
+        f"{_cv_block(cv_text, 'CV TEXT')}\n\n"
         f"JOB DESCRIPTION:\n\"\"\"\n{jd_preview}\n\"\"\""
     )
 
@@ -1156,12 +1191,11 @@ def ai_generate_cover_letter(cv_text: str, jd_text: str) -> str | None:
 
     lang = detect_language(cv_text)
     lang_name = language_name(lang)
-    cv_preview = _smart_truncate(cv_text, max_chars=3000)
     jd_preview = jd_text[:2000]
 
     user_prompt = (
         f"Write a cover letter in {lang_name}.\n\n"
-        f"CV:\n\"\"\"\n{cv_preview}\n\"\"\"\n\n"
+        f"{_cv_block(cv_text, 'CV')}\n\n"
         f"JOB DESCRIPTION:\n\"\"\"\n{jd_preview}\n\"\"\"\n\n"
         f"Output the cover letter text ONLY. No labels, no headers."
     )
