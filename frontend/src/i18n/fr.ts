@@ -572,7 +572,7 @@ const fr = {
     title: "Voici comment l'ATS lit votre CV",
     findingsCount: "{{count}} problème détecté",
     clean: "L'ATS lit votre CV sans problème",
-    cleanNote: "Aucun dégât de mise en page — votre contenu survit à l'analyse automatique.",
+    cleanNote: "Aucun dégât de mise en page. Votre contenu survit à l'analyse automatique.",
     yourCv: "VOTRE CV",
     atsSees: "CE QUE VOIT L'ATS",
     plainText: "Votre fichier est en texte brut — sûr pour le scanner par définition.",

@@ -575,7 +575,7 @@ const en = {
     title: "How the ATS reads your CV",
     findingsCount: "{{count}} issue found",
     clean: "The ATS reads your CV cleanly",
-    cleanNote: "No layout damage detected — your content survives machine parsing.",
+    cleanNote: "No layout damage detected. Your content survives machine parsing.",
     yourCv: "YOUR CV",
     atsSees: "WHAT THE ATS SEES",
     plainText: "Your file is plain text — scanner-safe by definition.",

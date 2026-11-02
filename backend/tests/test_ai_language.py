@@ -123,3 +123,16 @@ def test_user_prompt_omits_findings_block_when_empty():
         lang_name="English",
     )
     assert "ENGINE FINDINGS" not in prompt
+
+
+# ── Voice: the report talks to its reader ───────────────────────────────────
+
+def test_report_addresses_the_reader_as_you_and_assumes_no_gender():
+    # The executive summary once described the user as "him" while every other
+    # line said "you". The reader is the CV's owner.
+    from app.services.ai_service import CVAnalysis, OUTPUT_RULES
+
+    assert 'address them directly as "you"' in OUTPUT_RULES
+    assert "never assume their gender" in OUTPUT_RULES
+    summary = CVAnalysis.model_fields["executive_summary"].description
+    assert "'you'" in summary and "'he'" in summary

@@ -583,7 +583,7 @@ const tr = {
     title: "ATS, CV'ni böyle okuyor",
     findingsCount: "{{count}} bulgu",
     clean: "ATS, CV'ni sorunsuz okuyor",
-    cleanNote: "Sayfa düzeninde hasar yok — içeriğin makine taramasından sağlam çıkıyor.",
+    cleanNote: "Sayfa düzeninde hasar yok. İçeriğin makine taramasından sağlam çıkıyor.",
     yourCv: "SENİN CV'N",
     atsSees: "ATS'İN GÖRDÜĞÜ",
     plainText: "Dosyan düz metin — tarama açısından zaten güvenli.",

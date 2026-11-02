@@ -572,7 +572,7 @@ const es = {
     title: "Así lee el ATS tu currículum",
     findingsCount: "{{count}} problema detectado",
     clean: "El ATS lee tu currículum sin problemas",
-    cleanNote: "Sin daños de diseño — tu contenido sobrevive al análisis automático.",
+    cleanNote: "Sin daños de diseño. Tu contenido sobrevive al análisis automático.",
     yourCv: "TU CV",
     atsSees: "LO QUE VE EL ATS",
     plainText: "Tu archivo es texto plano — seguro para el escáner por definición.",

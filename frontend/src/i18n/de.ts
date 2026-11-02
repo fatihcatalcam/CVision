@@ -572,7 +572,7 @@ const de = {
     title: "So liest das ATS deinen Lebenslauf",
     findingsCount: "{{count}} Problem gefunden",
     clean: "Das ATS liest deinen Lebenslauf sauber",
-    cleanNote: "Keine Layout-Schäden erkannt — dein Inhalt übersteht das maschinelle Auslesen.",
+    cleanNote: "Keine Layout-Schäden erkannt. Dein Inhalt übersteht das maschinelle Auslesen.",
     yourCv: "DEIN LEBENSLAUF",
     atsSees: "WAS DAS ATS SIEHT",
     plainText: "Deine Datei ist reiner Text — per Definition scanner-sicher.",

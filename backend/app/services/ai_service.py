@@ -74,7 +74,10 @@ class CVAnalysis(BaseModel):
     """Structured output schema for the full CV analysis call."""
 
     executive_summary: str = Field(
-        description="2-3 sentence honest executive summary of the CV's overall quality."
+        description=(
+            "2-3 sentence honest executive summary of the CV's overall quality, "
+            "written to the CV's owner as 'you' - never 'he', 'she' or 'the candidate'."
+        )
     )
     strengths: list[str] = Field(description="Exactly 3 specific strengths.")
     weaknesses: list[str] = Field(description="Exactly 3 specific weaknesses.")
@@ -344,6 +347,9 @@ OUTPUT_RULES = """OUTPUT RULES:
 7. Strengths and weaknesses must each be one tight sentence under 25 words.
 8. Write executive_summary, strengths, weaknesses, and suggestion messages in
    the SAME language as the CV (detected language is provided in the user prompt).
+   The person reading them is the CV's owner: address them directly as "you"
+   (in Turkish the informal "sen"), never in the third person ("he", "she",
+   "him", "her", "the candidate"), and never assume their gender.
 9. Set detected_domain to the professional field this CV actually belongs to,
    judged from its content (NOT from the user's selection). Choose EXACTLY one:
    Software Engineering; Data & Analytics; Industrial Engineering; Mechanical
