@@ -14,7 +14,6 @@ import { MobileCreditBar } from '../../components/dashboard/MobileCreditBar';
 import { RecentAnalysesList } from '../../components/dashboard/RecentAnalysesList';
 import { CVUploader } from '../../components/cv/CVUploader';
 import { UploadModal } from '../../components/dashboard/UploadModal';
-import { WEEKLY_CREDITS, WEEKLY_CREDIT_CAP } from '../../constants/credits';
 
 interface DashboardSummary {
   total_cvs: number;
@@ -202,8 +201,6 @@ export function DashboardPage() {
           <div className="flex flex-col gap-4">
             <CreditCard
               credits={user?.credits ?? 0}
-              weekly={WEEKLY_CREDITS}
-              cap={WEEKLY_CREDIT_CAP}
             />
           </div>
         </div>
@@ -235,8 +232,6 @@ export function DashboardPage() {
               )}
               <CreditCard
                 credits={user?.credits ?? 0}
-                weekly={WEEKLY_CREDITS}
-                cap={WEEKLY_CREDIT_CAP}
               />
             </div>
           </div>

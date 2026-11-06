@@ -310,20 +310,30 @@ def test_admin_endpoints_survive_ownerless_analyses(client, db_session, make_use
     assert activity.status_code == 200
 
 
-def test_claimed_cv_is_fully_unlocked(client, db_session, make_user, auth_headers):
-    """After claim, the owner's /analysis results are unlocked (first analysis)."""
+def _anon_cv(db_session, token):
     cv = CV(
         user_id=None, original_filename="u.pdf", stored_filename="u-stored.pdf",
         file_path="/nonexistent/u-stored.pdf", file_type="pdf", file_size=10,
-        status="completed", session_token="tok_unlock", client_ip="203.0.113.30",
+        status="completed", session_token=token, client_ip="203.0.113.30",
         extracted_text="cv text",
     )
     db_session.add(cv)
     db_session.commit()
     db_session.refresh(cv)
     _make_analysis_with_ai(db_session, cv)
+    return cv
 
+
+def test_claimed_cv_is_fully_unlocked_out_of_the_signup_credits(client, db_session, make_user, auth_headers):
+    """After claim the whole report is open - paid for with CREDIT_UNLOCK out of
+    the opening balance, not handed over free on top of it."""
+    from app.config import settings
+    from app.services.credit_service import CreditService
+
+    _anon_cv(db_session, "tok_unlock")
     user = make_user(email="unlock@test.com")
+    CreditService.grant(db_session, user, settings.CREDIT_SIGNUP, "grant_signup")
+
     claim = client.post("/public/claim", json={"token": "tok_unlock"}, headers=auth_headers(user))
     assert claim.status_code == 200
     cv_hashid = claim.json()["cv_id"]
@@ -331,9 +341,28 @@ def test_claimed_cv_is_fully_unlocked(client, db_session, make_user, auth_header
     resp = client.get(f"/analysis/{cv_hashid}/results", headers=auth_headers(user))
     assert resp.status_code == 200
     body = resp.json()
-    # Every AI suggestion is unlocked now (first analysis for this user).
     assert all(s["is_locked"] is False for s in body["ai_suggestions"])
     assert body["is_summary_locked"] is False
+
+    db_session.refresh(user)
+    assert user.credits == settings.CREDIT_SIGNUP - settings.CREDIT_UNLOCK
+
+
+def test_a_claimed_report_the_balance_cannot_cover_stays_locked(client, db_session, make_user, auth_headers):
+    """No credits, no free report: it stays locked behind its unlock button and
+    nothing is charged."""
+    _anon_cv(db_session, "tok_broke")
+    user = make_user(email="broke@test.com")
+
+    claim = client.post("/public/claim", json={"token": "tok_broke"}, headers=auth_headers(user))
+    assert claim.status_code == 200
+
+    body = client.get(f"/analysis/{claim.json()['cv_id']}/results", headers=auth_headers(user)).json()
+    assert body["is_summary_locked"] is True
+    assert any(s["is_locked"] for s in body["ai_suggestions"])
+
+    db_session.refresh(user)
+    assert user.credits == 0
 
 
 @pytest.mark.parametrize("status", ["failed_no_text", "failed"])

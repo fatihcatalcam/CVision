@@ -6,10 +6,6 @@ import { FULL_ANALYSIS_COST } from '../../constants/credits';
 
 interface CreditCardProps {
   credits: number;
-  /** Credits added each week while the balance is under the cap. */
-  weekly: number;
-  /** Balance at or above which the weekly grant pauses. */
-  cap: number;
 }
 
 /**
@@ -19,7 +15,7 @@ interface CreditCardProps {
  * without saying what it buys. Hence the price line rather than a progress bar -
  * there is no longer a denominator to fill.
  */
-export function CreditCard({ credits, weekly, cap }: CreditCardProps) {
+export function CreditCard({ credits }: CreditCardProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { onSale } = useCreditPacks();
@@ -45,7 +41,7 @@ export function CreditCard({ credits, weekly, cap }: CreditCardProps) {
       </div>
 
       <p className="text-[11px] leading-relaxed text-[#6B6A65] dark:text-[#908d89]">
-        {credits >= cap ? t('credits.weeklyPaused', { cap }) : t('credits.weekly', { weekly, analysis: FULL_ANALYSIS_COST })}
+        {t('credits.analysisPrice', { analysis: FULL_ANALYSIS_COST })}
       </p>
 
       {low && (

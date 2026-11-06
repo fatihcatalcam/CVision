@@ -144,6 +144,10 @@ class CreditService:
         clamping to an exact total buys nothing and makes the rule harder to say
         out loud.
         """
+        # Switched off (CREDIT_WEEKLY = 0): nothing to hand out.
+        if settings.CREDIT_WEEKLY <= 0:
+            return False
+
         now = datetime.now(timezone.utc)
         last = user.credits_granted_at
         if last is not None and last.tzinfo is None:

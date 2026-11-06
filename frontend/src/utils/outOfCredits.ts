@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { track, type PaidAction } from './track';
 
 /**
  * The moment someone runs out of credits is the only moment they are ready to
@@ -18,7 +19,9 @@ export function isOutOfCredits(err: unknown): boolean {
   return (err as { response?: { status?: number } } | null)?.response?.status === 402;
 }
 
-type Listener = (cost: number) => void;
+export type OutOfCredits = { cost: number; action: PaidAction };
+
+type Listener = (refusal: OutOfCredits) => void;
 
 let listener: Listener | null = null;
 
@@ -35,7 +38,10 @@ export function onOutOfCredits(fn: Listener): () => void {
 }
 
 /**
- * Raise the out-of-credits dialog for an action that costs `cost` credits.
+ * Raise the out-of-credits dialog for `action`, which costs `cost` credits.
+ *
+ * Also the one place the refusal is counted in GA4 (out_of_credits_shown), so
+ * every caller is measured the same way, dialog or fallback.
  *
  * Imperative on purpose: this is called from catch blocks in four different
  * components, and threading a hook through each of them (including one that
@@ -45,9 +51,10 @@ export function onOutOfCredits(fn: Listener): () => void {
  * being fixed, so if the dialog is somehow not mounted the user still gets the
  * sentence - through the i18n singleton, since there is no component in scope.
  */
-export function notifyOutOfCredits(cost: number): void {
+export function notifyOutOfCredits(cost: number, action: PaidAction): void {
+  track('out_of_credits_shown', { action, cost });
   if (listener) {
-    listener(cost);
+    listener({ cost, action });
     return;
   }
   // Imported here rather than at the top of the file: pulling in the i18n

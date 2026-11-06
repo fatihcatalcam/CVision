@@ -103,21 +103,35 @@ class AnonymousService:
         cv.session_token = None
         cv.client_ip = None
 
-        # Hand over the full report with the CV. The welcome perk is applied at
-        # analysis time, and an anonymous analysis has no owner then, so a
-        # claimed report would otherwise arrive locked - breaking the funnel this
-        # whole flow exists for: try it, sign up, read the answer. Applied only
-        # when the account has nothing else, so claiming cannot be used to unlock
-        # a second report for free.
+        # Hand over the full report with the CV - try it, sign up, read the
+        # answer is the funnel this flow exists for - paid for out of the
+        # signup credits, like any other report.
+        #
+        # It used to be opened free, on top of the signup credits, so a /try
+        # visitor who signed up held two full reports on day one. With 412
+        # users and no sale, that free supply was the reason nobody ever needed
+        # to buy. Now the unlock costs CREDIT_UNLOCK and leaves the rest of the
+        # opening balance, and a report the balance cannot cover stays locked
+        # with its unlock button, as everywhere else.
+        #
+        # Still only for an account with nothing else, as before.
+        from app.config import settings
         from app.models.analysis import AnalysisResult
         from app.services.analysis_service import AnalysisService
+        from app.services.credit_service import CreditService, InsufficientCredits
 
         if AnalysisService._is_users_first_analysis(cv, db):
             analysis = (
                 db.query(AnalysisResult).filter(AnalysisResult.cv_id == cv.id).first()
             )
-            if analysis is not None:
-                analysis.is_unlocked = True
+            if analysis is not None and not analysis.is_unlocked:
+                try:
+                    CreditService.spend(
+                        db, user, settings.CREDIT_UNLOCK, "spend_unlock", ref_id=str(cv.id),
+                    )
+                    analysis.is_unlocked = True
+                except InsufficientCredits:
+                    pass
 
         db.commit()
         db.refresh(cv)

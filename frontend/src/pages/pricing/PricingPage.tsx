@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
-import { useCreditPacks, formatPrice } from '../../hooks/useCreditPacks';
-import api from '../../services/api';
+import { useCreditPacks, formatPrice, type CreditPack } from '../../hooks/useCreditPacks';
+import { startCheckout } from '../../utils/checkout';
 import { ArrowLeft, Loader2, Shield, Lock } from 'lucide-react';
 import {
   FULL_ANALYSIS_COST, FULL_APPLICATION_COST, MATCH_COST, COVER_LETTER_COST,
@@ -47,7 +47,7 @@ export function PricingPage() {
   const [loadingVariant, setLoadingVariant] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const buy = async (variantId: string) => {
+  const buy = async (pack: CreditPack) => {
     // No session, no checkout. Sending them to the API anyway would answer 401
     // and print an error under a price they just decided they wanted, which is
     // the worst possible moment to stall. Signup is the actual next step.
@@ -56,10 +56,9 @@ export function PricingPage() {
       return;
     }
     setError(null);
-    setLoadingVariant(variantId);
+    setLoadingVariant(pack.variant_id);
     try {
-      const res = await api.post('/payment/lemon/create-checkout', { variant_id: variantId });
-      window.location.href = res.data.checkoutUrl;
+      await startCheckout(pack, 'pricing');
     } catch (err: unknown) {
       setError((err as any)?.response?.data?.detail || t('settings.pricing.errorInit'));
       setLoadingVariant(null);
@@ -208,7 +207,7 @@ export function PricingPage() {
                   </p>
 
                   <button
-                    onClick={() => buy(pack.variant_id)}
+                    onClick={() => buy(pack)}
                     disabled={loadingVariant !== null}
                     className={`mt-auto w-full py-2.5 rounded-lg text-sm font-bold disabled:opacity-60 active:scale-[0.98] transition-all flex items-center justify-center gap-2 ${
                       featured
@@ -233,7 +232,7 @@ export function PricingPage() {
         {/* A highlighted "you can keep going without buying" box used to sit
             here, between the packs and everything else - the page that sells
             credits arguing against buying them at the moment of decision. The
-            weekly credits are still explained below, where the credit model
+            free credits are still explained below, where the credit model
             is; this spot is for the guarantees that make buying feel safe. */}
         <div className="mt-10 flex items-center justify-center gap-6 text-xs text-[#6B6A65] dark:text-[#908d89]">
           <span className="flex items-center gap-1.5">

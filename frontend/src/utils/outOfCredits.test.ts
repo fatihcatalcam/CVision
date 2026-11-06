@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const toastError = vi.fn();
 vi.mock('react-hot-toast', () => ({ default: { error: (...a: unknown[]) => toastError(...a) } }));
@@ -8,8 +8,16 @@ vi.mock('../i18n', () => ({
 
 import { isOutOfCredits, notifyOutOfCredits, onOutOfCredits } from './outOfCredits';
 
+const gtag = vi.fn();
+
 beforeEach(() => {
   toastError.mockReset();
+  gtag.mockReset();
+  window.gtag = gtag;
+});
+
+afterEach(() => {
+  delete window.gtag;
 });
 
 describe('isOutOfCredits', () => {
@@ -26,14 +34,25 @@ describe('isOutOfCredits', () => {
 });
 
 describe('notifyOutOfCredits', () => {
-  it('hands the cost to the mounted dialog', () => {
+  it('hands the cost and the refused action to the mounted dialog', () => {
     const shown = vi.fn();
     const stop = onOutOfCredits(shown);
 
-    notifyOutOfCredits(2);
+    notifyOutOfCredits(2, 'cover_letter');
 
-    expect(shown).toHaveBeenCalledWith(2);
+    expect(shown).toHaveBeenCalledWith({ cost: 2, action: 'cover_letter' });
     expect(toastError).not.toHaveBeenCalled();
+    stop();
+  });
+
+  it('counts every refusal in GA4, with what was refused', () => {
+    // The funnel question this answers: do people hit the limit at all, and
+    // on what? It is counted here, once, so every caller is measured alike.
+    const stop = onOutOfCredits(vi.fn());
+
+    notifyOutOfCredits(2, 'match');
+
+    expect(gtag).toHaveBeenCalledWith('event', 'out_of_credits_shown', { action: 'match', cost: 2 });
     stop();
   });
 
@@ -41,7 +60,7 @@ describe('notifyOutOfCredits', () => {
     // Silence here is the exact bug this whole change exists to remove, so the
     // fallback matters even though it should never run. It loads i18n lazily,
     // hence the await.
-    notifyOutOfCredits(3);
+    notifyOutOfCredits(3, 'analysis');
 
     await vi.waitFor(() => expect(toastError).toHaveBeenCalledWith('credits.notEnough:3'));
   });
@@ -50,9 +69,19 @@ describe('notifyOutOfCredits', () => {
     const shown = vi.fn();
     onOutOfCredits(shown)();
 
-    notifyOutOfCredits(1);
+    notifyOutOfCredits(1, 'analysis');
 
     expect(shown).not.toHaveBeenCalled();
     await vi.waitFor(() => expect(toastError).toHaveBeenCalled());
+  });
+
+  it('works when GA4 is blocked', () => {
+    delete window.gtag;
+    const shown = vi.fn();
+    const stop = onOutOfCredits(shown);
+
+    expect(() => notifyOutOfCredits(2, 'unlock')).not.toThrow();
+    expect(shown).toHaveBeenCalled();
+    stop();
   });
 });

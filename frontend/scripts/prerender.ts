@@ -67,10 +67,10 @@ const LASTMOD: Record<string, string> = {
   '/how-ats-works': '2026-08-14',
   '/ats-uyumlu-cv-nasil-hazirlanir': '2026-11-06',
   '/on-yazi-ornekleri': '2026-11-06',
-  '/pricing': '2026-08-14',
-  '/about': '2026-10-30',
+  '/pricing': '2026-11-06',
+  '/about': '2026-11-06',
   '/privacy': '2025-05-28',
-  '/terms': '2025-05-28',
+  '/terms': '2026-11-06',
 };
 
 type Route = {

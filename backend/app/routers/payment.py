@@ -394,8 +394,14 @@ def pricing_markdown():
         "- Without an account: one free analysis per day at https://www.cvisionapp.com/try",
         "  (score and the first suggestion).",
         f"- A new account starts with {settings.CREDIT_SIGNUP} free credits, enough for one full analysis.",
-        f"- Every week an account earns {settings.CREDIT_WEEKLY} more credits while its balance is",
-        f"  under {settings.CREDIT_WEEKLY_CAP}.",
+        *(
+            [
+                f"- Every week an account earns {settings.CREDIT_WEEKLY} more credits while its balance is",
+                f"  under {settings.CREDIT_WEEKLY_CAP}.",
+            ]
+            if settings.CREDIT_WEEKLY > 0
+            else []
+        ),
         "",
         "## What each action costs",
         "",
@@ -477,6 +483,12 @@ def lemon_create_checkout(
         logger.error(f"LemonSqueezy error: {e}")
         raise HTTPException(status_code=502, detail="Payment system error.")
 
+    # The one record that someone pressed Buy: Lemon only reports finished
+    # orders, so without this a checkout opened and abandoned left no trace.
+    logger.info(
+        "Checkout opened: user %s, variant %s (%d credits)",
+        current_user.id, body.variant_id, packs[body.variant_id],
+    )
     return {"checkoutUrl": data["data"]["attributes"]["url"]}
 
 

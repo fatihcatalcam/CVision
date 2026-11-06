@@ -424,7 +424,7 @@ const fr = {
       q2: 'Comment CVision note-t-il mon CV ?',
       a2: "Tu télécharges un fichier PDF et l'IA le lit en quelques secondes. Elle note la compatibilité ATS, la couverture des mots-clés, la complétude et l'expérience, puis explique chaque score pour que tu saches quoi changer.",
       q3: 'Combien coûte CVision ?',
-      a3: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Vous recevez 3 crédits à l'inscription, puis 2 de plus chaque semaine tant que votre solde est bas. Une analyse de CV coûte 3 crédits et inclut le rapport complet ; la comparaison avec une offre et la lettre de motivation coûtent 2 chacune. Des packs de crédits sont disponibles sur la page tarifs.",
+      a3: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Vous recevez 3 crédits à l'inscription, de quoi faire une analyse complète. Une analyse de CV coûte 3 crédits et inclut le rapport complet ; la comparaison avec une offre et la lettre de motivation coûtent 2 chacune. Des packs de crédits sont disponibles sur la page tarifs.",
       q4: "Combien de temps dure une analyse de CV ?",
       a4: 'Moins de 30 secondes. Tu télécharges ton CV et le score et les retours sont générés automatiquement, sans revue manuelle ni attente.',
       q5: 'Fonctionnez-vous dans mon pays ?',
@@ -455,7 +455,7 @@ const fr = {
     s3Heading: 'Ce qui différencie CVision',
     s3Body: "La plupart des vérificateurs de CV s'arrêtent à un score. CVision te dit exactement quoi corriger et réécrit tes puces avec l'IA, pour que tu puisses agir en quelques secondes au lieu de deviner. Il boucle aussi la boucle que la plupart des outils sautent : compare ton CV à une vraie offre d'emploi, vois les mots-clés manquants et génère une lettre de motivation sur mesure — le tout au même endroit.",
     s4Heading: 'Tarifs',
-    s4Body: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Un nouveau compte reçoit 3 crédits, soit exactement une analyse complète, puis 2 de plus chaque semaine tant que le solde reste bas. Une analyse de CV coûte 3 crédits et inclut le rapport complet, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Des packs de crédits sont disponibles sur la page tarifs. Aucune carte n'est requise pour commencer.",
+    s4Body: "Il n'y a pas d'abonnement : vous ne payez que ce que vous utilisez. Un nouveau compte reçoit 3 crédits, soit exactement une analyse complète. Une analyse de CV coûte 3 crédits et inclut le rapport complet, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Des packs de crédits sont disponibles sur la page tarifs. Aucune carte n'est requise pour commencer.",
     s5Heading: 'Disponibilité et langues',
     s5Body: "CVision fonctionne entièrement en ligne et est disponible dans tous les pays. L'interface est proposée en anglais, turc, espagnol, allemand et français. Les paiements sont traités en toute sécurité par Lemon Squeezy en tant que commerçant officiel. Opéré depuis la Turquie, au service de clients dans le monde entier.",
     ctaTitle: 'Prêt à renforcer ton CV ?',
@@ -516,13 +516,13 @@ const fr = {
     saving: '{{percent}}% d\'economie',
     buy: 'Acheter',
     notOnSale: 'Les packs de crédits ne sont pas encore en vente.',
-    earnInstead: 'Vous recevez toujours des crédits gratuits chaque semaine, et vous pouvez en gagner en invitant quelqu\'un.',
+    earnInstead: 'Vous pouvez aussi gagner des crédits gratuits en invitant quelqu\'un.',
     noExpiry: 'Les crédits achetés n\'expirent jamais',
     signUpToBuy: 'S\'inscrire pour acheter',
     seo: {
       h2a: 'Combien coûte CVision et comment fonctionnent les crédits ?',
       p1: "Il n'y a pas d'abonnement. Vous achetez des crédits et ne dépensez que ce que vous utilisez. Une analyse de CV coûte 3 crédits et inclut le rapport complet, et la comparaison avec une offre ou une lettre de motivation 2 chacune. Les crédits achetés n'expirent jamais : ils sont encore là pour votre prochaine recherche d'emploi.",
-      p2: "Vous recevez 3 crédits à l'inscription, soit exactement une analyse. Tant que votre solde reste bas, 2 crédits s'ajoutent chaque semaine : vous pouvez donc continuer à analyser votre CV sans rien payer.",
+      p2: "Vous recevez 3 crédits à l'inscription, soit exactement une analyse : vous voyez le rapport complet avant de payer quoi que ce soit.",
       h2b: "Pourquoi pas d'abonnement ?",
       p3: "Chercher un emploi est un besoin temporaire. Un abonnement vous demande de vous engager sur quelque chose dont vous espérez ne plus avoir besoin dans six semaines ; un pack s'achète une fois, s'épuise, et se rachète la fois suivante. Les paiements sont gérés par Lemon Squeezy en tant que revendeur officiel, et vos données bancaires ne sont jamais stockées sur nos serveurs.",
     },
@@ -533,14 +533,34 @@ const fr = {
     unit: 'crédits',
     cost: '{{cost}} crédits',
     costSuffix: '· {{cost}} crédits',
-    weekly: '+{{weekly}} crédits chaque semaine. Une analyse de CV coûte {{analysis}}.',
-    weeklyPaused: 'Les crédits hebdomadaires sont en pause tant que votre solde atteint {{cap}} ou plus.',
-    low: 'Votre solde baisse. Invitez quelqu\'un pour gagner des crédits gratuits.',
+    analysisPrice: "Une analyse de CV coûte {{analysis}} crédits.",    low: 'Votre solde baisse. Invitez quelqu\'un pour gagner des crédits gratuits.',
     inviteCta: 'Inviter un ami',
     buyCta: 'Acheter des crédits',
     notEnough_one: 'Cette action nécessite {{count}} crédit et votre solde est insuffisant.',
     notEnough_other: 'Cette action nécessite {{count}} crédits et votre solde est insuffisant.',
     notEnoughTitle: 'Crédits insuffisants',
+
+    // Titles per refused action, and the offer under them.
+
+    paywall: {
+
+      analysis: "Crédits insuffisants pour une nouvelle analyse",
+
+      match: "Crédits insuffisants pour comparer avec cette offre",
+
+      cover_letter: "Crédits insuffisants pour une lettre de motivation pour cette offre",
+
+      unlock: "Crédits insuffisants pour ouvrir le rapport complet",
+
+      buyPack: "Acheter {{credits}} crédits · {{price}}",
+
+      buyPackNoPrice: "Acheter {{credits}} crédits",
+
+      otherPacks: "Autres packs",
+
+      error: "Le paiement ne s'est pas ouvert. Réessayez dans un instant.",
+
+    },
   },
   imagePdf: {
     title: 'Ce CV ne contient aucun texte lisible',
@@ -659,7 +679,7 @@ const fr = {
 
     terms: {
       title: "Conditions d'utilisation",
-      lastUpdated: 'Dernière mise à jour : 28 mai 2025',
+      lastUpdated: 'Dernière mise à jour : 6 novembre 2026',
       s1Heading: '1. Acceptation',
       s1Body: "En accédant à CVision ou en utilisant nos services, tu acceptes ces conditions d'utilisation. Si tu n'acceptes pas ces conditions, merci de ne pas utiliser le service.",
       s2Heading: '2. Description du service',
@@ -680,7 +700,7 @@ const fr = {
       s5Heading: '5. Propriété des données de CV',
       s5Body: "Les fichiers de CV et le contenu que tu télécharges t'appartiennent. Tu accordes à CVision uniquement la licence limitée nécessaire pour fournir le service. Le contenu de ton CV n'est pas utilisé pour la publicité, les données d'entraînement ou tout autre objectif. Lorsque tu supprimes ton compte, toutes tes données sont définitivement supprimées sous 30 jours.",
       s6Heading: '6. Tarification et crédits',
-      s6Body1: "CVision fonctionne avec des crédits ; il n'y a pas d'abonnement récurrent. Chaque nouveau compte reçoit des crédits gratuits, et d'autres sont ajoutés chaque semaine tant que le solde reste sous une limite définie. Les actions telles qu'une analyse, une comparaison avec une offre d'emploi ou une lettre de motivation générée déduisent des crédits de votre solde ; le coût actuel de chacune est publié sur la page tarifs.",
+      s6Body1: "CVision fonctionne avec des crédits ; il n'y a pas d'abonnement récurrent. Chaque nouveau compte reçoit des crédits gratuits. Les actions telles qu'une analyse, une comparaison avec une offre d'emploi ou une lettre de motivation générée déduisent des crédits de votre solde ; le coût actuel de chacune est publié sur la page tarifs.",
       s6Body2: "Les crédits supplémentaires sont vendus en packs à paiement unique. Les paiements sont traités en toute sécurité via Lemon Squeezy, qui agit en tant que revendeur officiel ; vos données bancaires ne sont jamais stockées sur nos serveurs. Comme il n'existe pas d'abonnement récurrent, il n'y a rien à annuler. Les crédits achetés n'expirent pas. Les demandes de remboursement sont traitées par Lemon Squeezy en tant que revendeur officiel, selon ses propres conditions ; vous pouvez également nous écrire à notre adresse d'assistance.",
       s7Heading: "7. Résultats d'analyse IA",
       s7Body: "Les résultats d'analyse, scores, suggestions de carrière et recommandations d'amélioration produits par CVision sont générés automatiquement par des modèles d'IA. Ces résultats sont fournis à titre informatif uniquement ; ils ne garantissent pas le résultat d'une candidature ou d'une embauche. Aucune garantie n'est donnée quant à l'exactitude des résultats.",

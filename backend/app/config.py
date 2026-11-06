@@ -46,7 +46,11 @@ class Settings(BaseSettings):
     CREDIT_REWRITE: int = 1
     # Grants
     CREDIT_SIGNUP: int = 3          # one analysis plus its unlock
-    CREDIT_WEEKLY: int = 2
+    # Off since 2026-11-06. With 412 users and no sale ever, the free supply -
+    # two reports on day one plus +2 every week - covered everything anyone
+    # used, so nobody reached a reason to pay. The mechanism stays (set this
+    # above 0 to switch it back on); every page that promised it was updated.
+    CREDIT_WEEKLY: int = 0
     CREDIT_REFERRAL: int = 3
     # The weekly grant is skipped at or above this balance. Stops a dormant
     # account banking a year of grants, which would remove any reason to buy;

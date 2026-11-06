@@ -434,7 +434,7 @@ const tr = {
       q2: 'CVision özgeçmişimi nasıl puanlar?',
       a2: 'PDF dosyanı yüklersin, yapay zeka saniyeler içinde okur. ATS uyumluluğu, anahtar kelime kapsamı, bütünlük ve deneyim üzerinden puanlar ve her skoru açıklar; böylece neyi değiştireceğini bilirsin.',
       q3: 'CVision ne kadar?',
-      a3: "Abonelik yok, sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz, bakiyen düşükken de her hafta 2 kredi ekliyoruz. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı 2'şer kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin.",
+      a3: "Abonelik yok, sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz; bu, tam raporlu bir CV analizine yeter. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı 2'şer kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin.",
       q4: 'Bir CV analizi ne kadar sürer?',
       a4: '30 saniyenin altında. CV\'ni yüklersin, skor ve geri bildirim otomatik üretilir; elle inceleme veya bekleme yoktur.',
       q5: 'Benim ülkemde çalışıyor musunuz?',
@@ -465,7 +465,7 @@ const tr = {
     s3Heading: 'CVision\'ı farklı kılan ne?',
     s3Body: 'Çoğu CV kontrol aracı sadece skor verir. CVision tam olarak neyi düzeltmen gerektiğini söyler ve madde işaretlerini yapay zeka ile yeniden yazar; böylece tahmin etmek yerine geri bildirime saniyeler içinde göre hareket edebilirsin. Ayrıca çoğu aracın atladığı döngüyü kapatır: CV\'ni gerçek bir iş ilanıyla eşleştir, eksik anahtar kelimeleri gör ve sana özel bir ön yazı oluştur — hepsi tek yerde.',
     s4Heading: 'Fiyatlandırma',
-    s4Body: 'Abonelik yok; sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz — bu tam bir analize denk gelir — ve bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı oluşturma ise 2 kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin. Başlamak için kart bilgisi gerekmez.',
+    s4Body: 'Abonelik yok; sadece kullandığın kadar ödersin. Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam bir analize denk gelir. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı oluşturma ise 2 kredi. Daha fazlasına ihtiyacın olursa fiyatlandırma sayfasından kredi paketi alabilirsin. Başlamak için kart bilgisi gerekmez.',
     s5Heading: 'Erişilebilirlik ve diller',
     s5Body: 'CVision tamamen çevrimiçi çalışır ve her ülkede kullanılabilir. Arayüz İngilizce, Türkçe, İspanyolca, Almanca ve Fransızca sunulur. Ödemeler, kayıtlı satıcı sıfatıyla Lemon Squeezy tarafından güvenle işlenir. Türkiye\'den işletilir, dünya genelinde hizmet verir.',
     ctaTitle: 'CV\'ni güçlendirmeye hazır mısın?',
@@ -526,7 +526,7 @@ const tr = {
     saving: '%{{percent}} tasarruf',
     buy: 'Satın al',
     notOnSale: 'Kredi paketleri henüz satışta değil.',
-    earnInstead: 'Her hafta ücretsiz kredi alıyorsun, ayrıca arkadaşını davet ederek kredi kazanabilirsin.',
+    earnInstead: 'Arkadaşını davet ederek ücretsiz kredi de kazanabilirsin.',
     noExpiry: 'Satın alınan krediler son kullanma tarihi taşımaz',
     signUpToBuy: 'Kaydol ve satın al',
     // Copy the prerender script emits into the static /pricing HTML. The page
@@ -535,7 +535,7 @@ const tr = {
     seo: {
       h2a: 'CVision ne kadar? Kredi sistemi nasıl çalışır?',
       p1: "CVision'da abonelik yok. Kredi alırsın, sadece kullandığın kadar harcarsın. CV analizi 3 kredi ve tam raporu içerir; iş ilanı eşleştirme ve ön yazı oluşturma ikişer kredi tutar. Satın alınan krediler son kullanma tarihi taşımaz, bir sonraki iş aramanda da yerinde durur.",
-      p2: "Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam olarak bir analize denk geliyor. Bakiyen düşük kaldığı sürece her hafta 2 kredi daha ekleniyor, yani hiç ödeme yapmadan da CV'ni ve özgeçmişini analiz etmeye devam edebilirsin.",
+      p2: "Kayıt olduğunda 3 kredi hediye ediyoruz; bu tam olarak bir analize denk geliyor. Böylece hiç ödeme yapmadan CV'nin tam raporunu görebilirsin.",
       h2b: 'Neden abonelik yok?',
       p3: 'İş aramak geçici bir ihtiyaç. Abonelik, altı hafta sonra bırakmayı umduğun bir şeye bağlanmanı ister; kredi paketi bir kez alınır, biter ve bir dahaki sefere yeniden alınır. Ödemeler Lemon Squeezy üzerinden kayıtlı satıcı (merchant of record) sıfatıyla işlenir; kart bilgilerin bizim sunucularımızda saklanmaz.',
     },
@@ -546,14 +546,34 @@ const tr = {
     unit: 'kredi',
     cost: '{{cost}} kredi',
     costSuffix: '· {{cost}} kredi',
-    weekly: 'Her hafta +{{weekly}} kredi. Bir CV analizi {{analysis}} kredi.',
-    weeklyPaused: 'Bakiyen {{cap}} kredi ve üzerinde olduğu için haftalık kredi duraklatıldı.',
-    low: 'Kredin azalıyor. Arkadaşını davet ederek ücretsiz kredi kazanabilirsin.',
+    analysisPrice: "Bir CV analizi {{analysis}} kredi.",    low: 'Kredin azalıyor. Arkadaşını davet ederek ücretsiz kredi kazanabilirsin.',
     inviteCta: 'Arkadaşını davet et',
     buyCta: 'Kredi al',
     notEnough_one: 'Bu işlem {{count}} kredi gerektiriyor, bakiyen yetmiyor.',
     notEnough_other: 'Bu işlem {{count}} kredi gerektiriyor, bakiyen yetmiyor.',
     notEnoughTitle: 'Kredin yetmiyor',
+
+    // Titles per refused action, and the offer under them.
+
+    paywall: {
+
+      analysis: "Yeni bir analiz için kredin yetmiyor",
+
+      match: "İlan eşleştirmesi için kredin yetmiyor",
+
+      cover_letter: "Bu ilana özel ön yazı için kredin yetmiyor",
+
+      unlock: "Tam raporu açmak için kredin yetmiyor",
+
+      buyPack: "{{credits}} kredi al · {{price}}",
+
+      buyPackNoPrice: "{{credits}} kredi al",
+
+      otherPacks: "Diğer paketler",
+
+      error: "Ödeme sayfası açılamadı. Biraz sonra tekrar dene.",
+
+    },
   },
   imagePdf: {
     title: 'Bu CV\'nin içinde okunabilir metin yok',
@@ -672,7 +692,7 @@ const tr = {
 
     terms: {
       title: 'Kullanım Şartları',
-      lastUpdated: 'Son güncelleme: 28 Mayıs 2025',
+      lastUpdated: 'Son güncelleme: 6 Kasım 2026',
       s1Heading: '1. Kabul',
       s1Body: 'CVision\'a erişerek veya hizmetlerimizi kullanarak bu Kullanım Şartlarını kabul etmiş sayılırsınız. Bu şartları kabul etmiyorsanız lütfen hizmeti kullanmayınız.',
       s2Heading: '2. Hizmet Tanımı',
@@ -693,7 +713,7 @@ const tr = {
       s5Heading: '5. CV Verilerinin Mülkiyeti',
       s5Body: 'Yüklediğiniz CV dosyaları ve içerikleri size aittir. CVision\'a yalnızca hizmeti sunmak amacıyla gerekli sınırlı lisansı vermiş olursunuz. CV içerikleriniz reklam, eğitim verisi veya başka bir amaçla kullanılmaz. Hesabınızı sildiğinizde tüm verileriniz 30 gün içinde kalıcı olarak silinir.',
       s6Heading: '6. Ücretlendirme ve Krediler',
-      s6Body1: 'CVision kredi esaslı çalışır; yenilenen bir abonelik yoktur. Kayıt olan her hesaba ücretsiz kredi tanımlanır ve bakiye belirlenen sınırın altındayken haftalık ücretsiz kredi eklenir. Analiz, iş ilanı eşleştirme ve ön yazı oluşturma gibi işlemler bakiyenizden kredi düşer; her işlemin güncel kredi bedeli fiyatlandırma sayfasında yayımlanır.',
+      s6Body1: 'CVision kredi esaslı çalışır; yenilenen bir abonelik yoktur. Kayıt olan her hesaba ücretsiz kredi tanımlanır. Analiz, iş ilanı eşleştirme ve ön yazı oluşturma gibi işlemler bakiyenizden kredi düşer; her işlemin güncel kredi bedeli fiyatlandırma sayfasında yayımlanır.',
       s6Body2: 'Ek krediler tek seferlik paketler hâlinde satılır. Ödemeler, kayıtlı satıcı (merchant of record) sıfatıyla hareket eden Lemon Squeezy üzerinden güvenli biçimde işlenir; kart bilgileriniz sunucularımızda saklanmaz. Yenilenen bir abonelik bulunmadığından iptal edilecek bir ödeme de yoktur. Satın alınan krediler son kullanma tarihi taşımaz. İade talepleri, kayıtlı satıcı sıfatıyla Lemon Squeezy tarafından kendi koşulları çerçevesinde değerlendirilir; bize destek adresinden ulaşabilirsiniz.',
       s7Heading: '7. Yapay Zeka Analiz Sonuçları',
       s7Body: 'CVision tarafından üretilen analiz sonuçları, puanlar, kariyer önerileri ve iyileştirme tavsiyeleri yapay zeka modelleri tarafından otomatik olarak oluşturulur. Bu sonuçlar bilgilendirme amaçlıdır; iş başvurusunun sonucunu veya işe alınmayı garanti etmez. Sonuçların doğruluğu konusunda hiçbir garanti verilmemektedir.',
@@ -766,7 +786,7 @@ const tr = {
     // asked whether the check needs an account and what it returns. The limit
     // is one per IP per day (backend/app/routers/public.py); the result shows
     // the scores and the first suggestion, the rest stay locked.
-    sub: "Kayıt gerekmez: hesap açmadan günde bir CV analiz edebilirsin. Sonuçta genel CV puanını, ATS uyumu, anahtar kelime ve bütünlük puanlarını ve bir iyileştirme önerisini görürsün. Ücretsiz bir hesap açarsan 3 kredi alırsın; bu, bütün önerileri içeren bir tam analize yeter.",
+    sub: "Kayıt gerekmez: hesap açmadan günde bir CV analiz edebilirsin. Sonuçta genel CV puanını, ATS uyumu, anahtar kelime ve bütünlük puanlarını ve bir iyileştirme önerisini görürsün. Ücretsiz bir hesap açarsan 3 kredi alırsın; bu analizin bütün önerilerini açmak bunların 2'sini kullanır.",
     // Copy that gives this page something to rank on, and that the
     // prerender script emits into the static HTML for crawlers.
     seo: {

@@ -24,6 +24,7 @@ import { CoverLetterModal } from '../../components/match/CoverLetterModal';
 import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
 import { MATCH_COST, COVER_LETTER_COST, FULL_ANALYSIS_COST } from '../../constants/credits';
 import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
+import type { PaidAction } from '../../utils/track';
 import { parseRewriteHint } from '../../utils/rewriteHint';
 import { localizedPath, type UrlLanguage } from '../../i18n/routes';
 
@@ -234,9 +235,9 @@ export function AnalysisPage() {
   // Every paid action on this page ends up here when the balance falls short:
   // pull the real balance so the numbers on screen stop lying, and offer the
   // way to more credits in the user's language.
-  const handleOutOfCredits = (cost: number) => {
+  const handleOutOfCredits = (cost: number, action: PaidAction) => {
     void refreshUser();
-    notifyOutOfCredits(cost);
+    notifyOutOfCredits(cost, action);
   };
 
   const handleUnlock = async () => {
@@ -249,7 +250,7 @@ export function AnalysisPage() {
       toast.success(t('analysis.unlockedToast'));
     } catch (err: any) {
       if (isOutOfCredits(err)) {
-        handleOutOfCredits(UNLOCK_COST);
+        handleOutOfCredits(UNLOCK_COST, 'unlock');
       } else {
         toast.error(
           err.response?.data?.detail || err.response?.data?.message || t('analysis.unlockFailed')
@@ -423,7 +424,7 @@ export function AnalysisPage() {
     } catch (err) {
       // This used to be the only branch, so a refusal for credits just stopped
       // the spinner and said nothing at all.
-      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST);
+      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST, 'cover_letter');
       else console.error('Cover letter generation failed', err);
     } finally {
       setIsGeneratingCoverLetter(false);
@@ -719,7 +720,7 @@ export function AnalysisPage() {
         isOpen={showJDModal && !!data?.cv_id}
         cvId={data?.cv_id ?? ''}
         onClose={() => setShowJDModal(false)}
-        onOutOfCredits={() => handleOutOfCredits(MATCH_COST)}
+        onOutOfCredits={() => handleOutOfCredits(MATCH_COST, 'match')}
         onMatchComplete={(match, jdId) => {
           setMatchResult(match);
           setMatchJdId(jdId);

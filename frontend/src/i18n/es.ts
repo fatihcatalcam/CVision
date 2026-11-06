@@ -424,7 +424,7 @@ const es = {
       q2: '¿Cómo puntúa CVision mi CV?',
       a2: 'Subes un PDF y la IA lo lee en segundos. Puntúa compatibilidad ATS, cobertura de palabras clave, completitud y experiencia, y explica cada puntuación para que sepas qué cambiar.',
       q3: '¿Cuánto cuesta CVision?',
-      a3: 'No hay suscripción: pagas solo por lo que usas. Recibes 3 créditos al registrarte y 2 más cada semana mientras tu saldo sea bajo. Un análisis de CV cuesta 3 créditos e incluye el informe completo; la comparación con una oferta y la carta de presentación cuestan 2 cada una. Si necesitas más, hay packs de créditos en la página de precios.',
+      a3: 'No hay suscripción: pagas solo por lo que usas. Recibes 3 créditos al registrarte, suficientes para un análisis completo. Un análisis de CV cuesta 3 créditos e incluye el informe completo; la comparación con una oferta y la carta de presentación cuestan 2 cada una. Si necesitas más, hay packs de créditos en la página de precios.',
       q4: '¿Cuánto tarda un análisis de CV?',
       a4: 'Menos de 30 segundos. Subes tu CV y la puntuación y los comentarios se generan automáticamente, sin revisión manual ni esperas.',
       q5: '¿Funciona en mi país?',
@@ -455,7 +455,7 @@ const es = {
     s3Heading: 'Qué diferencia a CVision',
     s3Body: 'La mayoría de los verificadores de CV se detienen en una puntuación. CVision te dice exactamente qué corregir y reescribe tus puntos con IA, para que puedas actuar en segundos. También cierra el ciclo que la mayoría de las herramientas omiten: compara tu CV con una oferta real, ve las palabras clave faltantes y genera una carta de presentación personalizada, todo en un solo lugar.',
     s4Heading: 'Precios',
-    s4Body: 'No hay suscripción: pagas solo por lo que usas. Una cuenta nueva recibe 3 créditos, exactamente un análisis completo, y suma 2 más cada semana mientras el saldo siga bajo. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta o una carta de presentación 2 cada una. Si necesitas más, hay packs de créditos en la página de precios. No hace falta tarjeta para empezar.',
+    s4Body: 'No hay suscripción: pagas solo por lo que usas. Una cuenta nueva recibe 3 créditos, exactamente un análisis completo. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta o una carta de presentación 2 cada una. Si necesitas más, hay packs de créditos en la página de precios. No hace falta tarjeta para empezar.',
     s5Heading: 'Disponibilidad e idiomas',
     s5Body: 'CVision funciona completamente en línea y está disponible en todos los países. La interfaz está disponible en inglés, turco, español, alemán y francés. Los pagos se procesan de forma segura por Lemon Squeezy como comerciante registrado. Operado desde Turquía, con clientes en todo el mundo.',
     ctaTitle: '¿Listo para fortalecer tu CV?',
@@ -516,13 +516,13 @@ const es = {
     saving: 'Ahorra un {{percent}}%',
     buy: 'Comprar',
     notOnSale: 'Los paquetes de créditos aún no están a la venta.',
-    earnInstead: 'Sigues recibiendo créditos gratis cada semana y puedes ganar más invitando a alguien.',
+    earnInstead: 'También puedes ganar créditos gratis invitando a alguien.',
     noExpiry: 'Los créditos comprados no caducan',
     signUpToBuy: 'Regístrate para comprar',
     seo: {
       h2a: '¿Cuánto cuesta CVision y cómo funcionan los créditos?',
       p1: 'No hay suscripción. Compras créditos y gastas solo lo que usas. Un análisis de CV cuesta 3 créditos e incluye el informe completo, y la comparación con una oferta o una carta de presentación cuestan 2 cada una. Los créditos comprados no caducan, así que siguen ahí para tu próxima búsqueda de empleo.',
-      p2: 'Recibes 3 créditos al registrarte, exactamente un análisis. Mientras tu saldo siga bajo, cada semana llegan 2 más, así que puedes seguir analizando tu CV sin pagar nada.',
+      p2: 'Recibes 3 créditos al registrarte, exactamente un análisis, así que ves el informe completo antes de pagar nada.',
       h2b: '¿Por qué no una suscripción?',
       p3: 'Buscar trabajo es una necesidad temporal. Una suscripción te pide comprometerte con algo que esperas dejar de necesitar en seis semanas; un pack se compra una vez, se agota y se vuelve a comprar la próxima vez. Los pagos los gestiona Lemon Squeezy como comerciante registrado, y los datos de tu tarjeta nunca se guardan en nuestros servidores.',
     },
@@ -533,14 +533,34 @@ const es = {
     unit: 'créditos',
     cost: '{{cost}} créditos',
     costSuffix: '· {{cost}} créditos',
-    weekly: '+{{weekly}} créditos cada semana. Un análisis de CV cuesta {{analysis}}.',
-    weeklyPaused: 'Los créditos semanales están en pausa mientras tu saldo sea de {{cap}} o más.',
-    low: 'Te quedan pocos. Puedes ganar créditos gratis invitando a alguien.',
+    analysisPrice: "Un análisis de CV cuesta {{analysis}} créditos.",    low: 'Te quedan pocos. Puedes ganar créditos gratis invitando a alguien.',
     inviteCta: 'Invitar a un amigo',
     buyCta: 'Comprar créditos',
     notEnough_one: 'Esto requiere {{count}} crédito y tu saldo no alcanza.',
     notEnough_other: 'Esto requiere {{count}} créditos y tu saldo no alcanza.',
     notEnoughTitle: 'No tienes créditos suficientes',
+
+    // Titles per refused action, and the offer under them.
+
+    paywall: {
+
+      analysis: "No tienes créditos suficientes para un nuevo análisis",
+
+      match: "No tienes créditos suficientes para comparar con esta oferta",
+
+      cover_letter: "No tienes créditos suficientes para una carta de presentación para esta oferta",
+
+      unlock: "No tienes créditos suficientes para abrir el informe completo",
+
+      buyPack: "Comprar {{credits}} créditos · {{price}}",
+
+      buyPackNoPrice: "Comprar {{credits}} créditos",
+
+      otherPacks: "Otros packs",
+
+      error: "No se pudo abrir el pago. Inténtalo de nuevo en un momento.",
+
+    },
   },
   imagePdf: {
     title: 'Este CV no tiene texto legible',
@@ -659,7 +679,7 @@ const es = {
 
     terms: {
       title: 'Términos de servicio',
-      lastUpdated: 'Última actualización: 28 de mayo de 2025',
+      lastUpdated: 'Última actualización: 6 de noviembre de 2026',
       s1Heading: '1. Aceptación',
       s1Body: 'Al acceder a CVision o usar nuestros servicios, aceptas estos Términos de servicio. Si no aceptas estos términos, por favor no uses el servicio.',
       s2Heading: '2. Descripción del servicio',
@@ -680,7 +700,7 @@ const es = {
       s5Heading: '5. Propiedad de los datos del CV',
       s5Body: 'Los archivos de CV y el contenido que subes son tuyos. Otorgas a CVision solo la licencia limitada necesaria para proporcionar el servicio. El contenido de tu CV no se usa para publicidad, datos de entrenamiento u otro fin. Cuando eliminas tu cuenta, todos tus datos se eliminan permanentemente en 30 días.',
       s6Heading: '6. Precios y créditos',
-      s6Body1: 'CVision funciona con créditos; no hay suscripción recurrente. Toda cuenta nueva recibe créditos gratuitos, y se añaden más cada semana mientras el saldo se mantenga por debajo de un límite establecido. Acciones como un análisis, una comparación con una oferta de empleo o una carta de presentación descuentan créditos de tu saldo; el coste actual de cada una se publica en la página de precios.',
+      s6Body1: 'CVision funciona con créditos; no hay suscripción recurrente. Toda cuenta nueva recibe créditos gratuitos. Acciones como un análisis, una comparación con una oferta de empleo o una carta de presentación descuentan créditos de tu saldo; el coste actual de cada una se publica en la página de precios.',
       s6Body2: 'Los créditos adicionales se venden en packs de un solo pago. Los pagos se procesan de forma segura a través de Lemon Squeezy, que actúa como comerciante registrado; los datos de tu tarjeta nunca se guardan en nuestros servidores. Al no existir una suscripción recurrente, no hay nada que cancelar. Los créditos comprados no caducan. Las solicitudes de reembolso las gestiona Lemon Squeezy como comerciante registrado según sus propias condiciones; también puedes escribirnos a nuestra dirección de soporte.',
       s7Heading: '7. Resultados del análisis de IA',
       s7Body: 'Los resultados del análisis, puntuaciones, sugerencias de carrera y recomendaciones de mejora producidos por CVision se generan automáticamente mediante modelos de IA. Estos resultados son solo informativos; no garantizan el resultado de una solicitud de empleo. No se da ninguna garantía sobre la exactitud de los resultados.',

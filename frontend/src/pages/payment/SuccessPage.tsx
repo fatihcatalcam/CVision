@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { CheckCircle, Coins, ArrowRight } from 'lucide-react';
+import { reportPurchase } from '../../utils/checkout';
 
 /**
  * Where Lemon Squeezy sends the buyer after paying.
@@ -29,6 +30,9 @@ export function SuccessPage() {
 
   if (initial.current === null && user) initial.current = user.credits;
   if (user) latest.current = user.credits;
+
+  // GA4 purchase, once, from the pack noted when the checkout was opened.
+  useEffect(() => { reportPurchase(); }, []);
 
   useEffect(() => {
     let alive = true;

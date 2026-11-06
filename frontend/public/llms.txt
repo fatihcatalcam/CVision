@@ -39,8 +39,8 @@ CVision is credit-based. There is no subscription and no free trial to cancel:
 you buy credits once and spend them as you need them.
 
 - Free to start — a new account is granted 3 credits, which is exactly one full
-  analysis. Every week the account earns 2 more credits while its balance is
-  under 12, so the product stays usable without paying.
+  analysis. A visitor who tried CVision at /try first spends 2 of them opening
+  that report in full. There are no recurring free credits.
 - What things cost, in credits: CV analysis 3, which includes the full report;
   job-description matching 2; AI cover letter 2.
 - Extra credits are sold in one-off packs, billed via

@@ -42,7 +42,7 @@ export function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalPro
           // the file they picked is still there if they top up and retry.
           onOutOfCredits={(cost) => {
             void refreshUser();
-            notifyOutOfCredits(cost);
+            notifyOutOfCredits(cost, 'analysis');
           }}
           onUploadSuccess={(cvId) => {
             onClose();

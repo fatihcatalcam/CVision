@@ -183,7 +183,7 @@ describe('AnalysisPage when credits run out', () => {
     await userEvent.click((await screen.findAllByText('analysis.unlockCta:2'))[0]);
 
     // The dialog is mounted once in App; this is the wiring that reaches it.
-    await waitFor(() => expect(raised).toHaveBeenCalledWith(2));
+    await waitFor(() => expect(raised).toHaveBeenCalledWith({ cost: 2, action: 'unlock' }));
     await waitFor(() => expect(refreshUser).toHaveBeenCalled());
     // And the report stays shut rather than pretending the purchase worked.
     expect(screen.queryByText('The second tip')).not.toBeInTheDocument();

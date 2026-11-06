@@ -427,7 +427,7 @@ const en = {
       q2: 'How does CVision score my CV?',
       a2: 'You upload a PDF and the AI reads it in seconds. It scores ATS compatibility, keyword coverage, completeness, and experience, then explains each score so you know what to change.',
       q3: 'How much does CVision cost?',
-      a3: 'There is no subscription; you pay for what you use. You get 3 credits when you sign up, plus 2 more every week while your balance is low. A CV analysis costs 3 credits and includes the full report, while job matching and cover letters cost 2 each. Credit packs are on the pricing page if you need more.',
+      a3: 'There is no subscription; you pay for what you use. You get 3 credits when you sign up, enough for one full analysis. A CV analysis costs 3 credits and includes the full report, while job matching and cover letters cost 2 each. Credit packs are on the pricing page if you need more.',
       q4: 'How long does a CV analysis take?',
       a4: 'Under 30 seconds. You upload your CV and the score and feedback are generated automatically, with no manual review or waiting.',
       q5: 'Do you work in my country?',
@@ -458,7 +458,7 @@ const en = {
     s3Heading: 'What makes CVision different',
     s3Body: 'Most resume checkers stop at a score. CVision tells you exactly what to fix and rewrites your bullet points with AI, so you can act on the feedback in seconds instead of guessing. It also closes the loop most tools skip: match your CV against a real job description, see the missing keywords, and generate a tailored cover letter — all in one place.',
     s4Heading: 'Pricing',
-    s4Body: 'There is no subscription; you pay for what you use. A new account gets 3 credits — exactly one full analysis — and earns 2 more every week while the balance stays low. A CV analysis costs 3 credits and includes the full report, and job matching or a cover letter 2 each. Credit packs are on the pricing page when you need more. No card details are needed to start.',
+    s4Body: 'There is no subscription; you pay for what you use. A new account gets 3 credits — exactly one full analysis. A CV analysis costs 3 credits and includes the full report, and job matching or a cover letter 2 each. Credit packs are on the pricing page when you need more. No card details are needed to start.',
     s5Heading: 'Availability and languages',
     s5Body: 'CVision runs entirely online and is available in every country. The interface is offered in English, Turkish, Spanish, German, and French. Payments are processed securely by Lemon Squeezy as merchant of record. Operated from Turkey, serving customers globally.',
     ctaTitle: 'Ready to strengthen your CV?',
@@ -519,13 +519,13 @@ const en = {
     saving: 'Save {{percent}}%',
     buy: 'Buy',
     notOnSale: 'Credit packs are not on sale yet.',
-    earnInstead: 'You still get free credits every week, and you can earn more by inviting a friend.',
+    earnInstead: 'You can also earn free credits by inviting a friend.',
     noExpiry: 'Purchased credits never expire',
     signUpToBuy: 'Sign up to buy',
     seo: {
       h2a: 'How much does CVision cost, and how do credits work?',
       p1: 'There is no subscription. You buy credits and spend only what you use. A CV analysis costs 3 credits and includes the full report, and job matching or a cover letter cost 2 each. Purchased credits never expire, so they are still there for your next job search.',
-      p2: 'You get 3 credits when you sign up, which is exactly one analysis. While your balance stays low, 2 more land every week - so you can keep analysing your CV without paying anything.',
+      p2: 'You get 3 credits when you sign up, which is exactly one analysis, so you see the full report before paying anything.',
       h2b: 'Why not a subscription?',
       p3: 'Job hunting is a temporary need. A subscription asks you to commit to something you hope to stop needing in six weeks; a pack is bought once, used up, and bought again next time. Payments are handled by Lemon Squeezy as merchant of record, and your card details are never stored on our servers.',
     },
@@ -536,14 +536,34 @@ const en = {
     unit: 'credits',
     cost: '{{cost}} credits',
     costSuffix: '· {{cost}} credits',
-    weekly: '+{{weekly}} credits every week. One CV analysis costs {{analysis}}.',
-    weeklyPaused: 'Weekly credits are paused while your balance is {{cap}} or above.',
-    low: 'Running low. You can earn free credits by inviting a friend.',
+    analysisPrice: "One CV analysis costs {{analysis}} credits.",    low: 'Running low. You can earn free credits by inviting a friend.',
     inviteCta: 'Invite a friend',
     buyCta: 'Buy credits',
     notEnough_one: 'This needs {{count}} credit and your balance is too low.',
     notEnough_other: 'This needs {{count}} credits and your balance is too low.',
     notEnoughTitle: 'Not enough credits',
+
+    // Titles per refused action, and the offer under them.
+
+    paywall: {
+
+      analysis: "Not enough credits for a new analysis",
+
+      match: "Not enough credits to match this job ad",
+
+      cover_letter: "Not enough credits for a cover letter for this job",
+
+      unlock: "Not enough credits to open the full report",
+
+      buyPack: "Buy {{credits}} credits · {{price}}",
+
+      buyPackNoPrice: "Buy {{credits}} credits",
+
+      otherPacks: "Other packs",
+
+      error: "The checkout didn't open. Try again in a moment.",
+
+    },
   },
   imagePdf: {
     title: 'This CV has no readable text',
@@ -662,7 +682,7 @@ const en = {
 
     terms: {
       title: 'Terms of Service',
-      lastUpdated: 'Last updated: May 28, 2025',
+      lastUpdated: 'Last updated: November 6, 2026',
       s1Heading: '1. Acceptance',
       s1Body: 'By accessing CVision or using our services, you agree to be bound by these Terms of Service. If you do not accept these terms, please do not use the service.',
       s2Heading: '2. Service Description',
@@ -683,7 +703,7 @@ const en = {
       s5Heading: '5. Ownership of CV Data',
       s5Body: 'The CV files and content you upload belong to you. You grant CVision only the limited licence necessary to provide the service. Your CV content is not used for advertising, training data, or any other purpose. When you delete your account, all your data is permanently deleted within 30 days.',
       s6Heading: '6. Pricing and Credits',
-      s6Body1: 'CVision runs on credits; there is no recurring subscription. Every new account is granted free credits, and further free credits are added weekly while the balance stays below a set limit. Actions such as an analysis, a job-description match or a generated cover letter deduct credits from your balance; the current cost of each is published on the pricing page.',
+      s6Body1: 'CVision runs on credits; there is no recurring subscription. Every new account is granted free credits. Actions such as an analysis, a job-description match or a generated cover letter deduct credits from your balance; the current cost of each is published on the pricing page.',
       s6Body2: 'Additional credits are sold as one-off packs. Payments are processed securely through Lemon Squeezy, acting as merchant of record; your card details are never stored on our servers. As there is no recurring subscription, there is nothing to cancel. Purchased credits do not expire. Refund requests are handled by Lemon Squeezy as merchant of record under its own terms; you can also reach us at our support address.',
       s7Heading: '7. AI Analysis Results',
       s7Body: 'Analysis results, scores, career suggestions, and improvement recommendations produced by CVision are generated automatically by AI models. These results are for informational purposes only; they do not guarantee the outcome of a job application or employment. No warranty is given regarding the accuracy of the results.',

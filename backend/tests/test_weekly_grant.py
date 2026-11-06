@@ -24,6 +24,14 @@ from app.models.user import User
 from app.services.credit_service import CreditService
 
 
+@pytest.fixture(autouse=True)
+def _weekly_grant_switched_on(monkeypatch):
+    """The grant is off in production (CREDIT_WEEKLY = 0) but kept, so it can be
+    switched back on. These tests are about how it behaves when it is on;
+    test_weekly_grant_off.py covers the switch itself."""
+    monkeypatch.setattr(settings, "CREDIT_WEEKLY", 2)
+
+
 def _ledger(db, user_id):
     return (
         db.query(CreditTransaction)

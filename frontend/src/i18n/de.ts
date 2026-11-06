@@ -424,7 +424,7 @@ const de = {
       q2: 'Wie bewertet CVision meinen Lebenslauf?',
       a2: 'Du lädst eine PDF-Datei hoch und die KI liest sie in Sekunden. Sie bewertet ATS-Kompatibilität, Keyword-Abdeckung, Vollständigkeit und Erfahrung, und erklärt jeden Score, damit du weißt, was du ändern solltest.',
       q3: 'Was kostet CVision?',
-      a3: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Bei der Registrierung bekommst du 3 Credits und jede Woche 2 weitere, solange dein Guthaben niedrig ist. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht; Stellenabgleich und Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite.',
+      a3: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Bei der Registrierung bekommst du 3 Credits, genug für eine vollständige Analyse. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht; Stellenabgleich und Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite.',
       q4: 'Wie lange dauert eine Lebenslauf-Analyse?',
       a4: 'Unter 30 Sekunden. Du lädst deinen Lebenslauf hoch und der Score sowie das Feedback werden automatisch generiert, ohne manuelle Überprüfung oder Wartezeit.',
       q5: 'Funktioniert es in meinem Land?',
@@ -455,7 +455,7 @@ const de = {
     s3Heading: 'Was CVision unterscheidet',
     s3Body: 'Die meisten Lebenslauf-Checker bleiben bei einem Score stehen. CVision sagt dir genau, was du beheben musst, und schreibt deine Aufzählungspunkte mit KI um, sodass du in Sekunden handeln kannst. Es schließt auch die Lücke, die die meisten Tools überspringen: Vergleiche deinen Lebenslauf mit einer echten Stellenausschreibung, sieh die fehlenden Keywords und generiere ein maßgeschneidertes Anschreiben, alles an einem Ort.',
     s4Heading: 'Preise',
-    s4Body: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Ein neues Konto bekommt 3 Credits, genau eine vollständige Analyse, und jede Woche 2 weitere, solange das Guthaben niedrig bleibt. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Stellenabgleich oder ein Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite. Für den Start sind keine Kartendaten nötig.',
+    s4Body: 'Es gibt kein Abo — du zahlst nur, was du nutzt. Ein neues Konto bekommt 3 Credits, genau eine vollständige Analyse. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Stellenabgleich oder ein Anschreiben je 2. Weitere Credit-Pakete findest du auf der Preisseite. Für den Start sind keine Kartendaten nötig.',
     s5Heading: 'Verfügbarkeit und Sprachen',
     s5Body: 'CVision läuft vollständig online und ist in jedem Land verfügbar. Die Oberfläche wird auf Englisch, Türkisch, Spanisch, Deutsch und Französisch angeboten. Zahlungen werden sicher über Lemon Squeezy als eingetragenem Händler abgewickelt. Betrieben aus der Türkei, mit Kunden weltweit.',
     ctaTitle: 'Bereit, deinen Lebenslauf zu stärken?',
@@ -516,13 +516,13 @@ const de = {
     saving: '{{percent}}% sparen',
     buy: 'Kaufen',
     notOnSale: 'Guthaben-Pakete sind noch nicht im Verkauf.',
-    earnInstead: 'Du bekommst weiterhin jede Woche kostenlose Credits und kannst mit Einladungen mehr verdienen.',
+    earnInstead: 'Mit Einladungen kannst du außerdem kostenlose Credits verdienen.',
     noExpiry: 'Gekaufte Credits verfallen nie',
     signUpToBuy: 'Registrieren und kaufen',
     seo: {
       h2a: 'Was kostet CVision, und wie funktionieren Credits?',
       p1: 'Es gibt kein Abo. Du kaufst Credits und gibst nur aus, was du nutzt. Eine CV-Analyse kostet 3 Credits und enthält den vollen Bericht, ein Stellenabgleich oder ein Anschreiben je 2. Gekaufte Credits verfallen nie und sind bei der nächsten Jobsuche noch da.',
-      p2: 'Bei der Registrierung bekommst du 3 Credits — genau eine Analyse. Solange dein Guthaben niedrig bleibt, kommen jede Woche 2 weitere dazu, du kannst deinen Lebenslauf also weiter analysieren, ohne etwas zu zahlen.',
+      p2: 'Bei der Registrierung bekommst du 3 Credits — genau eine Analyse. So siehst du den vollständigen Bericht, bevor du etwas zahlst.',
       h2b: 'Warum kein Abo?',
       p3: 'Jobsuche ist ein vorübergehender Bedarf. Ein Abo verlangt eine Bindung an etwas, das du in sechs Wochen hoffentlich nicht mehr brauchst; ein Paket kaufst du einmal, verbrauchst es und kaufst beim nächsten Mal wieder. Zahlungen wickelt Lemon Squeezy als Merchant of Record ab; deine Kartendaten liegen nie auf unseren Servern.',
     },
@@ -533,14 +533,34 @@ const de = {
     unit: 'Credits',
     cost: '{{cost}} Credits',
     costSuffix: '· {{cost}} Credits',
-    weekly: 'Jede Woche +{{weekly}} Credits. Eine Lebenslauf-Analyse kostet {{analysis}}.',
-    weeklyPaused: 'Die wöchentlichen Credits pausieren, solange dein Guthaben bei {{cap}} oder darüber liegt.',
-    low: 'Dein Guthaben wird knapp. Lade jemanden ein und verdiene kostenlose Credits.',
+    analysisPrice: "Eine Lebenslauf-Analyse kostet {{analysis}} Credits.",    low: 'Dein Guthaben wird knapp. Lade jemanden ein und verdiene kostenlose Credits.',
     inviteCta: 'Freunde einladen',
     buyCta: 'Credits kaufen',
     notEnough_one: 'Dafür brauchst du {{count}} Credit, dein Guthaben reicht nicht.',
     notEnough_other: 'Dafür brauchst du {{count}} Credits, dein Guthaben reicht nicht.',
     notEnoughTitle: 'Nicht genug Credits',
+
+    // Titles per refused action, and the offer under them.
+
+    paywall: {
+
+      analysis: "Nicht genug Credits für eine neue Analyse",
+
+      match: "Nicht genug Credits für den Stellenabgleich",
+
+      cover_letter: "Nicht genug Credits für ein Anschreiben zu dieser Stelle",
+
+      unlock: "Nicht genug Credits, um den vollen Bericht zu öffnen",
+
+      buyPack: "{{credits}} Credits kaufen · {{price}}",
+
+      buyPackNoPrice: "{{credits}} Credits kaufen",
+
+      otherPacks: "Andere Pakete",
+
+      error: "Der Checkout ließ sich nicht öffnen. Versuch es gleich noch einmal.",
+
+    },
   },
   imagePdf: {
     title: 'Dieser Lebenslauf enthält keinen lesbaren Text',
@@ -659,7 +679,7 @@ const de = {
 
     terms: {
       title: 'Nutzungsbedingungen',
-      lastUpdated: 'Zuletzt aktualisiert: 28. Mai 2025',
+      lastUpdated: 'Zuletzt aktualisiert: 6. November 2026',
       s1Heading: '1. Akzeptanz',
       s1Body: 'Durch den Zugriff auf CVision oder die Nutzung unserer Dienste stimmst du diesen Nutzungsbedingungen zu. Wenn du diese Bedingungen nicht akzeptierst, nutze den Dienst bitte nicht.',
       s2Heading: '2. Dienstbeschreibung',
@@ -680,7 +700,7 @@ const de = {
       s5Heading: '5. Eigentum an Lebenslauf-Daten',
       s5Body: 'Die von dir hochgeladenen Lebenslauf-Dateien und Inhalte gehören dir. Du gewährst CVision nur die begrenzte Lizenz, die zur Erbringung des Dienstes erforderlich ist. Deine Lebenslauf-Inhalte werden nicht für Werbung, Trainingsdaten oder andere Zwecke verwendet. Wenn du dein Konto löschst, werden alle deine Daten innerhalb von 30 Tagen dauerhaft gelöscht.',
       s6Heading: '6. Preise und Credits',
-      s6Body1: 'CVision läuft über Credits; es gibt kein wiederkehrendes Abonnement. Jedes neue Konto erhält kostenlose Credits, und solange das Guthaben unter einer festgelegten Grenze bleibt, kommen wöchentlich weitere hinzu. Aktionen wie eine Analyse, ein Stellenabgleich oder ein erzeugtes Anschreiben ziehen Credits von deinem Guthaben ab; die aktuellen Kosten stehen auf der Preisseite.',
+      s6Body1: 'CVision läuft über Credits; es gibt kein wiederkehrendes Abonnement. Jedes neue Konto erhält kostenlose Credits. Aktionen wie eine Analyse, ein Stellenabgleich oder ein erzeugtes Anschreiben ziehen Credits von deinem Guthaben ab; die aktuellen Kosten stehen auf der Preisseite.',
       s6Body2: 'Zusätzliche Credits werden als einmalige Pakete verkauft. Zahlungen werden sicher über Lemon Squeezy abgewickelt, das als eingetragener Händler (Merchant of Record) agiert; deine Kartendaten werden nie auf unseren Servern gespeichert. Da es kein wiederkehrendes Abonnement gibt, gibt es auch nichts zu kündigen. Gekaufte Credits verfallen nicht. Rückerstattungsanfragen bearbeitet Lemon Squeezy als Merchant of Record nach den eigenen Bedingungen; du kannst uns auch über unsere Support-Adresse erreichen.',
       s7Heading: '7. KI-Analyseergebnisse',
       s7Body: 'Von CVision erstellte Analyseergebnisse, Scores, Karrierevorschläge und Verbesserungsempfehlungen werden automatisch von KI-Modellen generiert. Diese Ergebnisse dienen nur zu Informationszwecken; sie garantieren nicht den Ausgang einer Bewerbung. Es wird keine Gewähr für die Richtigkeit der Ergebnisse übernommen.',

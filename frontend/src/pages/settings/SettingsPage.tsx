@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useCreditPacks } from '../../hooks/useCreditPacks';
 import {
-  FULL_ANALYSIS_COST, MATCH_COST, COVER_LETTER_COST, WEEKLY_CREDITS,
+  FULL_ANALYSIS_COST, MATCH_COST, COVER_LETTER_COST,
 } from '../../constants/credits';
 
 function SectionHeader({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
@@ -229,7 +229,7 @@ export function SettingsPage() {
                 </span>
               </div>
               <p className="text-[10px] text-[#6B6A65] dark:text-[#908d89] leading-relaxed">
-                {t('credits.weekly', { weekly: WEEKLY_CREDITS })}
+                {t('credits.analysisPrice', { analysis: FULL_ANALYSIS_COST })}
               </p>
               <div className="flex justify-between text-sm pt-1">
                 <span className="text-[#6B6A65] dark:text-[#908d89]">{t('settings.analysesDone')}</span>
@@ -411,7 +411,7 @@ export function SettingsPage() {
                       {t('credits.cost', { cost: user?.credits ?? 0 })}
                     </p>
                     <p className="text-xs text-[#6B6A65] dark:text-[#908d89]">
-                      {t('credits.weekly', { weekly: WEEKLY_CREDITS })}
+                      {t('credits.analysisPrice', { analysis: FULL_ANALYSIS_COST })}
                     </p>
                   </div>
                 </div>

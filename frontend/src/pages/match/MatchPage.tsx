@@ -13,6 +13,7 @@ import {
 } from '../../services/matchApi';
 import { MATCH_COST, COVER_LETTER_COST } from '../../constants/credits';
 import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
+import type { PaidAction } from '../../utils/track';
 
 interface CVOption {
   id: string;
@@ -70,9 +71,9 @@ export function MatchPage() {
   };
 
   // Both paid actions here land on this when the balance falls short.
-  const handleOutOfCredits = (cost: number) => {
+  const handleOutOfCredits = (cost: number, action: PaidAction) => {
     void refreshUser();
-    notifyOutOfCredits(cost);
+    notifyOutOfCredits(cost, action);
   };
 
   const handleMatch = async () => {
@@ -88,7 +89,7 @@ export function MatchPage() {
       setMatchJdId(jd.id);
     } catch (err: unknown) {
       if (isOutOfCredits(err)) {
-        handleOutOfCredits(MATCH_COST);
+        handleOutOfCredits(MATCH_COST, 'match');
       } else {
         const axiosErr = err as { response?: { data?: { message?: string } } };
         setError(axiosErr?.response?.data?.message || t('match.matchError'));
@@ -107,7 +108,7 @@ export function MatchPage() {
     } catch (err) {
       // Other failures stay silent - the button comes back and can be retried.
       // A refusal for credits cannot be retried into success, so say so.
-      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST);
+      if (isOutOfCredits(err)) handleOutOfCredits(COVER_LETTER_COST, 'cover_letter');
     } finally {
       setIsGeneratingCoverLetter(false);
     }

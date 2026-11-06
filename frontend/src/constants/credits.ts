@@ -35,7 +35,3 @@ export const FULL_APPLICATION_COST =
 
 /** Granted on signup: exactly one analysis. */
 export const SIGNUP_CREDITS = 3;
-/** Added each week while the balance is under the cap. */
-export const WEEKLY_CREDITS = 2;
-/** Balance at or above which the weekly grant pauses. */
-export const WEEKLY_CREDIT_CAP = 12;
