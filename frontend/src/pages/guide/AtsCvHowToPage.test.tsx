@@ -51,6 +51,18 @@ describe('AtsCvHowToPage', () => {
     }
   });
 
+  it('renders the sample CV and the FAQ in Turkish', () => {
+    renderAt('/ats-uyumlu-cv-nasil-hazirlanir');
+
+    expect(screen.getByText('ATS uyumlu CV örneği')).toBeInTheDocument();
+    expect(screen.getByText('ÖRNEK ADAY', { exact: false })).toBeInTheDocument();
+    const faq = ATS_CV_HOWTO.tr!.find((s) => s.faq)!;
+    for (const item of faq.items!) {
+      expect(screen.getByText(item.title)).toBeInTheDocument();
+      expect(screen.getByText(item.body)).toBeInTheDocument();
+    }
+  });
+
   it('renders at the English slug, in English', () => {
     uiLanguage = 'en';
     renderAt('/en/how-to-write-an-ats-friendly-cv');

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { returnPath } from '../../utils/returnPath';
 import { Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -30,6 +31,7 @@ function GoogleAuthButtonInner() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // The invite code off /register?ref=CODE. Only the email form used to send
   // this, so following an invite link and then pressing "Continue with Google"
@@ -52,7 +54,7 @@ function GoogleAuthButtonInner() {
         login(res.data.access_token, res.data.user);
         const claimedId = await claimPendingAnalysis();
         toast.success(t('auth.login.successToast'));
-        navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
+        navigate(claimedId ? `/analysis/${claimedId}` : returnPath(location.state));
       }
     } catch (err: any) {
       toast.error(
@@ -84,7 +86,7 @@ function GoogleAuthButtonInner() {
       login(res.data.access_token, res.data.user);
       const claimedId = await claimPendingAnalysis();
       toast.success(t('auth.register.successToast'));
-      navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
+      navigate(claimedId ? `/analysis/${claimedId}` : returnPath(location.state));
     } catch (err: any) {
       toast.error(
         err.response?.data?.message ||

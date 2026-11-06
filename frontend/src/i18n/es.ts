@@ -361,6 +361,8 @@ const es = {
   home: {
     metaTitle: 'CVision - Analizador de CV con IA y verificador ATS',
     metaDescription: 'Sube tu CV para obtener una puntuación ATS instantánea, análisis de palabras clave y sugerencias de reescritura con IA. Empieza gratis.',
+    // A link into the how-to guide from the page body, not just the footer.
+    guideLink: "¿Quieres ver cómo es un CV compatible con ATS? Lee la guía paso a paso:",
     nav: {
       howItWorks: 'Cómo funciona',
       backToTop: 'Volver arriba',
@@ -725,6 +727,7 @@ const es = {
     nextStep: {
       label: 'Siguiente paso',
       reanalyse: 'Aplica las sugerencias y vuelve a analizar',
+      guide: "Mientras haces los cambios, te puede ayudar la guía paso a paso:",
     },
     overallScore: 'Puntuación general',
     atsCompat: 'Compatibilidad ATS',

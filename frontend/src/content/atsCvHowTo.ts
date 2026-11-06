@@ -105,6 +105,53 @@ const tr: GuideSection[] = [
       'Bir sayfa mı iki sayfa mı sorusunun ATS açısından bir cevabı yok; sistem sayfa saymaz. İnsan açısından ise kural basittir: 5–7 yıla kadar bir sayfa, sonrası için iki sayfa fazlasıyla yeter.',
   },
   {
+    heading: 'ATS uyumlu CV örneği',
+    intro:
+      'Buraya kadar anlatılanların hepsi bir arada nasıl görünür? Aşağıdaki örnek, bir pazarlama uzmanının ATS uyumlu CV\'sidir. Kişi ve şirketler uydurmadır; köşeli parantez içindeki yerler kendi rakamlarınız içindir.',
+    items: [
+      {
+        title: 'Örnek: Pazarlama Uzmanı CV\'si',
+        body:
+          'Şablonsuz, tek sütunlu ve düz metin. Word\'de boş bir belgeye yazılıp PDF olarak kaydedilmiş hâlini düşünün.',
+        example: [
+          'ÖRNEK ADAY',
+          'Pazarlama Uzmanı',
+          'İstanbul | ornek.aday@example.com | 0555 000 00 00 | linkedin.com/in/ornek-aday',
+          '',
+          'PROFESYONEL ÖZET',
+          'Dijital pazarlamada dört yıllık deneyimi olan bir pazarlama uzmanıyım. Arama ve sosyal medya reklamlarını, e-posta kampanyalarını ve içerik takvimini yönettim; sonuçları Google Analytics 4 ile ölçüp raporluyorum. E-ticarette performans pazarlamasına odaklanan bir rol arıyorum.',
+          '',
+          'İŞ DENEYİMİ',
+          'Pazarlama Uzmanı, Örnek Teknoloji A.Ş., İstanbul',
+          'Mart 2023 – Devam ediyor',
+          '- Google Ads ve Meta reklam bütçesini aylık olarak planladım; tıklama başına maliyeti %[N] düşürdüm.',
+          '- Haftalık e-posta bültenini yeniden kurguladım; açılma oranı %[N] seviyesinden %[N] seviyesine çıktı.',
+          '- Web sitesindeki talep formlarını HubSpot\'a bağladım; satış ekibi gelen talepleri aynı gün görmeye başladı.',
+          '',
+          'Pazarlama Asistanı, Örnek Perakende Ltd., Ankara',
+          'Temmuz 2021 – Şubat 2023',
+          '- Sosyal medya içerik takvimini hazırladım ve [N] kampanyanın yayınını yönettim.',
+          '- Aylık kampanya raporlarını Excel ve Looker Studio ile hazırladım.',
+          '',
+          'EĞİTİM',
+          'İşletme Lisans, Örnek Üniversitesi, Ankara',
+          'Eylül 2017 – Haziran 2021',
+          '',
+          'BECERİLER',
+          'Google Ads, Meta Ads, Google Analytics 4, SEO, e-posta pazarlaması, HubSpot, Excel, Looker Studio, A/B testi',
+          '',
+          'SERTİFİKALAR',
+          'Google Ads Arama Sertifikası (2024)',
+          '',
+          'DİLLER',
+          'İngilizce (ileri), Almanca (başlangıç)',
+        ].join('\n'),
+      },
+    ],
+    outro:
+      'Bu CV\'yi ATS uyumlu yapan şey görünüşü değil, düzeni. İletişim bilgileri sayfanın gövdesinde, bölüm adları sistemin beklediği adlar, tarihler baştan sona aynı biçimde, beceriler tablo yerine virgülle ayrılmış düz bir liste. Maddeler fiille başlıyor ve bir sonuca varıyor. Kendi CV\'nizi bu iskeletin üzerine kurabilirsiniz.',
+  },
+  {
     heading: 'Göndermeden önce kontrol edin',
     intro:
       'Son adım, tahmin etmeyi bırakıp bakmaktır. CV\'nizin sistemin gözünde nasıl göründüğünü göndermeden önce görmek istersiniz.',
@@ -117,7 +164,43 @@ const tr: GuideSection[] = [
       {
         title: 'İlana karşı test edin',
         body:
-          'Her başvuru için CV\'yi baştan yazmanız gerekmez, ama hedeflediğiniz ilana karşı bir kez kontrol etmeniz gerekir: hangi anahtar kelimeler eksik, hangi bölüm zayıf kalıyor. CVision bunu ücretsiz analizde yapar ve eksikleri madde madde gösterir.',
+          'Her başvuru için CV\'yi baştan yazmanız gerekmez, ama hedeflediğiniz ilana karşı bir kez kontrol etmeniz gerekir: hangi anahtar kelimeler eksik, hangi bölüm zayıf kalıyor. CVision\'ın ilan eşleştirmesi CV\'nizi ilanla karşılaştırır ve eksik anahtar kelimeleri madde madde gösterir.',
+      },
+    ],
+  },
+  {
+    heading: 'Sık sorulan sorular',
+    faq: true,
+    items: [
+      {
+        title: 'ATS uyumlu CV ne demek?',
+        body:
+          'Aday takip sisteminin (ATS) baştan sona okuyabildiği, bölümlerine ayırabildiği ve ilanla karşılaştırabildiği bir CV demektir. Bunun için özel bir tasarım gerekmez: tek sütunlu bir düzen, standart bölüm adları ve seçilebilir metin içeren bir PDF çoğu zaman yeterlidir.',
+      },
+      {
+        title: 'Hazır bir CV şablonu kullanabilir miyim?',
+        body:
+          'Şablon tek sütunluysa, tablo ve metin kutusu içermiyorsa evet. İki sütunlu, yan panelli ya da ikonlarla süslenmiş şablonlar ekranda iyi görünür ama ayrıştırıcıda satırlar birbirine karışır. Emin değilseniz Word veya Google Docs\'ta boş bir belgeyle başlayın.',
+      },
+      {
+        title: 'CV\'yi PDF mi Word mü göndermeliyim?',
+        body:
+          'İlan özellikle bir format istemiyorsa metni seçilebilir bir PDF gönderin. PDF, düzeninizi her cihazda aynı tutar. İlan .doc veya .docx istiyorsa istediği formatı verin.',
+      },
+      {
+        title: 'ATS uyumlu bir CV\'de fotoğraf olmalı mı?',
+        body:
+          'Fotoğraf, ATS\'nin okuduğu metni bozmaz; ayrıştırıcı onu okumadan geçer. Türkiye\'de fotoğraflı CV yaygın olduğu için eklemek isterseniz ekleyin, ama fotoğrafı yerleştirirken metni iki sütuna bölmeyin.',
+      },
+      {
+        title: 'Anahtar kelimeleri nereden bulurum?',
+        body:
+          'Başvurduğunuz ilanın metninden. İlanda geçen beceri, araç ve unvan adlarını, gerçekten sahip olduğunuz ölçüde ilandaki yazımıyla CV\'nize geçirin. Bir terimin hem kısaltması hem açık adı kullanılıyorsa, örneğin "SEO" ve "arama motoru optimizasyonu", ikisini birden yazmak iki aramayı da karşılar.',
+      },
+      {
+        title: 'CV\'min ATS uyumlu olup olmadığını nasıl anlarım?',
+        body:
+          'PDF\'inizdeki metni kopyalayıp düz bir metin dosyasına yapıştırın; sıra bozuluyorsa ATS de bozuk okur. Daha ayrıntılı bir kontrol için CV\'nizi CVision\'a yükleyebilirsiniz. Kayıt olmadan günde bir CV analiz edebilir, ATS puanınızı ve bir iyileştirme önerisini görebilirsiniz.',
       },
     ],
   },

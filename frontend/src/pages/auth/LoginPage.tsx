@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { returnPath } from '../../utils/returnPath';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
@@ -21,6 +22,7 @@ export function LoginPage() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ export function LoginPage() {
       login(response.data.access_token, response.data.user);
       const claimedId = await claimPendingAnalysis();
       toast.success(t('auth.login.successToast'));
-      navigate(claimedId ? `/analysis/${claimedId}` : '/dashboard');
+      navigate(claimedId ? `/analysis/${claimedId}` : returnPath(location.state));
     } catch (error: any) {
       // Right password, address never confirmed: the backend has a code on its
       // way (or still valid), so go and enter it.

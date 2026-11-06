@@ -1,8 +1,8 @@
 # CVision
 
-> [CVision](https://www.cvisionapp.com) is an AI-powered CV and resume analyzer and ATS checker. Upload a CV as a PDF to get an ATS compatibility score out of 100, keyword-gap analysis, section-by-section feedback, AI rewrites of weak bullet points, and matching career paths. It also matches a CV against a specific job posting and writes a tailored cover letter. Fully online and self-serve, available worldwide. Built by [Fatih Çatalçam](https://www.catalcamyazilim.online) (Çatalçam Yazılım).
+> [CVision](https://www.cvisionapp.com) is an AI-powered CV and resume analyzer and ATS checker. Upload a CV as a PDF to get an ATS compatibility score out of 100, keyword-gap analysis, section-by-section feedback, AI rewrites of weak bullet points, and matching career paths. It also matches a CV against a specific job posting and writes a tailored cover letter. It does not write CVs from scratch: it reads the CV you already have the way an ATS does, scores it and says what to fix. Fully online and self-serve, available worldwide. Built by [Fatih Çatalçam](https://www.catalcamyazilim.online) (Çatalçam Yazılım).
 
-Last updated: 2026-10-30
+Last updated: 2026-11-06
 
 ## Product
 
@@ -14,7 +14,8 @@ Last updated: 2026-10-30
 ## Guides
 
 - [How ATS works](https://www.cvisionapp.com/how-ats-works) ([English](https://www.cvisionapp.com/en/how-ats-works)) — how Applicant Tracking Systems read, parse and rank resumes, what an ATS score measures, and how to pass automated screening.
-- [ATS uyumlu CV nasıl hazırlanır](https://www.cvisionapp.com/ats-uyumlu-cv-nasil-hazirlanir) ([English: How to write an ATS-friendly CV](https://www.cvisionapp.com/en/how-to-write-an-ats-friendly-cv)) — step by step: file format, section headings, keywords, bullet points, and how to test the result.
+- [ATS uyumlu CV nasıl hazırlanır](https://www.cvisionapp.com/ats-uyumlu-cv-nasil-hazirlanir) ([English: How to write an ATS-friendly CV](https://www.cvisionapp.com/en/how-to-write-an-ats-friendly-cv)) — step by step: file format, section headings, keywords, bullet points, and how to test the result. The Turkish version also has a sample ATS-friendly CV as plain text and an FAQ.
+- [Ön yazı örnekleri](https://www.cvisionapp.com/on-yazi-ornekleri) (Turkish only) — six cover letter examples (new graduate, sales, accounting, software developer, customer service, internship), how a cover letter is structured, and two short ones for the cover letter box on job sites such as Kariyer.net.
 
 Turkish pages live at the bare paths; English pages live under `/en`. The interface is also available in Spanish, German and French, without separate URLs.
 
@@ -70,6 +71,7 @@ you buy credits once and spend them as you need them.
 ## Contact
 
 - Website: [cvisionapp.com](https://www.cvisionapp.com)
+- LinkedIn: [linkedin.com/company/cvisionapp](https://www.linkedin.com/company/cvisionapp/)
 - Support email: [fthctlcm@outlook.com](mailto:fthctlcm@outlook.com)
 - Availability: online 24/7, self-serve. Support replies during business hours.
 - Operated from Turkey, serving customers globally.

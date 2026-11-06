@@ -19,6 +19,7 @@ Allow: /$
 Allow: /try
 Allow: /how-ats-works
 Allow: /ats-uyumlu-cv-nasil-hazirlanir
+Allow: /on-yazi-ornekleri
 Allow: /about
 Allow: /pricing
 Allow: /privacy

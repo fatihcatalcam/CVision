@@ -56,6 +56,18 @@ const PAGES = [
 /** Page ids, which are also the Turkish paths. Sitemap order. */
 export const LOCALIZED_PATHS = PAGES.map((p) => p[DEFAULT_URL_LANGUAGE]) as readonly string[];
 
+/**
+ * Public pages that exist in Turkish only.
+ *
+ * They are prerendered and listed in the sitemap like any other page, but
+ * with no hreflang: hreflang names a page's translations, and these have
+ * none. Writing a thin English copy just to complete the set would be worse
+ * than leaving it out. They are deliberately NOT in PAGES, so every helper
+ * above treats them like any other untranslated path - no /en prefix, and
+ * the language switcher leaves the URL alone.
+ */
+export const TURKISH_ONLY_PATHS = ['/on-yazi-ornekleri'] as const;
+
 export type LocalizedPath = (typeof PAGES)[number][typeof DEFAULT_URL_LANGUAGE];
 
 function isUrlLanguage(value: string): value is UrlLanguage {

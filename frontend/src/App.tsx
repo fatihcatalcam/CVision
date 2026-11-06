@@ -31,6 +31,7 @@ const TermsPage = lazy(() => import('./pages/legal/TermsPage').then(m => ({ defa
 const AboutPage = lazy(() => import('./pages/about/AboutPage').then(m => ({ default: m.AboutPage })));
 const HowAtsWorksPage = lazy(() => import('./pages/guide/HowAtsWorksPage').then(m => ({ default: m.HowAtsWorksPage })));
 const AtsCvHowToPage = lazy(() => import('./pages/guide/AtsCvHowToPage').then(m => ({ default: m.AtsCvHowToPage })));
+const CoverLetterExamplesPage = lazy(() => import('./pages/guide/CoverLetterExamplesPage').then(m => ({ default: m.CoverLetterExamplesPage })));
 const MatchPage = lazy(() => import('./pages/match/MatchPage').then(m => ({ default: m.MatchPage })));
 const TryPage = lazy(() => import('./pages/try/TryPage').then(m => ({ default: m.TryPage })));
 
@@ -84,6 +85,8 @@ function App() {
                 slug is the strongest on-page signal a URL carries. See
                 i18n/routes.ts. */}
             <Route path="/ats-uyumlu-cv-nasil-hazirlanir" element={<AtsCvHowToPage />} />
+            {/* Turkish only, so it has no /en twin. See TURKISH_ONLY_PATHS. */}
+            <Route path="/on-yazi-ornekleri" element={<CoverLetterExamplesPage />} />
             <Route path="/try" element={<TryPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />

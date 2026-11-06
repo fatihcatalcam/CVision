@@ -366,6 +366,8 @@ const tr = {
     // was inside the keywords meta tag, which Google dropped in 2009.
     metaTitle: 'Ücretsiz ATS CV Analizi ve Özgeçmiş Kontrolü | CVision',
     metaDescription: "Yapay zeka destekli CV ve özgeçmiş analizi. CV'ni yükle; anında ATS uyumluluk skoru, eksik anahtar kelimeler ve AI iyileştirme önerileri al. Ücretsiz başla.",
+    // A link into the how-to guide from the page body, not just the footer.
+    guideLink: "ATS uyumlu bir CV'nin nasıl göründüğünü görmek istersen, örnek bir CV de içeren rehberimize bak:",
     nav: {
       howItWorks: 'Nasıl çalışır?',
       backToTop: 'Başa dön',
@@ -389,7 +391,9 @@ const tr = {
     hero: {
       label: 'Yapay Zeka CV ve Özgeçmiş Analizi · ATS Testi',
       title: 'CV\'n daha bir insan görmeden eleniyor olabilir',
-      subtitle: 'CVision, CV\'ni ya da özgeçmişini ATS uyumluluğu için puanlayan, eksik anahtar kelimeleri bulan ve zayıf maddeleri saniyeler içinde yeniden yazan yapay zeka destekli bir CV analiz aracıdır. İlana göre eşleştir, sana özel ön yazı oluştur.',
+      // The second sentence sets CVision apart from CV builders, which AI
+      // assistants kept lumping it in with.
+      subtitle: "CVision yapay zeka destekli bir CV analiz aracıdır. CV'ni sıfırdan yazmaz; var olan CV'ni bir ATS gibi okur, puanlar ve neyi düzelteceğini gösterir. Eksik anahtar kelimeleri bulur, zayıf maddeleri yeniden yazar, CV'ni ilana göre eşleştirir ve sana özel ön yazı hazırlar.",
       ctaDashboard: 'Dashboard\'a Git',
       ctaAnalyze: 'CV\'mi Ücretsiz Analiz Et',
       ctaSignIn: 'Giriş Yap',
@@ -406,7 +410,7 @@ const tr = {
     features: {
       label: 'Ne elde edersin?',
       scoringTitle: 'Akıllı Puanlama',
-      scoringDesc: 'Biçimlendirme, içerik, anahtar kelime yoğunluğu ve alan uyumu üzerinden çok boyutlu skor. Her boyut açıklanır; tam olarak neyi geliştirmen gerektiğini bilirsin.',
+      scoringDesc: 'CV puanlaması beş başlıkta yapılır: bütünlük, beceriler, ATS uyumu, anahtar kelimeler ve deneyim. Her puan açıklanır; tam olarak neyi geliştirmen gerektiğini bilirsin.',
       careerTitle: 'Kariyer Eşleşmesi',
       careerDesc: 'CV\'nin bugün hangi rollere uyduğunu ve hangi becerilerin yeni rollerin kapısını açacağını gör.',
       skillsTitle: 'Beceri Tespiti',
@@ -442,7 +446,7 @@ const tr = {
       q8: 'CVision\'ı diğer CV kontrol araçlarından ayıran ne?',
       a8: 'CVision sadece skor vermekle kalmaz. Madde işaretlerini yapay zeka ile yeniden yazar, CV\'ni belirli bir iş ilanıyla eşleştirip eksik anahtar kelimeleri gösterir ve o role özel bir ön yazı üretir; hepsi tek yerde.',
       q9: 'Başvurmadan önce CV\'mi neden kontrol etmeliyim?',
-      a9: 'Başvuruların çoğu ATS yazılımıyla elenir ve işe alım uzmanları tarafından saniyeler içinde göz gezdirilir. CV\'ni önce kontrol etmek eksikleri gösterir ve düzeltir; böylece daha güçlü bir belgeyle başvurursun.',
+      a9: 'Başvuruların çoğu ATS yazılımıyla elenir ve işe alım uzmanları tarafından saniyeler içinde göz gezdirilir. Başvurmadan önce yapacağın bir CV kontrolü eksikleri gösterir; düzeltip daha güçlü bir belgeyle başvurursun.',
       q10: 'CV\'mi belirli bir iş ilanıyla nasıl eşleştiririm?',
       a10: 'İş ilanını yapıştır veya bağlantısını ver, CVision onu CV\'nle karşılaştırır. Eşleşme skoru, eksik anahtar kelimeler, boşluk analizi ve o role özel ön yazı oluşturma seçeneği alırsın.',
     },
@@ -736,6 +740,7 @@ const tr = {
     nextStep: {
       label: 'Sıradaki adım',
       reanalyse: 'Önerileri uygula, sonra yeniden analiz et',
+      guide: "Düzeltmeleri yaparken örnek bir CV ve adım adım öneriler için rehbere bakabilirsin:",
     },
     overallScore: 'Genel Puan',
     atsCompat: 'ATS Uyumluluğu',
@@ -754,10 +759,14 @@ const tr = {
     extractedSkills: 'Çıkarılan Beceriler',
   },
   try: {
-    metaTitle: 'Ücretsiz CV ve Özgeçmiş Analizi — Kayıt Yok | CVision',
-    metaDescription: 'Ücretsiz CV analizi ve özgeçmiş ATS kontrolü. CV\'ni yükle, anında ATS puanı ve yapay zeka geri bildirimi al — hesap gerekmez.',
-    heading: 'CV\'ni 30 saniyede analiz et',
-    sub: 'Hesap gerekmez. CV\'ni yükle, ATS puanını anında gör.',
+    metaTitle: 'Ücretsiz ATS CV Kontrolü: Kayıt Gerekmez | CVision',
+    metaDescription: "Ücretsiz ATS CV kontrolü ve CV analizi. Kayıt olmadan CV'ni yükle; genel puanını, ATS uyumu puanını ve bir iyileştirme önerisini hemen gör.",
+    heading: 'Ücretsiz ATS CV kontrolü',
+    // Only facts, all in the first paragraph: AI assistants quote it when
+    // asked whether the check needs an account and what it returns. The limit
+    // is one per IP per day (backend/app/routers/public.py); the result shows
+    // the scores and the first suggestion, the rest stay locked.
+    sub: "Kayıt gerekmez: hesap açmadan günde bir CV analiz edebilirsin. Sonuçta genel CV puanını, ATS uyumu, anahtar kelime ve bütünlük puanlarını ve bir iyileştirme önerisini görürsün. Ücretsiz bir hesap açarsan 3 kredi alırsın; bu, bütün önerileri içeren bir tam analize yeter.",
     // Copy that gives this page something to rank on, and that the
     // prerender script emits into the static HTML for crawlers.
     seo: {

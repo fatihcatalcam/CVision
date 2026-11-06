@@ -361,6 +361,8 @@ const de = {
   home: {
     metaTitle: 'CVision - KI Lebenslauf-Analyse & ATS-Checker',
     metaDescription: 'Lade deinen Lebenslauf hoch für einen sofortigen ATS-Score, Keyword-Lückenanalyse und KI-Umschreibvorschläge. Kostenlos starten.',
+    // A link into the how-to guide from the page body, not just the footer.
+    guideLink: "Wie ein ATS-freundlicher Lebenslauf aussieht, zeigt dir unser Schritt-für-Schritt-Leitfaden:",
     nav: {
       howItWorks: 'So funktioniert es',
       backToTop: 'Nach oben',
@@ -725,6 +727,7 @@ const de = {
     nextStep: {
       label: 'Nächster Schritt',
       reanalyse: 'Vorschläge umsetzen, dann neu analysieren',
+      guide: "Beim Überarbeiten hilft dir der Schritt-für-Schritt-Leitfaden:",
     },
     overallScore: 'Gesamtpunktzahl',
     atsCompat: 'ATS-Kompatibilität',

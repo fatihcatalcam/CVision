@@ -28,8 +28,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
-import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
+import { ATS_GUIDE_EXTRA, exampleParagraphs, type GuideSection } from '../src/content/atsGuide';
 import { ATS_CV_HOWTO } from '../src/content/atsCvHowTo';
+import { COVER_LETTER_PAGE, COVER_LETTER_EXAMPLES } from '../src/content/coverLetterExamples';
 import { DEVELOPER_NAME, DEVELOPER_URL } from '../src/constants/developer';
 import { articleSchema } from '../src/seo/articleSchema';
 import {
@@ -37,6 +38,8 @@ import {
   URL_LANGUAGES,
   DEFAULT_URL_LANGUAGE,
   LOCALIZED_PATHS,
+  TURKISH_ONLY_PATHS,
+  isLocalizedPath,
   localizedPath,
   localizedUrl,
   type UrlLanguage,
@@ -59,10 +62,11 @@ const BUNDLES: Record<UrlLanguage, Bundle> = { tr, en: en as Bundle };
  * date printed in their own body.
  */
 const LASTMOD: Record<string, string> = {
-  '/': '2026-10-30',
-  '/try': '2026-08-14',
+  '/': '2026-11-06',
+  '/try': '2026-11-06',
   '/how-ats-works': '2026-08-14',
-  '/ats-uyumlu-cv-nasil-hazirlanir': '2026-08-14',
+  '/ats-uyumlu-cv-nasil-hazirlanir': '2026-11-06',
+  '/on-yazi-ornekleri': '2026-11-06',
   '/pricing': '2026-08-14',
   '/about': '2026-10-30',
   '/privacy': '2025-05-28',
@@ -107,6 +111,8 @@ const PRERENDER_STYLE =
   '#prerender p{margin:0 0 1rem;line-height:1.65;color:var(--color-muted)}' +
   '#prerender nav{display:block;margin:2.5rem 0 0;font-size:.85rem;color:var(--color-muted)}' +
   '#prerender nav a{color:inherit;text-decoration:none}' +
+  '#prerender .example{border:1px solid var(--color-card-border);border-radius:.5rem;padding:1rem 1.25rem;margin:0 0 1rem}' +
+  '#prerender .example p{color:var(--color-foreground)}' +
   '</style>';
 
 const h1 = (s: string) => `<h1>${esc(s)}</h1>`;
@@ -129,6 +135,8 @@ function navHtml(b: Bundle, lang: UrlLanguage, self: string): string {
     ['/try', b.home.nav.tryFree],
     ['/how-ats-works', b.home.nav.howAts],
     ['/ats-uyumlu-cv-nasil-hazirlanir', b.home.nav.atsCvHowTo],
+    // Turkish only, so it is only ever a hop inside the Turkish tree.
+    ...(lang === 'tr' ? [['/on-yazi-ornekleri', COVER_LETTER_PAGE.title] as [string, string]] : []),
     ['/pricing', b.packs.title],
     ['/about', b.home.nav.about],
     ['/privacy', b.common.privacy],
@@ -136,7 +144,7 @@ function navHtml(b: Bundle, lang: UrlLanguage, self: string): string {
   ];
   return labels
     .filter(([p]) => p !== self)
-    .map(([p, label]) => `<a href="${localizedPath(p, lang)}">${esc(label)}</a>`)
+    .map(([p, label]) => `<a href="${isLocalizedPath(p) ? localizedPath(p, lang) : p}">${esc(label)}</a>`)
     .join(' · ');
 }
 
@@ -156,7 +164,7 @@ const shell = (body: string, nav: string, credit: string) =>
   `${PRERENDER_STYLE}<div id="prerender">${body}<nav>${nav}</nav>${credit}</div>`;
 
 /** The homepage: hero, how-it-works, features, and the full FAQ. */
-function homeBody(b: Bundle): string {
+function homeBody(b: Bundle, lang: UrlLanguage): string {
   const h = b.home;
   const parts = [h1(h.hero.title), p(h.hero.subtitle)];
 
@@ -179,18 +187,30 @@ function homeBody(b: Bundle): string {
   for (let i = 1; faq[`q${i}`]; i++) {
     parts.push(h3(faq[`q${i}`]), p(faq[`a${i}`]));
   }
+  // The link under the FAQ, as HomePage renders it in both URL languages.
+  parts.push(
+    `<p>${esc(h.guideLink)} <a href="${localizedPath('/ats-uyumlu-cv-nasil-hazirlanir', lang)}">${esc(h.nav.atsCvHowTo)}</a></p>`,
+  );
 
   return parts.join('');
 }
 
-/** GuideSection[] -> h2 / intro / h3+body items / outro. */
-function sectionsHtml(sections: { heading: string; intro?: string; items?: { title: string; body: string }[]; outro?: string }[] = []): string {
+/** A sample CV or letter, paragraph by paragraph, as GuideExample renders it. */
+function exampleHtml(example: string): string {
+  const paragraphs = exampleParagraphs(example).map((lines) => `<p>${lines.map(esc).join('<br>')}</p>`);
+  return `<div class="example">${paragraphs.join('')}</div>`;
+}
+
+/** GuideSection[] -> h2 / intro / h3+body(+example) items / outro. */
+function sectionsHtml(sections: GuideSection[] = []): string {
   return sections
     .map((section) =>
       [
         h2(section.heading),
         section.intro ? p(section.intro) : '',
-        ...(section.items ?? []).map((item) => h3(item.title) + p(item.body)),
+        ...(section.items ?? []).map(
+          (item) => h3(item.title) + p(item.body) + (item.example ? exampleHtml(item.example) : ''),
+        ),
         section.outro ? p(section.outro) : '',
       ].join(''),
     )
@@ -311,6 +331,28 @@ function howToBody(b: Bundle, lang: UrlLanguage): string {
   return h1(g.title) + p(g.definition) + sectionsHtml(ATS_CV_HOWTO[lang]) + h2(g.ctaTitle);
 }
 
+/** The cover letter examples, which exist in Turkish only. */
+function coverLetterBody(): string {
+  const c = COVER_LETTER_PAGE;
+  return h1(c.title) + p(c.definition) + sectionsHtml(COVER_LETTER_EXAMPLES) + h2(c.ctaTitle) + p(c.ctaNote);
+}
+
+/**
+ * The pages that exist in Turkish only. Built, written and listed in the
+ * sitemap like the others, but kept out of routesFor, which promises the same
+ * paths in every language.
+ */
+export function turkishOnlyRoutes(): Route[] {
+  return [
+    {
+      path: '/on-yazi-ornekleri',
+      title: COVER_LETTER_PAGE.metaTitle,
+      description: COVER_LETTER_PAGE.metaDescription,
+      body: coverLetterBody(),
+    },
+  ];
+}
+
 /**
  * Every localized route for one language.
  *
@@ -320,7 +362,7 @@ function howToBody(b: Bundle, lang: UrlLanguage): string {
 export function routesFor(lang: UrlLanguage): Route[] {
   const b = BUNDLES[lang];
   return [
-    { path: '/', title: b.home.metaTitle, description: b.home.metaDescription, body: homeBody(b) },
+    { path: '/', title: b.home.metaTitle, description: b.home.metaDescription, body: homeBody(b, lang) },
     { path: '/try', title: b.try.metaTitle, description: b.try.metaDescription, body: tryBody(b) },
     {
       path: '/how-ats-works',
@@ -374,17 +416,23 @@ export function routesFor(lang: UrlLanguage): Route[] {
  */
 export function faqJsonLd(lang: UrlLanguage = DEFAULT_URL_LANGUAGE): string {
   const faq = BUNDLES[lang].home.faq as Record<string, string>;
-  const mainEntity = [];
+  const questions: { title: string; body: string }[] = [];
   for (let i = 1; faq[`q${i}`]; i++) {
-    mainEntity.push({
-      '@type': 'Question',
-      name: faq[`q${i}`],
-      acceptedAnswer: { '@type': 'Answer', text: faq[`a${i}`] },
-    });
+    questions.push({ title: faq[`q${i}`], body: faq[`a${i}`] });
   }
-  if (!mainEntity.length) {
+  if (!questions.length) {
     throw new Error(`prerender: no FAQ questions found in ${lang}.home.faq`);
   }
+  return faqScript(questions, lang);
+}
+
+/** FAQPage JSON-LD for questions a visitor can read on the page. */
+function faqScript(questions: { title: string; body: string }[], lang: UrlLanguage): string {
+  const mainEntity = questions.map((q) => ({
+    '@type': 'Question',
+    name: q.title,
+    acceptedAnswer: { '@type': 'Answer', text: q.body },
+  }));
   // Escaping "<" keeps a stray "</script>" in the copy from closing this tag.
   const json = JSON.stringify(
     { '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: lang, mainEntity },
@@ -394,13 +442,42 @@ export function faqJsonLd(lang: UrlLanguage = DEFAULT_URL_LANGUAGE): string {
   return `<script type="application/ld+json">\n${json}\n</script>`;
 }
 
+/** The long-form sections each guide shows, by page and language. */
+const GUIDE_SECTIONS: Record<string, Partial<Record<UrlLanguage, GuideSection[]>>> = {
+  '/how-ats-works': ATS_GUIDE_EXTRA,
+  '/ats-uyumlu-cv-nasil-hazirlanir': ATS_CV_HOWTO,
+  '/on-yazi-ornekleri': { tr: COVER_LETTER_EXAMPLES },
+};
+
+/**
+ * FAQPage JSON-LD for a guide's own question section, or null when it has
+ * none in this language. Built from the section the page renders, so only
+ * questions a visitor can read on the page are marked up.
+ */
+export function guideFaqJsonLd(routePath: string, lang: UrlLanguage): string | null {
+  const questions = (GUIDE_SECTIONS[routePath]?.[lang] ?? [])
+    .filter((section) => section.faq)
+    .flatMap((section) => section.items ?? []);
+  return questions.length ? faqScript(questions, lang) : null;
+}
+
 /**
  * The long-form guides: which i18n block holds their title, the data-page id
  * ArticlePage uses for the same script, and when each first went live.
  */
-const ARTICLES: Record<string, { ns: 'howAts' | 'atsCvHowTo'; slug: string; published: string }> = {
-  '/how-ats-works': { ns: 'howAts', slug: 'how-ats-works', published: '2026-07-14' },
-  '/ats-uyumlu-cv-nasil-hazirlanir': { ns: 'atsCvHowTo', slug: 'ats-cv-how-to', published: '2026-08-14' },
+type ArticleMeta = {
+  slug: string;
+  published: string;
+  copy: (lang: UrlLanguage) => { title: string; metaDescription: string };
+};
+
+const fromBundle = (ns: 'howAts' | 'atsCvHowTo') => (lang: UrlLanguage) =>
+  BUNDLES[lang][ns] as { title: string; metaDescription: string };
+
+const ARTICLES: Record<string, ArticleMeta> = {
+  '/how-ats-works': { slug: 'how-ats-works', published: '2026-07-14', copy: fromBundle('howAts') },
+  '/ats-uyumlu-cv-nasil-hazirlanir': { slug: 'ats-cv-how-to', published: '2026-08-14', copy: fromBundle('atsCvHowTo') },
+  '/on-yazi-ornekleri': { slug: 'cover-letter-examples', published: '2026-11-06', copy: () => COVER_LETTER_PAGE },
 };
 
 /**
@@ -414,7 +491,7 @@ const ARTICLES: Record<string, { ns: 'howAts' | 'atsCvHowTo'; slug: string; publ
 export function articleJsonLd(routePath: string, lang: UrlLanguage): string | null {
   const article = ARTICLES[routePath];
   if (!article) return null;
-  const copy = BUNDLES[lang][article.ns] as Record<string, string>;
+  const copy = article.copy(lang);
   const json = JSON.stringify(
     articleSchema({
       headline: copy.title,
@@ -488,7 +565,11 @@ export function buildPage(
   html = replaceOnce(
     html,
     /<link rel="canonical" href="[\s\S]*?"\s*\/?>/,
-    `<link rel="canonical" href="${url}" />\n    ${alternatesHtml(route.path)}`,
+    // hreflang only for pages that really have a translation. A Turkish-only
+    // page naming an /en twin would point Google at a 404.
+    isLocalizedPath(route.path)
+      ? `<link rel="canonical" href="${url}" />\n    ${alternatesHtml(route.path)}`
+      : `<link rel="canonical" href="${url}" />`,
     'canonical',
   );
 
@@ -515,6 +596,11 @@ export function buildPage(
   const article = articleJsonLd(route.path, lang);
   if (article) {
     html = replaceOnce(html, /<\/head>/, `${article}\n  </head>`, '</head>');
+  }
+
+  const guideFaq = guideFaqJsonLd(route.path, lang);
+  if (guideFaq) {
+    html = replaceOnce(html, /<\/head>/, `${guideFaq}\n  </head>`, '</head>');
   }
 
   html = replaceOnce(
@@ -552,6 +638,18 @@ export function sitemapXml(): string {
       ].join('\n');
     }),
   );
+
+  // No alternates: these pages have no translation to point at.
+  for (const routePath of TURKISH_ONLY_PATHS) {
+    urls.push(
+      [
+        '  <url>',
+        `    <loc>${localizedUrl(routePath, DEFAULT_URL_LANGUAGE)}</loc>`,
+        `    <lastmod>${LASTMOD[routePath]}</lastmod>`,
+        '  </url>',
+      ].join('\n'),
+    );
+  }
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -594,6 +692,14 @@ export function main() {
       written++;
       console.log(`prerendered ${urlPath}`);
     }
+  }
+
+  for (const route of turkishOnlyRoutes()) {
+    const outDir = path.join(DIST, route.path.replace(/^\//, ''));
+    fs.mkdirSync(outDir, { recursive: true });
+    fs.writeFileSync(path.join(outDir, 'index.html'), buildPage(template, route, 'tr'), 'utf8');
+    written++;
+    console.log(`prerendered ${route.path} (tr only)`);
   }
 
   // Written last because its output file IS the template read above.

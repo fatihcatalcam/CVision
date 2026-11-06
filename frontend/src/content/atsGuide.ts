@@ -17,7 +17,16 @@
  * text Google discards when it renders the page for real.
  */
 
-export type GuideItem = { title: string; body: string };
+export type GuideItem = {
+  title: string;
+  body: string;
+  /**
+   * A worked example shown under the body: a sample CV, a sample letter.
+   * Blank lines separate paragraphs; single newlines are line breaks. Kept as
+   * text on the page, never an image, so a crawler reads it like a person.
+   */
+  example?: string;
+};
 
 export type GuideSection = {
   heading: string;
@@ -26,7 +35,21 @@ export type GuideSection = {
   items?: GuideItem[];
   /** Plain paragraphs after the items. */
   outro?: string;
+  /**
+   * The section is a list of questions: each item's title is a question and
+   * its body the answer. The prerender turns it into FAQPage JSON-LD, so only
+   * questions a visitor can read on the page are ever marked up.
+   */
+  faq?: boolean;
 };
+
+/** "a\nb\n\nc" -> [["a", "b"], ["c"]]: paragraphs, each a list of lines. */
+export function exampleParagraphs(example: string): string[][] {
+  return example
+    .trim()
+    .split(/\n\s*\n/)
+    .map((block) => block.split('\n').map((line) => line.trim()).filter(Boolean));
+}
 
 const tr: GuideSection[] = [
   {

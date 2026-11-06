@@ -364,6 +364,8 @@ const en = {
     // English query to rank.
     metaTitle: 'Free ATS Resume Checker & AI CV Analysis | CVision',
     metaDescription: "Upload your resume or CV for an instant ATS compatibility score, missing keywords, and AI rewrite suggestions. Match it to any job description. Free to start.",
+    // A link into the how-to guide from the page body, not just the footer.
+    guideLink: "Want to see what an ATS-friendly CV looks like? Read the step-by-step guide:",
     nav: {
       howItWorks: 'How it works',
       backToTop: 'Back to top',
@@ -728,6 +730,7 @@ const en = {
     nextStep: {
       label: 'Next step',
       reanalyse: 'Apply the suggestions, then re-analyse',
+      guide: "While you make the fixes, the step-by-step guide can help:",
     },
     overallScore: 'Overall Score',
     atsCompat: 'ATS Compatibility',

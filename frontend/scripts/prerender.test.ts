@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { routesFor, faqJsonLd, sitemapXml, alternatesHtml, buildPage } from './prerender';
+import { routesFor, turkishOnlyRoutes, faqJsonLd, sitemapXml, alternatesHtml, buildPage } from './prerender';
 import { DEVELOPER_URL } from '../src/constants/developer';
-import { URL_LANGUAGES, LOCALIZED_PATHS, localizedUrl } from '../src/i18n/routes';
+import { URL_LANGUAGES, LOCALIZED_PATHS, TURKISH_ONLY_PATHS, localizedUrl } from '../src/i18n/routes';
 import { ATS_GUIDE_EXTRA } from '../src/content/atsGuide';
 import tr from '../src/i18n/tr';
 import en from '../src/i18n/en';
@@ -227,7 +227,7 @@ describe('sitemap', () => {
       }
     }
     const count = (xml.match(/<loc>/g) ?? []).length;
-    expect(count).toBe(URL_LANGUAGES.length * LOCALIZED_PATHS.length);
+    expect(count).toBe(URL_LANGUAGES.length * LOCALIZED_PATHS.length + TURKISH_ONLY_PATHS.length);
   });
 
   it('prerenders every URL it advertises', () => {
@@ -237,9 +237,10 @@ describe('sitemap', () => {
     const xml = sitemapXml();
     const listed = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
-    const built = URL_LANGUAGES.flatMap((lang) =>
-      routesFor(lang).map((r) => localizedUrl(r.path, lang)),
-    );
+    const built = [
+      ...URL_LANGUAGES.flatMap((lang) => routesFor(lang).map((r) => localizedUrl(r.path, lang))),
+      ...turkishOnlyRoutes().map((r) => localizedUrl(r.path, 'tr')),
+    ];
 
     const orphans = listed.filter((u) => !built.includes(u));
     expect(orphans, `advertised but never prerendered: ${orphans.join(', ')}`).toEqual([]);

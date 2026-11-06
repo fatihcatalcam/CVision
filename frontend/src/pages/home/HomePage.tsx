@@ -12,13 +12,15 @@ import { HeroMockup } from '../../components/home/HeroMockup';
 import { useSeo } from '../../hooks/useSeo';
 import { useLocalizedNav } from '../../hooks/useLocalizedNav';
 import { DeveloperCredit } from '../../components/ui/DeveloperCredit';
+import { COVER_LETTER_PAGE } from '../../content/coverLetterExamples';
 
 export function HomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const hasGuide = ['tr', 'en'].includes((i18n.language ?? '').split('-')[0]);
   const navigate = useNavigate();
   // Links must stay in the visitor's language tree: on /en these have to point
   // at /en/about, not at the Turkish page of the same name.
-  const { href, go } = useLocalizedNav();
+  const { href, go, lang } = useLocalizedNav();
   const { isAuthenticated } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -227,6 +229,20 @@ export function HomePage() {
                 </p>
               </div>
             ))}
+            {/* Only where the guide has its long form; the languages without
+                URLs get a page of headings with nothing under them. */}
+            {hasGuide && (
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
+                {t('home.guideLink')}{' '}
+                <a
+                  href={href('/ats-uyumlu-cv-nasil-hazirlanir')}
+                  onClick={(e) => { e.preventDefault(); go('/ats-uyumlu-cv-nasil-hazirlanir'); }}
+                  className="underline underline-offset-2 hover:text-[var(--color-foreground)] transition-colors"
+                >
+                  {t('home.nav.atsCvHowTo')}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </Reveal>
@@ -271,6 +287,10 @@ export function HomePage() {
             <a href={href('/about')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.about')}</a>
             <a href={href('/how-ats-works')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.howAts')}</a>
             <a href={href('/ats-uyumlu-cv-nasil-hazirlanir')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('home.nav.atsCvHowTo')}</a>
+            {/* Turkish only, so linked only from the Turkish tree. */}
+            {lang === 'tr' && (
+              <a href="/on-yazi-ornekleri" className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{COVER_LETTER_PAGE.title}</a>
+            )}
             <a href={href('/pricing')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('packs.title')}</a>
             <a href={href('/privacy')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.privacy')}</a>
             <a href={href('/terms')} className="hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors">{t('common.terms')}</a>

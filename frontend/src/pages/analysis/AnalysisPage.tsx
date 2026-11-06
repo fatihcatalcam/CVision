@@ -25,6 +25,7 @@ import { createCoverLetter, type MatchResponse } from '../../services/matchApi';
 import { MATCH_COST, COVER_LETTER_COST, FULL_ANALYSIS_COST } from '../../constants/credits';
 import { isOutOfCredits, notifyOutOfCredits } from '../../utils/outOfCredits';
 import { parseRewriteHint } from '../../utils/rewriteHint';
+import { localizedPath, type UrlLanguage } from '../../i18n/routes';
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -207,7 +208,9 @@ function AISuggestionCard(
 export function AnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const uiLang = (i18n.language ?? '').split('-')[0];
+  const guideLang: UrlLanguage | null = uiLang === 'tr' || uiLang === 'en' ? uiLang : null;
   const { refreshUser } = useAuth();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [isNewAnalysis, setIsNewAnalysis] = useState(false);
@@ -573,6 +576,20 @@ export function AnalysisPage() {
                 </span>
               </button>
             </div>
+
+            {/* The guide exists in Turkish and English; the other languages
+                would land on a page of headings with nothing under them. */}
+            {guideLang && (
+              <p className="mt-4 text-sm text-[#6B6A65] dark:text-[#908d89]">
+                {t('analysis.nextStep.guide')}{' '}
+                <a
+                  href={localizedPath('/ats-uyumlu-cv-nasil-hazirlanir', guideLang)}
+                  className="underline underline-offset-2 hover:text-[#111111] dark:hover:text-[#e8e7e4] transition-colors"
+                >
+                  {t('home.nav.atsCvHowTo')}
+                </a>
+              </p>
+            )}
           </div>
 
           {/* Strengths & Weaknesses */}
