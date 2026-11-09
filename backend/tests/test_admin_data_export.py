@@ -151,3 +151,88 @@ def test_the_export_is_admin_only(client, make_user, auth_headers):
     resp = client.get("/hq-portal/export/analyses.csv", headers=auth_headers(plain))
 
     assert resp.status_code == 403
+
+
+# ── what each person did ─────────────────────────────────────────────────────
+#
+# 412 users and no sale: the question became whether anyone comes back and
+# reaches the paid steps. Each row carries its owner's totals so a pivot by
+# user_id answers it.
+
+def test_each_row_carries_its_owners_journey(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    from datetime import datetime, timedelta, timezone
+
+    from app.models.cover_letter import CoverLetter
+    from app.models.cv_jd_match import CVJDMatch
+    from app.models.job_description import JobDescription
+    from app.services.credit_service import CreditService
+
+    admin = make_user(email=_email(), role="admin")
+    signed_up = datetime.now(timezone.utc) - timedelta(days=10)
+    owner = make_user(email=_email(), google_id="g-123", language="tr", created_at=signed_up)
+    CreditService.grant(db_session, owner, 3, "grant_signup")
+    CreditService.grant(db_session, owner, 10, "purchase")
+
+    first = make_cv(owner, uploaded_at=signed_up + timedelta(hours=1))
+    CreditService.spend(db_session, owner, 3, "spend_analysis_pro", ref_id=str(first.id))
+    second = make_cv(owner, uploaded_at=signed_up + timedelta(days=4))
+    CreditService.spend(db_session, owner, 3, "spend_analysis_pro", ref_id=str(second.id))
+
+    jd = JobDescription(user_id=owner.id, raw_text="a job")
+    db_session.add(jd)
+    db_session.commit()
+    db_session.add(CVJDMatch(cv_id=second.id, jd_id=jd.id, match_score=60))
+    db_session.add(CoverLetter(cv_id=second.id, jd_id=jd.id, content="Dear team"))
+    db_session.commit()
+
+    by_id = {r["cv_id"]: r for r in _csv(client, auth_headers, admin)}
+    a, b = by_id[str(first.id)], by_id[str(second.id)]
+
+    assert (a["user_upload_number"], b["user_upload_number"]) == ("1", "2")
+    assert (a["days_after_signup"], b["days_after_signup"]) == ("0", "4")
+    assert (b["cv_matches"], b["cv_cover_letters"]) == ("1", "1")
+    assert (a["cv_matches"], a["cv_cover_letters"]) == ("0", "0")
+    for row in (a, b):
+        assert row["source"] == "app"
+        assert row["signup_method"] == "google"
+        assert row["user_language"] == "tr"
+        assert row["user_uploads"] == "2"
+        assert (row["user_matches"], row["user_cover_letters"]) == ("1", "1")
+        assert row["user_credits_bought"] == "10"
+        assert row["user_credits_spent"] == "6"
+        assert row["user_credits_now"] == "7"
+        assert row["user_last_active_at"] != ""
+        assert int(row["user_days_active"]) >= 4
+
+
+def test_an_upload_made_before_signup_came_from_try(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    from datetime import datetime, timedelta, timezone
+
+    admin = make_user(email=_email(), role="admin")
+    now = datetime.now(timezone.utc)
+    owner = make_user(email=_email(), created_at=now)
+    claimed = make_cv(owner, uploaded_at=now - timedelta(minutes=5))
+
+    row = {r["cv_id"]: r for r in _csv(client, auth_headers, admin)}[str(claimed.id)]
+
+    assert row["source"] == "try_claimed"
+    assert row["signup_method"] == "email"
+
+
+def test_an_unclaimed_try_upload_has_no_owner_columns(
+    client, make_user, auth_headers, make_cv, db_session
+):
+    admin = make_user(email=_email(), role="admin")
+    anon = make_cv(make_user(email=_email()))
+    anon.user_id = None
+    db_session.commit()
+
+    row = {r["cv_id"]: r for r in _csv(client, auth_headers, admin)}[str(anon.id)]
+
+    assert row["source"] == "try_unclaimed"
+    assert row["user_uploads"] == ""
+    assert row["user_upload_number"] == ""

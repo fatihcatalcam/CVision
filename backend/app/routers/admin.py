@@ -416,6 +416,13 @@ def get_user_credit_ledger(
     ]
 
 
+def _utc(value: datetime | None) -> datetime | None:
+    """Timestamps come back naive from some columns and drivers; compare in UTC."""
+    if value is None:
+        return None
+    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+
+
 @router.get(
     "/export/analyses.csv",
     summary="Every analysis as CSV (Admin)",
@@ -439,11 +446,76 @@ def export_analyses_csv(db: Session = Depends(get_db)):
 
     from fastapi.responses import StreamingResponse
 
+    from app.models.cover_letter import CoverLetter
+    from app.models.cv_jd_match import CVJDMatch
+
     rows = (
         db.query(CV)
         .order_by(CV.uploaded_at.desc(), CV.id.desc())
         .all()
     )
+
+    # ── what each person did, not only what each upload scored ──────────────
+    #
+    # 412 users and no sale: the question became "does anyone come back, and
+    # do they reach the paid steps?", which one row per upload could not
+    # answer. The columns below repeat the owner's totals on each of their rows
+    # so a pivot by user_id gives the funnel without a second export.
+    # Everything is aggregated up front: one query per table, not per row.
+    matches_per_cv = dict(
+        db.query(CVJDMatch.cv_id, func.count(CVJDMatch.id)).group_by(CVJDMatch.cv_id).all()
+    )
+    letters_per_cv = dict(
+        db.query(CoverLetter.cv_id, func.count(CoverLetter.id)).group_by(CoverLetter.cv_id).all()
+    )
+
+    ledger = db.query(
+        CreditTransaction.user_id, CreditTransaction.delta,
+        CreditTransaction.reason, CreditTransaction.ref_id, CreditTransaction.created_at,
+    ).all()
+    bought: dict[int, int] = defaultdict(int)
+    spent: dict[int, int] = defaultdict(int)
+    last_seen: dict[int, datetime] = {}
+    paid_upload_refs: set[str] = set()
+    for user_id, delta, reason, ref_id, created_at in ledger:
+        if reason == "purchase":
+            bought[user_id] += delta
+        elif reason.startswith("spend_"):
+            spent[user_id] -= delta
+        if reason in ("spend_analysis", "spend_analysis_pro") and ref_id:
+            paid_upload_refs.add(ref_id)
+        at = _utc(created_at)
+        if at and (user_id not in last_seen or at > last_seen[user_id]):
+            last_seen[user_id] = at
+    # Uploads from before the ledger existed have no spend row to find, so
+    # "no spend row" only means "came from /try" after this point.
+    ledger_start = min((_utc(r[4]) for r in ledger if r[4]), default=None)
+
+    uploads_by_user: dict[int, list[CV]] = defaultdict(list)
+    for cv in rows:
+        if cv.user_id:
+            uploads_by_user[cv.user_id].append(cv)
+            at = _utc(cv.uploaded_at)
+            if at and (cv.user_id not in last_seen or at > last_seen[cv.user_id]):
+                last_seen[cv.user_id] = at
+    upload_number: dict[int, int] = {}
+    for user_cvs in uploads_by_user.values():
+        ordered = sorted(user_cvs, key=lambda c: (_utc(c.uploaded_at) or datetime.min.replace(tzinfo=timezone.utc), c.id))
+        for n, c in enumerate(ordered, start=1):
+            upload_number[c.id] = n
+
+    def source(cv: CV) -> str:
+        """Where the upload came from: /try and then claimed at signup, or the app."""
+        if cv.owner is None:
+            return "try_unclaimed"
+        uploaded, signed_up = _utc(cv.uploaded_at), _utc(cv.owner.created_at)
+        if uploaded and signed_up and uploaded < signed_up:
+            return "try_claimed"
+        if str(cv.id) in paid_upload_refs:
+            return "app"
+        if uploaded and ledger_start and uploaded < ledger_start:
+            return "unknown"
+        return "try_claimed"
 
     buffer = io.StringIO()
     writer = csv.writer(buffer)
@@ -456,6 +528,14 @@ def export_analyses_csv(db: Session = Depends(get_db)):
         "overall_score", "ats_score", "keyword_score",
         "completeness_score", "experience_score",
         "ai_enhanced", "suggestion_count", "top_role",
+        # this upload
+        "source", "user_upload_number", "days_after_signup",
+        "cv_matches", "cv_cover_letters",
+        # its owner, repeated on each of their rows
+        "signup_at", "signup_method", "user_language",
+        "user_uploads", "user_matches", "user_cover_letters",
+        "user_credits_now", "user_credits_spent", "user_credits_bought",
+        "user_last_active_at", "user_days_active",
     ])
 
     for cv in rows:
@@ -464,6 +544,31 @@ def export_analyses_csv(db: Session = Depends(get_db)):
         role = ""
         if a and a.career_recommendations:
             role = a.career_recommendations[0].role_profile.title
+
+        uploaded = _utc(cv.uploaded_at)
+        if owner is not None:
+            signed_up = _utc(owner.created_at)
+            user_cvs = uploads_by_user.get(owner.id, [])
+            last = last_seen.get(owner.id)
+            person = [
+                signed_up.isoformat() if signed_up else "",
+                "google" if owner.google_id else "email",
+                owner.language or "",
+                len(user_cvs),
+                sum(matches_per_cv.get(c.id, 0) for c in user_cvs),
+                sum(letters_per_cv.get(c.id, 0) for c in user_cvs),
+                owner.credits,
+                spent.get(owner.id, 0),
+                bought.get(owner.id, 0),
+                last.isoformat() if last else "",
+                # Whole days between signup and the last thing they did: 0 is
+                # someone who never came back after the first day.
+                (last - signed_up).days if (last and signed_up) else "",
+            ]
+            days_after = (uploaded - signed_up).days if (uploaded and signed_up) else ""
+        else:
+            person = [""] * 11
+            days_after = ""
 
         writer.writerow([
             cv.id,
@@ -491,6 +596,12 @@ def export_analyses_csv(db: Session = Depends(get_db)):
             "yes" if (a and a.ai_enhanced) else "no",
             len(a.ai_suggestions or []) if a else 0,
             role,
+            source(cv),
+            upload_number.get(cv.id, ""),
+            days_after,
+            matches_per_cv.get(cv.id, 0),
+            letters_per_cv.get(cv.id, 0),
+            *person,
         ])
 
     buffer.seek(0)
